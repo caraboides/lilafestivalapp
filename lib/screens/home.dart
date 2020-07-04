@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen>
                 config.days.length,
                 (index) => Tab(
                   child: Text(
-                    'Day %d'.i18n.fill(index + 1),
+                    'Day {number}'.i18n.fill({'number': index + 1}),
                     style: theme.tabTextStyle,
                   ),
                 ),

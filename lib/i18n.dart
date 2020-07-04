@@ -7,13 +7,14 @@ extension Localization on String {
         "de_de": "Bands",
       } +
       {
-        "en_us": "Day %d",
-        "de_de": "Tag %d",
+        "en_us": "Day {number}",
+        "de_de": "Tag {number}",
       };
 
   String get i18n => localize(this, _t);
 
-  String fillList(List<Object> params) => localizeFill(this, params);
-
-  String fill(Object param) => fillList([param]);
+  String fill(Map<String, Object> params) => params.entries.fold(
+      this,
+      (previousValue, entry) =>
+          previousValue.replaceAll('{${entry.key}}', entry.value.toString()));
 }
