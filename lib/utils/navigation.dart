@@ -25,32 +25,32 @@ final ImmortalList<AppRoute> routes = ImmortalList([
     name: 'Schedule',
     icon: Icons.calendar_today,
     isHomeRoute: true,
-    builder: (_) => HomeScreen(),
+    builder: HomeScreen.builder,
   ),
   AppRoute(
     path: '/mySchedule',
     name: 'My Schedule',
     icon: Icons.star,
     isHomeRoute: true,
-    builder: (_) => HomeScreen(favoritesOnly: true),
+    builder: HomeScreen.myScheduleBuilder,
   ),
   AppRoute(
     path: '/drive',
     name: 'Location',
     icon: Icons.map,
-    // builder: (_) => Drive(),
+    // builder: Drive.builder,
   ),
   AppRoute(
     path: '/faq',
     name: 'FAQ',
     icon: Icons.help,
-    // builder: (_) => FAQ(),
+    // builder: FAQ.builder,
   ),
   AppRoute(
     path: '/about',
     name: 'About',
     icon: Icons.info,
-    // builder: (_) => About(),
+    // builder: About.builder,
   ),
 ]);
 final ImmortalMap<String, AppRoute> routesByPath =

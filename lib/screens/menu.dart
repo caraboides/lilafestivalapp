@@ -31,7 +31,7 @@ class Menu extends StatelessWidget {
   Widget _buildRouteEntry(
     NavigatorState navigator,
     FestivalTheme theme,
-    RouteConfig route,
+    AppRoute route,
   ) =>
       _buildEntry(
         theme: theme,

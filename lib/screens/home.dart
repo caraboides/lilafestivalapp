@@ -12,6 +12,10 @@ import 'menu.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({this.favoritesOnly = false});
 
+  static Widget builder(BuildContext context) => HomeScreen();
+  static Widget myScheduleBuilder(BuildContext context) =>
+      HomeScreen(favoritesOnly: true);
+
   final bool favoritesOnly;
 
   @override
