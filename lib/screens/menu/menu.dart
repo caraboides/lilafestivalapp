@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dime/dime.dart';
 
-import '../models/global_config.dart';
-import '../models/theme.dart';
-import '../utils/i18n.dart';
-import '../utils/navigation.dart';
+import '../../models/global_config.dart';
+import '../../models/theme.dart';
+import '../../utils/navigation.dart';
+import 'menu.i18n.dart';
 
 class Menu extends StatelessWidget {
   const Menu();

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
-import '../screens/home.dart';
+import '../screens/about/about.dart';
+import '../screens/home/home.dart';
 
 class AppRoute {
   const AppRoute({
@@ -50,7 +51,7 @@ final ImmortalList<AppRoute> routes = ImmortalList([
     path: '/about',
     name: 'About',
     icon: Icons.info,
-    // builder: About.builder,
+    builder: About.builder,
   ),
 ]);
 final ImmortalMap<String, AppRoute> routesByPath =

@@ -1,12 +1,13 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 
-import '../models/festival_config.dart';
-import '../models/theme.dart';
-import '../utils/date.dart';
-import '../utils/i18n.dart';
-import '../widgets/periodic_rebuild_mixin.dart';
-import 'menu.dart';
+import '../../models/festival_config.dart';
+import '../../models/theme.dart';
+import '../../utils/date.dart';
+import '../../utils/i18n.dart';
+import '../../widgets/periodic_rebuild_mixin.dart';
+import '../menu/menu.dart';
+import 'home.i18n.dart';
 
 // TODO(SF) hook widget possible?
 class HomeScreen extends StatefulWidget {
