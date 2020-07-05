@@ -9,7 +9,7 @@ import '../../models/global_config.dart';
 import '../../models/reference.dart';
 import '../../models/theme.dart';
 import '../../utils/i18n.dart';
-import '../menu/menu.dart';
+import '../../widgets/scaffold.dart';
 import 'about.i18n.dart';
 
 class About extends StatelessWidget {
@@ -104,12 +104,11 @@ class About extends StatelessWidget {
     final globalConfig = dimeGet<GlobalConfig>();
     return Theme(
       data: theme.aboutTheme,
-      child: Scaffold(
-        // TODO(SF) create scaffold class?
-        drawer: const Menu(),
-        appBar: theme.appBar('About'.i18n),
+      child: AppScaffold(
+        title: 'About'.i18n,
         backgroundColor: theme.aboutBackgroundColor,
         body: ListView(
+          // TODO(SF) add to theme
           padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
           children: <Widget>[
             ..._buildMessages(
