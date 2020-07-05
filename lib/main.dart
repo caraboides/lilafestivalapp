@@ -6,14 +6,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:i18n_extension/i18n_widget.dart';
 
 import 'flavor/module.dart';
-import 'models/config.dart';
+import 'models/festival_config.dart';
 import 'models/theme.dart';
-import 'providers/module.dart';
-import 'screens/home.dart';
+import 'utils/global_module.dart';
+import 'utils/navigation.dart';
 
 void main() {
   dimeInstall(FlavorModule());
-  dimeInstall(ProviderModule());
+  dimeInstall(GlobalModule());
+
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -56,17 +57,12 @@ class FestivalApp extends StatelessWidget {
       // home: InitializationWidget(
       //   child: HomeScreen(),
       // ),
-      // TODO(SF) does i18n work with routes?
-      home: I18n(
-        child: HomeScreen(),
-      ),
-      // routes: {
-      //   'home': (context) => HomeScreen(),
-      //   'mySchedule': (context) => HomeScreen(favoritesOnly: true),
-      //   'drive': (context) => Drive(),
-      //   'faq': (context) => FAQ(),
-      //   'about': (context) => About(),
-      // },
+      // TODO(SF) necessary to wrap i18n per route? maybe home routes only?
+      // or separate '/' route for init? > consider in 'isHomeRoute' fn
+      routes: routesByPath
+          .mapValues(
+              (_, route) => (context) => I18n(child: route.builder(context)))
+          .toMutableMap(),
     );
   }
 }

@@ -1,11 +1,12 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 
-import '../i18n.dart';
-import '../models/config.dart';
+import '../models/festival_config.dart';
 import '../models/theme.dart';
 import '../utils/date.dart';
+import '../utils/i18n.dart';
 import '../widgets/periodic_rebuild_mixin.dart';
+import 'menu.dart';
 
 // TODO(SF) hook widget possible?
 class HomeScreen extends StatefulWidget {
@@ -57,10 +58,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   int _initialTab(FestivalConfig config) {
     final now = DateTime.now();
-    return config.days.indexWhere(
-          (day) => isSameDay(now, day, offset: config.daySwitchOffset),
-        ) +
-        1;
+    return 1 +
+        config.days.indexWhere((day) => isSameDay(
+              now,
+              day,
+              offset: config.daySwitchOffset,
+            ));
   }
 
   @override
@@ -71,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen>
       length: config.days.length + 1,
       initialIndex: _initialTab(config),
       child: Scaffold(
-        // drawer: const Menu(),
+        drawer: const Menu(),
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
