@@ -8,12 +8,13 @@ import 'package:i18n_extension/i18n_widget.dart';
 import 'flavor/module.dart';
 import 'models/festival_config.dart';
 import 'models/theme.dart';
+import 'providers/context_module.dart';
 import 'utils/global_module.dart';
 import 'utils/navigation.dart';
 
 void main() {
-  dimeInstall(FlavorModule());
   dimeInstall(GlobalModule());
+  dimeInstall(FlavorModule());
 
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -43,6 +44,7 @@ class FestivalApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // _precacheImages(context);
     // initializeNotifications();
+    dimeInstall(ContextModule(context));
     return MaterialApp(
       title: dimeGet<FestivalConfig>().festivalName,
       theme: dimeGet<FestivalTheme>().theme,

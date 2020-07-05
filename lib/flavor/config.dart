@@ -4,6 +4,7 @@ import '../models/festival_config.dart';
 import '../models/reference.dart';
 
 final FestivalConfig config = FestivalConfig(
+  festivalId: 'spirit_2019',
   festivalName: 'Test festival',
   festivalFullName: 'Test festival 2020',
   festivalUrl: 'https://www.spirit-festival.com',

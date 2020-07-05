@@ -20,10 +20,9 @@ dependencies:
   immortal: ^2.1.1
   url_launcher: ^5.4.11
   package_info: ^0.4.1
+  path_provider: ^1.6.11
+  http: ^0.12.1
   # flutter_launcher_icons: ^0.7.2+1
-  # http: ^0.12.0+2
-  # path_provider: ^1.2.0
-  # optional: ^3.0.2+1
   # webview_flutter: ^0.3.10+4
   # flutter_local_notifications: ^0.8.0
   # dcache: ^0.3.0

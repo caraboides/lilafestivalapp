@@ -11,3 +11,4 @@ linter:
     prefer_typing_uninitialized_variables: true
     use_function_type_syntax_for_parameters: true
     prefer_single_quotes: true
+    avoid_catches_without_on_clauses: false

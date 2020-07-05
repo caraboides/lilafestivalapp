@@ -51,6 +51,8 @@ class _HomeScreenState extends State<HomeScreen>
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           // if (date != null) WeatherWidget(date),
+          // TODO(SF) tag for schedule filter provider
+          Text(date != null ? date.toIso8601String() : 'allBands'),
           // EventListView(
           //   eventFilter:
           //       date != null ? Schedule.dayOf(date) : Schedule.allBandsOf,

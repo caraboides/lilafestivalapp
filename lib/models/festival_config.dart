@@ -5,6 +5,7 @@ import 'reference.dart';
 // TODO(SF) add required annotations or similiar
 class FestivalConfig {
   const FestivalConfig({
+    this.festivalId,
     this.festivalName,
     this.festivalFullName,
     this.festivalUrl,
@@ -15,6 +16,7 @@ class FestivalConfig {
     this.aboutMessages,
   });
 
+  final String festivalId;
   final String festivalName;
   final String festivalFullName;
   final String festivalUrl;
