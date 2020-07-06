@@ -18,7 +18,7 @@ class StreamFallbackProvider<T> extends StreamProvider<T> {
     Optional<String> appStorageKey,
     Optional<String> fallbackDataAssetKey,
     T Function(dynamic) fromJson,
-  }) : super((ref) => _loadData(
+  }) : super((ref) => loadData(
               context: context,
               ref: ref,
               remoteUrl: remoteUrl,
@@ -37,12 +37,43 @@ class StreamFallbackProvider<T> extends StreamProvider<T> {
   ) =>
       DefaultAssetBundle.of(context)
           .loadString(fallbackDataAssetKey)
-          .then((json) => Optional<J>.of(jsonDecode(json)))
-          .catchError((_) => Optional<J>.empty());
+          .then((json) =>
+              Optional<J>.ofNullable(json != null ? jsonDecode(json) : null))
+          .catchError((e) {
+        print(e);
+        return Optional<J>.empty();
+      });
+
+  static void _loadRemoteData<J>(
+    String remoteUrl,
+    void Function(J) handleJsonData,
+  ) =>
+      _festivalHub
+          .loadJsonData<J>(remoteUrl)
+          .then((result) => result.ifPresent(handleJsonData))
+          .catchError(print);
+
+  static void _loadFallbackData<J>({
+    BuildContext context,
+    String appStorageKey,
+    Optional<String> fallbackDataAssetKey,
+    void Function(J) handleJsonFallbackData,
+  }) =>
+      _appStorage
+          .loadJson<J>(appStorageKey)
+          .then((result) => result
+              .map((value) => Optional.of(value))
+              .orElseGetAsync(() => fallbackDataAssetKey
+                  .map((assetKey) => _loadJsonDataFromAssets(context, assetKey))
+                  .orElse(Future.value(Optional<J>.empty()))))
+          .then(
+            (value) => value.ifPresent(handleJsonFallbackData),
+          )
+          .catchError(print);
 
   // TODO(SF) replace null checks everywhere with optionals?
   // TODO(SF) retry loading remote data later?
-  static Stream<T> _loadData<T, J>({
+  static Stream<T> loadData<T, J>({
     BuildContext context,
     Optional<String> fallbackDataAssetKey,
     Optional<String> appStorageKey,
@@ -50,36 +81,28 @@ class StreamFallbackProvider<T> extends StreamProvider<T> {
     T Function(J) fromJson,
     ProviderReference ref,
   }) {
-    // TODO(SF) improve?
     // TODO(SF) error handling
     final streamController = StreamController<T>();
     remoteUrl.ifPresent(
-      (url) => _festivalHub.loadJsonData<J>(url).then(
-            (result) => result.map((json) {
-              final data = fromJson(json);
-              // TODO(SF) what if already closed?
-              streamController.add(data);
-              streamController.close();
-              appStorageKey.map((key) => _appStorage.storeJson(key, json));
-            }),
-          ),
+      (url) => _loadRemoteData(url, (json) {
+        final data = fromJson(json);
+        // TODO(SF) what if already closed?
+        streamController.add(data);
+        streamController.close();
+        appStorageKey.ifPresent((key) => _appStorage.storeJson(key, json));
+      }),
     );
     appStorageKey.ifPresent(
-      (key) => _appStorage.loadJson<J>(key).then((result) async {
-        if (result.isPresent) {
-          return result;
-        }
-        return fallbackDataAssetKey
-            .map((assetKey) => _loadJsonDataFromAssets(context, assetKey))
-            .orElse(Future.value(Optional<J>.empty()));
-      }).then(
-        (value) => value.ifPresent((json) {
-          final data = fromJson(json);
-          if (!streamController.isClosed) {
-            streamController.add(data);
-          }
-        }),
-      ),
+      (key) => _loadFallbackData(
+          context: context,
+          appStorageKey: key,
+          fallbackDataAssetKey: fallbackDataAssetKey,
+          handleJsonFallbackData: (json) {
+            final data = fromJson(json);
+            if (!streamController.isClosed) {
+              streamController.add(data);
+            }
+          }),
     );
 
     // TODO(SF) possible to close closed stream?

@@ -44,6 +44,8 @@ class FestivalApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // _precacheImages(context);
     // initializeNotifications();
+    // TODO(SF) this may only be executed once! (problem on app restart)
+    // TODO(SF) override flag?
     dimeInstall(ContextModule(context));
     return MaterialApp(
       title: dimeGet<FestivalConfig>().festivalName,
