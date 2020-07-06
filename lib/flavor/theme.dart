@@ -103,4 +103,16 @@ final FestivalTheme festivalTheme = FestivalTheme(
       bottom: BorderSide(color: Colors.black, width: 2),
     ),
   ),
+  eventListItemHeight: 70,
+  eventBandTextStyle: TextStyle(
+    fontWeight: FontWeight.bold,
+  ),
+  eventDateTextStyle: TextStyle(
+    fontSize: 12,
+    color: Colors.black54,
+  ),
+  eventStageTextStyle: TextStyle(
+    fontSize: 12,
+    color: Colors.black87,
+  ),
 );

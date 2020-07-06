@@ -37,8 +37,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # assets:
-  #    - assets/initial_schedule.json
+  assets:
+     - assets/initial_schedule.json
   #    - assets/bands.json
   #    - assets/logo.png
   #    - assets/icon_menu.png

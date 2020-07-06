@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
 import 'reference.dart';
@@ -14,6 +15,7 @@ class FestivalConfig {
     this.daySwitchOffset,
     this.fontReferences,
     this.aboutMessages,
+    this.stageAlignment,
   });
 
   final String festivalId;
@@ -25,6 +27,7 @@ class FestivalConfig {
   final Duration daySwitchOffset;
   final ImmortalList<Reference> fontReferences;
   final ImmortalList<Reference> aboutMessages;
+  final CrossAxisAlignment Function(String stage) stageAlignment;
 
   ImmortalList<DateTime> get days => ImmortalList.generate(
       endDate.difference(startDate).inDays + 1,

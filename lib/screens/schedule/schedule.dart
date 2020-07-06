@@ -7,25 +7,26 @@ import '../../utils/date.dart';
 import '../../utils/i18n.dart';
 import '../../widgets/periodic_rebuild_mixin.dart';
 import '../../widgets/scaffold.dart';
-import 'home.i18n.dart';
+import 'schedule.i18n.dart';
+import 'widgets/event_list_view.dart';
 
 // TODO(SF) hook widget possible?
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({this.favoritesOnly = false});
+class ScheduleScreen extends StatefulWidget {
+  const ScheduleScreen({this.favoritesOnly = false});
 
-  static Widget builder(BuildContext context) => HomeScreen();
+  static Widget builder(BuildContext context) => ScheduleScreen();
   static Widget myScheduleBuilder(BuildContext context) =>
-      HomeScreen(favoritesOnly: true);
+      ScheduleScreen(favoritesOnly: true);
 
   final bool favoritesOnly;
 
   @override
-  State<StatefulWidget> createState() => _HomeScreenState();
+  State<StatefulWidget> createState() => _ScheduleScreenState();
 }
 
 // TODO(SF) test mixin
-class _HomeScreenState extends State<HomeScreen>
-    with WidgetsBindingObserver, PeriodicRebuildMixin<HomeScreen> {
+class _ScheduleScreenState extends State<ScheduleScreen>
+    with WidgetsBindingObserver, PeriodicRebuildMixin<ScheduleScreen> {
   bool favoritesOnly = false;
 
   @override
@@ -52,14 +53,13 @@ class _HomeScreenState extends State<HomeScreen>
         children: <Widget>[
           // if (date != null) WeatherWidget(date),
           // TODO(SF) tag for schedule filter provider
-          Text(date != null ? date.toIso8601String() : 'allBands'),
-          // EventListView(
-          //   eventFilter:
-          //       date != null ? Schedule.dayOf(date) : Schedule.allBandsOf,
-          //   date: date,
-          //   openEventDetails: (event) => _openEventDetails(context, event),
-          //   favoritesOnly: favoritesOnly,
-          // ),
+          EventListView(
+            scheduleFilterTag:
+                date != null ? date.toIso8601String() : 'allBands',
+            date: date,
+            // openEventDetails: (event) => _openEventDetails(context, event),
+            favoritesOnly: favoritesOnly,
+          ),
         ],
       );
 

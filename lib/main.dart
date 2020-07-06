@@ -46,7 +46,7 @@ class FestivalApp extends StatelessWidget {
     // initializeNotifications();
     // TODO(SF) this may only be executed once! (problem on app restart)
     // TODO(SF) override flag?
-    dimeInstall(ContextModule(context));
+    dimeInstall(ContextModule(context), override: true);
     return MaterialApp(
       title: dimeGet<FestivalConfig>().festivalName,
       theme: dimeGet<FestivalTheme>().theme,
@@ -59,10 +59,10 @@ class FestivalApp extends StatelessWidget {
         Locale('de', 'DE'),
       ],
       // home: InitializationWidget(
-      //   child: HomeScreen(),
+      //   child: ScheduleScreen(),
       // ),
-      // TODO(SF) necessary to wrap i18n per route? maybe home routes only?
-      // or separate '/' route for init? > consider in 'isHomeRoute' fn
+      // TODO(SF) necessary to wrap i18n per route? maybe root routes only?
+      // or separate '/' route for init? > consider in 'isRoot' fn
       routes: routesByPath
           .mapValues(
               (_, route) => (context) => I18n(child: route.builder(context)))

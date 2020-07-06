@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
 import '../models/festival_config.dart';
@@ -30,4 +31,14 @@ final FestivalConfig config = FestivalConfig(
       ]),
     ),
   ]),
+  stageAlignment: (stage) {
+    switch (stage) {
+      case 'Mainstage':
+        return CrossAxisAlignment.start;
+      case 'Stage II':
+        return CrossAxisAlignment.end;
+      default:
+        return CrossAxisAlignment.center;
+    }
+  },
 );

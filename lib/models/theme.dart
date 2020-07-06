@@ -11,6 +11,10 @@ class FestivalTheme {
     this.aboutBackgroundColor,
     this.primaryButton,
     this.appBar,
+    this.eventListItemHeight,
+    this.eventBandTextStyle,
+    this.eventDateTextStyle,
+    this.eventStageTextStyle,
   });
 
   final ThemeData theme;
@@ -25,6 +29,10 @@ class FestivalTheme {
     VoidCallback onPressed,
   }) primaryButton;
   final AppBar Function(String title) appBar;
+  final double eventListItemHeight;
+  final TextStyle eventBandTextStyle;
+  final TextStyle eventDateTextStyle;
+  final TextStyle eventStageTextStyle;
 
   ThemeData get aboutTheme => theme.copyWith(
         textTheme: aboutTextTheme,

@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
 import '../screens/about/about.dart';
-import '../screens/home/home.dart';
+import '../screens/schedule/schedule.dart';
 
 class AppRoute {
   const AppRoute({
     this.path,
     this.name,
     this.icon,
-    this.isHomeRoute = false,
+    this.isRoot = false,
     this.builder,
   });
 
   final String path;
   final String name;
   final IconData icon;
-  final bool isHomeRoute;
+  final bool isRoot;
   final WidgetBuilder builder;
 }
 
@@ -25,15 +25,15 @@ final ImmortalList<AppRoute> routes = ImmortalList([
     path: '/',
     name: 'Schedule',
     icon: Icons.calendar_today,
-    isHomeRoute: true,
-    builder: HomeScreen.builder,
+    isRoot: true,
+    builder: ScheduleScreen.builder,
   ),
   AppRoute(
     path: '/mySchedule',
     name: 'My Schedule',
     icon: Icons.star,
-    isHomeRoute: true,
-    builder: HomeScreen.myScheduleBuilder,
+    isRoot: true,
+    builder: ScheduleScreen.myScheduleBuilder,
   ),
   AppRoute(
     path: '/drive',
@@ -57,19 +57,19 @@ final ImmortalList<AppRoute> routes = ImmortalList([
 final ImmortalMap<String, AppRoute> routesByPath =
     routes.asMapWithKeys((route) => route.path);
 
-bool _isHomeScreen(Route route) => routesByPath[route.settings.name]
-    .map((appRoute) => appRoute.isHomeRoute)
+bool _isRoot(Route route) => routesByPath[route.settings.name]
+    .map((appRoute) => appRoute.isRoot)
     .orElse(false);
 
 void navigateToRoute(NavigatorState navigator, AppRoute route) {
-  if (route.isHomeRoute) {
-    navigator.popUntil(_isHomeScreen);
+  if (route.isRoot) {
+    navigator.popUntil(_isRoot);
     navigator.pushReplacementNamed(route.path);
   } else {
     navigator.pop();
     navigator.pushNamedAndRemoveUntil(
       route.path,
-      _isHomeScreen,
+      _isRoot,
     );
   }
 }
