@@ -30,7 +30,6 @@ class ProviderModule extends BaseDimeModule {
   @override
   void updateInjections() {
     // TODO(SF) or use tag for festivalid?
-    // TODO(SF) async?
     final festivalId = dimeGet<FestivalConfig>().festivalId;
     addSingle<BandsProvider>(BandsProvider(context, festivalId));
     addSingle<ScheduleProvider>(ScheduleProvider(context, festivalId));

@@ -37,7 +37,6 @@ mixin PeriodicRebuildMixin<T extends StatefulWidget>
     }
   }
 
-  // TODO(SF) make configurable?
   Timer _createTimer() => Timer.periodic(
         dimeGet<GlobalConfig>().periodicRebuildDuration,
         (_) => _rebuild(),

@@ -10,6 +10,7 @@ extension Localization on String {
         'en_us': 'My Schedule',
         'de_de': 'Mein Plan',
       } +
+      // TODO(SF) these are flavor specific
       {
         'en_us': 'Location',
         'de_de': 'Anfahrt',

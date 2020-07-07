@@ -46,8 +46,7 @@ class FestivalApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // _precacheImages(context);
     // initializeNotifications();
-    // TODO(SF) this may only be executed once! (problem on app restart)
-    // TODO(SF) override flag?
+    // TODO(SF) still problem on app restart? other solution?
     dimeInstall(ProviderModule(context), override: true);
 
     return MaterialApp(

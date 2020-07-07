@@ -24,6 +24,7 @@ class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
             ));
 
   // TODO(SF) retry loading remote data later?
+  @visibleForTesting
   static Stream<T> loadData<T, J>({
     BuildContext context,
     Optional<String> remoteUrl,
