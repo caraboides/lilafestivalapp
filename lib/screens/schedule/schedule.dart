@@ -2,11 +2,13 @@ import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/festival_config.dart';
+import '../../models/scheduled_event.dart';
 import '../../models/theme.dart';
 import '../../utils/date.dart';
 import '../../utils/i18n.dart';
 import '../../widgets/periodic_rebuild_mixin.dart';
 import '../../widgets/scaffold.dart';
+import '../band_detail_view/band_detail_view.dart';
 import 'schedule.i18n.dart';
 import 'widgets/event_list_view.dart';
 
@@ -41,12 +43,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     });
   }
 
-  // void _openEventDetails(BuildContext context, Event event) {
-  //   Navigator.of(context).push(MaterialPageRoute(
-  //     builder: (_) => EventDetailView(event),
-  //     fullscreenDialog: true,
-  //   ));
-  // }
+  void _openEventDetails(BuildContext context, ScheduledEvent event) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => BandDetailView(event),
+      fullscreenDialog: true,
+    ));
+  }
 
   Widget _buildEventList(BuildContext context, {DateTime date}) => Column(
         mainAxisSize: MainAxisSize.max,
@@ -56,7 +58,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             scheduleFilterTag:
                 date != null ? date.toIso8601String() : 'allBands',
             date: date,
-            // openEventDetails: (event) => _openEventDetails(context, event),
+            openEventDetails: (event) => _openEventDetails(context, event),
             favoritesOnly: favoritesOnly,
           ),
         ],

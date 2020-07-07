@@ -15,6 +15,8 @@ class FestivalTheme {
     this.eventBandTextStyle,
     this.eventDateTextStyle,
     this.eventStageTextStyle,
+    this.bandDetailTextStyle,
+    this.bandNameTextStyle,
   });
 
   final ThemeData theme;
@@ -33,6 +35,8 @@ class FestivalTheme {
   final TextStyle eventBandTextStyle;
   final TextStyle eventDateTextStyle;
   final TextStyle eventStageTextStyle;
+  final TextStyle bandNameTextStyle;
+  final TextStyle bandDetailTextStyle;
 
   ThemeData get aboutTheme => theme.copyWith(
         textTheme: aboutTextTheme,

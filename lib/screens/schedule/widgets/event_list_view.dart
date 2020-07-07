@@ -89,7 +89,7 @@ class EventListViewState extends State<EventListView> {
         key: Key(scheduledEvent.event.id),
         event: scheduledEvent,
         bandView: widget.bandView,
-        // openEventDetails: () => widget.openEventDetails(scheduledEvent),
+        openEventDetails: () => widget.openEventDetails(scheduledEvent),
         isPlaying: isPlaying,
       );
     });
@@ -134,12 +134,17 @@ class EventListViewState extends State<EventListView> {
     );
   }
 
+  // TODO(SF) use computed as well?
+  ImmortalList<ScheduledEvent> _filterEvents(
+          ImmortalList<ScheduledEvent> events) =>
+      !widget.favoritesOnly ? events : events.filter((event) => event.isLiked);
+
   @override
   Widget build(BuildContext context) => Consumer((context, read) {
         final events = read(
             dimeGet<CombinedScheduleProvider>(tag: widget.scheduleFilterTag));
         return events.when(
-          data: _buildEventList,
+          data: (events) => _buildEventList(_filterEvents(events)),
           // TODO(SF)
           loading: () => Center(child: Text('Loading!')),
           error: (e, trace) => Center(

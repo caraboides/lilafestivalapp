@@ -115,4 +115,8 @@ final FestivalTheme festivalTheme = FestivalTheme(
     fontSize: 12,
     color: Colors.black87,
   ),
+  bandNameTextStyle: theme.textTheme.headline5,
+  bandDetailTextStyle: TextStyle(
+    fontWeight: FontWeight.bold,
+  ),
 );
