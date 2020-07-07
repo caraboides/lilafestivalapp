@@ -6,22 +6,22 @@ import 'package:optional/optional.dart';
 
 import '../models/event.dart';
 import '../models/festival_config.dart';
+import '../utils/combined_storage_stream_provider.dart';
 import '../utils/date.dart';
-import '../utils/stream_fallback_provider.dart';
 
-class ScheduleProvider extends StreamFallbackProvider<ImmortalList<Event>> {
+class ScheduleProvider
+    extends CombinedStorageStreamProvider<ImmortalList<Event>> {
   ScheduleProvider(BuildContext context, String festivalId)
       : super(
           context: context,
           remoteUrl: Optional.of('/schedule?festival=$festivalId'),
           appStorageKey: Optional.of('schedule.json'),
-          fallbackDataAssetKey: Optional.of('assets/initial_schedule.json'),
+          assetKey: Optional.of('assets/initial_schedule.json'),
           fromJson: (jsonMap) => ImmortalMap<String, dynamic>(jsonMap)
               .mapEntries<Event>((id, json) => Event.fromJson(id, json)),
         );
 }
 
-// TODO(SF) does this work??
 class ScheduleFilterProvider extends Computed<AsyncValue<ImmortalList<Event>>> {
   ScheduleFilterProvider._(this.filter)
       : super((read) => read(dimeGet<ScheduleProvider>()).whenData(filter));

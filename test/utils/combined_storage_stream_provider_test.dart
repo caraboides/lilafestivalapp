@@ -4,10 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
+import 'package:lilafestivalapp/services/combined_storage.dart';
 import 'package:mockito/mockito.dart';
 import 'package:optional/optional.dart';
 
-import 'package:lilafestivalapp/utils/stream_fallback_provider.dart';
+import 'package:lilafestivalapp/utils/combined_storage_stream_provider.dart';
 import 'package:lilafestivalapp/services/app_storage.dart';
 import 'package:lilafestivalapp/services/festival_hub.dart';
 
@@ -39,6 +40,7 @@ class TestModule extends BaseDimeModule {
   void updateInjections() {
     addSingle<AppStorage>(appStorageMock);
     addSingle<FestivalHub>(festivalHubMock);
+    addSingle<CombinedStorage>(CombinedStorage());
   }
 }
 
@@ -64,11 +66,11 @@ Future<Optional<dynamic>> Function(Invocation) mockOptionalResponse(
         [int milliseconds = 0]) =>
     mockResponse(Optional.ofNullable(data?.toJson()), milliseconds);
 
-Stream<TestData> createStream() => StreamFallbackProvider.loadData(
+Stream<TestData> createStream() => CombinedStorageStreamProvider.loadData(
       context: buildContextMock,
       remoteUrl: Optional.of('remoteUrl'),
       appStorageKey: Optional.of('appStorageKey'),
-      fallbackDataAssetKey: Optional.of('fallbackDataAssetKey'),
+      assetKey: Optional.of('fallbackDataAssetKey'),
       fromJson: (json) => TestData.fromJson(json),
       ref: MockProviderReference(),
     );

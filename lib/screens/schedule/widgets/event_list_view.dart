@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
 
-import '../../../models/event.dart';
 import '../../../models/festival_config.dart';
+import '../../../models/scheduled_event.dart';
 import '../../../models/theme.dart';
-import '../../../providers/schedule.dart';
+import '../../../providers/combined_schedule.dart';
 import '../../../utils/date.dart';
 import 'event_list_item.dart';
 import 'event_list_view.i18n.dart';
@@ -23,7 +23,7 @@ class EventListView extends StatefulWidget {
 
   final String scheduleFilterTag;
   final DateTime date;
-  final ValueChanged<Event> openEventDetails;
+  final ValueChanged<ScheduledEvent> openEventDetails;
   final bool favoritesOnly;
 
   bool get bandView => date == null;
@@ -52,11 +52,6 @@ class EventListViewState extends State<EventListView> {
     super.didUpdateWidget(oldWidget);
   }
 
-  // ImmortalList<Event> getEvents(MyScheduleController myScheduleController) =>
-  //     widget.eventFilter(context).where((event) =>
-  //         !widget.favoritesOnly ||
-  //         myScheduleController.mySchedule.isEventLiked(event.id));
-
   // void _scrollToCurrentBand(
   //     {Duration timeout = const Duration(milliseconds: 50)}) {
   //   Future.delayed(timeout, () {
@@ -75,29 +70,26 @@ class EventListViewState extends State<EventListView> {
   //   });
   // }
 
-  Widget _buildEventList(ImmortalList<Event> events) {
-    // final myScheduleController = MyScheduleController.of(context);
-    // final events = getEvents(myScheduleController);
+  Widget _buildEventList(ImmortalList<ScheduledEvent> events) {
     final now = DateTime.now();
     final config = dimeGet<FestivalConfig>();
     final theme = dimeGet<FestivalTheme>();
     final nextOrCurrentIndex = widget.date != null &&
             isSameDay(now, widget.date, offset: config.daySwitchOffset)
-        ? events.indexWhere(
-            (event) => now.isBefore(event.start) || now.isBefore(event.end))
+        ? events.indexWhere((scheduledEvent) =>
+            now.isBefore(scheduledEvent.event.start) ||
+            now.isBefore(scheduledEvent.event.end))
         : -1;
     var currentlyPlaying = false;
-    var items = events.map<Widget>((event) {
-      final isPlaying = !now.isBefore(event.start) && !now.isAfter(event.end);
+    var items = events.map<Widget>((scheduledEvent) {
+      final isPlaying = !now.isBefore(scheduledEvent.event.start) &&
+          !now.isAfter(scheduledEvent.event.end);
       currentlyPlaying = currentlyPlaying || isPlaying;
       return EventListItem(
-        key: Key(event.id),
-        isLiked: false,
-        // isLiked: myScheduleController.mySchedule.isEventLiked(event.id),
-        event: event,
-        // toggleEvent: () => myScheduleController.toggleEvent(i18n, event),
+        key: Key(scheduledEvent.event.id),
+        event: scheduledEvent,
         bandView: widget.bandView,
-        openEventDetails: () => widget.openEventDetails(event),
+        // openEventDetails: () => widget.openEventDetails(scheduledEvent),
         isPlaying: isPlaying,
       );
     });
@@ -145,7 +137,7 @@ class EventListViewState extends State<EventListView> {
   @override
   Widget build(BuildContext context) => Consumer((context, read) {
         final events = read(
-            dimeGet<ScheduleFilterProvider>(tag: widget.scheduleFilterTag));
+            dimeGet<CombinedScheduleProvider>(tag: widget.scheduleFilterTag));
         return events.when(
           data: _buildEventList,
           // TODO(SF)

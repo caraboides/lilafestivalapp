@@ -52,7 +52,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           // if (date != null) WeatherWidget(date),
-          // TODO(SF) tag for schedule filter provider
           EventListView(
             scheduleFilterTag:
                 date != null ? date.toIso8601String() : 'allBands',

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/event.dart';
 import '../../../models/festival_config.dart';
+import '../../../models/scheduled_event.dart';
 import '../../../models/theme.dart';
 import '../../../utils/i18n.dart';
 import 'event_list_item.i18n.dart';
@@ -10,17 +11,13 @@ import 'event_list_item.i18n.dart';
 class EventListItem extends StatelessWidget {
   const EventListItem({
     Key key,
-    this.isLiked,
     this.event,
-    this.toggleEvent,
     this.bandView,
     this.openEventDetails,
     this.isPlaying,
   }) : super(key: key);
 
-  final bool isLiked;
-  final Event event;
-  final VoidCallback toggleEvent;
+  final ScheduledEvent event;
   final bool bandView;
   final VoidCallback openEventDetails;
   final bool isPlaying;
@@ -43,18 +40,18 @@ class EventListItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(isLiked ? Icons.star : Icons.star_border),
-                  tooltip: (isLiked
+                  icon: Icon(event.isLiked ? Icons.star : Icons.star_border),
+                  tooltip: (event.isLiked
                           ? 'Remove gig from schedule'
                           : 'Add gig to schedule')
                       .i18n,
-                  onPressed: toggleEvent,
+                  onPressed: event.toggleEvent,
                 ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: _EventDescription(
-                      event: event,
+                      event: event.event,
                       bandView: bandView,
                     ),
                   ),
