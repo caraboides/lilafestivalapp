@@ -9,14 +9,6 @@ extension Localization on String {
       {
         'en_us': 'Add gig to schedule',
         'de_de': 'Füge Auftritt zum Plan hinzu',
-      } +
-      {
-        'en_us': 'HH:mm',
-        'de_de': 'HH:mm',
-      } +
-      {
-        'en_us': 'E HH:mm',
-        'de_de': 'E HH:mm',
       };
 
   String get i18n => localize(this, _t);

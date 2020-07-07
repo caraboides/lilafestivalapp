@@ -5,8 +5,8 @@ import '../../../models/event.dart';
 import '../../../models/festival_config.dart';
 import '../../../models/scheduled_event.dart';
 import '../../../models/theme.dart';
-import '../../../utils/i18n.dart';
-import 'event_list_item.i18n.dart';
+import '../../../widgets/event_date/event_date.dart';
+import '../../../widgets/event_toggle/event_toggle.dart';
 
 class EventListItem extends StatelessWidget {
   const EventListItem({
@@ -39,13 +39,9 @@ class EventListItem extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                IconButton(
-                  icon: Icon(event.isLiked ? Icons.star : Icons.star_border),
-                  tooltip: (event.isLiked
-                          ? 'Remove gig from schedule'
-                          : 'Add gig to schedule')
-                      .i18n,
-                  onPressed: event.toggleEvent,
+                EventToggle(
+                  isActive: event.isLiked,
+                  onToggle: event.toggleEvent,
                 ),
                 Expanded(
                   child: Padding(
@@ -92,25 +88,10 @@ class _EventDescription extends StatelessWidget {
           style: theme.eventBandTextStyle,
         ),
         const SizedBox(height: 4),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              (bandView ? 'E HH:mm' : 'HH:mm').i18n.dateFormat(event.start),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.eventDateTextStyle,
-            ),
-            Text(
-              ' - ${'HH:mm'.i18n.dateFormat(event.end)}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: bandView
-                  ? theme.eventDateTextStyle
-                  : theme.eventDateTextStyle
-                      .copyWith(color: Colors.black.withOpacity(0.33)),
-            ),
-          ],
+        EventDate(
+          start: event.start,
+          end: event.end,
+          showWeekDay: bandView,
         ),
         const SizedBox(height: 2),
         Text(

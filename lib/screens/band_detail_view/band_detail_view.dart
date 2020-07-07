@@ -10,7 +10,8 @@ import '../../models/event.dart';
 import '../../models/scheduled_event.dart';
 import '../../models/theme.dart';
 import '../../providers/bands.dart';
-import '../../utils/i18n.dart';
+import '../../widgets/event_date/event_date.dart';
+import '../../widgets/event_toggle/event_toggle.dart';
 import 'band_detail_view.i18n.dart';
 
 class BandDetailView extends StatelessWidget {
@@ -144,24 +145,16 @@ class BandDetailView extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(scheduledEvent.isLiked
-                        ? Icons.star
-                        : Icons.star_border),
-                    tooltip: (scheduledEvent.isLiked
-                            ? 'Remove gig from schedule'
-                            : 'Add gig to schedule')
-                        .i18n,
-                    onPressed: () => scheduledEvent.toggleEvent,
+                  EventToggle(
+                    isActive: scheduledEvent.isLiked,
+                    onToggle: scheduledEvent.toggleEvent,
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 15),
-                    child: Text(
-                      '${'E HH:mm'.i18n.dateFormat(event.start)} - '
-                      '${'HH:mm'.i18n.dateFormat(event.end)}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.eventDateTextStyle,
+                    child: EventDate(
+                      start: event.start,
+                      end: event.end,
+                      showWeekDay: true,
                     ),
                   ),
                   Text(
