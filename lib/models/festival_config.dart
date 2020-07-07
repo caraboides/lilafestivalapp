@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
+import 'app_route.dart';
 import 'reference.dart';
 
 // TODO(SF) add required annotations or similiar
@@ -16,6 +17,7 @@ class FestivalConfig {
     this.fontReferences,
     this.aboutMessages,
     this.stageAlignment,
+    this.routes,
   });
 
   final String festivalId;
@@ -28,6 +30,7 @@ class FestivalConfig {
   final ImmortalList<Reference> fontReferences;
   final ImmortalList<Reference> aboutMessages;
   final CrossAxisAlignment Function(String stage) stageAlignment;
+  final ImmortalList<AppRoute> routes;
 
   ImmortalList<DateTime> get days => ImmortalList.generate(
       endDate.difference(startDate).inDays + 1,

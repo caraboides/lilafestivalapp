@@ -7,8 +7,8 @@ import 'combined_schedule.dart';
 import 'my_schedule.dart';
 import 'schedule.dart';
 
-class ContextModule extends BaseDimeModule {
-  ContextModule(this.context);
+class ProviderModule extends BaseDimeModule {
+  ProviderModule(this.context);
 
   final BuildContext context;
 

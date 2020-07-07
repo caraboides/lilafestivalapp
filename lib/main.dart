@@ -8,13 +8,15 @@ import 'package:i18n_extension/i18n_widget.dart';
 import 'flavor/module.dart';
 import 'models/festival_config.dart';
 import 'models/theme.dart';
-import 'providers/context_module.dart';
+import 'providers/provider_module.dart';
+import 'services/navigation.dart';
+import 'services/service_module.dart';
 import 'utils/global_module.dart';
-import 'utils/navigation.dart';
 
 void main() {
   dimeInstall(GlobalModule());
   dimeInstall(FlavorModule());
+  dimeInstall(ServiceModule());
 
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -46,7 +48,8 @@ class FestivalApp extends StatelessWidget {
     // initializeNotifications();
     // TODO(SF) this may only be executed once! (problem on app restart)
     // TODO(SF) override flag?
-    dimeInstall(ContextModule(context), override: true);
+    dimeInstall(ProviderModule(context), override: true);
+
     return MaterialApp(
       title: dimeGet<FestivalConfig>().festivalName,
       theme: dimeGet<FestivalTheme>().theme,
@@ -63,7 +66,8 @@ class FestivalApp extends StatelessWidget {
       // ),
       // TODO(SF) necessary to wrap i18n per route? maybe root routes only?
       // or separate '/' route for init? > consider in 'isRoot' fn
-      routes: routesByPath
+      routes: dimeGet<Navigation>()
+          .routesByPath
           .mapValues(
               (_, route) => (context) => I18n(child: route.builder(context)))
           .toMutableMap(),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
+import '../models/app_route.dart';
 import '../models/festival_config.dart';
 import '../models/reference.dart';
+import 'screens/drive/drive.dart';
+import 'screens/faq/faq.dart';
 
 final FestivalConfig config = FestivalConfig(
   festivalId: 'spirit_2019',
@@ -41,4 +44,18 @@ final FestivalConfig config = FestivalConfig(
         return CrossAxisAlignment.center;
     }
   },
+  routes: ImmortalList([
+    AppRoute(
+      path: '/drive',
+      name: 'Location',
+      icon: Icons.map,
+      builder: Drive.builder,
+    ),
+    AppRoute(
+      path: '/faq',
+      name: 'FAQ',
+      icon: Icons.help,
+      builder: FAQ.builder,
+    ),
+  ]),
 );

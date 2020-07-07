@@ -4,7 +4,7 @@ import 'package:dime/dime.dart';
 
 import '../../models/global_config.dart';
 import '../../models/theme.dart';
-import '../../utils/navigation.dart';
+import '../../services/navigation.dart';
 import 'menu.i18n.dart';
 
 class Menu extends StatelessWidget {
@@ -28,23 +28,12 @@ class Menu extends StatelessWidget {
         onTap: onTap,
       );
 
-  Widget _buildRouteEntry(
-    NavigatorState navigator,
-    FestivalTheme theme,
-    AppRoute route,
-  ) =>
-      _buildEntry(
-        theme: theme,
-        label: route.name,
-        icon: route.icon,
-        onTap: () => navigateToRoute(navigator, route),
-      );
-
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context);
     final theme = dimeGet<FestivalTheme>();
     final config = dimeGet<GlobalConfig>();
+    final navigation = dimeGet<Navigation>();
     return Drawer(
       child: Container(
         decoration: theme.menuDrawerDecoration,
@@ -54,8 +43,13 @@ class Menu extends StatelessWidget {
             //   'assets/icon_menu.png',
             //   height: 300,
             // ),
-            ...routes
-                .map((route) => _buildRouteEntry(navigator, theme, route))
+            ...navigation.routes
+                .map((route) => _buildEntry(
+                      theme: theme,
+                      label: route.name,
+                      icon: route.icon,
+                      onTap: () => navigation.navigateToRoute(navigator, route),
+                    ))
                 .toMutableList(),
             _buildEntry(
               theme: theme,
