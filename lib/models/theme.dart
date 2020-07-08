@@ -12,9 +12,6 @@ class FestivalTheme {
     this.primaryButton,
     this.appBar,
     this.eventListItemHeight,
-    this.eventBandTextStyle,
-    this.eventDateTextStyle,
-    this.eventStageTextStyle,
     this.bandDetailTextStyle,
     this.bandNameTextStyle,
   });
@@ -31,10 +28,7 @@ class FestivalTheme {
     VoidCallback onPressed,
   }) primaryButton;
   final AppBar Function(String title) appBar;
-  final double eventListItemHeight;
-  final TextStyle eventBandTextStyle;
-  final TextStyle eventDateTextStyle;
-  final TextStyle eventStageTextStyle;
+  final double eventListItemHeight; // TODO(SF) move to global theme
   final TextStyle bandNameTextStyle;
   final TextStyle bandDetailTextStyle;
 

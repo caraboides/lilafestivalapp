@@ -58,7 +58,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             scheduleFilterTag:
                 date != null ? date.toIso8601String() : 'allBands',
             date: date,
-            openEventDetails: (event) => _openEventDetails(context, event),
+            openBandDetails: (event) => _openEventDetails(context, event),
             favoritesOnly: favoritesOnly,
           ),
         ],

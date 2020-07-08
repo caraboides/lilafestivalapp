@@ -104,17 +104,6 @@ final FestivalTheme festivalTheme = FestivalTheme(
     ),
   ),
   eventListItemHeight: 70,
-  eventBandTextStyle: TextStyle(
-    fontWeight: FontWeight.bold,
-  ),
-  eventDateTextStyle: TextStyle(
-    fontSize: 12,
-    color: Colors.black54,
-  ),
-  eventStageTextStyle: TextStyle(
-    fontSize: 12,
-    color: Colors.black87,
-  ),
   bandNameTextStyle: theme.textTheme.headline5,
   bandDetailTextStyle: TextStyle(
     fontWeight: FontWeight.bold,

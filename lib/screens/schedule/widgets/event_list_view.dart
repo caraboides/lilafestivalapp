@@ -17,16 +17,16 @@ class EventListView extends StatefulWidget {
     Key key,
     this.scheduleFilterTag,
     this.date,
-    this.openEventDetails,
+    this.openBandDetails,
     this.favoritesOnly,
   }) : super(key: key);
 
   final String scheduleFilterTag;
   final DateTime date;
-  final ValueChanged<ScheduledEvent> openEventDetails;
+  final ValueChanged<ScheduledEvent> openBandDetails;
   final bool favoritesOnly;
 
-  bool get bandView => date == null;
+  bool get isBandView => date == null;
 
   @override
   State<StatefulWidget> createState() => EventListViewState();
@@ -45,7 +45,7 @@ class EventListViewState extends State<EventListView> {
   @override
   void didUpdateWidget(EventListView oldWidget) {
     if (mounted &&
-        !widget.bandView &&
+        !widget.isBandView &&
         widget.favoritesOnly != oldWidget.favoritesOnly) {
       // _scrollToCurrentBand();
     }
@@ -87,9 +87,9 @@ class EventListViewState extends State<EventListView> {
       currentlyPlaying = currentlyPlaying || isPlaying;
       return EventListItem(
         key: Key(scheduledEvent.event.id),
-        event: scheduledEvent,
-        bandView: widget.bandView,
-        openEventDetails: () => widget.openEventDetails(scheduledEvent),
+        scheduledEvent: scheduledEvent,
+        isBandView: widget.isBandView,
+        openBandDetails: () => widget.openBandDetails(scheduledEvent),
         isPlaying: isPlaying,
       );
     });
@@ -119,7 +119,7 @@ class EventListViewState extends State<EventListView> {
         ),
       );
     }
-    if (_firstBuild && !widget.bandView) {
+    if (_firstBuild && !widget.isBandView) {
       _firstBuild = false;
       // _scrollToCurrentBand(timeout: Duration(milliseconds: 200));
     }

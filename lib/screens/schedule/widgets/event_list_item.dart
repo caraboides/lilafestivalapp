@@ -6,49 +6,51 @@ import '../../../models/festival_config.dart';
 import '../../../models/scheduled_event.dart';
 import '../../../models/theme.dart';
 import '../../../widgets/event_date/event_date.dart';
+import '../../../widgets/event_stage.dart';
 import '../../../widgets/event_toggle/event_toggle.dart';
+import 'event_band_name.dart';
 
 class EventListItem extends StatelessWidget {
   const EventListItem({
     Key key,
-    this.event,
-    this.bandView,
-    this.openEventDetails,
+    this.scheduledEvent,
+    this.isBandView,
+    this.openBandDetails,
     this.isPlaying,
   }) : super(key: key);
 
-  final ScheduledEvent event;
-  final bool bandView;
-  final VoidCallback openEventDetails;
+  final ScheduledEvent scheduledEvent;
+  final bool isBandView;
+  final VoidCallback openBandDetails;
   final bool isPlaying;
 
   @override
   Widget build(BuildContext context) {
-    final theme = dimeGet<FestivalTheme>();
+    final theme = Theme.of(context);
     return Material(
-      color: isPlaying ? theme.theme.accentColor : theme.theme.canvasColor,
+      color: isPlaying ? theme.accentColor : theme.canvasColor,
       child: InkWell(
-        onTap: openEventDetails,
+        onTap: openBandDetails,
         child: SafeArea(
           top: false,
           bottom: false,
-          minimum: EdgeInsets.symmetric(horizontal: 16),
+          minimum: EdgeInsets.symmetric(horizontal: 10),
           child: Container(
+            height: dimeGet<FestivalTheme>().eventListItemHeight,
             padding: const EdgeInsets.symmetric(vertical: 10),
-            height: theme.eventListItemHeight,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 EventToggle(
-                  isActive: event.isLiked,
-                  onToggle: event.toggleEvent,
+                  isActive: scheduledEvent.isLiked,
+                  onToggle: scheduledEvent.toggleEvent,
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: _EventDescription(
-                      event: event.event,
-                      bandView: bandView,
+                    padding: const EdgeInsets.only(left: 8, right: 16),
+                    child: _EventDetails(
+                      event: scheduledEvent.event,
+                      isBandView: isBandView,
                     ),
                   ),
                 )
@@ -61,44 +63,32 @@ class EventListItem extends StatelessWidget {
   }
 }
 
-class _EventDescription extends StatelessWidget {
-  const _EventDescription({
+class _EventDetails extends StatelessWidget {
+  const _EventDetails({
     Key key,
     this.event,
-    this.bandView,
+    this.isBandView,
   }) : super(key: key);
 
   final Event event;
-  final bool bandView;
+  final bool isBandView;
 
   @override
-  Widget build(BuildContext context) {
-    final config = dimeGet<FestivalConfig>();
-    final theme = dimeGet<FestivalTheme>();
-    return Column(
-      crossAxisAlignment: bandView
-          ? CrossAxisAlignment.start
-          : config.stageAlignment(event.stage),
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          event.bandName.toUpperCase(),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: theme.eventBandTextStyle,
-        ),
-        const SizedBox(height: 4),
-        EventDate(
-          start: event.start,
-          end: event.end,
-          showWeekDay: bandView,
-        ),
-        const SizedBox(height: 2),
-        Text(
-          event.stage,
-          style: theme.eventStageTextStyle,
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: isBandView
+            ? CrossAxisAlignment.start
+            : dimeGet<FestivalConfig>().stageAlignment(event.stage),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          EventBandName(event.bandName),
+          const SizedBox(height: 3.5),
+          EventDate(
+            start: event.start,
+            end: event.end,
+            showWeekDay: isBandView,
+          ),
+          const SizedBox(height: 2.5),
+          EventStage(event.stage),
+        ],
+      );
 }

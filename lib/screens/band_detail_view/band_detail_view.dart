@@ -11,6 +11,7 @@ import '../../models/scheduled_event.dart';
 import '../../models/theme.dart';
 import '../../providers/bands.dart';
 import '../../widgets/event_date/event_date.dart';
+import '../../widgets/event_stage.dart';
 import '../../widgets/event_toggle/event_toggle.dart';
 import 'band_detail_view.i18n.dart';
 
@@ -157,10 +158,7 @@ class BandDetailView extends StatelessWidget {
                       showWeekDay: true,
                     ),
                   ),
-                  Text(
-                    event.stage,
-                    style: theme.eventStageTextStyle,
-                  ),
+                  EventStage(event.stage),
                 ],
               ),
             ),
