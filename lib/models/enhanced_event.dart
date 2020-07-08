@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'event.dart';
 
-class ScheduledEvent {
-  ScheduledEvent({
+// TODO(SF) better make obsolete by using provider family
+class EnhancedEvent {
+  EnhancedEvent({
     this.event,
-    this.isLiked,
+    this.isScheduled,
     this.toggleEvent,
   });
 
   final Event event;
-  final bool isLiked;
+  final bool isScheduled;
   final VoidCallback toggleEvent;
 }

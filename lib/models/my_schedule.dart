@@ -12,7 +12,7 @@ class MySchedule {
 
   final ImmortalMap<String, int> _eventsWithNotification;
 
-  bool isEventLiked(String eventId) =>
+  bool isEventScheduled(String eventId) =>
       _eventsWithNotification.containsKey(eventId);
 
   Optional<int> getNotificationId(String eventId) =>

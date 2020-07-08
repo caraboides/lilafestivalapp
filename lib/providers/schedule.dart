@@ -5,7 +5,6 @@ import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
 
 import '../models/event.dart';
-import '../models/festival_config.dart';
 import '../utils/combined_storage_stream_provider.dart';
 import '../utils/date.dart';
 
@@ -35,8 +34,7 @@ class ScheduleFilterProvider extends Computed<AsyncValue<ImmortalList<Event>>> {
   factory ScheduleFilterProvider.forDay(DateTime day) =>
       ScheduleFilterProvider._(
         (events) => events
-            .where((item) => isSameDay(item.start, day,
-                offset: dimeGet<FestivalConfig>().daySwitchOffset))
+            .where((item) => isSameFestivalDay(item.start, day))
             .sort((a, b) => a.start.compareTo(b.start)),
       );
 }

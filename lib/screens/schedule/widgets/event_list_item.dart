@@ -1,9 +1,9 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/enhanced_event.dart';
 import '../../../models/event.dart';
 import '../../../models/festival_config.dart';
-import '../../../models/scheduled_event.dart';
 import '../../../models/theme.dart';
 import '../../../widgets/event_date/event_date.dart';
 import '../../../widgets/event_stage.dart';
@@ -13,13 +13,13 @@ import 'event_band_name.dart';
 class EventListItem extends StatelessWidget {
   const EventListItem({
     Key key,
-    this.scheduledEvent,
+    this.enhancedEvent,
     this.isBandView,
     this.onTap,
     this.isPlaying,
   }) : super(key: key);
 
-  final ScheduledEvent scheduledEvent;
+  final EnhancedEvent enhancedEvent;
   final bool isBandView;
   final VoidCallback onTap;
   final bool isPlaying;
@@ -42,14 +42,14 @@ class EventListItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 EventToggle(
-                  isActive: scheduledEvent.isLiked,
-                  onToggle: scheduledEvent.toggleEvent,
+                  isActive: enhancedEvent.isScheduled,
+                  onToggle: enhancedEvent.toggleEvent,
                 ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8, right: 16),
                     child: _EventDetails(
-                      event: scheduledEvent.event,
+                      event: enhancedEvent.event,
                       isBandView: isBandView,
                     ),
                   ),

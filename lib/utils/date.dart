@@ -1,5 +1,9 @@
-bool isSameDay(DateTime date1, DateTime date2, {Duration offset}) {
-  final date = offset != null ? date1.subtract(offset) : date1;
+import 'package:dime/dime.dart';
+
+import '../models/festival_config.dart';
+
+bool isSameFestivalDay(DateTime date1, DateTime date2) {
+  final date = date1.subtract(dimeGet<FestivalConfig>().daySwitchOffset);
   return date.year == date2.year &&
       date.month == date2.month &&
       date.day == date2.day;

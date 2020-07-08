@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'no_liked_events.i18n.dart';
+import 'empty_schedule.i18n.dart';
 
-class NoLikedEvents extends StatelessWidget {
+class EmptSchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Expanded(
         child: Padding(

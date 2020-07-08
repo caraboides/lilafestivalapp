@@ -1,8 +1,8 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/enhanced_event.dart';
 import '../../models/festival_config.dart';
-import '../../models/scheduled_event.dart';
 import '../../models/theme.dart';
 import '../../utils/date.dart';
 import '../../utils/i18n.dart';
@@ -14,13 +14,13 @@ import 'widgets/filtered_event_list.dart';
 
 // TODO(SF) hook widget possible?
 class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({this.favoritesOnly = false});
+  const ScheduleScreen({this.scheduledOnly = false});
 
   static Widget builder(BuildContext context) => ScheduleScreen();
   static Widget myScheduleBuilder(BuildContext context) =>
-      ScheduleScreen(favoritesOnly: true);
+      ScheduleScreen(scheduledOnly: true);
 
-  final bool favoritesOnly;
+  final bool scheduledOnly;
 
   @override
   State<StatefulWidget> createState() => _ScheduleScreenState();
@@ -29,21 +29,21 @@ class ScheduleScreen extends StatefulWidget {
 // TODO(SF) test mixin
 class _ScheduleScreenState extends State<ScheduleScreen>
     with WidgetsBindingObserver, PeriodicRebuildMixin<ScheduleScreen> {
-  bool favoritesOnly = false;
+  bool scheduledOnly = false;
 
   @override
   void initState() {
     super.initState();
-    favoritesOnly = widget.favoritesOnly;
+    scheduledOnly = widget.scheduledOnly;
   }
 
-  void _onFavoritesFilterChange(bool newValue) {
+  void _onScheduledFilterChange(bool newValue) {
     setState(() {
-      favoritesOnly = newValue;
+      scheduledOnly = newValue;
     });
   }
 
-  void _openEventDetails(BuildContext context, ScheduledEvent event) {
+  void _openEventDetails(BuildContext context, EnhancedEvent event) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (_) => BandDetailView(event),
       fullscreenDialog: true,
@@ -59,19 +59,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 date != null ? date.toIso8601String() : 'allBands',
             date: date,
             openBandDetails: (event) => _openEventDetails(context, event),
-            favoritesOnly: favoritesOnly,
+            scheduledOnly: scheduledOnly,
           ),
         ],
       );
 
   int _initialTab(FestivalConfig config) {
     final now = DateTime.now();
-    return 1 +
-        config.days.indexWhere((day) => isSameDay(
-              now,
-              day,
-              offset: config.daySwitchOffset,
-            ));
+    return 1 + config.days.indexWhere((day) => isSameFestivalDay(now, day));
   }
 
   @override
@@ -108,10 +103,10 @@ class _ScheduleScreenState extends State<ScheduleScreen>
           //   height: 40,
           // ),
           actions: <Widget>[
-            Icon(favoritesOnly ? Icons.star : Icons.star_border),
+            Icon(scheduledOnly ? Icons.star : Icons.star_border),
             Switch(
-              value: favoritesOnly,
-              onChanged: _onFavoritesFilterChange,
+              value: scheduledOnly,
+              onChanged: _onScheduledFilterChange,
             ),
           ],
         ),

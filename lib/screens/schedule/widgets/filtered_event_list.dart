@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../models/scheduled_event.dart';
+import '../../../models/enhanced_event.dart';
 import '../../../providers/combined_schedule.dart';
+import 'empty_schedule.dart';
 import 'event_list_view.dart';
-import 'no_liked_events.dart';
 
 class FilteredEventList extends HookWidget {
   const FilteredEventList({
@@ -14,13 +14,13 @@ class FilteredEventList extends HookWidget {
     this.scheduleFilterTag,
     this.date,
     this.openBandDetails,
-    this.favoritesOnly,
+    this.scheduledOnly,
   }) : super(key: key);
 
   final String scheduleFilterTag;
   final DateTime date;
-  final ValueChanged<ScheduledEvent> openBandDetails;
-  final bool favoritesOnly;
+  final ValueChanged<EnhancedEvent> openBandDetails;
+  final bool scheduledOnly;
 
   @override
   Widget build(BuildContext context) =>
@@ -28,10 +28,11 @@ class FilteredEventList extends HookWidget {
           .when(
         data: (events) {
           // TODO(SF) use computed as well?
-          final filteredEvents =
-              !favoritesOnly ? events : events.filter((event) => event.isLiked);
-          if (favoritesOnly && filteredEvents.isEmpty) {
-            return NoLikedEvents();
+          final filteredEvents = scheduledOnly
+              ? events.filter((event) => event.isScheduled)
+              : events;
+          if (scheduledOnly && filteredEvents.isEmpty) {
+            return EmptSchedule();
           }
           return EventListView(
             events: filteredEvents,

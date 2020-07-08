@@ -6,8 +6,8 @@ import 'package:optional/optional.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/band.dart';
+import '../../models/enhanced_event.dart';
 import '../../models/event.dart';
-import '../../models/scheduled_event.dart';
 import '../../models/theme.dart';
 import '../../providers/bands.dart';
 import '../../widgets/event_date/event_date.dart';
@@ -16,11 +16,11 @@ import '../../widgets/event_toggle/event_toggle.dart';
 import 'band_detail_view.i18n.dart';
 
 class BandDetailView extends StatelessWidget {
-  const BandDetailView(this.scheduledEvent);
+  const BandDetailView(this.enhancedEvent);
 
-  final ScheduledEvent scheduledEvent;
+  final EnhancedEvent enhancedEvent;
 
-  Event get event => scheduledEvent.event;
+  Event get event => enhancedEvent.event;
 
   String _buildFlag(String country) =>
       String.fromCharCodes(country.runes.map((code) => code + 127397));
@@ -147,8 +147,8 @@ class BandDetailView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   EventToggle(
-                    isActive: scheduledEvent.isLiked,
-                    onToggle: scheduledEvent.toggleEvent,
+                    isActive: enhancedEvent.isScheduled,
+                    onToggle: enhancedEvent.toggleEvent,
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 15),
@@ -181,7 +181,8 @@ class BandDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Consumer((context, read) {
         // TODO(SF) use family provider and only read single band
-        // TODO(SF) listen to schedule here as well to get update on like change
+        // TODO(SF) listen to schedule here as well to get update on schedule
+        // change
         final bandsProvider = read(dimeGet<BandsProvider>());
         return bandsProvider.when(
           data: (bands) => _buildBandView(context, bands.get(event.bandName)),

@@ -4,8 +4,7 @@ import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
-import '../../../models/festival_config.dart';
-import '../../../models/scheduled_event.dart';
+import '../../../models/enhanced_event.dart';
 import '../../../models/theme.dart';
 import '../../../utils/date.dart';
 import '../../../widgets/first_build_mixin.dart';
@@ -20,9 +19,9 @@ class EventListView extends StatefulWidget {
     this.openBandDetails,
   }) : super(key: key);
 
-  final ImmortalList<ScheduledEvent> events;
+  final ImmortalList<EnhancedEvent> events;
   final DateTime date;
-  final ValueChanged<ScheduledEvent> openBandDetails;
+  final ValueChanged<EnhancedEvent> openBandDetails;
 
   bool get isBandView => date == null;
 
@@ -35,12 +34,10 @@ class EventListViewState extends State<EventListView> with FirstBuildMixin {
 
   int get currentOrNextPlayingBandIndex {
     final now = DateTime.now();
-    return widget.date != null &&
-            isSameDay(now, widget.date,
-                offset: dimeGet<FestivalConfig>().daySwitchOffset)
-        ? widget.events.indexWhere((scheduledEvent) =>
-            now.isBefore(scheduledEvent.event.start) ||
-            now.isBefore(scheduledEvent.event.end))
+    return widget.date != null && isSameFestivalDay(now, widget.date)
+        ? widget.events.indexWhere((enhancedEvent) =>
+            now.isBefore(enhancedEvent.event.start) ||
+            now.isBefore(enhancedEvent.event.end))
         : -1;
   }
 
@@ -77,16 +74,16 @@ class EventListViewState extends State<EventListView> with FirstBuildMixin {
 
   ImmortalList<Widget> _buildListItems() {
     final now = DateTime.now();
-    final items = widget.events.map<Widget>((scheduledEvent) => EventListItem(
-          key: Key(scheduledEvent.event.id),
-          scheduledEvent: scheduledEvent,
+    final items = widget.events.map<Widget>((enhancedEvent) => EventListItem(
+          key: Key(enhancedEvent.event.id),
+          enhancedEvent: enhancedEvent,
           isBandView: widget.isBandView,
-          onTap: () => widget.openBandDetails(scheduledEvent),
-          isPlaying: scheduledEvent.event.isPlaying(now),
+          onTap: () => widget.openBandDetails(enhancedEvent),
+          isPlaying: enhancedEvent.event.isPlaying(now),
         ));
     if (currentOrNextPlayingBandIndex >= 0 &&
         !widget.events[currentOrNextPlayingBandIndex]
-            .map((scheduledEvent) => scheduledEvent.event.isPlaying(now))
+            .map((enhancedEvent) => enhancedEvent.event.isPlaying(now))
             .orElse(false)) {
       return items.insert(
           currentOrNextPlayingBandIndex,
