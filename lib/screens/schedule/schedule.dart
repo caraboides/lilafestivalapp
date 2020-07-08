@@ -10,7 +10,7 @@ import '../../widgets/periodic_rebuild_mixin.dart';
 import '../../widgets/scaffold.dart';
 import '../band_detail_view/band_detail_view.dart';
 import 'schedule.i18n.dart';
-import 'widgets/event_list_view.dart';
+import 'widgets/filtered_event_list.dart';
 
 // TODO(SF) hook widget possible?
 class ScheduleScreen extends StatefulWidget {
@@ -54,7 +54,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           // if (date != null) WeatherWidget(date),
-          EventListView(
+          FilteredEventList(
             scheduleFilterTag:
                 date != null ? date.toIso8601String() : 'allBands',
             date: date,

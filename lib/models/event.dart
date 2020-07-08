@@ -20,4 +20,7 @@ class Event {
         start: DateTime.parse(json['start']),
         end: DateTime.parse(json['end']),
       );
+
+  bool isPlaying(DateTime currentTime) =>
+      !currentTime.isBefore(start) && !currentTime.isAfter(end);
 }

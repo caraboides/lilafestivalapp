@@ -36,7 +36,6 @@ final ThemeData theme = ThemeData(
   buttonTheme: ButtonThemeData(
     textTheme: ButtonTextTheme.normal,
   ),
-  dividerColor: Colors.grey[800],
   textTheme: Typography.blackMountainView.copyWith(
     headline5: TextStyle(
       fontFamily: 'No Continue',
@@ -59,7 +58,6 @@ final ThemeData theme = ThemeData(
 );
 
 final Color menuBackgroundColor = Colors.grey[850];
-final Color dividerColor = Colors.grey[800];
 final Color menuFontColor = Color(0xFFd6102b);
 final Color menuIconColor = menuFontColor.withOpacity(0.87);
 final TextStyle appBarTextStyle = theme.textTheme.headline4;
@@ -108,4 +106,5 @@ final FestivalTheme festivalTheme = FestivalTheme(
   bandDetailTextStyle: TextStyle(
     fontWeight: FontWeight.bold,
   ),
+  aboutDividerColor: Colors.grey[800],
 );

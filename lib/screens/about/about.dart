@@ -129,7 +129,7 @@ class About extends StatelessWidget {
                 ),
               ]),
             ),
-            theme.divider,
+            theme.aboutDivider,
             SizedBox(height: 5), // TODO(SF) move to theme?
             Text('Created by Projekt LilaHerz'.i18n),
             SizedBox(height: 10),
@@ -137,7 +137,7 @@ class About extends StatelessWidget {
               globalConfig.creators,
               useHeartIcon: true,
             ),
-            theme.divider,
+            theme.aboutDivider,
             SizedBox(height: 5),
             ..._buildReferences(
               globalConfig.references,
@@ -148,12 +148,12 @@ class About extends StatelessWidget {
               labelGenerator: (label) =>
                   'Font "{font}" by:'.i18n.fill({'font': label}),
             ),
-            theme.divider,
+            theme.aboutDivider,
             SizedBox(height: 5),
             ..._buildMessages(
               config.aboutMessages,
             ),
-            theme.divider,
+            theme.aboutDivider,
             SizedBox(height: 5),
             theme.primaryButton(
               label: MaterialLocalizations.of(context).viewLicensesButtonLabel,

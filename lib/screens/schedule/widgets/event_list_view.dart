@@ -1,30 +1,28 @@
+import 'dart:math';
+
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
 
 import '../../../models/festival_config.dart';
 import '../../../models/scheduled_event.dart';
 import '../../../models/theme.dart';
-import '../../../providers/combined_schedule.dart';
 import '../../../utils/date.dart';
+import '../../../widgets/first_build_mixin.dart';
 import 'event_list_item.dart';
-import 'event_list_view.i18n.dart';
 
 // TODO(SF) possible to use hook widget?
 class EventListView extends StatefulWidget {
   const EventListView({
     Key key,
-    this.scheduleFilterTag,
+    this.events,
     this.date,
     this.openBandDetails,
-    this.favoritesOnly,
   }) : super(key: key);
 
-  final String scheduleFilterTag;
+  final ImmortalList<ScheduledEvent> events;
   final DateTime date;
   final ValueChanged<ScheduledEvent> openBandDetails;
-  final bool favoritesOnly;
 
   bool get isBandView => date == null;
 
@@ -32,9 +30,19 @@ class EventListView extends StatefulWidget {
   State<StatefulWidget> createState() => EventListViewState();
 }
 
-class EventListViewState extends State<EventListView> {
+class EventListViewState extends State<EventListView> with FirstBuildMixin {
   final _scrollController = ScrollController();
-  bool _firstBuild = true;
+
+  int get currentOrNextPlayingBandIndex {
+    final now = DateTime.now();
+    return widget.date != null &&
+            isSameDay(now, widget.date,
+                offset: dimeGet<FestivalConfig>().daySwitchOffset)
+        ? widget.events.indexWhere((scheduledEvent) =>
+            now.isBefore(scheduledEvent.event.start) ||
+            now.isBefore(scheduledEvent.event.end))
+        : -1;
+  }
 
   @override
   void dispose() {
@@ -44,112 +52,66 @@ class EventListViewState extends State<EventListView> {
 
   @override
   void didUpdateWidget(EventListView oldWidget) {
-    if (mounted &&
-        !widget.isBandView &&
-        widget.favoritesOnly != oldWidget.favoritesOnly) {
-      // _scrollToCurrentBand();
+    if (mounted && !widget.isBandView && widget.events != oldWidget.events) {
+      _scrollToCurrentBand();
     }
     super.didUpdateWidget(oldWidget);
   }
 
-  // void _scrollToCurrentBand(
-  //     {Duration timeout = const Duration(milliseconds: 50)}) {
-  //   Future.delayed(timeout, () {
-  //     if (mounted) {
-  //       final now = DateTime.now();
-  //       final index = getEvents(MyScheduleController.of(context)).indexWhere(
-  //           (event) => now.isBefore(event.start) || now.isBefore(event.end));
-  //       if (index >= 0) {
-  //         _scrollController.animateTo(
-  //           max(index - 2, 0) * dimeGet<FestivalTheme>().eventListItemHeight,
-  //           duration: Duration(milliseconds: 500),
-  //           curve: Curves.easeIn,
-  //         );
-  //       }
-  //     }
-  //   });
-  // }
-
-  Widget _buildEventList(ImmortalList<ScheduledEvent> events) {
-    final now = DateTime.now();
-    final config = dimeGet<FestivalConfig>();
-    final theme = dimeGet<FestivalTheme>();
-    final nextOrCurrentIndex = widget.date != null &&
-            isSameDay(now, widget.date, offset: config.daySwitchOffset)
-        ? events.indexWhere((scheduledEvent) =>
-            now.isBefore(scheduledEvent.event.start) ||
-            now.isBefore(scheduledEvent.event.end))
-        : -1;
-    var currentlyPlaying = false;
-    var items = events.map<Widget>((scheduledEvent) {
-      final isPlaying = !now.isBefore(scheduledEvent.event.start) &&
-          !now.isAfter(scheduledEvent.event.end);
-      currentlyPlaying = currentlyPlaying || isPlaying;
-      return EventListItem(
-        key: Key(scheduledEvent.event.id),
-        scheduledEvent: scheduledEvent,
-        isBandView: widget.isBandView,
-        openBandDetails: () => widget.openBandDetails(scheduledEvent),
-        isPlaying: isPlaying,
-      );
+  void _scrollToCurrentBand({
+    Duration timeout = const Duration(milliseconds: 50),
+  }) {
+    Future.delayed(timeout, () {
+      if (mounted) {
+        if (currentOrNextPlayingBandIndex >= 0) {
+          _scrollController.animateTo(
+            max(currentOrNextPlayingBandIndex - 2, 0) *
+                dimeGet<FestivalTheme>().eventListItemHeight,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeIn,
+          );
+        }
+      }
     });
-    if (nextOrCurrentIndex >= 0 && !currentlyPlaying) {
-      items = items.insert(
-          nextOrCurrentIndex,
+  }
+
+  ImmortalList<Widget> _buildListItems() {
+    final now = DateTime.now();
+    final items = widget.events.map<Widget>((scheduledEvent) => EventListItem(
+          key: Key(scheduledEvent.event.id),
+          scheduledEvent: scheduledEvent,
+          isBandView: widget.isBandView,
+          onTap: () => widget.openBandDetails(scheduledEvent),
+          isPlaying: scheduledEvent.event.isPlaying(now),
+        ));
+    if (currentOrNextPlayingBandIndex >= 0 &&
+        !widget.events[currentOrNextPlayingBandIndex]
+            .map((scheduledEvent) => scheduledEvent.event.isPlaying(now))
+            .orElse(false)) {
+      return items.insert(
+          currentOrNextPlayingBandIndex,
           Container(
+            key: Key('change-over'),
             height: 2,
-            color: theme.theme.accentColor,
+            color: Theme.of(context).accentColor,
           ));
     }
-    if (widget.favoritesOnly && items.isEmpty) {
-      return Expanded(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Text("Don't you like music?".i18n),
-            ),
-            Icon(Icons.star_border),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child:
-                  Text('You did not add any gigs to your schedule yet!'.i18n),
-            ),
-          ],
-        ),
-      );
-    }
-    if (_firstBuild && !widget.isBandView) {
-      _firstBuild = false;
-      // _scrollToCurrentBand(timeout: Duration(milliseconds: 200));
-    }
+    return items;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    onFirstBuild(() {
+      _scrollToCurrentBand(timeout: Duration(milliseconds: 200));
+    });
     return Expanded(
       child: ListView(
         controller: _scrollController,
         children: ListTile.divideTiles(
           context: context,
-          tiles: items.toMutableList(),
+          tiles: _buildListItems().toMutableList(),
         ).toList(),
       ),
     );
   }
-
-  // TODO(SF) use computed as well?
-  ImmortalList<ScheduledEvent> _filterEvents(
-          ImmortalList<ScheduledEvent> events) =>
-      !widget.favoritesOnly ? events : events.filter((event) => event.isLiked);
-
-  @override
-  Widget build(BuildContext context) => Consumer((context, read) {
-        final events = read(
-            dimeGet<CombinedScheduleProvider>(tag: widget.scheduleFilterTag));
-        return events.when(
-          data: (events) => _buildEventList(_filterEvents(events)),
-          // TODO(SF)
-          loading: () => Center(child: Text('Loading!')),
-          error: (e, trace) => Center(
-            child: Text('Error! $e ${trace.toString()}'),
-          ),
-        );
-      });
 }

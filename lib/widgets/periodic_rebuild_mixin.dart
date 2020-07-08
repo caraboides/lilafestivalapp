@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../models/global_config.dart';
 
+// TODO(SF) find better solution? determine next band-playing-change
+// or day switch
+// > scroll on first build get's obsolete
 mixin PeriodicRebuildMixin<T extends StatefulWidget>
     on State<T>, WidgetsBindingObserver {
   Timer _rebuildTimer;

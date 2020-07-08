@@ -15,13 +15,13 @@ class EventListItem extends StatelessWidget {
     Key key,
     this.scheduledEvent,
     this.isBandView,
-    this.openBandDetails,
+    this.onTap,
     this.isPlaying,
   }) : super(key: key);
 
   final ScheduledEvent scheduledEvent;
   final bool isBandView;
-  final VoidCallback openBandDetails;
+  final VoidCallback onTap;
   final bool isPlaying;
 
   @override
@@ -30,7 +30,7 @@ class EventListItem extends StatelessWidget {
     return Material(
       color: isPlaying ? theme.accentColor : theme.canvasColor,
       child: InkWell(
-        onTap: openBandDetails,
+        onTap: onTap,
         child: SafeArea(
           top: false,
           bottom: false,

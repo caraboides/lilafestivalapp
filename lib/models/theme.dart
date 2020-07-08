@@ -9,6 +9,7 @@ class FestivalTheme {
     this.menuIconColor,
     this.aboutTextTheme,
     this.aboutBackgroundColor,
+    this.aboutDividerColor,
     this.primaryButton,
     this.appBar,
     this.eventListItemHeight,
@@ -31,14 +32,15 @@ class FestivalTheme {
   final double eventListItemHeight; // TODO(SF) move to global theme
   final TextStyle bandNameTextStyle;
   final TextStyle bandDetailTextStyle;
+  final Color aboutDividerColor;
 
   ThemeData get aboutTheme => theme.copyWith(
         textTheme: aboutTextTheme,
       );
 
-  Widget get divider => Padding(
+  Widget get aboutDivider => Padding(
         padding: EdgeInsets.only(bottom: 8),
-        child: Divider(color: theme.dividerColor, height: 1),
+        child: Divider(color: aboutDividerColor, height: 1),
       );
 
   Icon get heartIcon => Icon(
