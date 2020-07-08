@@ -15,25 +15,58 @@ import '../../widgets/event_stage.dart';
 import '../../widgets/event_toggle/event_toggle.dart';
 import 'band_detail_view.i18n.dart';
 
+// TODO(SF) improve
 class BandDetailView extends StatelessWidget {
   const BandDetailView(this.enhancedEvent);
 
   final EnhancedEvent enhancedEvent;
 
-  Event get event => enhancedEvent.event;
+  static void openFor(BuildContext context, EnhancedEvent event) =>
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => BandDetailView(event),
+        fullscreenDialog: true,
+      ));
+
+  Event get _event => enhancedEvent.event;
+
+  FestivalTheme get _festivalTheme => dimeGet<FestivalTheme>();
 
   String _buildFlag(String country) =>
       String.fromCharCodes(country.runes.map((code) => code + 127397));
 
+  static bool _isValueSet(String value) => value?.isNotEmpty ?? false;
+
+  String get _fallbackText => 'Sorry, no info'.i18n;
+
   String _getDescription(Locale locale, Band band) {
-    if (locale.languageCode == 'de' && (band.textDe ?? '') != '') {
+    if (locale.languageCode == 'de' && _isValueSet(band.textDe)) {
       return band.textDe;
     }
-    return band.textEn ?? 'Sorry, no info'.i18n;
+    if (_isValueSet(band.textEn)) {
+      return band.textEn;
+    }
+    return _fallbackText;
   }
 
+  Widget _buildDetailRow(ThemeData theme, String title, String value) =>
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        child: Row(
+          children: <Widget>[
+            SizedBox(
+              width: 75,
+              child: Text(
+                '${title.i18n}:',
+                style: theme.textTheme.subtitle2,
+              ),
+            ),
+            Text(value),
+          ],
+        ),
+      );
+
   List<Widget> _buildDetails(
-    FestivalTheme theme,
+    ThemeData theme,
     Locale locale,
     Band band,
   ) =>
@@ -43,68 +76,23 @@ class BandDetailView extends StatelessWidget {
               const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 15),
           child: Text(_getDescription(locale, band)),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: Row(
-            children: <Widget>[
-              SizedBox(
-                width: 75,
-                child: Text(
-                  '${'Origin'.i18n}:',
-                  style: theme.bandDetailTextStyle,
-                ),
-              ),
-              Text(band.origin != null
-                  ? _buildFlag(band.origin)
-                  : 'Sorry, no info'.i18n),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: band.style == null || band.style.trim() == ''
-              ? Container()
-              : Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 75,
-                      child: Text(
-                        '${'Style'.i18n}:',
-                        style: theme.bandDetailTextStyle,
-                      ),
-                    ),
-                    Text(band.style ?? 'Sorry, no info'.i18n),
-                  ],
-                ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: band.roots == null || band.roots.trim() == ''
-              ? Container()
-              : Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 75,
-                      child: Text(
-                        '${'Roots'.i18n}:',
-                        style: theme.bandDetailTextStyle,
-                      ),
-                    ),
-                    Text(band.roots ?? 'Sorry, no info'.i18n),
-                  ],
-                ),
-        ),
-        if ((band.spotify ?? '') != '')
+        if (_isValueSet(band.origin))
+          _buildDetailRow(theme, 'Origin', _buildFlag(band.origin)),
+        if (_isValueSet(band.style))
+          _buildDetailRow(theme, 'Style', band.style),
+        if (_isValueSet(band.roots))
+          _buildDetailRow(theme, 'Roots', band.roots),
+        if (_isValueSet(band.spotify))
           Padding(
             padding: EdgeInsets.only(left: 20, right: 20, top: 15),
-            child: theme.primaryButton(
+            child: _festivalTheme.primaryButton(
               label: 'Play on Spotify'.i18n,
               onPressed: () {
                 launch(band.spotify);
               },
             ),
           ),
-        if ((band.image ?? '') != '')
+        if (_isValueSet(band.image))
           Padding(
             padding: EdgeInsets.only(top: 15),
             child: CachedNetworkImage(
@@ -113,17 +101,33 @@ class BandDetailView extends StatelessWidget {
           ),
       ];
 
+  Widget _buildEventRow() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          EventToggle(
+            isActive: enhancedEvent.isScheduled,
+            onToggle: enhancedEvent.toggleEvent,
+          ),
+          EventDate(
+            start: _event.start,
+            end: _event.end,
+            showWeekDay: true,
+          ),
+          EventStage(_event.stage),
+        ],
+      );
+
   Widget _buildBandView(BuildContext context, Optional<Band> band) {
     final locale = Localizations.localeOf(context);
-    final theme = dimeGet<FestivalTheme>();
+    final theme = Theme.of(context);
     return Scaffold(
-      appBar: theme.appBar('Band Details'.i18n),
+      appBar: _festivalTheme.appBar('Band Details'.i18n),
       body: Container(
         alignment: Alignment.topCenter,
         child: ListView(
           children: <Widget>[
             band
-                .map<Widget>((d) => (d.logo ?? '') != ''
+                .map<Widget>((d) => _isValueSet(d.logo)
                     ? Container(
                         color: Colors.black,
                         child: CachedNetworkImage(
@@ -136,31 +140,15 @@ class BandDetailView extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 20),
               child: Text(
-                event.bandName.toUpperCase(),
-                style: theme.bandNameTextStyle,
+                // TODO(SF) use family provider and display key here
+                _event.bandName.toUpperCase(),
+                style: theme.textTheme.headline5,
                 textAlign: TextAlign.center,
               ),
             ),
             Padding(
               padding: EdgeInsets.only(left: 5, right: 20, top: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  EventToggle(
-                    isActive: enhancedEvent.isScheduled,
-                    onToggle: enhancedEvent.toggleEvent,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: EventDate(
-                      start: event.start,
-                      end: event.end,
-                      showWeekDay: true,
-                    ),
-                  ),
-                  EventStage(event.stage),
-                ],
-              ),
+              child: _buildEventRow(),
             ),
             ...band
                 .map<List<Widget>>((d) => _buildDetails(theme, locale, d))
@@ -169,7 +157,7 @@ class BandDetailView extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     top: 10, left: 20, right: 20, bottom: 20),
                 alignment: Alignment.center,
-                child: Text('Sorry, no info'.i18n),
+                child: Text(_fallbackText),
               ),
             ]),
           ],
@@ -183,9 +171,10 @@ class BandDetailView extends StatelessWidget {
         // TODO(SF) use family provider and only read single band
         // TODO(SF) listen to schedule here as well to get update on schedule
         // change
+        // TODO(SF) highlight event when currently playing?
         final bandsProvider = read(dimeGet<BandsProvider>());
         return bandsProvider.when(
-          data: (bands) => _buildBandView(context, bands.get(event.bandName)),
+          data: (bands) => _buildBandView(context, bands.get(_event.bandName)),
           // TODO(SF)
           loading: () => Center(child: Text('Loading!')),
           error: (e, trace) => Center(

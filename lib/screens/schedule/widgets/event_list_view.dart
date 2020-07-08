@@ -8,6 +8,7 @@ import '../../../models/enhanced_event.dart';
 import '../../../models/theme.dart';
 import '../../../utils/date.dart';
 import '../../../widgets/first_build_mixin.dart';
+import '../../band_detail_view/band_detail_view.dart';
 import 'event_list_item.dart';
 
 // TODO(SF) possible to use hook widget?
@@ -16,12 +17,10 @@ class EventListView extends StatefulWidget {
     Key key,
     this.events,
     this.date,
-    this.openBandDetails,
   }) : super(key: key);
 
   final ImmortalList<EnhancedEvent> events;
   final DateTime date;
-  final ValueChanged<EnhancedEvent> openBandDetails;
 
   bool get isBandView => date == null;
 
@@ -55,6 +54,8 @@ class EventListViewState extends State<EventListView> with FirstBuildMixin {
     super.didUpdateWidget(oldWidget);
   }
 
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
+
   void _scrollToCurrentBand({
     Duration timeout = const Duration(milliseconds: 50),
   }) {
@@ -63,7 +64,7 @@ class EventListViewState extends State<EventListView> with FirstBuildMixin {
         if (currentOrNextPlayingBandIndex >= 0) {
           _scrollController.animateTo(
             max(currentOrNextPlayingBandIndex - 2, 0) *
-                dimeGet<FestivalTheme>().eventListItemHeight,
+                _theme.eventListItemHeight,
             duration: Duration(milliseconds: 500),
             curve: Curves.easeIn,
           );
@@ -78,7 +79,7 @@ class EventListViewState extends State<EventListView> with FirstBuildMixin {
           key: Key(enhancedEvent.event.id),
           enhancedEvent: enhancedEvent,
           isBandView: widget.isBandView,
-          onTap: () => widget.openBandDetails(enhancedEvent),
+          onTap: () => BandDetailView.openFor(context, enhancedEvent),
           isPlaying: enhancedEvent.event.isPlaying(now),
         ));
     if (currentOrNextPlayingBandIndex >= 0 &&

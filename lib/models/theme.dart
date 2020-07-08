@@ -13,8 +13,6 @@ class FestivalTheme {
     this.primaryButton,
     this.appBar,
     this.eventListItemHeight,
-    this.bandDetailTextStyle,
-    this.bandNameTextStyle,
   });
 
   final ThemeData theme;
@@ -30,8 +28,6 @@ class FestivalTheme {
   }) primaryButton;
   final AppBar Function(String title) appBar;
   final double eventListItemHeight; // TODO(SF) move to global theme
-  final TextStyle bandNameTextStyle;
-  final TextStyle bandDetailTextStyle;
   final Color aboutDividerColor;
 
   ThemeData get aboutTheme => theme.copyWith(

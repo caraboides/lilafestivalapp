@@ -24,6 +24,8 @@ class EventListItem extends StatelessWidget {
   final VoidCallback onTap;
   final bool isPlaying;
 
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -36,7 +38,7 @@ class EventListItem extends StatelessWidget {
           bottom: false,
           minimum: EdgeInsets.symmetric(horizontal: 10),
           child: Container(
-            height: dimeGet<FestivalTheme>().eventListItemHeight,
+            height: _theme.eventListItemHeight,
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

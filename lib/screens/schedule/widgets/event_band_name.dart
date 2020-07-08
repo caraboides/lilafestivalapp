@@ -10,8 +10,6 @@ class EventBandName extends StatelessWidget {
         bandName.toUpperCase(),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.subtitle2.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+        style: Theme.of(context).textTheme.subtitle2,
       );
 }

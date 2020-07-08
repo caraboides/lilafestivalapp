@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../models/enhanced_event.dart';
 import '../../../providers/combined_schedule.dart';
 import 'empty_schedule.dart';
 import 'event_list_view.dart';
@@ -11,16 +10,14 @@ import 'event_list_view.dart';
 class FilteredEventList extends HookWidget {
   const FilteredEventList({
     Key key,
-    this.scheduleFilterTag,
     this.date,
-    this.openBandDetails,
     this.scheduledOnly,
   }) : super(key: key);
 
-  final String scheduleFilterTag;
   final DateTime date;
-  final ValueChanged<EnhancedEvent> openBandDetails;
   final bool scheduledOnly;
+
+  String get scheduleFilterTag => date?.toIso8601String() ?? 'allBands';
 
   @override
   Widget build(BuildContext context) =>
@@ -37,7 +34,6 @@ class FilteredEventList extends HookWidget {
           return EventListView(
             events: filteredEvents,
             date: date,
-            openBandDetails: openBandDetails,
           );
         },
         // TODO(SF)

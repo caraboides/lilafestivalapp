@@ -53,6 +53,9 @@ final ThemeData theme = ThemeData(
       fontSize: 24,
       color: Colors.black,
     ),
+    subtitle2: TextStyle(
+      fontWeight: FontWeight.bold,
+    ),
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
 );
@@ -102,9 +105,5 @@ final FestivalTheme festivalTheme = FestivalTheme(
     ),
   ),
   eventListItemHeight: 70,
-  bandNameTextStyle: theme.textTheme.headline5,
-  bandDetailTextStyle: TextStyle(
-    fontWeight: FontWeight.bold,
-  ),
   aboutDividerColor: Colors.grey[800],
 );

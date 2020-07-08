@@ -1,14 +1,13 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
+import 'package:immortal/immortal.dart';
 
-import '../../models/enhanced_event.dart';
 import '../../models/festival_config.dart';
 import '../../models/theme.dart';
 import '../../utils/date.dart';
 import '../../utils/i18n.dart';
 import '../../widgets/periodic_rebuild_mixin.dart';
 import '../../widgets/scaffold.dart';
-import '../band_detail_view/band_detail_view.dart';
 import 'schedule.i18n.dart';
 import 'widgets/filtered_event_list.dart';
 
@@ -26,7 +25,6 @@ class ScheduleScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _ScheduleScreenState();
 }
 
-// TODO(SF) test mixin
 class _ScheduleScreenState extends State<ScheduleScreen>
     with WidgetsBindingObserver, PeriodicRebuildMixin<ScheduleScreen> {
   bool scheduledOnly = false;
@@ -43,82 +41,68 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     });
   }
 
-  void _openEventDetails(BuildContext context, EnhancedEvent event) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => BandDetailView(event),
-      fullscreenDialog: true,
-    ));
+  ImmortalList<DateTime> get _days => dimeGet<FestivalConfig>().days;
+
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
+
+  int _initialTab() {
+    final now = DateTime.now();
+    return 1 + _days.indexWhere((day) => isSameFestivalDay(now, day));
   }
+
+  Tab _buildTab(String title) =>
+      Tab(child: Text(title, style: _theme.tabTextStyle));
+
+  AppBar _buildAppBar() => AppBar(
+        bottom: TabBar(
+          tabs: [
+            _buildTab('Bands'.i18n),
+            ...List.generate(
+              _days.length,
+              (index) =>
+                  _buildTab('Day {number}'.i18n.fill({'number': index + 1})),
+            ),
+          ],
+        ),
+        // title: Image.asset(
+        //   'assets/logo.png',
+        //   width: 158,
+        //   height: 40,
+        // ),
+        actions: <Widget>[
+          Icon(scheduledOnly ? Icons.star : Icons.star_border),
+          Switch(
+            value: scheduledOnly,
+            onChanged: _onScheduledFilterChange,
+          ),
+        ],
+      );
 
   Widget _buildEventList(BuildContext context, {DateTime date}) => Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           // if (date != null) WeatherWidget(date),
           FilteredEventList(
-            scheduleFilterTag:
-                date != null ? date.toIso8601String() : 'allBands',
             date: date,
-            openBandDetails: (event) => _openEventDetails(context, event),
             scheduledOnly: scheduledOnly,
           ),
         ],
       );
 
-  int _initialTab(FestivalConfig config) {
-    final now = DateTime.now();
-    return 1 + config.days.indexWhere((day) => isSameFestivalDay(now, day));
-  }
-
   @override
-  Widget build(BuildContext context) {
-    final config = dimeGet<FestivalConfig>();
-    final theme = dimeGet<FestivalTheme>();
-    return DefaultTabController(
-      length: config.days.length + 1,
-      initialIndex: _initialTab(config),
-      child: AppScaffold(
-        appBar: AppBar(
-          bottom: TabBar(
-            tabs: [
-              Tab(
-                child: Text(
-                  'Bands'.i18n,
-                  style: theme.tabTextStyle,
-                ),
-              ),
-              ...List.generate(
-                config.days.length,
-                (index) => Tab(
-                  child: Text(
-                    'Day {number}'.i18n.fill({'number': index + 1}),
-                    style: theme.tabTextStyle,
-                  ),
-                ),
-              ),
+  Widget build(BuildContext context) => DefaultTabController(
+        length: _days.length + 1,
+        initialIndex: _initialTab(),
+        child: AppScaffold(
+          appBar: _buildAppBar(),
+          body: TabBarView(
+            children: [
+              _buildEventList(context),
+              ..._days
+                  .map((date) => _buildEventList(context, date: date))
+                  .toMutableList(),
             ],
           ),
-          // title: Image.asset(
-          //   'assets/logo.png',
-          //   width: 158,
-          //   height: 40,
-          // ),
-          actions: <Widget>[
-            Icon(scheduledOnly ? Icons.star : Icons.star_border),
-            Switch(
-              value: scheduledOnly,
-              onChanged: _onScheduledFilterChange,
-            ),
-          ],
         ),
-        body: TabBarView(
-          children: [
-            _buildEventList(context),
-            ...config.days
-                .map((date) => _buildEventList(context, date: date))
-                .toMutableList(),
-          ],
-        ),
-      ),
-    );
-  }
+      );
 }
