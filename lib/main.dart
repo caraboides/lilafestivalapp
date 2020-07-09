@@ -34,24 +34,28 @@ void main() {
 class FestivalApp extends StatelessWidget {
   const FestivalApp();
 
-  // void _precacheImages(BuildContext context) {
-  //   precacheImage(
-  //     AssetImage('assets/icon_menu.png'),
-  //     context,
-  //     size: Size(304, 152),
-  //   );
-  // }
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
+
+  void _precacheImages(BuildContext context) {
+    if (_theme.logoMenu != null) {
+      precacheImage(
+        AssetImage(_theme.logoMenu.assetPath),
+        context,
+        size: Size(_theme.logoMenu.width, _theme.logoMenu.height),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // _precacheImages(context);
+    _precacheImages(context);
     // initializeNotifications();
     // TODO(SF) still problem on app restart? other solution?
     dimeInstall(ProviderModule(context), override: true);
 
     return MaterialApp(
       title: dimeGet<FestivalConfig>().festivalName,
-      theme: dimeGet<FestivalTheme>().theme,
+      theme: _theme.theme,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

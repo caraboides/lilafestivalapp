@@ -40,8 +40,8 @@ flutter:
   assets:
      - assets/initial_schedule.json
      - assets/bands.json
-  #    - assets/logo.png
-  #    - assets/icon_menu.png
+     - assets/logo.png
+     - assets/logo_menu.png
 
   fonts:
     - family: No Continue

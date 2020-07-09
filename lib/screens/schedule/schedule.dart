@@ -41,9 +41,10 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     });
   }
 
-  ImmortalList<DateTime> get _days => dimeGet<FestivalConfig>().days;
-
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
+  FestivalConfig get _config => dimeGet<FestivalConfig>();
+
+  ImmortalList<DateTime> get _days => _config.days;
 
   int _initialTab() {
     final now = DateTime.now();
@@ -79,11 +80,13 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 preferredSize: Size.fromHeight(_theme.tabBarHeight),
               )
             : _buildTabBar(),
-        // title: Image.asset(
-        //   'assets/logo.png',
-        //   width: 158,
-        //   height: 40,
-        // ),
+        title: _theme.logo != null
+            ? Image.asset(
+                _theme.logo.assetPath,
+                width: _theme.logo.width,
+                height: _theme.logo.height,
+              )
+            : Text(_config.festivalName),
         actions: <Widget>[
           Icon(scheduledOnly ? Icons.star : Icons.star_border),
           Switch(

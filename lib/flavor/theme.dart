@@ -89,4 +89,14 @@ final FestivalTheme festivalTheme = FestivalTheme(
     onPressed: onPressed,
     child: Text(label),
   ),
+  logo: Logo(
+    assetPath: 'assets/logo.png',
+    width: 158,
+    height: 40,
+  ),
+  logoMenu: Logo(
+    assetPath: 'assets/logo_menu.png',
+    width: 304,
+    height: 152,
+  ),
 );

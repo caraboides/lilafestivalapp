@@ -12,6 +12,8 @@ class FestivalTheme {
     this.tabBarDecoration,
     this.tabBarHeight,
     this.primaryButton,
+    this.logo,
+    this.logoMenu,
   });
 
   final ThemeData theme;
@@ -27,6 +29,8 @@ class FestivalTheme {
     String label,
     VoidCallback onPressed,
   }) primaryButton;
+  final Logo logo;
+  final Logo logoMenu;
 
   final double eventListItemHeight = 70;
 
@@ -40,4 +44,16 @@ class FestivalTheme {
         title: Text(title),
         shape: appBarBorder,
       );
+}
+
+class Logo {
+  const Logo({
+    this.assetPath,
+    this.width,
+    this.height,
+  });
+
+  final String assetPath;
+  final double width;
+  final double height;
 }

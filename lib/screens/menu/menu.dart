@@ -39,10 +39,12 @@ class Menu extends StatelessWidget {
     final locale = Localizations.localeOf(context);
     return ListView(
       children: <Widget>[
-        // Image.asset(
-        //   'assets/icon_menu.png',
-        //   height: 300,
-        // ),
+        if (_theme.logoMenu != null)
+          Image.asset(
+            _theme.logoMenu.assetPath,
+            height: _theme.logoMenu.height,
+            width: _theme.logoMenu.width,
+          ),
         ..._navigation.routes
             .map((route) => _buildEntry(
                   theme: theme,
