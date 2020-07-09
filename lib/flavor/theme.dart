@@ -30,12 +30,11 @@ List<Shadow> _createShadows(Color color) => [
       ),
     ];
 
+final Color _accentColor = Color(0xFFbafb00);
+
 final ThemeData theme = ThemeData(
   primaryColor: Color(0xFF15928c),
-  accentColor: Color(0xFFbafb00),
-  buttonTheme: ButtonThemeData(
-    textTheme: ButtonTextTheme.normal,
-  ),
+  accentColor: _accentColor,
   textTheme: Typography.blackMountainView.copyWith(
     headline5: TextStyle(
       fontFamily: 'No Continue',
@@ -71,17 +70,31 @@ final FestivalTheme festivalTheme = FestivalTheme(
     canvasColor: Colors.grey[850],
     iconTheme: theme.iconTheme.copyWith(color: menuFontColor.withOpacity(0.87)),
   ),
-  tabTextStyle: TextStyle(
-    fontFamily: 'No Continue',
-    fontSize: 18,
-  ),
   menuDrawerDecoration: BoxDecoration(
     border: Border(
       right: BorderSide(width: 2, color: Colors.black),
     ),
   ),
-  aboutTextTheme: Typography.whiteMountainView,
-  aboutBackgroundColor: Colors.grey[850],
+  aboutTheme: theme.copyWith(
+    textTheme: Typography.whiteMountainView,
+    scaffoldBackgroundColor: Colors.grey[850],
+    dividerColor: Colors.grey[800],
+    buttonTheme: ButtonThemeData(
+      textTheme: ButtonTextTheme.accent,
+    ),
+    iconTheme: theme.iconTheme.copyWith(color: Colors.white70),
+  ),
+  aboutIcon: Icons.star,
+  tabTextStyle: TextStyle(
+    fontFamily: 'No Continue',
+    fontSize: 18,
+  ),
+  tabBarHeight: 48, // TODO(SF) might change with font
+  tabBarDecoration: BoxDecoration(
+    border: Border(
+      bottom: BorderSide(color: Colors.black, width: 2),
+    ),
+  ),
   primaryButton: ({label, onPressed}) => FlatButton(
     shape: Border(
       top: BorderSide(color: Colors.black, width: 1),
@@ -90,6 +103,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
       right: BorderSide(color: Colors.black, width: 2),
     ),
     color: theme.accentColor,
+    textTheme: ButtonTextTheme.normal,
     onPressed: onPressed,
     child: Text(label),
   ),
@@ -98,11 +112,9 @@ final FestivalTheme festivalTheme = FestivalTheme(
       title,
       style: appBarTextStyle,
     ),
-    //elevation: 0,
     shape: Border(
       bottom: BorderSide(color: Colors.black, width: 2),
     ),
   ),
   eventListItemHeight: 70,
-  aboutDividerColor: Colors.grey[800],
 );

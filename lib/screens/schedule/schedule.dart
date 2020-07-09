@@ -53,17 +53,32 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   Tab _buildTab(String title) =>
       Tab(child: Text(title, style: _theme.tabTextStyle));
 
+  TabBar _buildTabBar() => TabBar(
+        tabs: [
+          _buildTab('Bands'.i18n),
+          ...List.generate(
+            _days.length,
+            (index) =>
+                _buildTab('Day {number}'.i18n.fill({'number': index + 1})),
+          ),
+        ],
+      );
+
   AppBar _buildAppBar() => AppBar(
-        bottom: TabBar(
-          tabs: [
-            _buildTab('Bands'.i18n),
-            ...List.generate(
-              _days.length,
-              (index) =>
-                  _buildTab('Day {number}'.i18n.fill({'number': index + 1})),
-            ),
-          ],
-        ),
+        bottom: _theme.tabBarDecoration != null
+            ? PreferredSize(
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      height: _theme.tabBarHeight,
+                      decoration: _theme.tabBarDecoration,
+                    ),
+                    _buildTabBar(),
+                  ],
+                ),
+                preferredSize: Size.fromHeight(_theme.tabBarHeight),
+              )
+            : _buildTabBar(),
         // title: Image.asset(
         //   'assets/logo.png',
         //   width: 158,

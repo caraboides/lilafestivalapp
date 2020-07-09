@@ -18,6 +18,13 @@ class About extends StatelessWidget {
   static Widget builder(BuildContext context) => About();
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
+  FestivalConfig get _config => dimeGet<FestivalConfig>();
+  GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
+
+  Widget get _divider => Padding(
+        padding: EdgeInsets.only(bottom: 8),
+        child: Divider(height: 1),
+      );
 
   Widget _buildLink(
     String url, {
@@ -25,7 +32,6 @@ class About extends StatelessWidget {
     bool shrink = false,
   }) =>
       FlatButton(
-        textColor: _theme.theme.accentColor,
         child: Text(label ?? url),
         onPressed: () => launch(url),
         materialTapTargetSize: shrink
@@ -48,12 +54,12 @@ class About extends StatelessWidget {
   Widget _buildReference(
     String label,
     ImmortalList<Link> links, {
-    bool useHeartIcon = false,
+    Icon icon,
   }) =>
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          useHeartIcon ? _theme.heartIcon : _theme.starIcon,
+          icon ?? Icon(_theme.aboutIcon),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -70,7 +76,7 @@ class About extends StatelessWidget {
   List<Widget> _buildReferences(
     ImmortalList<Reference> references, {
     String Function(String label) labelGenerator,
-    bool useHeartIcon = false,
+    Icon icon,
   }) =>
       references
           .map(
@@ -79,7 +85,7 @@ class About extends StatelessWidget {
                   ? labelGenerator(reference.label)
                   : reference.label,
               reference.links,
-              useHeartIcon: useHeartIcon,
+              icon: icon,
             ),
           )
           .toMutableList();
@@ -98,81 +104,80 @@ class About extends StatelessWidget {
       .flattenIterables<Widget>()
       .toMutableList();
 
-  @override
-  Widget build(BuildContext context) {
-    final config = dimeGet<FestivalConfig>();
-    final globalConfig = dimeGet<GlobalConfig>();
-    return Theme(
-      data: _theme.aboutTheme,
-      child: AppScaffold(
-        title: 'About'.i18n,
-        backgroundColor: _theme.aboutBackgroundColor,
-        body: ListView(
-          // TODO(SF) add to theme
-          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
-          children: <Widget>[
-            ..._buildMessages(
-              ImmortalList([
-                Reference(
-                  label: 'This is an unofficial app for the {festival}:'
-                      .i18n
-                      .fill({'festival': config.festivalFullName}),
-                  links: ImmortalList([
-                    Link(url: config.festivalUrl),
-                  ]),
-                ),
-                Reference(
-                  label: 'Source code can be found under'.i18n,
-                  links: ImmortalList([
-                    Link(url: globalConfig.repositoryUrl),
-                  ]),
-                ),
-              ]),
-            ),
-            _theme.aboutDivider,
-            SizedBox(height: 5),
-            Text('Created by Projekt LilaHerz'.i18n),
-            SizedBox(height: 10),
-            ..._buildReferences(
-              globalConfig.creators,
-              useHeartIcon: true,
-            ),
-            _theme.aboutDivider,
-            SizedBox(height: 5),
-            ..._buildReferences(
-              globalConfig.references,
-              labelGenerator: (label) => label.i18n,
-            ),
-            ..._buildReferences(
-              config.fontReferences,
-              labelGenerator: (label) =>
-                  'Font "{font}" by:'.i18n.fill({'font': label}),
-            ),
-            _theme.aboutDivider,
-            SizedBox(height: 5),
-            ..._buildMessages(
-              config.aboutMessages,
-            ),
-            _theme.aboutDivider,
-            SizedBox(height: 5),
-            _theme.primaryButton(
-              label: MaterialLocalizations.of(context).viewLicensesButtonLabel,
-              onPressed: () async {
-                final packageInfo = await PackageInfo.fromPlatform();
-                showLicensePage(
-                  context: context,
-                  applicationName: '{festivalName} App'
-                      .i18n
-                      .fill({'festivalName': config.festivalName}),
-                  applicationVersion: packageInfo.version,
-                  applicationLegalese:
-                      'Copyright 2019 - 2020 Projekt LilaHerz 💜'.i18n,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+  void _showLicenses(BuildContext context) async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    showLicensePage(
+      context: context,
+      applicationName: '{festivalName} App'
+          .i18n
+          .fill({'festivalName': _config.festivalName}),
+      applicationVersion: packageInfo.version,
+      applicationLegalese: 'Copyright 2019 - 2020 Projekt LilaHerz 💜'.i18n,
     );
   }
+
+  @override
+  Widget build(BuildContext _) => Theme(
+        data: _theme.aboutTheme,
+        child: Builder(
+          builder: (context) => AppScaffold(
+            title: 'About'.i18n,
+            body: ListView(
+              padding:
+                  EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
+              children: <Widget>[
+                ..._buildMessages(
+                  ImmortalList([
+                    Reference(
+                      label: 'This is an unofficial app for the {festival}:'
+                          .i18n
+                          .fill({'festival': _config.festivalFullName}),
+                      links: ImmortalList([
+                        Link(url: _config.festivalUrl),
+                      ]),
+                    ),
+                    Reference(
+                      label: 'Source code can be found under'.i18n,
+                      links: ImmortalList([
+                        Link(url: _globalConfig.repositoryUrl),
+                      ]),
+                    ),
+                  ]),
+                ),
+                _divider,
+                SizedBox(height: 5),
+                Text('Created by Projekt LilaHerz'.i18n),
+                SizedBox(height: 10),
+                ..._buildReferences(
+                  _globalConfig.creators,
+                  icon: _theme.heartIcon,
+                ),
+                _divider,
+                SizedBox(height: 5),
+                ..._buildReferences(
+                  _globalConfig.references,
+                  labelGenerator: (label) => label.i18n,
+                ),
+                ..._buildReferences(
+                  _config.fontReferences,
+                  labelGenerator: (label) =>
+                      'Font "{font}" by:'.i18n.fill({'font': label}),
+                ),
+                _divider,
+                SizedBox(height: 5),
+                ..._buildMessages(
+                  _config.aboutMessages,
+                ),
+                _divider,
+                SizedBox(height: 5),
+                _theme.primaryButton(
+                  label:
+                      MaterialLocalizations.of(context).viewLicensesButtonLabel,
+                  onPressed: () => _showLicenses(context),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 }

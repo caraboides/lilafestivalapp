@@ -3,49 +3,36 @@ import 'package:flutter/material.dart';
 class FestivalTheme {
   const FestivalTheme({
     this.theme,
+    this.aboutTheme,
+    this.aboutIcon,
     this.menuTheme,
-    // this.aboutTheme,
-    this.tabTextStyle,
     this.menuDrawerDecoration,
-    this.aboutTextTheme,
-    this.aboutBackgroundColor,
-    this.aboutDividerColor,
+    this.tabTextStyle,
+    this.tabBarDecoration,
+    this.tabBarHeight,
     this.primaryButton,
     this.appBar,
     this.eventListItemHeight,
   });
 
   final ThemeData theme;
+  final ThemeData aboutTheme;
+  final IconData aboutIcon;
   final ThemeData menuTheme;
-  // final ThemeData aboutTheme;
-  final TextStyle tabTextStyle;
-  final TextTheme aboutTextTheme;
   final BoxDecoration menuDrawerDecoration;
-  final Color aboutBackgroundColor;
+  final TextStyle tabTextStyle;
+  final BoxDecoration tabBarDecoration;
+  final double tabBarHeight;
   final MaterialButton Function({
     String label,
     VoidCallback onPressed,
   }) primaryButton;
   final AppBar Function(String title) appBar;
   final double eventListItemHeight; // TODO(SF) move to global theme
-  final Color aboutDividerColor;
-
-  ThemeData get aboutTheme => theme.copyWith(
-        textTheme: aboutTextTheme,
-      );
-
-  Widget get aboutDivider => Padding(
-        padding: EdgeInsets.only(bottom: 8),
-        child: Divider(color: aboutDividerColor, height: 1),
-      );
-
+  // TODO(SF) move to global theme
   Icon get heartIcon => Icon(
         Icons.favorite,
         color: Colors.purple,
       );
-
-  Icon get starIcon => Icon(
-        Icons.star,
-        color: Colors.white70,
-      );
+  // TODO(SF) make schedule icons in general configurable?
 }
