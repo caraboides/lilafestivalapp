@@ -60,27 +60,26 @@ final ThemeData theme = ThemeData(
   visualDensity: VisualDensity.adaptivePlatformDensity,
 );
 
-final Color menuBackgroundColor = Colors.grey[850];
 final Color menuFontColor = Color(0xFFd6102b);
-final Color menuIconColor = menuFontColor.withOpacity(0.87);
 final TextStyle appBarTextStyle = theme.textTheme.headline4;
 
 final FestivalTheme festivalTheme = FestivalTheme(
   theme: theme,
+  menuTheme: theme.copyWith(
+    textTheme: Typography.whiteMountainView
+        .apply(displayColor: menuFontColor, bodyColor: menuFontColor),
+    canvasColor: Colors.grey[850],
+    iconTheme: theme.iconTheme.copyWith(color: menuFontColor.withOpacity(0.87)),
+  ),
   tabTextStyle: TextStyle(
     fontFamily: 'No Continue',
     fontSize: 18,
-  ),
-  menuEntryTextStyle: theme.textTheme.headline6.copyWith(
-    color: menuFontColor,
   ),
   menuDrawerDecoration: BoxDecoration(
     border: Border(
       right: BorderSide(width: 2, color: Colors.black),
     ),
-    color: menuBackgroundColor,
   ),
-  menuIconColor: menuIconColor,
   aboutTextTheme: Typography.whiteMountainView,
   aboutBackgroundColor: Colors.grey[850],
   primaryButton: ({label, onPressed}) => FlatButton(

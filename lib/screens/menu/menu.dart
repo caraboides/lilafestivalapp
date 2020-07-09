@@ -10,8 +10,12 @@ import 'menu.i18n.dart';
 class Menu extends StatelessWidget {
   const Menu();
 
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
+  Navigation get _navigation => dimeGet<Navigation>();
+  GlobalConfig get _config => dimeGet<GlobalConfig>();
+
   Widget _buildEntry({
-    FestivalTheme theme,
+    ThemeData theme,
     String label,
     IconData icon,
     VoidCallback onTap,
@@ -19,47 +23,56 @@ class Menu extends StatelessWidget {
       ListTile(
         title: Text(
           label.i18n,
-          style: theme.menuEntryTextStyle,
+          style: theme.textTheme.headline6,
         ),
-        leading: Icon(
-          icon,
-          color: theme.menuIconColor,
+        // TODO(SF) why is this necessary?
+        leading: IconTheme(
+          data: theme.iconTheme,
+          child: Icon(icon),
         ),
         onTap: onTap,
       );
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildEntries(BuildContext context) {
     final navigator = Navigator.of(context);
-    final theme = dimeGet<FestivalTheme>();
-    final config = dimeGet<GlobalConfig>();
-    final navigation = dimeGet<Navigation>();
-    return Drawer(
-      child: Container(
-        decoration: theme.menuDrawerDecoration,
-        child: ListView(
-          children: <Widget>[
-            // Image.asset(
-            //   'assets/icon_menu.png',
-            //   height: 300,
-            // ),
-            ...navigation.routes
-                .map((route) => _buildEntry(
-                      theme: theme,
-                      label: route.name,
-                      icon: route.icon,
-                      onTap: () => navigation.navigateToRoute(navigator, route),
-                    ))
-                .toMutableList(),
-            _buildEntry(
-              theme: theme,
-              label: 'Privacy Policy',
-              icon: Icons.verified_user,
-              onTap: () => launch(config.privacyPolicyUrl),
-            ),
-          ],
+    final theme = Theme.of(context);
+    final locale = Localizations.localeOf(context);
+    return ListView(
+      children: <Widget>[
+        // Image.asset(
+        //   'assets/icon_menu.png',
+        //   height: 300,
+        // ),
+        ..._navigation.routes
+            .map((route) => _buildEntry(
+                  theme: theme,
+                  label: route.name,
+                  icon: route.icon,
+                  onTap: () => _navigation.navigateToRoute(navigator, route),
+                ))
+            .toMutableList(),
+        _buildEntry(
+          theme: theme,
+          label: 'Privacy Policy',
+          icon: Icons.verified_user,
+          onTap: () => launch(locale.languageCode == 'de'
+              ? _config.privacyPolicyUrlDe
+              : _config.privacyPolicyUrlEn),
         ),
-      ),
+      ],
     );
   }
+
+  @override
+  Widget build(BuildContext _) => Theme(
+        data: _theme.menuTheme,
+        child: Builder(
+          builder: (context) => Drawer(
+            child: Container(
+              decoration: _theme.menuDrawerDecoration,
+              child: _buildEntries(context),
+            ),
+          ),
+        ),
+      );
 }

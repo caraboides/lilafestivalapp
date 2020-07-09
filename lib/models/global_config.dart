@@ -5,7 +5,8 @@ import 'reference.dart';
 class GlobalConfig {
   const GlobalConfig({
     this.periodicRebuildDuration,
-    this.privacyPolicyUrl,
+    this.privacyPolicyUrlDe,
+    this.privacyPolicyUrlEn,
     this.festivalHubBaseUrl,
     this.repositoryUrl,
     this.creators,
@@ -13,7 +14,8 @@ class GlobalConfig {
   });
 
   final Duration periodicRebuildDuration;
-  final String privacyPolicyUrl;
+  final String privacyPolicyUrlDe;
+  final String privacyPolicyUrlEn;
   final String festivalHubBaseUrl;
   final String repositoryUrl;
   final ImmortalList<Reference> creators;

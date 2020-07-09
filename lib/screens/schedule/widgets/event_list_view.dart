@@ -31,7 +31,7 @@ class EventListView extends StatefulWidget {
 class EventListViewState extends State<EventListView> with FirstBuildMixin {
   final _scrollController = ScrollController();
 
-  int get currentOrNextPlayingBandIndex {
+  int get _currentOrNextPlayingBandIndex {
     final now = DateTime.now();
     return widget.date != null && isSameFestivalDay(now, widget.date)
         ? widget.events.indexWhere((enhancedEvent) =>
@@ -61,9 +61,9 @@ class EventListViewState extends State<EventListView> with FirstBuildMixin {
   }) {
     Future.delayed(timeout, () {
       if (mounted) {
-        if (currentOrNextPlayingBandIndex >= 0) {
+        if (_currentOrNextPlayingBandIndex >= 0) {
           _scrollController.animateTo(
-            max(currentOrNextPlayingBandIndex - 2, 0) *
+            max(_currentOrNextPlayingBandIndex - 2, 0) *
                 _theme.eventListItemHeight,
             duration: Duration(milliseconds: 500),
             curve: Curves.easeIn,
@@ -82,12 +82,12 @@ class EventListViewState extends State<EventListView> with FirstBuildMixin {
           onTap: () => BandDetailView.openFor(context, enhancedEvent),
           isPlaying: enhancedEvent.event.isPlaying(now),
         ));
-    if (currentOrNextPlayingBandIndex >= 0 &&
-        !widget.events[currentOrNextPlayingBandIndex]
+    if (_currentOrNextPlayingBandIndex >= 0 &&
+        !widget.events[_currentOrNextPlayingBandIndex]
             .map((enhancedEvent) => enhancedEvent.event.isPlaying(now))
             .orElse(false)) {
       return items.insert(
-          currentOrNextPlayingBandIndex,
+          _currentOrNextPlayingBandIndex,
           Container(
             key: Key('change-over'),
             height: 2,

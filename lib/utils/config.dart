@@ -5,8 +5,9 @@ import '../models/reference.dart';
 
 final GlobalConfig config = GlobalConfig(
   periodicRebuildDuration: Duration(minutes: 1),
-  // TODO(SF) add en version
-  privacyPolicyUrl: 'https://bit.ly/2L3HSD8',
+  privacyPolicyUrlDe: 'https://bit.ly/2L3HSD8',
+  // TODO(SF) translate privacy policy
+  privacyPolicyUrlEn: 'https://bit.ly/2L3HSD8',
   festivalHubBaseUrl: 'https://lilafestivalhub.herokuapp.com',
   repositoryUrl: 'https://github.com/caraboides/lilafestivalapp',
   creators: ImmortalList([

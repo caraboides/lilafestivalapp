@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class FestivalTheme {
   const FestivalTheme({
     this.theme,
+    this.menuTheme,
+    // this.aboutTheme,
     this.tabTextStyle,
-    this.menuEntryTextStyle,
     this.menuDrawerDecoration,
-    this.menuIconColor,
     this.aboutTextTheme,
     this.aboutBackgroundColor,
     this.aboutDividerColor,
@@ -16,11 +16,11 @@ class FestivalTheme {
   });
 
   final ThemeData theme;
+  final ThemeData menuTheme;
+  // final ThemeData aboutTheme;
   final TextStyle tabTextStyle;
-  final TextStyle menuEntryTextStyle;
   final TextTheme aboutTextTheme;
   final BoxDecoration menuDrawerDecoration;
-  final Color menuIconColor;
   final Color aboutBackgroundColor;
   final MaterialButton Function({
     String label,

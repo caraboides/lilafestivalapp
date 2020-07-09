@@ -17,11 +17,11 @@ class FilteredEventList extends HookWidget {
   final DateTime date;
   final bool scheduledOnly;
 
-  String get scheduleFilterTag => date?.toIso8601String() ?? 'allBands';
+  String get _scheduleFilterTag => date?.toIso8601String() ?? 'allBands';
 
   @override
   Widget build(BuildContext context) =>
-      useProvider(dimeGet<CombinedScheduleProvider>(tag: scheduleFilterTag))
+      useProvider(dimeGet<CombinedScheduleProvider>(tag: _scheduleFilterTag))
           .when(
         data: (events) {
           // TODO(SF) use computed as well?

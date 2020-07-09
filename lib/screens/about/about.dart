@@ -17,7 +17,7 @@ class About extends StatelessWidget {
 
   static Widget builder(BuildContext context) => About();
 
-  FestivalTheme get theme => dimeGet<FestivalTheme>();
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
 
   Widget _buildLink(
     String url, {
@@ -25,7 +25,7 @@ class About extends StatelessWidget {
     bool shrink = false,
   }) =>
       FlatButton(
-        textColor: theme.theme.accentColor,
+        textColor: _theme.theme.accentColor,
         child: Text(label ?? url),
         onPressed: () => launch(url),
         materialTapTargetSize: shrink
@@ -53,7 +53,7 @@ class About extends StatelessWidget {
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          useHeartIcon ? theme.heartIcon : theme.starIcon,
+          useHeartIcon ? _theme.heartIcon : _theme.starIcon,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -103,10 +103,10 @@ class About extends StatelessWidget {
     final config = dimeGet<FestivalConfig>();
     final globalConfig = dimeGet<GlobalConfig>();
     return Theme(
-      data: theme.aboutTheme,
+      data: _theme.aboutTheme,
       child: AppScaffold(
         title: 'About'.i18n,
-        backgroundColor: theme.aboutBackgroundColor,
+        backgroundColor: _theme.aboutBackgroundColor,
         body: ListView(
           // TODO(SF) add to theme
           padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
@@ -129,15 +129,15 @@ class About extends StatelessWidget {
                 ),
               ]),
             ),
-            theme.aboutDivider,
-            SizedBox(height: 5), // TODO(SF) move to theme?
+            _theme.aboutDivider,
+            SizedBox(height: 5),
             Text('Created by Projekt LilaHerz'.i18n),
             SizedBox(height: 10),
             ..._buildReferences(
               globalConfig.creators,
               useHeartIcon: true,
             ),
-            theme.aboutDivider,
+            _theme.aboutDivider,
             SizedBox(height: 5),
             ..._buildReferences(
               globalConfig.references,
@@ -148,14 +148,14 @@ class About extends StatelessWidget {
               labelGenerator: (label) =>
                   'Font "{font}" by:'.i18n.fill({'font': label}),
             ),
-            theme.aboutDivider,
+            _theme.aboutDivider,
             SizedBox(height: 5),
             ..._buildMessages(
               config.aboutMessages,
             ),
-            theme.aboutDivider,
+            _theme.aboutDivider,
             SizedBox(height: 5),
-            theme.primaryButton(
+            _theme.primaryButton(
               label: MaterialLocalizations.of(context).viewLicensesButtonLabel,
               onPressed: () async {
                 final packageInfo = await PackageInfo.fromPlatform();
