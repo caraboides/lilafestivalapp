@@ -13,6 +13,7 @@ import '../../providers/bands.dart';
 import '../../widgets/event_date/event_date.dart';
 import '../../widgets/event_stage.dart';
 import '../../widgets/event_toggle/event_toggle.dart';
+import '../../widgets/scaffold.dart';
 import 'band_detail_view.i18n.dart';
 
 // TODO(SF) improve
@@ -50,17 +51,21 @@ class BandDetailView extends StatelessWidget {
 
   Widget _buildDetailRow(ThemeData theme, String title, String value) =>
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: EdgeInsets.only(top: 10),
         child: Row(
           children: <Widget>[
-            SizedBox(
-              width: 75,
+            Flexible(
+              fit: FlexFit.tight,
               child: Text(
                 '${title.i18n}:',
                 style: theme.textTheme.subtitle2,
               ),
             ),
-            Text(value),
+            Flexible(
+              flex: 4,
+              fit: FlexFit.tight,
+              child: Text(value),
+            ),
           ],
         ),
       );
@@ -72,29 +77,44 @@ class BandDetailView extends StatelessWidget {
   ) =>
       <Widget>[
         Padding(
-          padding:
-              const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 15),
-          child: Text(_getDescription(locale, band)),
-        ),
-        if (_isValueSet(band.origin))
-          _buildDetailRow(theme, 'Origin', _buildFlag(band.origin)),
-        if (_isValueSet(band.style))
-          _buildDetailRow(theme, 'Style', band.style),
-        if (_isValueSet(band.roots))
-          _buildDetailRow(theme, 'Roots', band.roots),
-        if (_isValueSet(band.spotify))
-          Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 15),
-            child: _festivalTheme.primaryButton(
-              label: 'Play on Spotify'.i18n,
-              onPressed: () {
-                launch(band.spotify);
-              },
-            ),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text(_getDescription(locale, band)),
+              ),
+              _buildDetailRow(
+                theme,
+                'Origin',
+                _isValueSet(band.origin)
+                    ? _buildFlag(band.origin)
+                    : _fallbackText,
+              ),
+              if (_isValueSet(band.style))
+                _buildDetailRow(theme, 'Style', band.style),
+              if (_isValueSet(band.roots))
+                _buildDetailRow(theme, 'Roots', band.roots),
+              SizedBox(
+                height: 10,
+              ),
+              if (_isValueSet(band.spotify))
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: _festivalTheme.primaryButton(
+                    label: 'Play on Spotify'.i18n,
+                    onPressed: () {
+                      launch(band.spotify);
+                    },
+                  ),
+                ),
+            ],
           ),
+        ),
         if (_isValueSet(band.image))
           Padding(
-            padding: EdgeInsets.only(top: 15),
+            padding: EdgeInsets.only(top: 5),
             child: CachedNetworkImage(
               imageUrl: band.image,
             ),
@@ -117,32 +137,39 @@ class BandDetailView extends StatelessWidget {
         ],
       );
 
+  Widget _buildBandLogo(String logo) => Container(
+        color: Colors.black,
+        child: CachedNetworkImage(
+          imageUrl: logo,
+        ),
+        height: 100,
+      );
+
+  Widget get _fallbackInfo => Container(
+        padding:
+            const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+        alignment: Alignment.center,
+        child: Text(_fallbackText),
+      );
+
   Widget _buildBandView(BuildContext context, Optional<Band> band) {
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
-    return Scaffold(
-      appBar: _festivalTheme.appBar('Band Details'.i18n),
+    return AppScaffold(
+      isDialog: true,
+      title: 'Band Details'.i18n,
       body: Container(
         alignment: Alignment.topCenter,
         child: ListView(
           children: <Widget>[
-            band
-                .map<Widget>((d) => _isValueSet(d.logo)
-                    ? Container(
-                        color: Colors.black,
-                        child: CachedNetworkImage(
-                          imageUrl: d.logo,
-                        ),
-                        height: 100,
-                      )
-                    : Container())
-                .orElse(Container()),
+            if (band.isPresent && _isValueSet(band.value.logo))
+              _buildBandLogo(band.value.logo),
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 20),
               child: Text(
                 // TODO(SF) use family provider and display key here
                 _event.bandName.toUpperCase(),
-                style: theme.textTheme.headline5,
+                style: theme.textTheme.headline3,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -152,14 +179,9 @@ class BandDetailView extends StatelessWidget {
             ),
             ...band
                 .map<List<Widget>>((d) => _buildDetails(theme, locale, d))
-                .orElse(<Widget>[
-              Container(
-                padding: const EdgeInsets.only(
-                    top: 10, left: 20, right: 20, bottom: 20),
-                alignment: Alignment.center,
-                child: Text(_fallbackText),
-              ),
-            ]),
+                .orElse(
+              <Widget>[_fallbackInfo],
+            ),
           ],
         ),
       ),

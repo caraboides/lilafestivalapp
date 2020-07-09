@@ -7,12 +7,11 @@ class FestivalTheme {
     this.aboutIcon,
     this.menuTheme,
     this.menuDrawerDecoration,
+    this.appBarBorder,
     this.tabTextStyle,
     this.tabBarDecoration,
     this.tabBarHeight,
     this.primaryButton,
-    this.appBar,
-    this.eventListItemHeight,
   });
 
   final ThemeData theme;
@@ -20,6 +19,7 @@ class FestivalTheme {
   final IconData aboutIcon;
   final ThemeData menuTheme;
   final BoxDecoration menuDrawerDecoration;
+  final ShapeBorder appBarBorder;
   final TextStyle tabTextStyle;
   final BoxDecoration tabBarDecoration;
   final double tabBarHeight;
@@ -27,12 +27,17 @@ class FestivalTheme {
     String label,
     VoidCallback onPressed,
   }) primaryButton;
-  final AppBar Function(String title) appBar;
-  final double eventListItemHeight; // TODO(SF) move to global theme
-  // TODO(SF) move to global theme
+
+  final double eventListItemHeight = 70;
+
   Icon get heartIcon => Icon(
         Icons.favorite,
         color: Colors.purple,
       );
+
   // TODO(SF) make schedule icons in general configurable?
+  AppBar appBar(String title) => AppBar(
+        title: Text(title),
+        shape: appBarBorder,
+      );
 }

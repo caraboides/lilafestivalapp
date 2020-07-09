@@ -23,7 +23,7 @@ class Menu extends StatelessWidget {
       ListTile(
         title: Text(
           label.i18n,
-          style: theme.textTheme.headline6,
+          style: theme.textTheme.headline4,
         ),
         // TODO(SF) why is this necessary?
         leading: IconTheme(

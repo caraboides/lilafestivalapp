@@ -43,10 +43,10 @@ flutter:
   #    - assets/logo.png
   #    - assets/icon_menu.png
 
-  # fonts:
-  #   - family: No Continue
-  #     fonts:
-  #       - asset: assets/no_continue.ttf
+  fonts:
+    - family: No Continue
+      fonts:
+        - asset: assets/no_continue.ttf
 
 # flutter_icons:
 #   image_path: "assets/icon.png"

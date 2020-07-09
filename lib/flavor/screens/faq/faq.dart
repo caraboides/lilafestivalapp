@@ -12,7 +12,7 @@ class FAQ extends StatelessWidget {
       <Widget>[
         Text(
           title,
-          style: theme.textTheme.headline6,
+          style: theme.textTheme.headline4,
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 20),

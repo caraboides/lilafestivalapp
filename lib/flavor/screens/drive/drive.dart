@@ -40,7 +40,7 @@ class Drive extends StatelessWidget {
             SizedBox(height: 30),
             Text(
               'Anreise mit Zug:',
-              style: theme.textTheme.headline6,
+              style: theme.textTheme.headline4,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20),
@@ -66,7 +66,7 @@ class Drive extends StatelessWidget {
             SizedBox(height: 30),
             Text(
               'Anreise mit dem Auto:',
-              style: theme.textTheme.headline6,
+              style: theme.textTheme.headline4,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20),
