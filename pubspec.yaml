@@ -25,9 +25,9 @@ dependencies:
   cached_network_image: ^2.2.0+1
   weather: ^1.1.1
   dcache: ^0.3.0
-  flutter_config: ^1.0.7
+  flutter_config: ^1.0.7 # TODO(SF) can this be a dev dependency?
+  webview_flutter: ^0.3.22+1
   # flutter_launcher_icons: ^0.7.2+1
-  # webview_flutter: ^0.3.10+4
   # flutter_local_notifications: ^0.8.0
 
 dev_dependencies:
@@ -42,13 +42,16 @@ flutter:
   assets:
      - assets/initial_schedule.json
      - assets/bands.json
-     - assets/logo.png
-     - assets/logo_menu.png
+     - assets/spirit/
+    #  - assets/party.san/
 
   fonts:
     - family: No Continue
       fonts:
-        - asset: assets/no_continue.ttf
+        - asset: assets/spirit/no_continue.ttf
+    # - family: Pirata One
+    #   fonts:
+    #     - asset: assets/party.san/PirataOne-Regular.ttf
 
 # flutter_icons:
 #   image_path: "assets/icon.png"

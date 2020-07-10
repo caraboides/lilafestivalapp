@@ -59,6 +59,11 @@ final ThemeData theme = ThemeData(
       fontSize: 18,
     ),
   ),
+  cardTheme: CardTheme(
+    margin: EdgeInsets.zero,
+    shape: Border(bottom: _border),
+    color: Color(0xFFb3dddd),
+  ),
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(
@@ -70,7 +75,6 @@ final FestivalTheme festivalTheme = FestivalTheme(
     buttonTheme: theme.buttonTheme.copyWith(textTheme: ButtonTextTheme.accent),
     iconTheme: theme.iconTheme.copyWith(color: Colors.white70),
   ),
-  aboutIcon: Icons.star,
   menuTheme: theme.copyWith(
     textTheme: theme.textTheme
         .apply(displayColor: _menuFontColor, bodyColor: _menuFontColor),
@@ -80,10 +84,6 @@ final FestivalTheme festivalTheme = FestivalTheme(
     ),
   ),
   menuDrawerDecoration: BoxDecoration(border: Border(right: _border)),
-  weatherTheme: theme.copyWith(
-    canvasColor: Color(0xFFb3dddd),
-  ),
-  weatherCardDecoration: BoxDecoration(border: Border(bottom: _border)),
   appBarBorder: Border(bottom: _border),
   tabBarHeight: 48,
   tabBarDecoration: BoxDecoration(border: Border(bottom: _border)),
@@ -100,13 +100,13 @@ final FestivalTheme festivalTheme = FestivalTheme(
     child: Text(label),
   ),
   logo: Logo(
-    assetPath: 'assets/logo.png',
+    assetPath: 'assets/spirit/logo.png',
     width: 158,
     height: 40,
   ),
   logoMenu: Logo(
-    assetPath: 'assets/logo_menu.png',
-    width: 304,
+    assetPath: 'assets/spirit/logo_menu.png',
+    width: 304, // TODO(SF) are those correct?
     height: 152,
   ),
 );

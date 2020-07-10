@@ -15,6 +15,7 @@ class ScheduleProvider
           context: context,
           remoteUrl: Optional.of('/schedule?festival=$festivalId'),
           appStorageKey: Optional.of('schedule.json'),
+          // TODO(SF) make this flavor-configurable? maybe asset root path?
           assetKey: Optional.of('assets/initial_schedule.json'),
           fromJson: (jsonMap) => ImmortalMap<String, dynamic>(jsonMap)
               .mapEntries<Event>((id, json) => Event.fromJson(id, json)),

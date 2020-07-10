@@ -53,14 +53,10 @@ class _WeatherCardState extends State<WeatherCard> {
         ),
       );
 
-  Widget _buildWeatherCard(Weather weather) => Theme(
-        data: _theme.weatherTheme,
-        child: Material(
-          child: Container(
-            height: _theme.weatherCardHeight,
-            decoration: _theme.weatherCardDecoration,
-            child: _buildWeatherWidget(weather),
-          ),
+  Widget _buildWeatherCard(Weather weather) => Card(
+        child: Container(
+          height: _theme.weatherCardHeight,
+          child: _buildWeatherWidget(weather),
         ),
       );
 

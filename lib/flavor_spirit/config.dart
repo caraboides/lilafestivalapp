@@ -10,8 +10,8 @@ import 'screens/faq/faq.dart';
 
 final FestivalConfig config = FestivalConfig(
   festivalId: 'spirit_2019',
-  festivalName: 'Test festival',
-  festivalFullName: 'Test festival 2020',
+  festivalName: 'Spirit',
+  festivalFullName: 'Spirit Festival',
   festivalUrl: 'https://www.spirit-festival.com',
   startDate: DateTime(2019, 8, 29),
   endDate: DateTime(2019, 8, 31),

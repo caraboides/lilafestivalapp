@@ -27,30 +27,36 @@ class About extends StatelessWidget {
         child: Divider(height: 1),
       );
 
-  Widget _buildLink(
-    String url, {
-    String label,
+  Widget _buildImageLink(Link link) => GestureDetector(
+        child: Image.asset(link.imageAssetPath),
+        onTap: () => launch(link.url),
+      );
+
+  Widget _buildButtonLink(
+    Link link, {
     bool shrink = false,
   }) =>
       FlatButton(
-        child: Text(label ?? url),
-        onPressed: () => launch(url),
+        child: Text(link.label ?? link.url),
+        onPressed: () => launch(link.url),
         materialTapTargetSize: shrink
             ? MaterialTapTargetSize.shrinkWrap
             : MaterialTapTargetSize.padded,
       );
 
+  Widget _buildLink(
+    Link link, {
+    bool shrink = false,
+  }) =>
+      link.imageAssetPath != null
+          ? _buildImageLink(link)
+          : _buildButtonLink(link, shrink: shrink);
+
   List<Widget> _buildLinks(
     ImmortalList<Link> links, {
     bool shrink = false,
   }) =>
-      links
-          .map((link) => _buildLink(
-                link.url,
-                label: link.label,
-                shrink: shrink,
-              ))
-          .toMutableList();
+      links.map((link) => _buildLink(link, shrink: shrink)).toMutableList();
 
   Widget _buildReference(
     String label,
@@ -93,7 +99,7 @@ class About extends StatelessWidget {
 
   List<Widget> _buildMessage(String label, ImmortalList<Link> links) =>
       <Widget>[
-        Text(label),
+        if (label != null) Text(label),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: _buildLinks(links),

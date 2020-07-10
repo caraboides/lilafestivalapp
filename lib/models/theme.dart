@@ -4,11 +4,8 @@ class FestivalTheme {
   const FestivalTheme({
     this.theme,
     this.aboutTheme,
-    this.aboutIcon,
     this.menuTheme,
     this.menuDrawerDecoration,
-    this.weatherTheme,
-    this.weatherCardDecoration,
     this.appBarBorder,
     this.tabBarDecoration,
     this.tabBarHeight,
@@ -19,12 +16,8 @@ class FestivalTheme {
 
   final ThemeData theme;
   final ThemeData aboutTheme;
-  // TODO(SF) make schedule icons in general configurable?
-  final IconData aboutIcon;
   final ThemeData menuTheme;
   final BoxDecoration menuDrawerDecoration;
-  final ThemeData weatherTheme;
-  final BoxDecoration weatherCardDecoration;
   final ShapeBorder appBarBorder;
   final BoxDecoration tabBarDecoration;
   final double tabBarHeight;
@@ -37,6 +30,10 @@ class FestivalTheme {
 
   final double eventListItemHeight = 70;
   final double weatherCardHeight = 40;
+
+  // TODO(SF) make schedule icons in general configurable?
+
+  IconData get aboutIcon => Icons.star;
 
   Icon get heartIcon => Icon(
         Icons.favorite,

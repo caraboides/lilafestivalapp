@@ -6,7 +6,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:i18n_extension/i18n_widget.dart';
 
-import 'flavor/module.dart';
+// TODO(SF) select correct flavor
+import 'flavor_spirit/module.dart';
 import 'models/festival_config.dart';
 import 'models/theme.dart';
 import 'providers/provider_module.dart';
@@ -40,6 +41,7 @@ class FestivalApp extends StatelessWidget {
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
 
   void _precacheImages(BuildContext context) {
+    // TODO(SF) perform flutter clean between flavor switches
     if (_theme.logoMenu != null) {
       precacheImage(
         AssetImage(_theme.logoMenu.assetPath),
