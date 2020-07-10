@@ -16,6 +16,7 @@ final FestivalConfig config = FestivalConfig(
   startDate: DateTime(2019, 8, 8),
   endDate: DateTime(2019, 8, 10),
   daySwitchOffset: Duration(hours: 3),
+  assetRootPath: 'assets/party.san/',
   fontReferences: ImmortalList([
     Reference(
       label: 'Pirata One',
@@ -31,7 +32,7 @@ final FestivalConfig config = FestivalConfig(
     Reference(
       links: ImmortalList([
         Link(
-          imageAssetPath: 'assets/party.san/mar.gif',
+          imageAssetPath: 'mar.gif',
           url: 'http://www.metalheadsagainstracism.org/',
         ),
       ]),

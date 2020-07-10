@@ -100,13 +100,13 @@ final FestivalTheme festivalTheme = FestivalTheme(
     child: Text(label),
   ),
   logo: Logo(
-    assetPath: 'assets/spirit/logo.png',
+    assetPath: 'logo.png',
     width: 158,
     height: 40,
   ),
   logoMenu: Logo(
-    assetPath: 'assets/spirit/logo_menu.png',
-    width: 304, // TODO(SF) are those correct?
+    assetPath: 'logo_menu.png',
+    width: 129,
     height: 152,
   ),
 );

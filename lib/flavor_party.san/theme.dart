@@ -73,12 +73,12 @@ final FestivalTheme festivalTheme = FestivalTheme(
     child: Text(label),
   ),
   logo: Logo(
-    assetPath: 'assets/party.san/logo.png',
+    assetPath: 'logo.png',
     width: 111,
     height: 56,
   ),
   logoMenu: Logo(
-    assetPath: 'assets/party.san/logo_menu.png',
+    assetPath: 'logo_menu.png',
     width: 304,
     height: 152,
   ),

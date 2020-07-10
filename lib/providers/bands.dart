@@ -12,7 +12,7 @@ class BandsProvider
           context: context,
           remoteUrl: Optional.of('/bands?festival=$festivalId'),
           appStorageKey: Optional.of('bands.json'),
-          assetKey: Optional.of('assets/bands.json'),
+          assetKey: Optional.of('bands.json'),
           fromJson: (jsonMap) => ImmortalMap<String, dynamic>(jsonMap)
               .mapValues((bandName, json) => Band.fromJson(bandName, json)),
         );

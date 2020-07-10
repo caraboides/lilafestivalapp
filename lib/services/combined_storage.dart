@@ -5,19 +5,21 @@ import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
 
+import '../models/festival_config.dart';
 import 'app_storage.dart';
 import 'festival_hub.dart';
 
 class CombinedStorage {
   AppStorage get _appStorage => dimeGet<AppStorage>();
   FestivalHub get _festivalHub => dimeGet<FestivalHub>();
+  FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   Future<Optional<J>> _loadJsonDataFromAssets<J>(
     BuildContext context,
     String assetKey,
   ) =>
       DefaultAssetBundle.of(context)
-          .loadString(assetKey)
+          .loadString(_config.assetRootPath + assetKey)
           .then((json) =>
               Optional.ofNullable(json != null ? jsonDecode(json) : null))
           .catchError((e) {

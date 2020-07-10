@@ -39,12 +39,13 @@ class FestivalApp extends StatelessWidget {
   const FestivalApp();
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
+  FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   void _precacheImages(BuildContext context) {
     // TODO(SF) perform flutter clean between flavor switches
     if (_theme.logoMenu != null) {
       precacheImage(
-        AssetImage(_theme.logoMenu.assetPath),
+        AssetImage(_config.assetRootPath + _theme.logoMenu.assetPath),
         context,
         size: Size(_theme.logoMenu.width, _theme.logoMenu.height),
       );
@@ -60,7 +61,7 @@ class FestivalApp extends StatelessWidget {
     dimeInstall(ProviderModule(context), override: true);
 
     return MaterialApp(
-      title: dimeGet<FestivalConfig>().festivalName,
+      title: _config.festivalName,
       theme: _theme.theme,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

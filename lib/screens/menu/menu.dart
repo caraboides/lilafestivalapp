@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dime/dime.dart';
 
+import '../../models/festival_config.dart';
 import '../../models/global_config.dart';
 import '../../models/theme.dart';
 import '../../services/navigation.dart';
@@ -11,8 +12,9 @@ class Menu extends StatelessWidget {
   const Menu();
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
+  FestivalConfig get _config => dimeGet<FestivalConfig>();
   Navigation get _navigation => dimeGet<Navigation>();
-  GlobalConfig get _config => dimeGet<GlobalConfig>();
+  GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
   Widget _buildEntry({
     ThemeData theme,
@@ -41,7 +43,7 @@ class Menu extends StatelessWidget {
       children: <Widget>[
         if (_theme.logoMenu != null)
           Image.asset(
-            _theme.logoMenu.assetPath,
+            _config.assetRootPath + _theme.logoMenu.assetPath,
             height: _theme.logoMenu.height,
             width: _theme.logoMenu.width,
           ),
@@ -58,8 +60,8 @@ class Menu extends StatelessWidget {
           label: 'Privacy Policy'.i18n,
           icon: Icons.verified_user,
           onTap: () => launch(locale.languageCode == 'de'
-              ? _config.privacyPolicyUrlDe
-              : _config.privacyPolicyUrlEn),
+              ? _globalConfig.privacyPolicyUrlDe
+              : _globalConfig.privacyPolicyUrlEn),
         ),
       ],
     );

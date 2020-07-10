@@ -28,7 +28,7 @@ class About extends StatelessWidget {
       );
 
   Widget _buildImageLink(Link link) => GestureDetector(
-        child: Image.asset(link.imageAssetPath),
+        child: Image.asset(_config.assetRootPath + link.imageAssetPath),
         onTap: () => launch(link.url),
       );
 

@@ -16,6 +16,7 @@ final FestivalConfig config = FestivalConfig(
   startDate: DateTime(2019, 8, 29),
   endDate: DateTime(2019, 8, 31),
   daySwitchOffset: Duration(hours: 3),
+  assetRootPath: 'assets/spirit/',
   fontReferences: ImmortalList([
     Reference(
       label: 'No Continue',
