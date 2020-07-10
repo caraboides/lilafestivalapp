@@ -1,13 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../widgets/scaffold.dart';
+import '../../../widgets/static_html_view.dart';
 import 'shuttle.i18n.dart';
 
-const String html = '''
+const String _html = '''
 <link href="https://fonts.googleapis.com/css?family=Pirata+One&display=swap" rel="stylesheet">
 
 <style>
@@ -1182,22 +1179,9 @@ class Shuttle extends StatelessWidget {
   // TODO(SF) can this be getters?
   static String title() => 'Bus Shuttle'.i18n;
 
-  String _buildUrl() {
-    final contentBase64 = base64Encode(const Utf8Encoder().convert(html));
-    return 'data:text/html;base64,$contentBase64';
-  }
-
   @override
   Widget build(BuildContext context) => AppScaffold(
         title: title(),
-        body: Center(
-            child: WebView(
-          initialUrl: _buildUrl(),
-          javascriptMode: JavascriptMode.unrestricted,
-          navigationDelegate: (request) {
-            launch(request.url);
-            return NavigationDecision.prevent;
-          },
-        )),
+        body: StaticHtmlView(_html),
       );
 }

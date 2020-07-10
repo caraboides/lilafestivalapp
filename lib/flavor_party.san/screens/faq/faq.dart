@@ -1,13 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../widgets/scaffold.dart';
+import '../../../widgets/static_html_view.dart';
 import 'faq.i18n.dart';
 
-const String faqHeader = '''
+const String _faqHeader = '''
     <link href="https://fonts.googleapis.com/css?family=Pirata+One&display=swap" rel="stylesheet">
     <style>
     h3 {
@@ -22,7 +19,7 @@ const String faqHeader = '''
     }
     </style>
     ''';
-const String faq = '''
+const String _faq = '''
     <body>
         <div class="row"><div class="col-xs-12 col-sm-12 col-md-4">
 <div id="c27" class="frame frame-default frame-type-text frame-layout-0"><header><h3 class="">
@@ -85,7 +82,7 @@ const String faq = '''
 </body>
 ''';
 
-const String faqEn = '''
+const String _faqEn = '''
 <body>
 <div class="row"><div class="col-xs-12 col-sm-12 col-md-4">
 <div id="c27" class="frame frame-default frame-type-text frame-layout-0"><a id="c44"></a><header><h3 class="">
@@ -149,25 +146,14 @@ class FAQ extends StatelessWidget {
 
   static String title() => 'FAQ'.i18n;
 
-  String _buildUrl(BuildContext context) {
+  String _buildHtml(BuildContext context) {
     final locale = Localizations.localeOf(context);
-    final content = faqHeader + (locale.languageCode == 'en' ? faqEn : faq);
-    final contentBase64 = base64Encode(const Utf8Encoder().convert(content));
-    return 'data:text/html;base64,$contentBase64';
+    return _faqHeader + (locale.languageCode == 'en' ? _faqEn : _faq);
   }
 
-  // TODO(SF) create shared widget
   @override
   Widget build(BuildContext context) => AppScaffold(
         title: title(),
-        body: Center(
-            child: WebView(
-          initialUrl: _buildUrl(context),
-          javascriptMode: JavascriptMode.unrestricted,
-          navigationDelegate: (request) {
-            launch(request.url);
-            return NavigationDecision.prevent;
-          },
-        )),
+        body: StaticHtmlView(_buildHtml(context)),
       );
 }
