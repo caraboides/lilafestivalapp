@@ -142,7 +142,7 @@ const String _faqEn = '''
 class FAQ extends StatelessWidget {
   const FAQ();
 
-  static Widget builder(BuildContext context) => FAQ();
+  static Widget builder(BuildContext context) => const FAQ();
 
   static String title() => 'FAQ'.i18n;
 

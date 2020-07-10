@@ -29,7 +29,7 @@ class FilteredEventList extends HookWidget {
               ? events.filter((event) => event.isScheduled)
               : events;
           if (scheduledOnly && filteredEvents.isEmpty) {
-            return EmptSchedule();
+            return EmptySchedule();
           }
           return EventListView(
             events: filteredEvents,
@@ -37,7 +37,7 @@ class FilteredEventList extends HookWidget {
           );
         },
         // TODO(SF) THEME
-        loading: () => Center(child: Text('Loading!')),
+        loading: () => const Center(child: Text('Loading!')),
         error: (e, trace) => Center(
           child: Text('Error! $e ${trace.toString()}'),
         ),

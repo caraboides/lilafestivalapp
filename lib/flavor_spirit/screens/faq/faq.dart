@@ -6,7 +6,7 @@ import 'faq.i18n.dart';
 class FAQ extends StatelessWidget {
   const FAQ();
 
-  static Widget builder(BuildContext context) => FAQ();
+  static Widget builder(BuildContext context) => const FAQ();
 
   static String title() => 'FAQ'.i18n;
 
@@ -18,12 +18,12 @@ class FAQ extends StatelessWidget {
           style: theme.textTheme.headline4,
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         ...content.expand((widget) => <Widget>[
               widget,
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ]),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
       ];
 
   List<Widget> _buildTextList(List<String> content) =>
@@ -33,9 +33,10 @@ class FAQ extends StatelessWidget {
       .map((item) => Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(width: 10),
-              Text('●', style: TextStyle(fontSize: 11)),
-              SizedBox(width: 10),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Text('●', style: TextStyle(fontSize: 11)),
+              ),
               Expanded(child: item),
             ],
           ))
@@ -47,10 +48,10 @@ class FAQ extends StatelessWidget {
     return AppScaffold(
       title: 'Fragen & Antworten',
       body: ListView(
-        padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         children: <Widget>[
           ..._buildSection(theme, 'Vorweg:', <Widget>[
-            Text(
+            const Text(
               'Was wir nicht wollen:',
             ),
             ..._buildList([
@@ -88,18 +89,18 @@ class FAQ extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Donnerstag:'),
-                    Text('Freitag:'),
-                    Text('Samstag:'),
+                    const Text('Donnerstag:'),
+                    const Text('Freitag:'),
+                    const Text('Samstag:'),
                   ],
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('16 Uhr'),
-                    Text('13 Uhr'),
-                    Text('11 Uhr'),
+                    const Text('16 Uhr'),
+                    const Text('13 Uhr'),
+                    const Text('11 Uhr'),
                   ],
                 ),
               ],
@@ -141,7 +142,7 @@ class FAQ extends StatelessWidget {
             ],
           ),
           ..._buildSection(theme, 'Zelten & Parken', <Widget>[
-            Text(
+            const Text(
               'Wie in den letzten Jahren auch, ist das Zelten und Parken nicht '
               'getrennt. Ihr dürft also neben eurem Auto campieren. Dabei gilt '
               'natürlich weiterhin: Achtet auf eure Nachbarn, parkt niemanden '
@@ -156,7 +157,7 @@ class FAQ extends StatelessWidget {
                 decoration: TextDecoration.underline,
               ),
             ),
-            Text(
+            const Text(
               'Erlaubt sind normale '
               'GUMMIHAMMER in handelsüblicher Größe. Bitte lasst sonstiges '
               'Werkzeug zu Hause. In der Vergangenheit haben wir zu oft '
@@ -170,7 +171,7 @@ class FAQ extends StatelessWidget {
             ),
           ]),
           ..._buildSection(theme, 'Essen & Trinken', <Widget>[
-            Text(
+            const Text(
               'Auf den Zeltplatz dürft ihr wie immer alles mitnehmen, was das '
               'kulinarische Herz begehrt, jedoch mit 2 Einschränkungen:',
             ),
@@ -181,7 +182,7 @@ class FAQ extends StatelessWidget {
                 decoration: TextDecoration.underline,
               ),
             ),
-            Text(
+            const Text(
               'Füllt bitte ALLES in Plastikbehälter um! Auch Gurken, '
               'Ketchup, Nutella oder dergleichen. Keine Teelichtgläser, '
               'Laternen oder sonstiger Klimbim in und aus Glas. Es wird '
@@ -194,7 +195,7 @@ class FAQ extends StatelessWidget {
                 decoration: TextDecoration.underline,
               ),
             ),
-            Text(
+            const Text(
               'Aufgrund der prekären Wetterlage und '
               'anhaltender Dürre ist auch unser Gelände hochentzündlich. Daher '
               'sind EINWEGGRILLS, die quasi direkt auf dem Boden stehen, '
@@ -206,7 +207,7 @@ class FAQ extends StatelessWidget {
               'dringend. Die Sicherheitslage bezüglich Feuer ist auch in '
               'diesem Sommer besonders hoch.',
             ),
-            Text(
+            const Text(
               'Wem das alles zu anstrengend ist, der bekommt auf dem '
               'Festivalgelände ausreichend und abwechslungsreiche Kost geboten '
               '(natürlich auch vegetarisch UND vegan).',

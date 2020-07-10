@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../models/theme.dart';
 
-final String displayFontFamily = 'Pirata One';
+const String displayFontFamily = 'Pirata One';
 
 final ThemeData theme = ThemeData(
   primaryColor: Colors.grey[850],
-  accentColor: Color(0xFFD2D522),
+  accentColor: const Color(0xFFD2D522),
   textTheme: Typography.blackMountainView.copyWith(
     headline4: TextStyle(
       fontFamily: displayFontFamily,
@@ -26,13 +26,13 @@ final ThemeData theme = ThemeData(
   visualDensity: VisualDensity.adaptivePlatformDensity,
   appBarTheme: AppBarTheme(
     textTheme: Typography.whiteMountainView.copyWith(
-      headline6: TextStyle(
+      headline6: const TextStyle(
         fontFamily: displayFontFamily,
         fontSize: 26,
       ),
     ),
   ),
-  tabBarTheme: TabBarTheme(
+  tabBarTheme: const TabBarTheme(
     labelStyle: TextStyle(
       fontFamily: displayFontFamily,
       fontSize: 18,
@@ -43,7 +43,7 @@ final ThemeData theme = ThemeData(
     ),
   ),
   cardTheme: CardTheme(
-    margin: EdgeInsets.only(left: 4, top: 4, right: 4, bottom: 1),
+    margin: const EdgeInsets.only(left: 4, top: 4, right: 4, bottom: 1),
     color: Colors.grey[400],
   ),
 );
@@ -72,12 +72,12 @@ final FestivalTheme festivalTheme = FestivalTheme(
     onPressed: onPressed,
     child: Text(label),
   ),
-  logo: Logo(
+  logo: const Logo(
     assetPath: 'logo.png',
     width: 111,
     height: 56,
   ),
-  logoMenu: Logo(
+  logoMenu: const Logo(
     assetPath: 'logo_menu.png',
     width: 304,
     height: 152,

@@ -27,7 +27,7 @@ class AppStorage {
     } catch (e) {
       print(e);
     }
-    return Optional.empty();
+    return const Optional.empty();
   }
 
   Future<void> storeJson(String fileName, dynamic json) async {

@@ -16,9 +16,9 @@ import 'widgets/weather_card.dart';
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({this.scheduledOnly = false});
 
-  static Widget builder(BuildContext context) => ScheduleScreen();
+  static Widget builder(BuildContext context) => const ScheduleScreen();
   static Widget myScheduleBuilder(BuildContext context) =>
-      ScheduleScreen(scheduledOnly: true);
+      const ScheduleScreen(scheduledOnly: true);
 
   static String title() => 'Schedule'.i18n;
   static String myScheduleTitle() => 'My Schedule'.i18n;

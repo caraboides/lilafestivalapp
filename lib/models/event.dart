@@ -7,12 +7,6 @@ class Event {
     this.end,
   });
 
-  final String bandName;
-  final String id;
-  final String stage;
-  final DateTime start;
-  final DateTime end;
-
   factory Event.fromJson(String id, Map<String, dynamic> json) => Event(
         bandName: json['band'],
         id: id,
@@ -20,6 +14,12 @@ class Event {
         start: DateTime.parse(json['start']),
         end: DateTime.parse(json['end']),
       );
+
+  final String bandName;
+  final String id;
+  final String stage;
+  final DateTime start;
+  final DateTime end;
 
   bool isPlaying(DateTime currentTime) =>
       !currentTime.isBefore(start) && !currentTime.isAfter(end);

@@ -1174,7 +1174,7 @@ body {
 class Shuttle extends StatelessWidget {
   const Shuttle();
 
-  static Widget builder(BuildContext context) => Shuttle();
+  static Widget builder(BuildContext context) => const Shuttle();
 
   // TODO(SF) I18N can this be getters?
   static String title() => 'Bus Shuttle'.i18n;
@@ -1182,6 +1182,6 @@ class Shuttle extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AppScaffold(
         title: title(),
-        body: StaticHtmlView(_html),
+        body: const StaticHtmlView(_html),
       );
 }

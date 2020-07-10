@@ -28,14 +28,14 @@ class _WeatherCardState extends State<WeatherCard> {
         onTap: () =>
             launch('https://openweathermap.org/city/${_config.weatherCityId}'),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               // TODO(SF) FEATURE option for temperature unit?
               Text('${weather.temperature.celsius.toStringAsFixed(1)}°C'),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Image.network(
                   'http://openweathermap.org/img/wn/${weather.weatherIcon}@2x.png',
                 ),

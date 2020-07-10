@@ -51,7 +51,7 @@ class BandDetailView extends StatelessWidget {
 
   Widget _buildDetailRow(ThemeData theme, String title, String value) =>
       Padding(
-        padding: EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.only(top: 10),
         child: Row(
           children: <Widget>[
             Flexible(
@@ -70,7 +70,7 @@ class BandDetailView extends StatelessWidget {
   ) =>
       <Widget>[
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -89,12 +89,12 @@ class BandDetailView extends StatelessWidget {
                 _buildDetailRow(theme, 'Style', band.style),
               if (_isValueSet(band.roots))
                 _buildDetailRow(theme, 'Roots', band.roots),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               if (_isValueSet(band.spotify))
                 Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 10),
                   child: _festivalTheme.primaryButton(
                     label: 'Play on Spotify'.i18n,
                     onPressed: () {
@@ -107,7 +107,7 @@ class BandDetailView extends StatelessWidget {
         ),
         if (_isValueSet(band.image))
           Padding(
-            padding: EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 5),
             child: CachedNetworkImage(
               imageUrl: band.image,
             ),
@@ -158,7 +158,7 @@ class BandDetailView extends StatelessWidget {
             if (band.isPresent && _isValueSet(band.value.logo))
               _buildBandLogo(band.value.logo),
             Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
               child: Text(
                 // TODO(SF) STATE use family provider and display key here
                 _event.bandName.toUpperCase(),
@@ -167,7 +167,7 @@ class BandDetailView extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 5, right: 20, top: 5),
+              padding: const EdgeInsets.only(left: 5, right: 20, top: 5),
               child: _buildEventRow(),
             ),
             ...band
@@ -191,7 +191,7 @@ class BandDetailView extends StatelessWidget {
         return bandsProvider.when(
           data: (bands) => _buildBandView(context, bands.get(_event.bandName)),
           // TODO(SF) THEME
-          loading: () => Center(child: Text('Loading!')),
+          loading: () => const Center(child: Text('Loading!')),
           error: (e, trace) => Center(
             child: Text('Error! $e ${trace.toString()}'),
           ),

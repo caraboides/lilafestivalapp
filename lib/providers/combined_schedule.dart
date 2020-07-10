@@ -27,7 +27,7 @@ class CombinedScheduleProvider
                     toggleEvent: () => myScheduleController.toggleEvent(event),
                   )),
             ),
-            loading: () => AsyncValue.loading(),
+            loading: () => const AsyncValue.loading(),
             error: (err, stack) => AsyncValue.error(err, stack),
           );
         });

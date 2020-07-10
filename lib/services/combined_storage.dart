@@ -10,6 +10,8 @@ import 'app_storage.dart';
 import 'festival_hub.dart';
 
 class CombinedStorage {
+  const CombinedStorage();
+
   AppStorage get _appStorage => dimeGet<AppStorage>();
   FestivalHub get _festivalHub => dimeGet<FestivalHub>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();

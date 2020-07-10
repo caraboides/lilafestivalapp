@@ -9,10 +9,10 @@ import 'open_weather.dart';
 class ServiceModule extends BaseDimeModule {
   @override
   void updateInjections() {
-    addSingle<Navigation>(Navigation());
+    addSingle<Navigation>(const Navigation());
     addSingle<AppStorage>(AppStorage());
-    addSingle<FestivalHub>(FestivalHub());
-    addSingle<CombinedStorage>(CombinedStorage());
+    addSingle<FestivalHub>(const FestivalHub());
+    addSingle<CombinedStorage>(const CombinedStorage());
     addSingle<OpenWeather>(OpenWeather());
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/theme.dart';
 
-final List<Shadow> _appBarTextShadows = [
+final List<Shadow> _appBarTextShadows = const [
   Offset(1.0, 1.0),
   Offset(1.0, -1.0),
   Offset(-1.0, 1.0),
@@ -15,15 +15,15 @@ final List<Shadow> _appBarTextShadows = [
           offset: offset,
         ))
     .toList();
-final String displayFontFamily = 'No Continue';
-final Color _menuFontColor = Color(0xFFd6102b);
+const String displayFontFamily = 'No Continue';
+const Color _menuFontColor = Color(0xFFd6102b);
 final Color _darkBackgroundColor = Colors.grey[850];
 final BorderSide _border = BorderSide(color: Colors.black, width: 2);
 final BorderSide _borderSlim = _border.copyWith(width: 1);
 
 final ThemeData theme = ThemeData(
-  primaryColor: Color(0xFF15928c),
-  accentColor: Color(0xFFbafb00),
+  primaryColor: const Color(0xFF15928c),
+  accentColor: const Color(0xFFbafb00),
   textTheme: Typography.blackMountainView.copyWith(
     headline4: TextStyle(
       fontFamily: displayFontFamily,
@@ -49,7 +49,7 @@ final ThemeData theme = ThemeData(
       ),
     ),
   ),
-  tabBarTheme: TabBarTheme(
+  tabBarTheme: const TabBarTheme(
     labelStyle: TextStyle(
       fontFamily: displayFontFamily,
       fontSize: 18,
@@ -62,7 +62,7 @@ final ThemeData theme = ThemeData(
   cardTheme: CardTheme(
     margin: EdgeInsets.zero,
     shape: Border(bottom: _border),
-    color: Color(0xFFb3dddd),
+    color: const Color(0xFFb3dddd),
   ),
 );
 
@@ -99,12 +99,12 @@ final FestivalTheme festivalTheme = FestivalTheme(
     onPressed: onPressed,
     child: Text(label),
   ),
-  logo: Logo(
+  logo: const Logo(
     assetPath: 'logo.png',
     width: 158,
     height: 40,
   ),
-  logoMenu: Logo(
+  logoMenu: const Logo(
     assetPath: 'logo_menu.png',
     width: 129,
     height: 152,

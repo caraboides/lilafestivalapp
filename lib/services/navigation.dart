@@ -8,6 +8,8 @@ import '../screens/about/about.dart';
 import '../screens/schedule/schedule.dart';
 
 class Navigation {
+  const Navigation();
+
   ImmortalList<AppRoute> get routes => ImmortalList([
         AppRoute(
           path: '/',

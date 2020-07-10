@@ -6,7 +6,7 @@ import 'drive.i18n.dart';
 class Drive extends StatelessWidget {
   const Drive();
 
-  static Widget builder(BuildContext context) => Drive();
+  static Widget builder(BuildContext context) => const Drive();
 
   static String title() => 'Location'.i18n;
 
@@ -15,13 +15,14 @@ class Drive extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(width: 10),
-                Text('●', style: TextStyle(fontSize: 11)),
-                SizedBox(width: 10),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text('●', style: TextStyle(fontSize: 11)),
+                ),
                 Expanded(child: Text(item)),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
           ])
       .toList();
 
@@ -31,7 +32,7 @@ class Drive extends StatelessWidget {
     return AppScaffold(
       title: 'Anfahrt',
       body: ListView(
-          padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+          padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
           children: <Widget>[
             Text(
               'Adresse: Flugplatz / Altes Lager, 14913 Niedergörsdorf',
@@ -40,25 +41,25 @@ class Drive extends StatelessWidget {
                 fontSize: 20,
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Text(
               'Anreise mit Zug:',
               style: theme.textTheme.headline4,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Ganz einfach: Bis Berlin, dann mit der Regionalbahn nach '
               'Jüterbog.',
             ),
-            SizedBox(height: 10),
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               'Unseren Shuttleservice können wir in diesem Jahr, aus '
               'verschiedenen Gründen, nicht anbieten. Das finden wir selbst '
               'sehr bedauerlich.',
             ),
-            SizedBox(height: 10),
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               'Die Taxiunternehmen am Bahnhof wissen allerdings Bescheid. Wenn '
               'ihr einzeln anreist, bildet Gruppen und nehmt euch ein '
               'Großraumtaxi. Die Fahrt zum Gelände kostest euch dann auch '
@@ -66,13 +67,13 @@ class Drive extends StatelessWidget {
               'anders gelöst, aber manchmal sind selbst uns die Hände '
               'gebunden.',
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Text(
               'Anreise mit dem Auto:',
               style: theme.textTheme.headline4,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ..._buildList([
               'über die A9, Abfahrt Niemegk, dann die B 102 Richtung Jüterbog',
               'über die A 13, Abfahrt Duben oder Freiwalde',

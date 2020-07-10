@@ -15,14 +15,14 @@ import 'about.i18n.dart';
 class About extends StatelessWidget {
   const About();
 
-  static Widget builder(BuildContext context) => About();
+  static Widget builder(BuildContext context) => const About();
   static String title() => 'About'.i18n;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
-  Widget get _divider => Padding(
+  Widget get _divider => const Padding(
         padding: EdgeInsets.only(bottom: 8),
         child: Divider(height: 1),
       );
@@ -71,7 +71,7 @@ class About extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(left: 15),
+                padding: const EdgeInsets.only(left: 15),
                 child: Text(label),
               ),
               ..._buildLinks(links, shrink: true),
@@ -130,8 +130,8 @@ class About extends StatelessWidget {
           builder: (context) => AppScaffold(
             title: 'About'.i18n,
             body: ListView(
-              padding:
-                  EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, top: 20, bottom: 10),
               children: <Widget>[
                 ..._buildMessages(
                   ImmortalList([
@@ -152,15 +152,15 @@ class About extends StatelessWidget {
                   ]),
                 ),
                 _divider,
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text('Created by Projekt LilaHerz'.i18n),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 ..._buildReferences(
                   _globalConfig.creators,
                   icon: _theme.heartIcon,
                 ),
                 _divider,
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 ..._buildReferences(
                   _globalConfig.references,
                   labelGenerator: (label) => label.i18n,
@@ -171,12 +171,12 @@ class About extends StatelessWidget {
                       'Font "{font}" by:'.i18n.fill({'font': label}),
                 ),
                 _divider,
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 ..._buildMessages(
                   _config.aboutMessages,
                 ),
                 _divider,
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 _theme.primaryButton(
                   label:
                       MaterialLocalizations.of(context).viewLicensesButtonLabel,

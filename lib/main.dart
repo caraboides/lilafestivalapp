@@ -28,7 +28,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]).then((_) async {
     runApp(
-      ProviderScope(
+      const ProviderScope(
         child: FestivalApp(),
       ),
     );

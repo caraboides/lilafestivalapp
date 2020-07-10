@@ -25,8 +25,6 @@ class ScheduleFilterProvider extends Computed<AsyncValue<ImmortalList<Event>>> {
   ScheduleFilterProvider._(this.filter)
       : super((read) => read(dimeGet<ScheduleProvider>()).whenData(filter));
 
-  final ImmortalList<Event> Function(ImmortalList<Event>) filter;
-
   factory ScheduleFilterProvider.allBands() => ScheduleFilterProvider._(
         (events) => events.sort((a, b) => a.bandName.compareTo(b.bandName)),
       );
@@ -37,4 +35,6 @@ class ScheduleFilterProvider extends Computed<AsyncValue<ImmortalList<Event>>> {
             .where((item) => isSameFestivalDay(item.start, day))
             .sort((a, b) => a.start.compareTo(b.start)),
       );
+
+  final ImmortalList<Event> Function(ImmortalList<Event>) filter;
 }

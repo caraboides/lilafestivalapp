@@ -36,7 +36,7 @@ class EventListItem extends StatelessWidget {
         child: SafeArea(
           top: false,
           bottom: false,
-          minimum: EdgeInsets.symmetric(horizontal: 10),
+          minimum: const EdgeInsets.symmetric(horizontal: 10),
           child: Container(
             height: _theme.eventListItemHeight,
             padding: const EdgeInsets.symmetric(vertical: 10),

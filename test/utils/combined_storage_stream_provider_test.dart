@@ -40,7 +40,7 @@ class TestModule extends BaseDimeModule {
   void updateInjections() {
     addSingle<AppStorage>(appStorageMock);
     addSingle<FestivalHub>(festivalHubMock);
-    addSingle<CombinedStorage>(CombinedStorage());
+    addSingle<CombinedStorage>(const CombinedStorage());
   }
 }
 
@@ -80,9 +80,9 @@ bool assertList(List<TestData> actual, List<String> expected) =>
         .map((data) => data.value)
         .equals(ImmortalList(expected));
 
-final TestData remoteData = TestData('remoteData');
-final TestData appStorageData = TestData('appStorageData');
-final TestData assetData = TestData('assetData');
+const TestData remoteData = TestData('remoteData');
+const TestData appStorageData = TestData('appStorageData');
+const TestData assetData = TestData('assetData');
 
 void main() {
   group('StreamFallbackProvider', () {

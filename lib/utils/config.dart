@@ -5,7 +5,7 @@ import '../models/global_config.dart';
 import '../models/reference.dart';
 
 final GlobalConfig config = GlobalConfig(
-  periodicRebuildDuration: Duration(minutes: 1),
+  periodicRebuildDuration: const Duration(minutes: 1),
   privacyPolicyUrlDe: 'https://bit.ly/2L3HSD8',
   // TODO(SF) I18N translate privacy policy
   privacyPolicyUrlEn: 'https://bit.ly/2L3HSD8',
@@ -15,14 +15,14 @@ final GlobalConfig config = GlobalConfig(
     Reference(
       label: 'Stephanie Freitag',
       links: ImmortalList([
-        Link(url: 'https://github.com/strangeAeon'),
+        const Link(url: 'https://github.com/strangeAeon'),
       ]),
     ),
     Reference(
       label: 'Christian Hennig',
       links: ImmortalList([
-        Link(url: 'https://github.com/caraboides'),
-        Link(
+        const Link(url: 'https://github.com/caraboides'),
+        const Link(
           url: 'https://twitter.com/carabiodes',
           label: '@carabiodes',
         ),
@@ -33,7 +33,7 @@ final GlobalConfig config = GlobalConfig(
     Reference(
       label: 'Weather data provided by:',
       links: ImmortalList([
-        Link(url: 'https://openweathermap.org'),
+        const Link(url: 'https://openweathermap.org'),
       ]),
     ),
   ]),

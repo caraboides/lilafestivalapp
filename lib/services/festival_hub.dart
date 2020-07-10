@@ -9,6 +9,8 @@ import '../models/event.dart';
 import '../models/global_config.dart';
 
 class FestivalHub {
+  const FestivalHub();
+
   GlobalConfig get _config => dimeGet<GlobalConfig>();
 
   Future<Optional<ImmortalList<Event>>> loadSchedule(String festivalId) async {
@@ -22,7 +24,7 @@ class FestivalHub {
           .mapEntries<Event>((id, json) => Event.fromJson(id, json));
       return Optional.of(events);
     }
-    return Optional.empty();
+    return const Optional.empty();
   }
 
   Future<Optional<J>> loadJsonData<J>(String url) async {

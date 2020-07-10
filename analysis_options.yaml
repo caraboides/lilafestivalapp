@@ -12,3 +12,7 @@ linter:
     use_function_type_syntax_for_parameters: true
     prefer_single_quotes: true
     avoid_catches_without_on_clauses: false
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    sort_constructors_first: true
+    sort_unnamed_constructors_first: true

@@ -15,13 +15,13 @@ final FestivalConfig config = FestivalConfig(
   festivalUrl: 'https://www.spirit-festival.com',
   startDate: DateTime(2019, 8, 29),
   endDate: DateTime(2019, 8, 31),
-  daySwitchOffset: Duration(hours: 3),
+  daySwitchOffset: const Duration(hours: 3),
   assetRootPath: 'assets/spirit/',
   fontReferences: ImmortalList([
     Reference(
       label: 'No Continue',
       links: ImmortalList([
-        Link(
+        const Link(
           url: 'http://gomaricefont.web.fc2.com/',
           label: 'Goma Shin',
         ),
@@ -32,7 +32,7 @@ final FestivalConfig config = FestivalConfig(
     Reference(
       label: 'Seenotrettung ist kein Verbrechen!',
       links: ImmortalList([
-        Link(url: 'https://sea-watch.org/'),
+        const Link(url: 'https://sea-watch.org/'),
       ]),
     ),
   ]),
@@ -60,6 +60,6 @@ final FestivalConfig config = FestivalConfig(
       builder: FAQ.builder,
     ),
   ]),
-  weatherGeoLocation: LatLng(lat: 51.59, lng: 12.59),
+  weatherGeoLocation: const LatLng(lat: 51.59, lng: 12.59),
   weatherCityId: '6547727',
 );

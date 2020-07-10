@@ -65,7 +65,7 @@ class EventListViewState extends State<EventListView> with FirstBuildMixin {
           _scrollController.animateTo(
             max(_currentOrNextPlayingBandIndex - 2, 0) *
                 _theme.eventListItemHeight,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.easeIn,
           );
         }
@@ -89,7 +89,7 @@ class EventListViewState extends State<EventListView> with FirstBuildMixin {
       return items.insert(
           _currentOrNextPlayingBandIndex,
           Container(
-            key: Key('change-over'),
+            key: const Key('change-over'),
             height: 2,
             color: Theme.of(context).accentColor,
           ));
@@ -100,7 +100,7 @@ class EventListViewState extends State<EventListView> with FirstBuildMixin {
   @override
   Widget build(BuildContext context) {
     onFirstBuild(() {
-      _scrollToCurrentBand(timeout: Duration(milliseconds: 200));
+      _scrollToCurrentBand(timeout: const Duration(milliseconds: 200));
     });
     return Expanded(
       child: ListView(
