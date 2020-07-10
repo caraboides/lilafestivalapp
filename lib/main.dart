@@ -12,8 +12,10 @@ import 'models/festival_config.dart';
 import 'models/theme.dart';
 import 'providers/provider_module.dart';
 import 'services/navigation.dart';
+import 'services/notifications/notifications.dart';
 import 'services/service_module.dart';
 import 'utils/global_module.dart';
+import 'widgets/initialization_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,32 +57,29 @@ class FestivalApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _precacheImages(context);
-    // TODO(SF) NOTIFICATIONS
-    // initializeNotifications();
+    dimeGet<Notifications>().initializeNotificationPlugin();
     dimeInstall(ProviderModule(context), override: true);
 
-    return MaterialApp(
-      title: _config.festivalName,
-      theme: _theme.theme,
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('de', 'DE'),
-      ],
-      // TODO(SF) NOTIFICATIONS
-      // home: InitializationWidget(
-      //   child: ScheduleScreen(),
-      // ),
-      // TODO(SF) I18N necessary to wrap i18n per route? maybe root routes only?
-      // or separate '/' route for init? > consider in 'isRoot' fn
-      routes: dimeGet<Navigation>()
-          .routesByPath
-          .mapValues(
-              (_, route) => (context) => I18n(child: route.builder(context)))
-          .toMutableMap(),
+    return InitializationWidget(
+      MaterialApp(
+        title: _config.festivalName,
+        theme: _theme.theme,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('de', 'DE'),
+        ],
+        // TODO(SF) I18N necessary to wrap i18n per route? maybe root routes
+        // only? or separate '/' route for init? > consider in 'isRoot' fn
+        routes: dimeGet<Navigation>()
+            .routesByPath
+            .mapValues(
+                (_, route) => (context) => I18n(child: route.builder(context)))
+            .toMutableMap(),
+      ),
     );
   }
 }

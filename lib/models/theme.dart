@@ -12,6 +12,7 @@ class FestivalTheme {
     this.primaryButton,
     this.logo,
     this.logoMenu,
+    this.notificationColor,
   });
 
   final ThemeData theme;
@@ -27,6 +28,7 @@ class FestivalTheme {
   }) primaryButton;
   final Logo logo;
   final Logo logoMenu;
+  final Color notificationColor;
 
   final double eventListItemHeight = 70;
   final double weatherCardHeight = 40;

@@ -7,6 +7,7 @@ import 'package:state_notifier/state_notifier.dart';
 import '../models/event.dart';
 import '../models/my_schedule.dart';
 import '../services/app_storage.dart';
+import '../services/notifications/notifications.dart';
 
 class MyScheduleProvider extends StateNotifierProvider<MyScheduleController> {
   MyScheduleProvider() : super((ref) => MyScheduleController.create());
@@ -24,6 +25,7 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   Timer _debounce;
 
   AppStorage get _appStorage => dimeGet<AppStorage>();
+  Notifications get _notifications => dimeGet<Notifications>();
 
   void _loadMySchedule() => _appStorage
           .loadJson(_myScheduleFileName)
@@ -47,17 +49,13 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   // TODO(SF) STATE pass to my schedule?
   void toggleEvent(Event event) {
     state.whenData((mySchedule) {
+      // TODO(SF) STATE/STYLE move to event toggle?
       mySchedule
-          .toggleEvent(
-        event.id,
-        onRemove: (_) {},
-        // TODO(SF) NOTIFICATION
-        // onRemove: cancelNotification,
-        // generateValue: () async => event.start.isAfter(DateTime.now())
-        //   ? await scheduleNotificationForEvent(event)
-        //   : 0
-        generateValue: () => Future.value(0),
-      )
+          .toggleEvent(event.id,
+              onRemove: _notifications.cancelNotification,
+              generateValue: () async => event.start.isAfter(DateTime.now())
+                  ? await _notifications.scheduleNotificationForEvent(event)
+                  : 0)
           .then((newSchedule) {
         state = AsyncValue.data(newSchedule);
         _saveMySchedule();

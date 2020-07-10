@@ -24,6 +24,8 @@ class CombinedScheduleProvider
               (mySchedule) => eventList.map((event) => EnhancedEvent(
                     event: event,
                     isScheduled: mySchedule.isEventScheduled(event.id),
+                    // TODO(SF) STATE better use dimeGet<MyScheduleProvider>().
+                    // read(context).toggleEvent(event),
                     toggleEvent: () => myScheduleController.toggleEvent(event),
                   )),
             ),

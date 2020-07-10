@@ -82,4 +82,5 @@ final FestivalTheme festivalTheme = FestivalTheme(
     width: 304,
     height: 152,
   ),
+  notificationColor: Colors.black,
 );

@@ -27,8 +27,8 @@ dependencies:
   dcache: ^0.3.0
   flutter_config: ^1.0.7 # TODO(SF) BUILD can this be a dev dependency?
   webview_flutter: ^0.3.22+1
+  flutter_local_notifications: ^1.4.4+2
   # flutter_launcher_icons: ^0.7.2+1
-  # flutter_local_notifications: ^0.8.0
 
 dev_dependencies:
   flutter_test:
