@@ -49,6 +49,16 @@ final ThemeData theme = ThemeData(
       ),
     ),
   ),
+  tabBarTheme: TabBarTheme(
+    labelStyle: TextStyle(
+      fontFamily: displayFontFamily,
+      fontSize: 18,
+    ),
+    unselectedLabelStyle: TextStyle(
+      fontFamily: displayFontFamily,
+      fontSize: 18,
+    ),
+  ),
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(
@@ -57,7 +67,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
     textTheme: Typography.whiteMountainView,
     scaffoldBackgroundColor: _darkBackgroundColor,
     dividerColor: Colors.grey[800],
-    buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent),
+    buttonTheme: theme.buttonTheme.copyWith(textTheme: ButtonTextTheme.accent),
     iconTheme: theme.iconTheme.copyWith(color: Colors.white70),
   ),
   aboutIcon: Icons.star,
@@ -70,11 +80,11 @@ final FestivalTheme festivalTheme = FestivalTheme(
     ),
   ),
   menuDrawerDecoration: BoxDecoration(border: Border(right: _border)),
-  appBarBorder: Border(bottom: _border),
-  tabTextStyle: TextStyle(
-    fontFamily: displayFontFamily,
-    fontSize: 18,
+  weatherTheme: theme.copyWith(
+    canvasColor: Color(0xFFb3dddd),
   ),
+  weatherCardDecoration: BoxDecoration(border: Border(bottom: _border)),
+  appBarBorder: Border(bottom: _border),
   tabBarHeight: 48,
   tabBarDecoration: BoxDecoration(border: Border(bottom: _border)),
   primaryButton: ({label, onPressed}) => FlatButton(

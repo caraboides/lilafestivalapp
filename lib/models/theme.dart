@@ -7,8 +7,9 @@ class FestivalTheme {
     this.aboutIcon,
     this.menuTheme,
     this.menuDrawerDecoration,
+    this.weatherTheme,
+    this.weatherCardDecoration,
     this.appBarBorder,
-    this.tabTextStyle,
     this.tabBarDecoration,
     this.tabBarHeight,
     this.primaryButton,
@@ -18,11 +19,13 @@ class FestivalTheme {
 
   final ThemeData theme;
   final ThemeData aboutTheme;
+  // TODO(SF) make schedule icons in general configurable?
   final IconData aboutIcon;
   final ThemeData menuTheme;
   final BoxDecoration menuDrawerDecoration;
+  final ThemeData weatherTheme;
+  final BoxDecoration weatherCardDecoration;
   final ShapeBorder appBarBorder;
-  final TextStyle tabTextStyle;
   final BoxDecoration tabBarDecoration;
   final double tabBarHeight;
   final MaterialButton Function({
@@ -33,13 +36,13 @@ class FestivalTheme {
   final Logo logoMenu;
 
   final double eventListItemHeight = 70;
+  final double weatherCardHeight = 40;
 
   Icon get heartIcon => Icon(
         Icons.favorite,
         color: Colors.purple,
       );
 
-  // TODO(SF) make schedule icons in general configurable?
   AppBar appBar(String title) => AppBar(
         title: Text(title),
         shape: appBarBorder,

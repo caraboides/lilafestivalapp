@@ -6,6 +6,7 @@ import 'bands.dart';
 import 'combined_schedule.dart';
 import 'my_schedule.dart';
 import 'schedule.dart';
+import 'weather.dart';
 
 class ProviderModule extends BaseDimeModule {
   ProviderModule(this.context);
@@ -36,5 +37,6 @@ class ProviderModule extends BaseDimeModule {
     addSingle<MyScheduleProvider>(MyScheduleProvider());
     _addScheduleProviders();
     dimeGet<FestivalConfig>().days.forEach(_addScheduleProviders);
+    addSingle<WeatherProvider>(WeatherProvider());
   }
 }

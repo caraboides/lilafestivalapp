@@ -11,6 +11,7 @@ class GlobalConfig {
     this.repositoryUrl,
     this.creators,
     this.references,
+    this.weatherApiKey,
   });
 
   final Duration periodicRebuildDuration;
@@ -20,4 +21,5 @@ class GlobalConfig {
   final String repositoryUrl;
   final ImmortalList<Reference> creators;
   final ImmortalList<Reference> references;
+  final String weatherApiKey;
 }

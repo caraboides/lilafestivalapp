@@ -1,3 +1,4 @@
+import 'package:flutter_config/flutter_config.dart';
 import 'package:immortal/immortal.dart';
 
 import '../models/global_config.dart';
@@ -36,4 +37,5 @@ final GlobalConfig config = GlobalConfig(
       ]),
     ),
   ]),
+  weatherApiKey: FlutterConfig.get('WEATHER_API_KEY'),
 );

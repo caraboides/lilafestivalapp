@@ -3,6 +3,7 @@ import 'package:immortal/immortal.dart';
 
 import '../models/app_route.dart';
 import '../models/festival_config.dart';
+import '../models/lat_lng.dart';
 import '../models/reference.dart';
 import 'screens/drive/drive.dart';
 import 'screens/faq/faq.dart';
@@ -58,4 +59,6 @@ final FestivalConfig config = FestivalConfig(
       builder: FAQ.builder,
     ),
   ]),
+  weatherGeoLocation: LatLng(lat: 51.59, lng: 12.59),
+  weatherCityId: '6547727',
 );

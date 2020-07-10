@@ -10,6 +10,7 @@ import '../../widgets/periodic_rebuild_mixin.dart';
 import '../../widgets/scaffold.dart';
 import 'schedule.i18n.dart';
 import 'widgets/filtered_event_list.dart';
+import 'widgets/weather_card.dart';
 
 // TODO(SF) hook widget possible?
 class ScheduleScreen extends StatefulWidget {
@@ -51,16 +52,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     return 1 + _days.indexWhere((day) => isSameFestivalDay(now, day));
   }
 
-  Tab _buildTab(String title) =>
-      Tab(child: Text(title, style: _theme.tabTextStyle));
-
   TabBar _buildTabBar() => TabBar(
         tabs: [
-          _buildTab('Bands'.i18n),
+          Tab(child: Text('Bands'.i18n)),
           ...List.generate(
             _days.length,
-            (index) =>
-                _buildTab('Day {number}'.i18n.fill({'number': index + 1})),
+            (index) => Tab(
+              child: Text('Day {number}'.i18n.fill({'number': index + 1})),
+            ),
           ),
         ],
       );
@@ -99,7 +98,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   Widget _buildEventList(BuildContext context, {DateTime date}) => Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          // if (date != null) WeatherWidget(date),
+          if (date != null) WeatherCard(date),
           FilteredEventList(
             date: date,
             scheduledOnly: scheduledOnly,

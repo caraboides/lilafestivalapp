@@ -1,6 +1,7 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:i18n_extension/i18n_widget.dart';
@@ -13,12 +14,14 @@ import 'services/navigation.dart';
 import 'services/service_module.dart';
 import 'utils/global_module.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await FlutterConfig.loadEnvVariables();
   dimeInstall(GlobalModule());
   dimeInstall(FlavorModule());
   dimeInstall(ServiceModule());
 
-  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -49,6 +52,7 @@ class FestivalApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _precacheImages(context);
+    // TODO(SF) NOTIFICATIONS
     // initializeNotifications();
     // TODO(SF) still problem on app restart? other solution?
     dimeInstall(ProviderModule(context), override: true);

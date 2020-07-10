@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
 import 'app_route.dart';
+import 'lat_lng.dart';
 import 'reference.dart';
 
 // TODO(SF) add required annotations or similiar
@@ -18,6 +19,8 @@ class FestivalConfig {
     this.aboutMessages,
     this.stageAlignment,
     this.routes,
+    this.weatherGeoLocation,
+    this.weatherCityId,
   });
 
   final String festivalId;
@@ -31,6 +34,8 @@ class FestivalConfig {
   final ImmortalList<Reference> aboutMessages;
   final CrossAxisAlignment Function(String stage) stageAlignment;
   final ImmortalList<AppRoute> routes;
+  final LatLng weatherGeoLocation;
+  final String weatherCityId;
 
   ImmortalList<DateTime> get days => ImmortalList.generate(
       endDate.difference(startDate).inDays + 1,

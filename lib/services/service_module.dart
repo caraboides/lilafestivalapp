@@ -4,6 +4,7 @@ import 'app_storage.dart';
 import 'combined_storage.dart';
 import 'festival_hub.dart';
 import 'navigation.dart';
+import 'open_weather.dart';
 
 class ServiceModule extends BaseDimeModule {
   @override
@@ -12,5 +13,6 @@ class ServiceModule extends BaseDimeModule {
     addSingle<AppStorage>(AppStorage());
     addSingle<FestivalHub>(FestivalHub());
     addSingle<CombinedStorage>(CombinedStorage());
+    addSingle<OpenWeather>(OpenWeather());
   }
 }

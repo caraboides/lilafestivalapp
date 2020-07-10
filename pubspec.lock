@@ -71,6 +71,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
+  dcache:
+    dependency: "direct main"
+    description:
+      name: dcache
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   dime:
     dependency: "direct main"
     description:
@@ -111,6 +118,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.1"
+  flutter_config:
+    dependency: "direct main"
+    description:
+      name: flutter_config
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.7"
   flutter_hooks:
     dependency: "direct main"
     description:
@@ -481,6 +495,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
+  weather:
+    dependency: "direct main"
+    description:
+      name: weather
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   xdg_directories:
     dependency: transitive
     description:

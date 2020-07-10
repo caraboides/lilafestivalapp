@@ -23,10 +23,12 @@ dependencies:
   path_provider: ^1.6.11
   http: ^0.12.1
   cached_network_image: ^2.2.0+1
+  weather: ^1.1.1
+  dcache: ^0.3.0
+  flutter_config: ^1.0.7
   # flutter_launcher_icons: ^0.7.2+1
   # webview_flutter: ^0.3.10+4
   # flutter_local_notifications: ^0.8.0
-  # dcache: ^0.3.0
 
 dev_dependencies:
   flutter_test:
