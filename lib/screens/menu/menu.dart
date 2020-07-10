@@ -22,7 +22,7 @@ class Menu extends StatelessWidget {
   }) =>
       ListTile(
         title: Text(
-          label.i18n,
+          label,
           style: theme.textTheme.headline4,
         ),
         // TODO(SF) why is this necessary?
@@ -48,14 +48,14 @@ class Menu extends StatelessWidget {
         ..._navigation.routes
             .map((route) => _buildEntry(
                   theme: theme,
-                  label: route.name,
+                  label: route.getName(),
                   icon: route.icon,
                   onTap: () => _navigation.navigateToRoute(navigator, route),
                 ))
             .toMutableList(),
         _buildEntry(
           theme: theme,
-          label: 'Privacy Policy',
+          label: 'Privacy Policy'.i18n,
           icon: Icons.verified_user,
           onTap: () => launch(locale.languageCode == 'de'
               ? _config.privacyPolicyUrlDe

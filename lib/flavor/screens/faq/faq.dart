@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../../widgets/scaffold.dart';
+import 'faq.i18n.dart';
 
 class FAQ extends StatelessWidget {
   const FAQ();
 
   static Widget builder(BuildContext context) => FAQ();
+
+  static String title() => 'FAQ'.i18n;
 
   List<Widget> _buildSection(
           ThemeData theme, String title, List<Widget> content) =>

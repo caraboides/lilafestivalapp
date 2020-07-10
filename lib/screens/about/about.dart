@@ -16,6 +16,7 @@ class About extends StatelessWidget {
   const About();
 
   static Widget builder(BuildContext context) => About();
+  static String title() => 'About'.i18n;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();

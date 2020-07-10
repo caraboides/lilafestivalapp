@@ -11,14 +11,14 @@ class Navigation {
   ImmortalList<AppRoute> get routes => ImmortalList([
         AppRoute(
           path: '/',
-          name: 'Schedule',
+          getName: ScheduleScreen.title,
           icon: Icons.calendar_today,
           isRoot: true,
           builder: ScheduleScreen.builder,
         ),
         AppRoute(
           path: '/mySchedule',
-          name: 'My Schedule',
+          getName: ScheduleScreen.myScheduleTitle,
           icon: Icons.star,
           isRoot: true,
           builder: ScheduleScreen.myScheduleBuilder,
@@ -26,7 +26,7 @@ class Navigation {
         ...dimeGet<FestivalConfig>().routes.toMutableList(),
         AppRoute(
           path: '/about',
-          name: 'About',
+          getName: About.title,
           icon: Icons.info,
           builder: About.builder,
         ),

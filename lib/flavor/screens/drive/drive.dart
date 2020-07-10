@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../../widgets/scaffold.dart';
+import 'drive.i18n.dart';
 
 class Drive extends StatelessWidget {
   const Drive();
 
   static Widget builder(BuildContext context) => Drive();
+
+  // TODO(SF) can this be getters?
+  static String title() => 'Location'.i18n;
 
   List<Widget> _buildList(List<String> content) => content
       .expand((item) => [

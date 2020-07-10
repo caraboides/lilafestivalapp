@@ -20,6 +20,9 @@ class ScheduleScreen extends StatefulWidget {
   static Widget myScheduleBuilder(BuildContext context) =>
       ScheduleScreen(scheduledOnly: true);
 
+  static String title() => 'Schedule'.i18n;
+  static String myScheduleTitle() => 'My Schedule'.i18n;
+
   final bool scheduledOnly;
 
   @override
