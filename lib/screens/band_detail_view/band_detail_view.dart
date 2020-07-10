@@ -16,7 +16,7 @@ import '../../widgets/event_toggle/event_toggle.dart';
 import '../../widgets/scaffold.dart';
 import 'band_detail_view.i18n.dart';
 
-// TODO(SF) improve
+// TODO(SF) STYLE improve
 class BandDetailView extends StatelessWidget {
   const BandDetailView(this.enhancedEvent);
 
@@ -56,16 +56,9 @@ class BandDetailView extends StatelessWidget {
           children: <Widget>[
             Flexible(
               fit: FlexFit.tight,
-              child: Text(
-                '${title.i18n}:',
-                style: theme.textTheme.subtitle2,
-              ),
+              child: Text('${title.i18n}:', style: theme.textTheme.subtitle2),
             ),
-            Flexible(
-              flex: 4,
-              fit: FlexFit.tight,
-              child: Text(value),
-            ),
+            Flexible(flex: 4, fit: FlexFit.tight, child: Text(value)),
           ],
         ),
       );
@@ -167,7 +160,7 @@ class BandDetailView extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 20),
               child: Text(
-                // TODO(SF) use family provider and display key here
+                // TODO(SF) STATE use family provider and display key here
                 _event.bandName.toUpperCase(),
                 style: theme.textTheme.headline3,
                 textAlign: TextAlign.center,
@@ -190,14 +183,14 @@ class BandDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Consumer((context, read) {
-        // TODO(SF) use family provider and only read single band
-        // TODO(SF) listen to schedule here as well to get update on schedule
-        // change
-        // TODO(SF) highlight event when currently playing?
+        // TODO(SF) STATE use family provider and only read single band
+        // TODO(SF) STATE listen to schedule here as well to get update on
+        // schedule change
+        // TODO(SF) FEATURE highlight event when currently playing?
         final bandsProvider = read(dimeGet<BandsProvider>());
         return bandsProvider.when(
           data: (bands) => _buildBandView(context, bands.get(_event.bandName)),
-          // TODO(SF)
+          // TODO(SF) THEME
           loading: () => Center(child: Text('Loading!')),
           error: (e, trace) => Center(
             child: Text('Error! $e ${trace.toString()}'),

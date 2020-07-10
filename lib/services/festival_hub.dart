@@ -17,7 +17,7 @@ class FestivalHub {
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonMap =
           jsonDecode(utf8.decode(response.bodyBytes));
-      // TODO(SF) error handling
+      // TODO(SF) STATE error handling
       final events = ImmortalMap<String, dynamic>(jsonMap)
           .mapEntries<Event>((id, json) => Event.fromJson(id, json));
       return Optional.of(events);

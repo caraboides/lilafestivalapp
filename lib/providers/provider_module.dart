@@ -14,7 +14,7 @@ class ProviderModule extends BaseDimeModule {
   final BuildContext context;
 
   void _addScheduleProviders([DateTime date]) {
-    // TODO(SF) necessary? constant?
+    // TODO(SF) STATE necessary? constant?
     final tag = date?.toIso8601String() ?? 'allBands';
     addSingle<ScheduleFilterProvider>(
       date != null
@@ -30,7 +30,7 @@ class ProviderModule extends BaseDimeModule {
 
   @override
   void updateInjections() {
-    // TODO(SF) or use tag for festivalid?
+    // TODO(SF) STATE or use tag for festivalid?
     final festivalId = dimeGet<FestivalConfig>().festivalId;
     addSingle<BandsProvider>(BandsProvider(context, festivalId));
     addSingle<ScheduleProvider>(ScheduleProvider(context, festivalId));

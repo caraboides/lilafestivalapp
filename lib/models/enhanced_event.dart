@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'event.dart';
 
-// TODO(SF) better make obsolete by using provider family
+// TODO(SF) STATE better make obsolete by using provider family
 class EnhancedEvent {
   EnhancedEvent({
     this.event,

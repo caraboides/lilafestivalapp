@@ -32,7 +32,7 @@ class _WeatherCardState extends State<WeatherCard> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // TODO(SF) option for temperature unit?
+              // TODO(SF) FEATURE option for temperature unit?
               Text('${weather.temperature.celsius.toStringAsFixed(1)}°C'),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5),

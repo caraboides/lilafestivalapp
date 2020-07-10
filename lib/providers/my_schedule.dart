@@ -12,10 +12,9 @@ class MyScheduleProvider extends StateNotifierProvider<MyScheduleController> {
   MyScheduleProvider() : super((ref) => MyScheduleController.create());
 }
 
-// TODO(SF) collection of constants
+// TODO(SF) STYLE collection of constants
 const _myScheduleFileName = 'my_schedule.txt';
 
-// TODO(SF) move somewhere else?
 class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   MyScheduleController._() : super(const AsyncValue<MySchedule>.loading());
 
@@ -45,7 +44,7 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
     });
   }
 
-  // TODO(SF) pass to my schedule?
+  // TODO(SF) STATE pass to my schedule?
   void toggleEvent(Event event) {
     state.whenData((mySchedule) {
       mySchedule

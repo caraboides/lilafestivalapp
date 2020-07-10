@@ -5,7 +5,7 @@ import 'app_route.dart';
 import 'lat_lng.dart';
 import 'reference.dart';
 
-// TODO(SF) add required annotations or similiar
+// TODO(SF) STYLE add required annotations or similiar
 class FestivalConfig {
   const FestivalConfig({
     this.festivalId,

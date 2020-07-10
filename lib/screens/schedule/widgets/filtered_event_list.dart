@@ -24,7 +24,7 @@ class FilteredEventList extends HookWidget {
       useProvider(dimeGet<CombinedScheduleProvider>(tag: _scheduleFilterTag))
           .when(
         data: (events) {
-          // TODO(SF) use computed as well?
+          // TODO(SF) STATE use computed as well?
           final filteredEvents = scheduledOnly
               ? events.filter((event) => event.isScheduled)
               : events;
@@ -36,7 +36,7 @@ class FilteredEventList extends HookWidget {
             date: date,
           );
         },
-        // TODO(SF)
+        // TODO(SF) THEME
         loading: () => Center(child: Text('Loading!')),
         error: (e, trace) => Center(
           child: Text('Error! $e ${trace.toString()}'),

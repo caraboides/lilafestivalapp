@@ -31,7 +31,7 @@ class FestivalTheme {
   final double eventListItemHeight = 70;
   final double weatherCardHeight = 40;
 
-  // TODO(SF) make schedule icons in general configurable?
+  // TODO(SF) THEME make schedule icons in general configurable?
 
   IconData get aboutIcon => Icons.star;
 

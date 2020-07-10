@@ -7,7 +7,7 @@ import 'package:optional/optional.dart';
 
 import '../services/combined_storage.dart';
 
-// TODO(SF) Autodispose stream provider?
+// TODO(SF) STATE Autodispose stream provider?
 class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
   CombinedStorageStreamProvider({
     BuildContext context,
@@ -24,7 +24,7 @@ class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
               fromJson: fromJson,
             ));
 
-  // TODO(SF) retry loading remote data later?
+  // TODO(SF) FEATURE retry loading remote data later?
   @visibleForTesting
   static Stream<T> loadData<T, J>({
     BuildContext context,
@@ -41,7 +41,7 @@ class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
       assetKey: assetKey,
       fromJson: fromJson,
     );
-    // TODO(SF) possible to close closed stream?
+    // TODO(SF) STATE possible to close closed stream?
     ref.onDispose(streamController.close);
 
     return streamController.stream;

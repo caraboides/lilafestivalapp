@@ -14,7 +14,7 @@ class StaticHtmlView extends StatelessWidget {
     return 'data:text/html;base64,$contentBase64';
   }
 
-  // TODO(SF) why center?
+  // TODO(SF) THEME why center?
   @override
   Widget build(BuildContext context) => Center(
         child: WebView(

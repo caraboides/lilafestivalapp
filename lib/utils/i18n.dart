@@ -7,7 +7,7 @@ extension Interpolation on String {
       (previousValue, entry) =>
           previousValue.replaceAll('{${entry.key}}', entry.value.toString()));
 
-  // TODO(SF) is this working correctly?
+  // TODO(SF) I18N is this working correctly?
   String dateFormat(DateTime date) =>
       DateFormat(this, I18n.locale.toString()).format(date.toLocal());
 }

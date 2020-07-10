@@ -25,11 +25,11 @@ class WeatherProvider
   static Optional<Weather> _selectWeatherForDate(
       ImmortalList<Weather> forecast, DateTime date) {
     final now = DateTime.now();
-    // TODO(SF) or should this only check for actual day?
+    // TODO(SF) WEATHER or should this only check for actual day?
     final isToday = isSameFestivalDay(now, date);
     final minHour = isToday ? max(14, now.hour) : 14;
     return forecast.lastWhere((current) =>
-        // TODO(SF) as above - or same actual day?
+        // TODO(SF) WEATHER as above - or same actual day?
         isSameFestivalDay(current.date, date) &&
         current.date.hour <= minHour &&
         current.date.hour >= 14);

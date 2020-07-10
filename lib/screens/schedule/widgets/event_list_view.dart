@@ -11,7 +11,7 @@ import '../../../widgets/first_build_mixin.dart';
 import '../../band_detail_view/band_detail_view.dart';
 import 'event_list_item.dart';
 
-// TODO(SF) possible to use hook widget?
+// TODO(SF) STYLE possible to use hook widget?
 class EventListView extends StatefulWidget {
   const EventListView({
     Key key,

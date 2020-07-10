@@ -8,7 +8,6 @@ class Drive extends StatelessWidget {
 
   static Widget builder(BuildContext context) => Drive();
 
-  // TODO(SF) can this be getters?
   static String title() => 'Location'.i18n;
 
   List<Widget> _buildList(List<String> content) => content

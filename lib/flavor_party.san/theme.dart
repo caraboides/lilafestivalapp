@@ -19,7 +19,7 @@ final ThemeData theme = ThemeData(
       color: Colors.black,
     ),
     subtitle2: TextStyle(
-      // TODO(SF) can be part of global theme
+      // TODO(SF) THEME can be part of global theme
       fontWeight: FontWeight.bold,
     ),
   ),

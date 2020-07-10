@@ -50,7 +50,7 @@ class CombinedStorage {
                   .orElse(Future.value(Optional<J>.empty()))))
           .catchError(print);
 
-  // TODO(SF) replace null checks everywhere with optionals?
+  // TODO(SF) STYLE replace null checks everywhere with optionals?
   StreamController<T> loadData<T, J>({
     BuildContext context,
     Optional<String> remoteUrl,
@@ -58,17 +58,17 @@ class CombinedStorage {
     Optional<String> assetKey,
     T Function(J) fromJson,
   }) {
-    // TODO(SF) error handling
+    // TODO(SF) STATE error handling
     final streamController = StreamController<T>();
     remoteUrl.ifPresent((url) => _loadRemoteJsonData(url).then(
           (result) => result.ifPresent((json) {
             final data = fromJson(json);
-            // TODO(SF) what if already closed?
+            // TODO(SF) STATE what if already closed?
             streamController.add(data);
             streamController.close();
             appStorageKey.ifPresent((key) => _appStorage.storeJson(key, json));
           }, orElse: () {
-            // TODO(SF) close stream if fallback data was loaded already
+            // TODO(SF) STATE close stream if fallback data was loaded already
           }),
         ));
     appStorageKey.ifPresent(
@@ -80,7 +80,7 @@ class CombinedStorage {
             final data = fromJson(json);
             if (!streamController.isClosed) {
               streamController.add(data);
-              // TODO(SF) close stream if loading remote data failed
+              // TODO(SF) STATE close stream if loading remote data failed
             }
           })),
     );

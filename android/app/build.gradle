@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-// TODO(SF) added for .env support
+// TODO(SF) BUILD added for .env support
 apply from: project(':flutter_config').projectDir.getPath() + "/dotenv.gradle"
 
 android {
