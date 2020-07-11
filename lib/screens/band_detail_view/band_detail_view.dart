@@ -55,10 +55,11 @@ class BandDetailView extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Flexible(
+              flex: 2,
               fit: FlexFit.tight,
               child: Text('${title.i18n}:', style: theme.textTheme.subtitle2),
             ),
-            Flexible(flex: 4, fit: FlexFit.tight, child: Text(value)),
+            Flexible(flex: 7, fit: FlexFit.tight, child: Text(value)),
           ],
         ),
       );

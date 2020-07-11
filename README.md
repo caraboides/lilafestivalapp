@@ -37,7 +37,7 @@ Run in the app for a specific festival in development mode as follows:
 
 ## Build production version
 
-E.g. Spirit Festival 2019
+Build the production apk for a specific festival as follows:
 
 ```bash
 ./scripts/build_prod.sh [spirit|party_san] [<YEAR>]
@@ -47,3 +47,15 @@ E.g. Spirit Festival 2019
 ```
 
 * The second parameter is optional and used to prepare the asset folder and download the correct data for the given year. This is required on the first build and between flavor switches.
+
+## Prepare assets only
+
+Prepare the assets for a specific festival as follows:
+
+```bash
+./scripts/prepare_assets.sh [spirit|party_san] <YEAR>
+# e.g.
+./scripts/prepare_assets.sh party_san 2019
+```
+
+* The second parameter is required and used to prepare the asset folder and download the correct data for the given year.

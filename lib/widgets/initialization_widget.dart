@@ -34,7 +34,6 @@ class _InitializationWidgetState extends State<InitializationWidget> {
         });
       }
     });
-    print(scheduledEvents);
     // TODO(SF) NOTIFICATIONS handle updated events (e.g. time change)
     // schedule.updatedEvents.forEach((event) {
     //   mySchedule.getNotificationId(event.id).ifPresent((notificationId) {

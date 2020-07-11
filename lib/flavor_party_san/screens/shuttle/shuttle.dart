@@ -1176,7 +1176,6 @@ class Shuttle extends StatelessWidget {
 
   static Widget builder(BuildContext context) => const Shuttle();
 
-  // TODO(SF) I18N can this be getters?
   static String title() => 'Bus Shuttle'.i18n;
 
   @override

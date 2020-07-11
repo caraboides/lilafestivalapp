@@ -25,7 +25,6 @@ class Menu extends StatelessWidget {
           label,
           style: theme.textTheme.headline4,
         ),
-        // TODO(SF) THEME why is this necessary?
         leading: IconTheme(
           data: theme.iconTheme,
           child: Icon(icon),

@@ -14,7 +14,6 @@ extension Localization on String {
         'en_us': 'HH:mm',
         'de_de': 'HH:mm',
       } +
-      // TODO(SF) I18N possible to integrate the date format here?
       {
         'en_us': '{band} plays at {time} on the {stage}!',
         'de_de': '{band} spielen um {time} auf der {stage}!',

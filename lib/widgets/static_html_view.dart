@@ -14,16 +14,13 @@ class StaticHtmlView extends StatelessWidget {
     return 'data:text/html;base64,$contentBase64';
   }
 
-  // TODO(SF) THEME why center?
   @override
-  Widget build(BuildContext context) => Center(
-        child: WebView(
-          initialUrl: _buildUrl(context),
-          javascriptMode: JavascriptMode.unrestricted,
-          navigationDelegate: (request) {
-            launch(request.url);
-            return NavigationDecision.prevent;
-          },
-        ),
+  Widget build(BuildContext context) => WebView(
+        initialUrl: _buildUrl(context),
+        javascriptMode: JavascriptMode.unrestricted,
+        navigationDelegate: (request) {
+          launch(request.url);
+          return NavigationDecision.prevent;
+        },
       );
 }

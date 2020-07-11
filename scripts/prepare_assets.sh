@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -a
+source .env
+set +a
+
 FLAVOR=$1
 FESTIVAL_ID="${FLAVOR}_${2}"
 
