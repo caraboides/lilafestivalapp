@@ -1,13 +1,10 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:i18n_extension/i18n_widget.dart';
 
-// TODO(SF) BUILD select correct flavor
-import 'flavor_spirit/module.dart';
 import 'models/festival_config.dart';
 import 'models/theme.dart';
 import 'providers/provider_module.dart';
@@ -17,12 +14,11 @@ import 'services/service_module.dart';
 import 'utils/global_module.dart';
 import 'widgets/initialization_widget.dart';
 
-void main() async {
+void runForFlavor(BaseDimeModule flavorModule) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await FlutterConfig.loadEnvVariables();
   dimeInstall(GlobalModule());
-  dimeInstall(FlavorModule());
+  dimeInstall(flavorModule);
   dimeInstall(ServiceModule());
 
   await SystemChrome.setPreferredOrientations([
@@ -44,10 +40,9 @@ class FestivalApp extends StatelessWidget {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   void _precacheImages(BuildContext context) {
-    // TODO(SF) BUILD perform flutter clean between flavor switches
     if (_theme.logoMenu != null) {
       precacheImage(
-        AssetImage(_config.assetRootPath + _theme.logoMenu.assetPath),
+        AssetImage(_theme.logoMenu.assetPath),
         context,
         size: Size(_theme.logoMenu.width, _theme.logoMenu.height),
       );

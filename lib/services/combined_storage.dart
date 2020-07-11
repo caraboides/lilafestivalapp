@@ -5,7 +5,6 @@ import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
 
-import '../models/festival_config.dart';
 import 'app_storage.dart';
 import 'festival_hub.dart';
 
@@ -14,14 +13,13 @@ class CombinedStorage {
 
   AppStorage get _appStorage => dimeGet<AppStorage>();
   FestivalHub get _festivalHub => dimeGet<FestivalHub>();
-  FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   Future<Optional<J>> _loadJsonDataFromAssets<J>(
     BuildContext context,
-    String assetKey,
+    String assetPath,
   ) =>
       DefaultAssetBundle.of(context)
-          .loadString(_config.assetRootPath + assetKey)
+          .loadString(assetPath)
           .then((json) =>
               Optional.ofNullable(json != null ? jsonDecode(json) : null))
           .catchError((e) {
@@ -42,12 +40,12 @@ class CombinedStorage {
   Future<Optional<J>> _loadOfflineJsonData<J>({
     BuildContext context,
     String appStorageKey,
-    Optional<String> assetKey,
+    Optional<String> assetPath,
   }) =>
       _loadJsonDataFromAppStorage(appStorageKey)
           .then((result) => result
               .map((value) => Optional.of(value))
-              .orElseGetAsync(() => assetKey
+              .orElseGetAsync(() => assetPath
                   .map((key) => _loadJsonDataFromAssets(context, key))
                   .orElse(Future.value(Optional<J>.empty()))))
           .catchError(print);
@@ -57,7 +55,7 @@ class CombinedStorage {
     BuildContext context,
     Optional<String> remoteUrl,
     Optional<String> appStorageKey,
-    Optional<String> assetKey,
+    Optional<String> assetPath,
     T Function(J) fromJson,
   }) {
     // TODO(SF) STATE error handling
@@ -77,7 +75,7 @@ class CombinedStorage {
       (key) => _loadOfflineJsonData(
         context: context,
         appStorageKey: key,
-        assetKey: assetKey,
+        assetPath: assetPath,
       ).then((value) => value.ifPresent((json) {
             final data = fromJson(json);
             if (!streamController.isClosed) {

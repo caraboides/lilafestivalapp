@@ -70,7 +70,7 @@ Stream<TestData> createStream() => CombinedStorageStreamProvider.loadData(
       context: buildContextMock,
       remoteUrl: Optional.of('remoteUrl'),
       appStorageKey: Optional.of('appStorageKey'),
-      assetKey: Optional.of('fallbackDataAssetKey'),
+      assetPath: Optional.of('fallbackDataAssetPath'),
       fromJson: (json) => TestData.fromJson(json),
       ref: MockProviderReference(),
     );

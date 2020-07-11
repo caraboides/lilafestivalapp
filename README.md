@@ -1,16 +1,49 @@
 # lilafestivalapp
 
-A new Flutter project.
+Generic festival app with specific festivals as flavors:
 
-## Getting Started
+* [Party.San Open Air](https://www.party-san.de)
+* [Spirit Festival](https://www.spirit-festival.com)
 
-This project is a starting point for a Flutter application.
+## Setup
 
-A few resources to get you started if this is your first Flutter project:
+### Environment
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Place `.env` file in the root directory.
+<!-- TODO(SF) BUILD release mention signing keys -->
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Generate app icons for all flavors
+
+```bash
+flutter pub run flutter_launcher_icons:main
+```
+
+## Run development version
+
+Run in the app for a specific festival in development mode as follows:
+
+```bash
+./scripts/run_dev.sh --flavor=[spirit|party_san] [--year=<YEAR>] [--build=<BUILD>] [--release]
+# or
+./scripts/run_dev.sh -f=[spirit|party_san] [-y=<YEAR>] [-b=<BUILD>] [-r]
+# e.g.
+./scripts/run_dev.sh -f=spirit -y=2019 --release
+```
+
+* `--flavor/-f` is required to specify the festival
+* `--year/-y` is needed to prepare the asset folder and download the correct data for the given year. This is required on the first build and between flavor switches.
+* `--build/-b` defaults to `dev` if omitted
+* `--release` runs the app in release mode
+
+## Build production version
+
+E.g. Spirit Festival 2019
+
+```bash
+./scripts/build_prod.sh [spirit|party_san] [<YEAR>]
+# e.g.
+./scripts/build_prod.sh spirit 2019
+./scripts/build_prod.sh party_san
+```
+
+* The second parameter is optional and used to prepare the asset folder and download the correct data for the given year. This is required on the first build and between flavor switches.

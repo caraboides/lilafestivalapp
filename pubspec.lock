@@ -118,13 +118,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.1"
-  flutter_config:
-    dependency: "direct main"
-    description:
-      name: flutter_config
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.7"
   flutter_hooks:
     dependency: "direct main"
     description:
@@ -132,6 +125,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.0"
+  flutter_launcher_icons:
+    dependency: "direct dev"
+    description:
+      path: "."
+      ref: flavors
+      resolved-ref: "7a8ea42e129733a3d3e23a4e8f3304fdfe807d51"
+      url: "git@github.com:fluttercommunity/flutter_launcher_icons.git"
+    source: git
+    version: "0.7.2+1"
   flutter_local_notifications:
     dependency: "direct main"
     description:
@@ -537,6 +539,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.6.1"
+  yaml:
+    dependency: transitive
+    description:
+      name: yaml
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
 sdks:
   dart: ">=2.8.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"

@@ -15,7 +15,7 @@ class ScheduleProvider
           context: context,
           remoteUrl: Optional.of('/schedule?festival=$festivalId'),
           appStorageKey: Optional.of('schedule.json'),
-          assetKey: Optional.of('initial_schedule.json'),
+          assetPath: Optional.of('assets/schedule.json'),
           fromJson: (jsonMap) => ImmortalMap<String, dynamic>(jsonMap)
               .mapEntries<Event>((id, json) => Event.fromJson(id, json)),
         );

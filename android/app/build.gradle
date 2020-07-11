@@ -24,8 +24,27 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-// TODO(SF) BUILD added for .env support
-apply from: project(':flutter_config').projectDir.getPath() + "/dotenv.gradle"
+
+// TODO(SF) BUILD release
+// def keystoreProperties = new Properties()
+// def keystorePropertiesFile = rootProject.file('key.properties')
+// if (keystorePropertiesFile.exists()) {
+//   keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+// }
+
+def dartEnvVars = [
+    APP_ID_SUFFIX: null,
+    VERSION_NAME_SUFFIX: null,
+    APP_NAME_PREFIX: ''
+];
+if (project.hasProperty('dart-defines')) {
+    dartEnvVars = dartEnvVars + project.property('dart-defines')
+        .split(',')
+        .collectEntries { entry ->
+            def pair = entry.split('=')
+            [(pair.first()): pair.last()]
+        }
+}
 
 android {
     compileSdkVersion 28
@@ -39,19 +58,52 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "de.lilaherzprojekt.lilafestivalapp"
+        applicationIdSuffix dartEnvVars.APP_ID_SUFFIX
+        versionNameSuffix dartEnvVars.VERSION_NAME_SUFFIX
         minSdkVersion 16
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        // TODO(SF) BUILD release?
+        // multiDexEnabled true
     }
+
+    flavorDimensions "festival"
+    productFlavors {
+        party_san {
+            dimension "festival"
+            applicationId "de.lilaherzprojekt.party_san"
+            resValue "string", "app_name", dartEnvVars.APP_NAME_PREFIX + "Party.San"
+        }
+
+        spirit {
+            dimension "festival"
+            applicationId "de.lilaherzprojekt.spirit"
+            resValue "string", "app_name", dartEnvVars.APP_NAME_PREFIX + "Spirit"
+        }
+    }
+
+    // TODO(SF) BUILD release
+    // signingConfigs {
+    //    release {
+    //        keyAlias keystoreProperties['keyAlias']
+    //        keyPassword keystoreProperties['keyPassword']
+    //        storeFile file(keystoreProperties['storeFile'])
+    //        storePassword keystoreProperties['storePassword']
+    //    }
+    // }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+            // TODO(SF) BUILD release
+            // signingConfig signingConfigs.release
+
+            // minifyEnabled false
+            // useProguard false
+
+            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -62,4 +114,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // TODO(SF) BUILD release?
+    // implementation 'com.android.support:multidex:1.0.3'
 }

@@ -15,7 +15,6 @@ class FestivalConfig {
     this.startDate,
     this.endDate,
     this.daySwitchOffset,
-    this.assetRootPath,
     this.fontReferences,
     this.aboutMessages,
     this.stageAlignment,
@@ -31,7 +30,6 @@ class FestivalConfig {
   final DateTime startDate;
   final DateTime endDate;
   final Duration daySwitchOffset;
-  final String assetRootPath;
   final ImmortalList<Reference> fontReferences;
   final ImmortalList<Reference> aboutMessages;
   final CrossAxisAlignment Function(String stage) stageAlignment;

@@ -1,4 +1,3 @@
-import 'package:flutter_config/flutter_config.dart';
 import 'package:immortal/immortal.dart';
 
 import '../models/global_config.dart';
@@ -9,7 +8,7 @@ final GlobalConfig config = GlobalConfig(
   privacyPolicyUrlDe: 'https://bit.ly/2L3HSD8',
   // TODO(SF) I18N translate privacy policy
   privacyPolicyUrlEn: 'https://bit.ly/2L3HSD8',
-  festivalHubBaseUrl: 'https://lilafestivalhub.herokuapp.com',
+  festivalHubBaseUrl: const String.fromEnvironment('FESTIVAL_HUB_BASE_URL'),
   repositoryUrl: 'https://github.com/caraboides/lilafestivalapp',
   creators: ImmortalList([
     Reference(
@@ -37,5 +36,5 @@ final GlobalConfig config = GlobalConfig(
       ]),
     ),
   ]),
-  weatherApiKey: FlutterConfig.get('WEATHER_API_KEY'),
+  weatherApiKey: const String.fromEnvironment('WEATHER_API_KEY'),
 );

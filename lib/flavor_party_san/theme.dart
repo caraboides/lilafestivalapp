@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/theme.dart';
 
-const String displayFontFamily = 'Pirata One';
+const String displayFontFamily = 'Display Font';
 
 final ThemeData theme = ThemeData(
   primaryColor: Colors.grey[850],
@@ -73,12 +73,12 @@ final FestivalTheme festivalTheme = FestivalTheme(
     child: Text(label),
   ),
   logo: const Logo(
-    assetPath: 'logo.png',
+    assetPath: 'assets/logo.png',
     width: 111,
     height: 56,
   ),
   logoMenu: const Logo(
-    assetPath: 'logo_menu.png',
+    assetPath: 'assets/logo_menu.png',
     width: 304,
     height: 152,
   ),

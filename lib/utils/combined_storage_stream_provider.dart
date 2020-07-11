@@ -13,14 +13,14 @@ class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
     BuildContext context,
     Optional<String> remoteUrl,
     Optional<String> appStorageKey,
-    Optional<String> assetKey,
+    Optional<String> assetPath,
     T Function(dynamic) fromJson,
   }) : super((ref) => loadData(
               context: context,
               ref: ref,
               remoteUrl: remoteUrl,
               appStorageKey: appStorageKey,
-              assetKey: assetKey,
+              assetPath: assetPath,
               fromJson: fromJson,
             ));
 
@@ -30,7 +30,7 @@ class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
     BuildContext context,
     Optional<String> remoteUrl,
     Optional<String> appStorageKey,
-    Optional<String> assetKey,
+    Optional<String> assetPath,
     T Function(J) fromJson,
     ProviderReference ref,
   }) {
@@ -38,7 +38,7 @@ class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
       context: context,
       remoteUrl: remoteUrl,
       appStorageKey: appStorageKey,
-      assetKey: assetKey,
+      assetPath: assetPath,
       fromJson: fromJson,
     );
     // TODO(SF) STATE possible to close closed stream?

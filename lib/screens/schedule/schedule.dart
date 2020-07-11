@@ -84,7 +84,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             : _buildTabBar(),
         title: _theme.logo != null
             ? Image.asset(
-                _config.assetRootPath + _theme.logo.assetPath,
+                _theme.logo.assetPath,
                 width: _theme.logo.width,
                 height: _theme.logo.height,
               )

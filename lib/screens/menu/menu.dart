@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dime/dime.dart';
 
-import '../../models/festival_config.dart';
 import '../../models/global_config.dart';
 import '../../models/theme.dart';
 import '../../services/navigation.dart';
@@ -12,7 +11,6 @@ class Menu extends StatelessWidget {
   const Menu();
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
-  FestivalConfig get _config => dimeGet<FestivalConfig>();
   Navigation get _navigation => dimeGet<Navigation>();
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
@@ -43,7 +41,7 @@ class Menu extends StatelessWidget {
       children: <Widget>[
         if (_theme.logoMenu != null)
           Image.asset(
-            _config.assetRootPath + _theme.logoMenu.assetPath,
+            _theme.logoMenu.assetPath,
             height: _theme.logoMenu.height,
             width: _theme.logoMenu.width,
           ),

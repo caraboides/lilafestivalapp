@@ -20,7 +20,7 @@ class Notifications {
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
 
-  // TODO(SF) BUILD proguard: -keep class com.dexterous.** { *; }
+  // TODO(SF) BUILD release proguard: -keep class com.dexterous.** { *; }
 
   AndroidNotificationDetails get _androidPlatformChannelSpecifics =>
       AndroidNotificationDetails(
@@ -49,7 +49,6 @@ class Notifications {
 
     _plugin.initialize(
       const InitializationSettings(
-        // TODO(SF) BUILD flavorize
         AndroidInitializationSettings('notification_icon'),
         IOSInitializationSettings(),
       ),

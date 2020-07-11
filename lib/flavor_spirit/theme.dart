@@ -15,7 +15,7 @@ final List<Shadow> _appBarTextShadows = const [
           offset: offset,
         ))
     .toList();
-const String displayFontFamily = 'No Continue';
+const String displayFontFamily = 'Display Font';
 const Color _menuFontColor = Color(0xFFd6102b);
 final Color _darkBackgroundColor = Colors.grey[850];
 final BorderSide _border = BorderSide(color: Colors.black, width: 2);
@@ -100,12 +100,12 @@ final FestivalTheme festivalTheme = FestivalTheme(
     child: Text(label),
   ),
   logo: const Logo(
-    assetPath: 'logo.png',
+    assetPath: 'assets/logo.png',
     width: 158,
     height: 40,
   ),
   logoMenu: const Logo(
-    assetPath: 'logo_menu.png',
+    assetPath: 'assets/logo_menu.png',
     width: 129,
     height: 152,
   ),

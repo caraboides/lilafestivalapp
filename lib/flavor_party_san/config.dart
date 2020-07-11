@@ -9,14 +9,13 @@ import 'screens/faq/faq.dart';
 import 'screens/shuttle/shuttle.dart';
 
 final FestivalConfig config = FestivalConfig(
-  festivalId: 'party.san_2019',
+  festivalId: 'party_san_2019',
   festivalName: 'Party.San',
   festivalFullName: 'Party.San Open Air',
   festivalUrl: 'https://www.party-san.de',
   startDate: DateTime(2019, 8, 8),
   endDate: DateTime(2019, 8, 10),
   daySwitchOffset: const Duration(hours: 3),
-  assetRootPath: 'assets/party.san/',
   fontReferences: ImmortalList([
     Reference(
       label: 'Pirata One',
@@ -32,7 +31,7 @@ final FestivalConfig config = FestivalConfig(
     Reference(
       links: ImmortalList([
         const Link(
-          imageAssetPath: 'mar.gif',
+          imageAssetPath: 'assets/mar.gif',
           url: 'http://www.metalheadsagainstracism.org/',
         ),
       ]),
