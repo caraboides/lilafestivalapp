@@ -25,16 +25,16 @@ void main() async {
   dimeInstall(FlavorModule());
   dimeInstall(ServiceModule());
 
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((_) async {
-    runApp(
-      const ProviderScope(
-        child: FestivalApp(),
-      ),
-    );
-  });
+  ]);
+
+  runApp(
+    const ProviderScope(
+      child: FestivalApp(),
+    ),
+  );
 }
 
 class FestivalApp extends StatelessWidget {

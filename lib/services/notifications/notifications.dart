@@ -4,6 +4,7 @@ import 'package:dime/dime.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:immortal/immortal.dart';
+import 'package:pedantic/pedantic.dart';
 
 import '../../models/event.dart';
 import '../../models/festival_config.dart';
@@ -91,7 +92,7 @@ class Notifications {
     for (final notification in pendingNotifications) {
       _nextNotificationId = max(_nextNotificationId, notification.id + 1);
       if (requiredNotifications[notification.id] == null) {
-        cancelNotification(notification.id);
+        unawaited(cancelNotification(notification.id));
       } else {
         scheduledNotifications[notification.id] = true;
       }

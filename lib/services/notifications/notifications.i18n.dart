@@ -7,13 +7,14 @@ extension Localization on String {
         'de_de': 'Auftrittsbenachrichtigungen',
       } +
       {
-        'en_us': 'Notification to remind of scheduled gigs',
+        'en_us': 'Notifications to remind of scheduled gigs',
         'de_de': 'Benachrichtigungen für eingeplante Auftritte',
       } +
       {
         'en_us': 'HH:mm',
         'de_de': 'HH:mm',
       } +
+      // TODO(SF) I18N possible to integrate the date format here?
       {
         'en_us': '{band} plays at {time} on the {stage}!',
         'de_de': '{band} spielen um {time} auf der {stage}!',

@@ -3,6 +3,11 @@ include: package:effective_dart/analysis_options.yaml
 analyzer:
   errors:
     todo: ignore
+    missing_required_param: error
+    missing_return: error
+#   strong-mode:
+#     implicit-casts: false
+#     implicit-dynamic: false
 
 linter:
   rules:
@@ -16,3 +21,23 @@ linter:
     prefer_const_declarations: true
     sort_constructors_first: true
     sort_unnamed_constructors_first: true
+    avoid_shadowing_type_parameters: true
+    always_require_non_null_named_parameters: true
+    annotate_overrides: true
+    always_declare_return_types: true
+    null_closures: true
+    prefer_conditional_assignment: true
+    prefer_if_null_operators: true
+    prefer_is_empty: true
+    prefer_is_not_empty: true
+    prefer_spread_collections: true
+    recursive_getters: true
+    unawaited_futures: true
+    cancel_subscriptions: true
+    close_sinks: true
+    control_flow_in_finally: true
+    test_types_in_equals: true
+    await_only_futures: true
+    package_prefixed_library_names: true
+    package_names: true
+    sort_pub_dependencies: true
