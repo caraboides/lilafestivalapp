@@ -8,6 +8,7 @@ import '../../../models/festival_config.dart';
 import '../../../models/theme.dart';
 import '../../../providers/weather.dart';
 
+// TODO(SF) ERROR HANDLING
 class WeatherCard extends StatefulWidget {
   WeatherCard(this.date, {Key key}) : super(key: key);
 
@@ -73,6 +74,7 @@ class _WeatherCardState extends State<WeatherCard> {
           }).orElse(_fallback),
           loading: () => _fallback,
           error: (e, trace) {
+            // TODO(SF) ERROR HANDLING
             print('Error fetching weather: $e: ${trace.toString()}');
             return _fallback;
           },

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:optional/optional.dart';
 
 import '../services/combined_storage.dart';
 
@@ -12,9 +11,9 @@ import '../services/combined_storage.dart';
 class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
   CombinedStorageStreamProvider({
     BuildContext context,
-    Optional<String> remoteUrl,
-    Optional<String> appStorageKey,
-    Optional<String> assetPath,
+    String remoteUrl,
+    String appStorageKey,
+    String assetPath,
     T Function(dynamic) fromJson,
   }) : super((ref) => loadData(
               context: context,
@@ -29,9 +28,9 @@ class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
   @visibleForTesting
   static Stream<T> loadData<T, J>({
     BuildContext context,
-    Optional<String> remoteUrl,
-    Optional<String> appStorageKey,
-    Optional<String> assetPath,
+    String remoteUrl,
+    String appStorageKey,
+    String assetPath,
     T Function(J) fromJson,
     ProviderReference ref,
   }) {

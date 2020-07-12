@@ -68,9 +68,9 @@ Future<Optional<dynamic>> Function(Invocation) mockOptionalResponse(
 
 Stream<TestData> createStream() => CombinedStorageStreamProvider.loadData(
       context: buildContextMock,
-      remoteUrl: Optional.of('remoteUrl'),
-      appStorageKey: Optional.of('appStorageKey'),
-      assetPath: Optional.of('fallbackDataAssetPath'),
+      remoteUrl: 'remoteUrl',
+      appStorageKey: 'appStorageKey',
+      assetPath: 'fallbackDataAssetPath',
       fromJson: (json) => TestData.fromJson(json),
       ref: MockProviderReference(),
     );

@@ -2,7 +2,6 @@ import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
-import 'package:optional/optional.dart';
 
 import '../models/event.dart';
 import '../utils/combined_storage_stream_provider.dart';
@@ -14,9 +13,9 @@ class ScheduleProvider
   ScheduleProvider(BuildContext context, String festivalId)
       : super(
           context: context,
-          remoteUrl: Optional.of('/schedule?festival=$festivalId'),
-          appStorageKey: Optional.of('schedule.json'),
-          assetPath: Optional.of('assets/schedule.json'),
+          remoteUrl: '/schedule?festival=$festivalId',
+          appStorageKey: 'schedule.json',
+          assetPath: 'assets/schedule.json',
           // TODO(SF) ERROR HANDLING
           fromJson: (jsonMap) => ImmortalMap<String, dynamic>(jsonMap)
               .mapEntries<Event>((id, json) => Event.fromJson(id, json)),

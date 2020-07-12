@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../utils/logging.dart';
+
 class StaticHtmlView extends StatelessWidget {
   const StaticHtmlView(this.html);
 
   final String html;
+
+  Logger get _log => const Logger('StaticHtmlView');
 
   String _buildUrl(BuildContext context) {
     final contentBase64 = base64Encode(const Utf8Encoder().convert(html));
@@ -23,9 +27,11 @@ class StaticHtmlView extends StatelessWidget {
           return NavigationDecision.prevent;
         },
         onWebResourceError: (error) {
-          print('Web resource failed to load: type ${error.errorType} code '
-              '${error.errorCode} on url ${error.failingUrl}: '
-              '${error.description}');
+          _log.error(
+            'Web resource failed to load: type ${error.errorType} code '
+            '${error.errorCode} on url ${error.failingUrl}',
+            error.description,
+          );
         },
       );
 }

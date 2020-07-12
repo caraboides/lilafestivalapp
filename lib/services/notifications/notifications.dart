@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:dime/dime.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:immortal/immortal.dart';
 import 'package:pedantic/pedantic.dart';
@@ -11,6 +10,7 @@ import '../../models/event.dart';
 import '../../models/festival_config.dart';
 import '../../models/theme.dart';
 import '../../utils/i18n.dart';
+import '../../utils/logging.dart';
 import 'notifications.i18n.dart';
 
 class Notifications {
@@ -20,6 +20,7 @@ class Notifications {
       dimeGet<FlutterLocalNotificationsPlugin>();
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
+  Logger get _log => const Logger('NOTIFICATIONS');
 
   // TODO(SF) BUILD release proguard: -keep class com.dexterous.** { *; }
 
@@ -37,19 +38,18 @@ class Notifications {
     if (payload != null) {
       // TODO(SF) ERROR HANDLING add more debugprints everywhere
       // TODO(SF) FEATURE handle this somehow?
-      debugPrint('NOTIFICATIONS: Notification selected with payload: $payload');
+      _log.debug('Notification selected with payload: $payload');
     }
   }
 
   void initializeNotificationPlugin() {
-    debugPrint('NOTIFICATIONS: Initialize notification plugin');
+    _log.debug('Initialize notification plugin');
     _plugin.getNotificationAppLaunchDetails().then((details) {
       if (details != null && details.didNotificationLaunchApp) {
-        debugPrint('NOTIFICATIONS: App was launched with notification');
+        _log.debug('App was launched with notification');
       }
     }).catchError((error) {
-      print(
-          'Retrieving notification launch details failed: ${error.toString()}');
+      _log.error('Retrieving notification launch details failed', error);
     });
 
     _plugin
@@ -61,7 +61,7 @@ class Notifications {
       onSelectNotification: _onSelectNotification,
     )
         .catchError((error) {
-      print('Initializing notification plugin failed: ${error.toString()}');
+      _log.error('Initializing notification plugin failed', error);
     });
   }
 
@@ -73,8 +73,7 @@ class Notifications {
     if (event.start
         .map((startTime) => startTime.isAfter(DateTime.now()))
         .orElse(false)) {
-      debugPrint('NOTIFICATIONS: Schedule notification for event ${event.id} '
-          'with id $id');
+      _log.debug('Schedule notification for event ${event.id} with id $id');
       await _plugin
           .schedule(
         id,
@@ -94,16 +93,16 @@ class Notifications {
       )
           .catchError((error) {
         // Will be retried on next app start if still necessary
-        print('Scheduling notification failed: ${error.toString()}');
+        _log.error('Scheduling notification failed', error);
       });
     }
     return id;
   }
 
   Future<void> cancelNotification(int notificationId) {
-    debugPrint('NOTIFICATIONS: Cancel notification with id $notificationId');
+    _log.debug('Cancel notification with id $notificationId');
     return _plugin.cancel(notificationId).catchError((error) {
-      print('Cancelling notification failed: ${error.toString()}');
+      _log.error('Cancelling notification failed', error);
     });
   }
 
@@ -146,11 +145,10 @@ class Notifications {
             .map((id) => max(id + 1, previousMax))
             .orElse(previousMax));
     final requiredNotifications = _calculateRequiredNotifications(events);
-    debugPrint('NOTIFICATIONS: Verify required notifications '
-        '$requiredNotifications');
+    _log.debug('Verify required notifications $requiredNotifications');
     final pendingNotifications =
         await _plugin.pendingNotificationRequests().catchError((error) {
-      print('Retrieving pending notifications failed: ${error.toString()}');
+      _log.error('Retrieving pending notifications failed', error);
       return [];
     });
     // TODO(SF) STYLE improve

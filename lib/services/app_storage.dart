@@ -4,9 +4,12 @@ import 'dart:io';
 import 'package:optional/optional_internal.dart';
 import 'package:path_provider/path_provider.dart';
 
-// TODO(SF) ERROR HANDLING
+import '../utils/logging.dart';
+
 class AppStorage {
   String directory;
+
+  Logger get _log => const Logger('APP_STORAGE');
 
   Future<String> _getDirectory() async =>
       directory ??= (await getApplicationDocumentsDirectory()).path;
@@ -18,26 +21,31 @@ class AppStorage {
 
   Future<Optional<J>> loadJson<J>(String fileName) async {
     try {
+      _log.debug('Reading data from $fileName');
       final file = await _getFileHandle(fileName);
       if (await file.exists()) {
         final fileContent = await file.readAsString();
-        // TODO(SF) STATE fallback?
         final json = jsonDecode(fileContent);
+        _log.debug('Reading data from $fileName was successful');
         return Optional.of(json);
+      } else {
+        _log.debug('File $fileName does not exist');
       }
     } catch (error) {
-      print(error);
+      _log.error('Error reading data from $fileName', error);
     }
     return const Optional.empty();
   }
 
   Future<void> storeJson(String fileName, dynamic json) async {
     try {
+      _log.debug('Storing data in $fileName');
       final file = await _getFileHandle(fileName);
       final fileContent = jsonEncode(json);
       await file.writeAsString(fileContent);
+      _log.debug('Storing data in $fileName was successful');
     } catch (error) {
-      print(error);
+      _log.error('Error storing data in $fileName', error);
     }
   }
 }

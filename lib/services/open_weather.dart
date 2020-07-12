@@ -2,14 +2,15 @@ import 'dart:convert';
 
 import 'package:dcache/dcache.dart';
 import 'package:dime/dime.dart';
-import 'package:flutter/foundation.dart';
 import 'package:i18n_extension/i18n_widget.dart';
 import 'package:immortal/immortal.dart';
 import 'package:weather/weather_library.dart';
 import 'package:http/http.dart' as http;
+import 'package:optional/optional.dart';
 
 import '../models/festival_config.dart';
 import '../models/global_config.dart';
+import '../utils/logging.dart';
 
 class OpenWeather {
   final _cache =
@@ -17,6 +18,7 @@ class OpenWeather {
 
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
+  Logger get _log => const Logger('WEATHER');
 
   String _buildQueryUrl() => 'http://api.openweathermap.org/data/2.5/forecast?'
       'lat=${_config.weatherGeoLocation.lat}&'
@@ -24,37 +26,37 @@ class OpenWeather {
       'appid=${_globalConfig.weatherApiKey}&'
       'lang=${I18n.language}';
 
-  Future<Map<String, dynamic>> _requestOpenWeatherAPI() async {
-    final response = await http.get(_buildQueryUrl());
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      throw OpenWeatherAPIException(
-          'The API threw an exception: ${response.body}');
-    }
-  }
-
   /// For API documentation, see: https://openweathermap.org/forecast5
-  Future<ImmortalList<Weather>> _loadForecast() async {
+  Future<Optional<ImmortalList<Weather>>> _loadForecast() async {
     try {
-      final jsonForecasts = await _requestOpenWeatherAPI();
-      return ImmortalList(jsonForecasts['list']).map((w) => Weather(w));
+      final response = await http.get(_buildQueryUrl());
+      if (response.statusCode == 200) {
+        final jsonForecasts = json.decode(response.body);
+        _log.debug('Loading forecast was successful');
+        final weathers =
+            ImmortalList(jsonForecasts['list']).map((w) => Weather(w));
+        return Optional.of(weathers);
+      } else {
+        _log.error('Loading forecast failed', response.body);
+      }
     } catch (error) {
-      print('Failed to load weather: ${error.toString()}');
+      _log.error('Error loading forecast', error);
     }
-    return ImmortalList<Weather>();
+    return const Optional<ImmortalList<Weather>>.empty();
   }
 
   Future<ImmortalList<Weather>> getForecast(int hour) async {
     final currentWeathers = _cache.get(hour);
     if (currentWeathers != null) {
-      debugPrint('WEATHER: Reading forecast for hour $hour from cache');
+      _log.debug('Reading forecast for hour $hour from cache');
       return Future.value(currentWeathers);
     }
-    debugPrint('WEATHER: Loading forecast for hour $hour');
-    return _loadForecast().then((weathers) {
-      _cache.set(hour, weathers);
-      return weathers;
-    });
+    _log.debug('Loading forecast for hour $hour');
+    return _loadForecast().then((weathers) => weathers.map((list) {
+          _log.debug(
+              'Loading weather for $hour was successful, writing to cache');
+          _cache.set(hour, list);
+          return list;
+        }).orElse(ImmortalList<Weather>()));
   }
 }
