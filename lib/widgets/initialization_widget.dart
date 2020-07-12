@@ -9,7 +9,7 @@ import '../models/theme.dart';
 import '../providers/combined_schedule.dart';
 import '../providers/provider_module.dart';
 import '../services/notifications/notifications.dart';
-import 'first_build_mixin.dart';
+import 'one_time_execution_mixin.dart';
 
 class InitializationWidget extends StatefulHookWidget {
   InitializationWidget(this.child);
@@ -21,7 +21,7 @@ class InitializationWidget extends StatefulHookWidget {
 }
 
 class _InitializationWidgetState extends State<InitializationWidget>
-    with FirstBuildCallbackMixin {
+    with OneTimeExecutionMixin {
   bool initializedNotifications = false;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
@@ -36,25 +36,29 @@ class _InitializationWidgetState extends State<InitializationWidget>
     }
   }
 
-  void _verifyScheduledNotifications(ImmortalList<EnhancedEvent> events) {
-    initializedNotifications = true;
-    if (events.isEmpty) {
-      return;
-    }
-    dimeGet<Notifications>().verifyScheduledEventNotifications(events);
-  }
+  bool _verifyScheduledNotifications(
+    AsyncValue<ImmortalList<EnhancedEvent>> enhancedEvents,
+  ) =>
+      enhancedEvents.when(
+        data: (events) {
+          if (events.isNotEmpty) {
+            dimeGet<Notifications>().verifyScheduledEventNotifications(events);
+          }
+          return true;
+        },
+        loading: () => false,
+        error: (_, __) => false,
+      );
 
   @override
   Widget build(BuildContext context) {
-    onFirstBuild(() {
+    executeOnce(() {
       _precacheImages(context);
       dimeInstall(ProviderModule(context));
       dimeGet<Notifications>().initializeNotificationPlugin();
     });
     final enhancedEvents = useProvider(dimeGet<CombinedScheduleProvider>());
-    if (!initializedNotifications) {
-      enhancedEvents.whenData(_verifyScheduledNotifications);
-    }
+    executeUntilSuccessful(() => _verifyScheduledNotifications(enhancedEvents));
     return widget.child;
   }
 }

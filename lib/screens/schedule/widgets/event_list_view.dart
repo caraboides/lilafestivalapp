@@ -7,7 +7,7 @@ import 'package:immortal/immortal.dart';
 import '../../../models/enhanced_event.dart';
 import '../../../models/theme.dart';
 import '../../../utils/date.dart';
-import '../../../widgets/first_build_mixin.dart';
+import '../../../widgets/one_time_execution_mixin.dart';
 import '../../band_detail_view/band_detail_view.dart';
 import 'event_list_item.dart';
 
@@ -30,7 +30,7 @@ class EventListView extends StatefulWidget {
 }
 
 class EventListViewState extends State<EventListView>
-    with FirstBuildCallbackMixin {
+    with OneTimeExecutionMixin {
   final _scrollController = ScrollController();
 
   int get _currentOrNextPlayingBandIndex {
@@ -101,7 +101,7 @@ class EventListViewState extends State<EventListView>
 
   @override
   Widget build(BuildContext context) {
-    onFirstBuild(() {
+    executeOnce(() {
       _scrollToCurrentBand(timeout: const Duration(milliseconds: 200));
     });
     return Expanded(
