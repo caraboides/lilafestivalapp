@@ -25,8 +25,8 @@ class AppStorage {
         final json = jsonDecode(fileContent);
         return Optional.of(json);
       }
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(error);
     }
     return const Optional.empty();
   }
@@ -36,8 +36,8 @@ class AppStorage {
       final file = await _getFileHandle(fileName);
       final fileContent = jsonEncode(json);
       await file.writeAsString(fileContent);
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(error);
     }
   }
 }

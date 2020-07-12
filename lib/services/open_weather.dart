@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dcache/dcache.dart';
 import 'package:dime/dime.dart';
+import 'package:flutter/foundation.dart';
 import 'package:i18n_extension/i18n_widget.dart';
 import 'package:immortal/immortal.dart';
 import 'package:weather/weather_library.dart';
@@ -10,7 +11,6 @@ import 'package:http/http.dart' as http;
 import '../models/festival_config.dart';
 import '../models/global_config.dart';
 
-// TODO(SF) ERROR HANDLING
 class OpenWeather {
   final _cache =
       SimpleCache<int, ImmortalList<Weather>>(storage: SimpleStorage(size: 1));
@@ -39,8 +39,8 @@ class OpenWeather {
     try {
       final jsonForecasts = await _requestOpenWeatherAPI();
       return ImmortalList(jsonForecasts['list']).map((w) => Weather(w));
-    } catch (exception) {
-      print(exception);
+    } catch (error) {
+      print('Failed to load weather: ${error.toString()}');
     }
     return ImmortalList<Weather>();
   }
@@ -48,12 +48,13 @@ class OpenWeather {
   Future<ImmortalList<Weather>> getForecast(int hour) async {
     final currentWeathers = _cache.get(hour);
     if (currentWeathers != null) {
+      debugPrint('WEATHER: Reading forecast for hour $hour from cache');
       return Future.value(currentWeathers);
-    } else {
-      return _loadForecast().then((weathers) {
-        _cache.set(hour, weathers);
-        return Future.value(weathers);
-      });
     }
+    debugPrint('WEATHER: Loading forecast for hour $hour');
+    return _loadForecast().then((weathers) {
+      _cache.set(hour, weathers);
+      return weathers;
+    });
   }
 }

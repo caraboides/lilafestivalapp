@@ -4,11 +4,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
 
-import '../models/event.dart';
-import '../models/my_schedule.dart';
-import '../providers/my_schedule.dart';
-import '../providers/schedule.dart';
+import '../models/enhanced_event.dart';
+import '../models/theme.dart';
+import '../providers/combined_schedule.dart';
+import '../providers/provider_module.dart';
 import '../services/notifications/notifications.dart';
+import 'first_build_mixin.dart';
 
 class InitializationWidget extends StatefulHookWidget {
   InitializationWidget(this.child);
@@ -19,58 +20,40 @@ class InitializationWidget extends StatefulHookWidget {
   State<StatefulWidget> createState() => _InitializationWidgetState();
 }
 
-class _InitializationWidgetState extends State<InitializationWidget> {
-  bool initialized = false;
+class _InitializationWidgetState extends State<InitializationWidget>
+    with FirstBuildCallbackMixin {
+  bool initializedNotifications = false;
 
-  ImmortalMap<int, Event> _calculateRequiredNotifications(
-      ImmortalList<Event> events, MySchedule mySchedule) {
-    final now = DateTime.now();
-    final scheduledEvents = <int, Event>{};
-    // TODO(SF) STYLE improve?
-    events.forEach((event) {
-      if (event.start
-          .map((startTime) => startTime.isAfter(now))
-          .orElse(false)) {
-        mySchedule.getNotificationId(event.id).ifPresent((notificationId) {
-          scheduledEvents[notificationId] = event;
-        });
-      }
-    });
-    // TODO(SF) NOTIFICATIONS handle updated events (e.g. time change)
-    // schedule.updatedEvents.forEach((event) {
-    //   mySchedule.getNotificationId(event.id).ifPresent((notificationId) {
-    //     cancelNotification(notificationId);
-    //     if (event.start
-    //         .map((startTime) => startTime.isAfter(now))
-    //         .orElse(false)) {
-    //       scheduledEvents[notificationId] = event;
-    //     }
-    //   });
-    // });
-    return ImmortalMap(scheduledEvents);
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
+
+  void _precacheImages(BuildContext context) {
+    if (_theme.logoMenu != null) {
+      precacheImage(
+        AssetImage(_theme.logoMenu.assetPath),
+        context,
+        size: Size(_theme.logoMenu.width, _theme.logoMenu.height),
+      );
+    }
   }
 
-  void _verifyScheduledNotifications(
-      ImmortalList<Event> events, MySchedule mySchedule) {
-    initialized = true;
-    if (events.isEmpty || mySchedule.isEmpty) {
+  void _verifyScheduledNotifications(ImmortalList<EnhancedEvent> events) {
+    initializedNotifications = true;
+    if (events.isEmpty) {
       return;
     }
-    dimeGet<Notifications>().verifyScheduledEventNotifications(
-      _calculateRequiredNotifications(events, mySchedule),
-    );
+    dimeGet<Notifications>().verifyScheduledEventNotifications(events);
   }
 
   @override
   Widget build(BuildContext context) {
-    final schedule = useProvider(dimeGet<ScheduleProvider>());
-    final myScheduleProvider = useProvider(dimeGet<MyScheduleProvider>().state);
-    if (!initialized) {
-      schedule.whenData(
-        (events) => myScheduleProvider.whenData(
-          (mySchedule) => _verifyScheduledNotifications(events, mySchedule),
-        ),
-      );
+    onFirstBuild(() {
+      _precacheImages(context);
+      dimeInstall(ProviderModule(context));
+      dimeGet<Notifications>().initializeNotificationPlugin();
+    });
+    final enhancedEvents = useProvider(dimeGet<CombinedScheduleProvider>());
+    if (!initializedNotifications) {
+      enhancedEvents.whenData(_verifyScheduledNotifications);
     }
     return widget.child;
   }

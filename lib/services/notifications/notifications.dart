@@ -6,13 +6,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:immortal/immortal.dart';
 import 'package:pedantic/pedantic.dart';
 
+import '../../models/enhanced_event.dart';
 import '../../models/event.dart';
 import '../../models/festival_config.dart';
 import '../../models/theme.dart';
 import '../../utils/i18n.dart';
 import 'notifications.i18n.dart';
 
-// TODO(SF) ERROR HANDLING
 class Notifications {
   int _nextNotificationId = 0;
 
@@ -27,7 +27,7 @@ class Notifications {
       AndroidNotificationDetails(
         'event_notification', // TODO(SF) CONFIG constant
         'Gig Reminder'.i18n,
-        'Notification to remind of scheduled gigs'.i18n,
+        'Notifications to remind of scheduled gigs'.i18n,
         importance: Importance.Max,
         priority: Priority.High,
         color: _theme.notificationColor,
@@ -35,63 +35,125 @@ class Notifications {
 
   Future _onSelectNotification(String payload) async {
     if (payload != null) {
-      // TODO(SF) STATE add more debugprints everywhere
+      // TODO(SF) ERROR HANDLING add more debugprints everywhere
       // TODO(SF) FEATURE handle this somehow?
-      debugPrint('notification payload: $payload');
+      debugPrint('NOTIFICATIONS: Notification selected with payload: $payload');
     }
   }
 
   void initializeNotificationPlugin() {
+    debugPrint('NOTIFICATIONS: Initialize notification plugin');
     _plugin.getNotificationAppLaunchDetails().then((details) {
       if (details != null && details.didNotificationLaunchApp) {
-        debugPrint('was launched with notification');
+        debugPrint('NOTIFICATIONS: App was launched with notification');
       }
+    }).catchError((error) {
+      print(
+          'Retrieving notification launch details failed: ${error.toString()}');
     });
 
-    _plugin.initialize(
+    _plugin
+        .initialize(
       const InitializationSettings(
         AndroidInitializationSettings('notification_icon'),
         IOSInitializationSettings(),
       ),
       onSelectNotification: _onSelectNotification,
-    );
+    )
+        .catchError((error) {
+      print('Initializing notification plugin failed: ${error.toString()}');
+    });
   }
 
   Future<int> scheduleNotificationForEvent(
     Event event, [
     int notificationId,
   ]) async {
-    // TODO(SF) ERROR HANDLING should never happen
-    if (!event.start.isPresent) {
-      return 0;
-    }
     final id = notificationId ?? _nextNotificationId++;
-    await _plugin.schedule(
-      id,
-      _config.festivalName,
-      '{band} plays at {time} on the {stage}!'.i18n.fill({
-        'band': event.bandName,
-        'time': 'HH:mm'.i18n.dateFormat(event.start.value),
-        'stage': event.stage,
-      }),
-      // TODO(SF) FEATURE configuration option?
-      event.start.value.subtract(const Duration(minutes: 10)),
-      NotificationDetails(
-        _androidPlatformChannelSpecifics,
-        const IOSNotificationDetails(),
-      ),
-      payload: event.id,
-    );
+    if (event.start
+        .map((startTime) => startTime.isAfter(DateTime.now()))
+        .orElse(false)) {
+      debugPrint('NOTIFICATIONS: Schedule notification for event ${event.id} '
+          'with id $id');
+      await _plugin
+          .schedule(
+        id,
+        _config.festivalName,
+        '{band} plays at {time} on the {stage}!'.i18n.fill({
+          'band': event.bandName,
+          'time': 'HH:mm'.i18n.dateFormat(event.start.value),
+          'stage': event.stage,
+        }),
+        // TODO(SF) FEATURE configuration option?
+        event.start.value.subtract(const Duration(minutes: 10)),
+        NotificationDetails(
+          _androidPlatformChannelSpecifics,
+          const IOSNotificationDetails(),
+        ),
+        payload: event.id,
+      )
+          .catchError((error) {
+        // Will be retried on next app start if still necessary
+        print('Scheduling notification failed: ${error.toString()}');
+      });
+    }
     return id;
   }
 
-  Future<void> cancelNotification(int notificationId) =>
-      _plugin.cancel(notificationId);
+  Future<void> cancelNotification(int notificationId) {
+    debugPrint('NOTIFICATIONS: Cancel notification with id $notificationId');
+    return _plugin.cancel(notificationId).catchError((error) {
+      print('Cancelling notification failed: ${error.toString()}');
+    });
+  }
+
+  // TODO(SF) TEST
+  ImmortalMap<int, Event> _calculateRequiredNotifications(
+    ImmortalList<EnhancedEvent> events,
+  ) {
+    final now = DateTime.now();
+    final scheduledEvents = <int, Event>{};
+    // TODO(SF) STYLE improve?
+    events.forEach((enhancedEvent) {
+      if (enhancedEvent.event.start
+          .map((startTime) => startTime.isAfter(now))
+          .orElse(false)) {
+        enhancedEvent.notificationId.ifPresent((id) {
+          scheduledEvents[id] = enhancedEvent.event;
+        });
+      }
+    });
+    // TODO(SF) NOTIFICATIONS handle updated events (e.g. time change)
+    // schedule.updatedEvents.forEach((event) {
+    //   mySchedule.getNotificationId(event.id).ifPresent((notificationId) {
+    //     cancelNotification(notificationId);
+    //     if (event.start
+    //         .map((startTime) => startTime.isAfter(now))
+    //         .orElse(false)) {
+    //       scheduledEvents[notificationId] = event;
+    //     }
+    //   });
+    // });
+    return ImmortalMap(scheduledEvents);
+  }
 
   Future<void> verifyScheduledEventNotifications(
-    ImmortalMap<int, Event> requiredNotifications,
+    ImmortalList<EnhancedEvent> events,
   ) async {
-    final pendingNotifications = await _plugin.pendingNotificationRequests();
+    _nextNotificationId = events.fold(
+        _nextNotificationId,
+        (previousMax, event) => event.notificationId
+            .map((id) => max(id + 1, previousMax))
+            .orElse(previousMax));
+    final requiredNotifications = _calculateRequiredNotifications(events);
+    debugPrint('NOTIFICATIONS: Verify required notifications '
+        '$requiredNotifications');
+    final pendingNotifications =
+        await _plugin.pendingNotificationRequests().catchError((error) {
+      print('Retrieving pending notifications failed: ${error.toString()}');
+      return [];
+    });
+    // TODO(SF) STYLE improve
     final scheduledNotifications = {};
     for (final notification in pendingNotifications) {
       _nextNotificationId = max(_nextNotificationId, notification.id + 1);
@@ -103,7 +165,7 @@ class Notifications {
     }
     requiredNotifications.forEach((notificationId, event) {
       if (scheduledNotifications[notificationId] == null) {
-        scheduleNotificationForEvent(event, notificationId);
+        unawaited(scheduleNotificationForEvent(event, notificationId));
       }
     });
   }

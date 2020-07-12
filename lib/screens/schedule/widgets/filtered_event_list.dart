@@ -18,7 +18,7 @@ class FilteredEventList extends HookWidget {
   final DateTime date;
   final bool scheduledOnly;
 
-  String get _scheduleFilterTag => date?.toIso8601String() ?? 'allBands';
+  String get _scheduleFilterTag => date?.toIso8601String();
 
   @override
   Widget build(BuildContext context) =>

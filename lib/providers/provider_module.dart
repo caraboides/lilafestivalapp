@@ -15,7 +15,7 @@ class ProviderModule extends BaseDimeModule {
 
   void _addScheduleProviders([DateTime date]) {
     // TODO(SF) STATE necessary? constant?
-    final tag = date?.toIso8601String() ?? 'allBands';
+    final tag = date?.toIso8601String();
     addSingle<ScheduleFilterProvider>(
       date != null
           ? ScheduleFilterProvider.forDay(date)

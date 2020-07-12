@@ -24,7 +24,7 @@ class CombinedScheduleProvider
             data: (eventList) => mySchedule.whenData(
               (mySchedule) => eventList.map((event) => EnhancedEvent(
                     event: event,
-                    isScheduled: mySchedule.isEventScheduled(event.id),
+                    notificationId: mySchedule.getNotificationId(event.id),
                     // TODO(SF) STATE better use dimeGet<MyScheduleProvider>().
                     // read(context).toggleEvent(event),
                     toggleEvent: () => myScheduleController.toggleEvent(event),

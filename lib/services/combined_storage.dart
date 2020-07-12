@@ -23,8 +23,8 @@ class CombinedStorage {
           .loadString(assetPath)
           .then((json) =>
               Optional.ofNullable(json != null ? jsonDecode(json) : null))
-          .catchError((e) {
-        print(e);
+          .catchError((error) {
+        print(error);
         return Optional<J>.empty();
       });
 

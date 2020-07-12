@@ -8,7 +8,6 @@ import '../../../models/festival_config.dart';
 import '../../../models/theme.dart';
 import '../../../providers/weather.dart';
 
-// TODO(SF) ERROR HANDLING
 class WeatherCard extends StatefulWidget {
   WeatherCard(this.date, {Key key}) : super(key: key);
 
@@ -61,17 +60,22 @@ class _WeatherCardState extends State<WeatherCard> {
         ),
       );
 
+  Widget get _fallback => _lastWeather ?? Container();
+
   @override
   Widget build(BuildContext context) => Consumer((context, read) {
         final hour = DateTime.now().hour;
-        final weatherParams = widget.date.add(Duration(hours: hour));
-        return read(_weather(weatherParams)).when(
+        final weatherTime = widget.date.add(Duration(hours: hour));
+        return read(_weather(weatherTime)).when(
           data: (result) => result.map((weather) {
             _lastWeather = _buildWeatherCard(weather);
             return _lastWeather;
-          }).orElse(_lastWeather ?? Container()),
-          loading: () => _lastWeather ?? Container(),
-          error: (e, trace) => _lastWeather ?? Container(),
+          }).orElse(_fallback),
+          loading: () => _fallback,
+          error: (e, trace) {
+            print('Error fetching weather: $e: ${trace.toString()}');
+            return _fallback;
+          },
         );
       });
 }

@@ -55,11 +55,8 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
       mySchedule
           .toggleEvent(event.id,
               onRemove: _notifications.cancelNotification,
-              generateValue: () async => event.start
-                      .map((startTime) => startTime.isAfter(DateTime.now()))
-                      .orElse(false)
-                  ? await _notifications.scheduleNotificationForEvent(event)
-                  : 0)
+              generateValue: () =>
+                  _notifications.scheduleNotificationForEvent(event))
           .then((newSchedule) {
         state = AsyncValue.data(newSchedule);
         _saveMySchedule();

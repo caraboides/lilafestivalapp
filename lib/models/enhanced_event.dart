@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
 
 import 'event.dart';
 
@@ -6,11 +7,13 @@ import 'event.dart';
 class EnhancedEvent {
   EnhancedEvent({
     this.event,
-    this.isScheduled,
     this.toggleEvent,
+    this.notificationId,
   });
 
   final Event event;
-  final bool isScheduled;
+  final Optional<int> notificationId;
   final VoidCallback toggleEvent;
+
+  bool get isScheduled => notificationId.isPresent;
 }

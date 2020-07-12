@@ -9,7 +9,6 @@ import 'package:optional/optional.dart';
 import '../services/open_weather.dart';
 import '../utils/date.dart';
 
-// TODO(SF) ERROR HANDLING
 class WeatherProvider
     extends FutureProviderFamily<Optional<Weather>, DateTime> {
   WeatherProvider()
