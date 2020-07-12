@@ -7,6 +7,7 @@ import 'package:optional/optional.dart';
 
 import '../services/combined_storage.dart';
 
+// TODO(SF) ERROR HANDLING
 // TODO(SF) STATE Autodispose stream provider?
 class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
   CombinedStorageStreamProvider({

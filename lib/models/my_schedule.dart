@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
 
+// TODO(SF) STATE improve
 class MySchedule {
   const MySchedule._(this._eventsWithNotification);
 
   factory MySchedule.empty() => MySchedule._(ImmortalMap<String, int>.empty());
 
+  // TODO(SF) ERROR HANDLING handle errors when casting, ids may not be empty
   factory MySchedule.fromJson(Map<String, dynamic> json) =>
       MySchedule._(ImmortalMap(json.cast<String, int>()));
 

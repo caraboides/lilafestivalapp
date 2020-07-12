@@ -16,6 +16,7 @@ import '../../widgets/event_toggle/event_toggle.dart';
 import '../../widgets/scaffold.dart';
 import 'band_detail_view.i18n.dart';
 
+// TODO(SF) ERROR HANDLING
 // TODO(SF) STYLE improve
 class BandDetailView extends StatelessWidget {
   const BandDetailView(this.enhancedEvent);

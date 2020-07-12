@@ -11,6 +11,7 @@ class Band {
     this.textEn,
   });
 
+  // TODO(SF) ERROR HANDLING band name may not be empty
   factory Band.fromJson(String bandName, Map<String, dynamic> json) => Band(
         name: bandName,
         image: json['img'],

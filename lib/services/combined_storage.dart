@@ -8,6 +8,7 @@ import 'package:optional/optional.dart';
 import 'app_storage.dart';
 import 'festival_hub.dart';
 
+// TODO(SF) ERROR HANDLING
 class CombinedStorage {
   const CombinedStorage();
 
@@ -62,6 +63,7 @@ class CombinedStorage {
     final streamController = StreamController<T>();
     remoteUrl.ifPresent((url) => _loadRemoteJsonData(url).then(
           (result) => result.ifPresent((json) {
+            // TODO(SF) ERROR HANDLING
             final data = fromJson(json);
             // TODO(SF) STATE what if already closed?
             streamController.add(data);
@@ -77,6 +79,7 @@ class CombinedStorage {
         appStorageKey: key,
         assetPath: assetPath,
       ).then((value) => value.ifPresent((json) {
+            // TODO(SF) ERROR HANDLING
             final data = fromJson(json);
             if (!streamController.isClosed) {
               streamController.add(data);

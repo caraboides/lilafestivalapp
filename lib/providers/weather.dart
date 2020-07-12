@@ -9,12 +9,7 @@ import 'package:optional/optional.dart';
 import '../services/open_weather.dart';
 import '../utils/date.dart';
 
-class WeatherParameters {
-  const WeatherParameters(this.date, this.hour);
-  final DateTime date;
-  final int hour;
-}
-
+// TODO(SF) ERROR HANDLING
 class WeatherProvider
     extends FutureProviderFamily<Optional<Weather>, DateTime> {
   WeatherProvider()

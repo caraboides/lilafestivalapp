@@ -22,5 +22,10 @@ class StaticHtmlView extends StatelessWidget {
           launch(request.url);
           return NavigationDecision.prevent;
         },
+        onWebResourceError: (error) {
+          print('Web resource failed to load: type ${error.errorType} code '
+              '${error.errorCode} on url ${error.failingUrl}: '
+              '${error.description}');
+        },
       );
 }

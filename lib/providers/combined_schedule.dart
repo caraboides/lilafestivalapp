@@ -6,6 +6,7 @@ import '../models/enhanced_event.dart';
 import 'my_schedule.dart';
 import 'schedule.dart';
 
+// TODO(SF) ERROR HANDLING
 // TODO(SF) STATE would a provider family be better?
 // for event scheduled & maybe is playing state
 // (day2 would get updated too, if only day1 has changed)

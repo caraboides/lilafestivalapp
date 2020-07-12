@@ -11,6 +11,7 @@ import '../../../widgets/first_build_mixin.dart';
 import '../../band_detail_view/band_detail_view.dart';
 import 'event_list_item.dart';
 
+// TODO(SF) ERROR HANDLING
 // TODO(SF) STYLE possible to use hook widget?
 class EventListView extends StatefulWidget {
   const EventListView({
@@ -28,15 +29,16 @@ class EventListView extends StatefulWidget {
   State<StatefulWidget> createState() => EventListViewState();
 }
 
-class EventListViewState extends State<EventListView> with FirstBuildMixin {
+class EventListViewState extends State<EventListView>
+    with FirstBuildCallbackMixin {
   final _scrollController = ScrollController();
 
   int get _currentOrNextPlayingBandIndex {
     final now = DateTime.now();
     return widget.date != null && isSameFestivalDay(now, widget.date)
         ? widget.events.indexWhere((enhancedEvent) =>
-            now.isBefore(enhancedEvent.event.start) ||
-            now.isBefore(enhancedEvent.event.end))
+            enhancedEvent.event.start.map(now.isBefore).orElse(false) ||
+            enhancedEvent.event.end.map(now.isBefore).orElse(false))
         : -1;
   }
 

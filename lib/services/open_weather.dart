@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import '../models/festival_config.dart';
 import '../models/global_config.dart';
 
+// TODO(SF) ERROR HANDLING
 class OpenWeather {
   final _cache =
       SimpleCache<int, ImmortalList<Weather>>(storage: SimpleStorage(size: 1));

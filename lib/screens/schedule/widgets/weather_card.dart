@@ -8,6 +8,7 @@ import '../../../models/festival_config.dart';
 import '../../../models/theme.dart';
 import '../../../providers/weather.dart';
 
+// TODO(SF) ERROR HANDLING
 class WeatherCard extends StatefulWidget {
   WeatherCard(this.date, {Key key}) : super(key: key);
 

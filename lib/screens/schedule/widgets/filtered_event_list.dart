@@ -7,6 +7,7 @@ import '../../../providers/combined_schedule.dart';
 import 'empty_schedule.dart';
 import 'event_list_view.dart';
 
+// TODO(SF) ERROR HANDLING
 class FilteredEventList extends HookWidget {
   const FilteredEventList({
     Key key,

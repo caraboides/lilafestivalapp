@@ -1,4 +1,6 @@
-class Event {
+import 'package:optional/optional.dart';
+
+class Event implements Comparable {
   Event({
     this.bandName,
     this.id,
@@ -7,20 +9,34 @@ class Event {
     this.end,
   });
 
+  // TODO(SF) ERROR HANDLING id may not be empty
   factory Event.fromJson(String id, Map<String, dynamic> json) => Event(
-        bandName: json['band'],
+        bandName: json['band'] ?? '',
         id: id,
-        stage: json['stage'],
-        start: DateTime.parse(json['start']),
-        end: DateTime.parse(json['end']),
+        stage: json['stage'] ?? '',
+        start: Optional.ofNullable(DateTime.tryParse(json['start'])),
+        end: Optional.ofNullable(DateTime.tryParse(json['end'])),
       );
 
   final String bandName;
   final String id;
   final String stage;
-  final DateTime start;
-  final DateTime end;
+  final Optional<DateTime> start;
+  final Optional<DateTime> end;
 
   bool isPlaying(DateTime currentTime) =>
-      !currentTime.isBefore(start) && !currentTime.isAfter(end);
+      start
+          .map((startTime) => !currentTime.isBefore(startTime))
+          .orElse(false) &&
+      end.map((endTime) => !currentTime.isAfter(endTime)).orElse(false);
+
+  // TODO(SF) TEST
+  @override
+  int compareTo(dynamic other) => other is Event
+      ? other.start
+          .map((otherStartTime) => start
+              .map((startTime) => startTime.compareTo(otherStartTime))
+              .orElse(1))
+          .orElse(-1)
+      : -1;
 }

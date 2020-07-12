@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:optional/optional_internal.dart';
 import 'package:path_provider/path_provider.dart';
 
+// TODO(SF) ERROR HANDLING
 class AppStorage {
   String directory;
 

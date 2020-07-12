@@ -13,6 +13,7 @@ class BandsProvider
           remoteUrl: Optional.of('/bands?festival=$festivalId'),
           appStorageKey: Optional.of('bands.json'),
           assetPath: Optional.of('assets/bands.json'),
+          // TODO(SF) ERROR HANDLING
           fromJson: (jsonMap) => ImmortalMap<String, dynamic>(jsonMap)
               .mapValues((bandName, json) => Band.fromJson(bandName, json)),
         );

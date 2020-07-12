@@ -9,6 +9,7 @@ import '../models/my_schedule.dart';
 import '../services/app_storage.dart';
 import '../services/notifications/notifications.dart';
 
+// TODO(SF) ERROR HANDLING
 class MyScheduleProvider extends StateNotifierProvider<MyScheduleController> {
   MyScheduleProvider() : super((ref) => MyScheduleController.create());
 }
@@ -30,6 +31,7 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   void _loadMySchedule() => _appStorage
           .loadJson(_myScheduleFileName)
           .then((result) => result
+              // TODO(SF) ERROR HANDLING
               .map((json) => MySchedule.fromJson(json))
               .orElse(MySchedule.empty()))
           .then((value) {
@@ -53,7 +55,9 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
       mySchedule
           .toggleEvent(event.id,
               onRemove: _notifications.cancelNotification,
-              generateValue: () async => event.start.isAfter(DateTime.now())
+              generateValue: () async => event.start
+                      .map((startTime) => startTime.isAfter(DateTime.now()))
+                      .orElse(false)
                   ? await _notifications.scheduleNotificationForEvent(event)
                   : 0)
           .then((newSchedule) {

@@ -28,7 +28,9 @@ class _InitializationWidgetState extends State<InitializationWidget> {
     final scheduledEvents = <int, Event>{};
     // TODO(SF) STYLE improve?
     events.forEach((event) {
-      if (event.start.isAfter(now)) {
+      if (event.start
+          .map((startTime) => startTime.isAfter(now))
+          .orElse(false)) {
         mySchedule.getNotificationId(event.id).ifPresent((notificationId) {
           scheduledEvents[notificationId] = event;
         });
@@ -38,7 +40,9 @@ class _InitializationWidgetState extends State<InitializationWidget> {
     // schedule.updatedEvents.forEach((event) {
     //   mySchedule.getNotificationId(event.id).ifPresent((notificationId) {
     //     cancelNotification(notificationId);
-    //     if (event.start.isAfter(now)) {
+    //     if (event.start
+    //         .map((startTime) => startTime.isAfter(now))
+    //         .orElse(false)) {
     //       scheduledEvents[notificationId] = event;
     //     }
     //   });

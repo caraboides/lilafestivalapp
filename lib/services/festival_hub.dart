@@ -6,6 +6,7 @@ import 'package:optional/optional.dart';
 
 import '../models/global_config.dart';
 
+// TODO(SF) ERROR HANDLING
 class FestivalHub {
   const FestivalHub();
 

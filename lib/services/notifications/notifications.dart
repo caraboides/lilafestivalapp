@@ -12,6 +12,7 @@ import '../../models/theme.dart';
 import '../../utils/i18n.dart';
 import 'notifications.i18n.dart';
 
+// TODO(SF) ERROR HANDLING
 class Notifications {
   int _nextNotificationId = 0;
 
@@ -60,17 +61,21 @@ class Notifications {
     Event event, [
     int notificationId,
   ]) async {
+    // TODO(SF) ERROR HANDLING should never happen
+    if (!event.start.isPresent) {
+      return 0;
+    }
     final id = notificationId ?? _nextNotificationId++;
     await _plugin.schedule(
       id,
       _config.festivalName,
       '{band} plays at {time} on the {stage}!'.i18n.fill({
         'band': event.bandName,
-        'time': 'HH:mm'.i18n.dateFormat(event.start),
+        'time': 'HH:mm'.i18n.dateFormat(event.start.value),
         'stage': event.stage,
       }),
       // TODO(SF) FEATURE configuration option?
-      event.start.subtract(const Duration(minutes: 10)),
+      event.start.value.subtract(const Duration(minutes: 10)),
       NotificationDetails(
         _androidPlatformChannelSpecifics,
         const IOSNotificationDetails(),
