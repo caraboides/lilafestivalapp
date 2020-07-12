@@ -47,6 +47,7 @@ class _InitializationWidgetState extends State<InitializationWidget>
           return true;
         },
         loading: () => false,
+        // TODO(SF) ERROR HANDLING
         error: (_, __) => false,
       );
 

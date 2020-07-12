@@ -54,7 +54,8 @@ class OpenWeather {
     _log.debug('Loading forecast for hour $hour');
     return _loadForecast().then((weathers) => weathers.map((list) {
           _log.debug(
-              'Loading weather for $hour was successful, writing to cache');
+            'Loading weather for hour $hour was successful, writing to cache',
+          );
           _cache.set(hour, list);
           return list;
         }).orElse(ImmortalList<Weather>()));

@@ -7,7 +7,6 @@ import '../models/event.dart';
 import '../utils/combined_storage_stream_provider.dart';
 import '../utils/date.dart';
 
-// TODO(SF) ERROR HANDLING
 class ScheduleProvider
     extends CombinedStorageStreamProvider<ImmortalList<Event>> {
   ScheduleProvider(BuildContext context, String festivalId)
@@ -16,7 +15,6 @@ class ScheduleProvider
           remoteUrl: '/schedule?festival=$festivalId',
           appStorageKey: 'schedule.json',
           assetPath: 'assets/schedule.json',
-          // TODO(SF) ERROR HANDLING
           fromJson: (jsonMap) => ImmortalMap<String, dynamic>(jsonMap)
               .mapEntries<Event>((id, json) => Event.fromJson(id, json)),
         );

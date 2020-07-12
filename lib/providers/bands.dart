@@ -12,7 +12,6 @@ class BandsProvider
           remoteUrl: '/bands?festival=$festivalId',
           appStorageKey: 'bands.json',
           assetPath: 'assets/bands.json',
-          // TODO(SF) ERROR HANDLING
           fromJson: (jsonMap) => ImmortalMap<String, dynamic>(jsonMap)
               .mapValues((bandName, json) => Band.fromJson(bandName, json)),
         );

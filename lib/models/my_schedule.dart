@@ -8,7 +8,6 @@ class MySchedule {
 
   factory MySchedule.empty() => MySchedule._(ImmortalMap<String, int>.empty());
 
-  // TODO(SF) ERROR HANDLING handle errors when casting, ids may not be empty
   factory MySchedule.fromJson(Map<String, dynamic> json) =>
       MySchedule._(ImmortalMap(json.cast<String, int>()));
 

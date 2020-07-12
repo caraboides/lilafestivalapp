@@ -27,6 +27,8 @@ class Logger {
 
   void debug(String message) => _logFunction(LogLevel.debug)(message);
 
-  void error(String message, dynamic error) =>
-      _logFunction(LogLevel.error)('$message: ${error?.toString()}');
+  void error(String message, dynamic error, [StackTrace trace]) =>
+      _logFunction(LogLevel.error)(
+        '$message: ${error?.toString()}${trace?.toString()}',
+      );
 }

@@ -9,7 +9,6 @@ class Event implements Comparable {
     this.end,
   });
 
-  // TODO(SF) ERROR HANDLING id may not be empty
   factory Event.fromJson(String id, Map<String, dynamic> json) => Event(
         bandName: json['band'] ?? '',
         id: id,

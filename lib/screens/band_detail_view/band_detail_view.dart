@@ -195,6 +195,7 @@ class BandDetailView extends StatelessWidget {
           // TODO(SF) THEME
           loading: () => const Center(child: Text('Loading!')),
           error: (e, trace) => Center(
+            // TODO(SF) ERROR HANDLING
             child: Text('Error! $e ${trace.toString()}'),
           ),
         );

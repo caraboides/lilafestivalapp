@@ -80,7 +80,6 @@ class CombinedStorage {
     _festivalHub.loadJsonData<J>(remoteUrl).then(
           (result) => result.ifPresent((json) {
             try {
-              // TODO(SF) ERROR HANDLING
               final data = fromJson(json);
               _log.debug('Loading remote data from $remoteUrl was successful, '
                   'closing stream');
