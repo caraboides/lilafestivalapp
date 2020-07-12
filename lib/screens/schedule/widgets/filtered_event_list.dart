@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../providers/combined_schedule.dart';
+import '../../../utils/logging.dart';
 import 'empty_schedule.dart';
 import 'event_list_view.dart';
 
@@ -18,6 +19,7 @@ class FilteredEventList extends HookWidget {
   final bool scheduledOnly;
 
   String get _scheduleFilterTag => date?.toIso8601String();
+  Logger get _log => const Logger('FilteredEventList');
 
   @override
   Widget build(BuildContext context) =>
@@ -25,11 +27,17 @@ class FilteredEventList extends HookWidget {
           .when(
         data: (events) {
           // TODO(SF) STATE use computed as well?
+          // TODO(SF) ERROR HANDLING list should not be empty > should this be
+          // handled & logged sooner?
           final filteredEvents = scheduledOnly
               ? events.filter((event) => event.isScheduled)
               : events;
-          if (scheduledOnly && filteredEvents.isEmpty) {
-            return EmptySchedule();
+          if (filteredEvents.isEmpty) {
+            return scheduledOnly
+                ? EmptySchedule()
+                // TODO(SF) THEME
+                : const Center(
+                    child: Text('Error! Event list should not be empty!'));
           }
           return EventListView(
             events: filteredEvents,
@@ -38,9 +46,15 @@ class FilteredEventList extends HookWidget {
         },
         // TODO(SF) THEME
         loading: () => const Center(child: Text('Loading!')),
-        // TODO(SF) ERROR HANDLING
-        error: (e, trace) => Center(
-          child: Text('Error! $e ${trace.toString()}'),
-        ),
+        error: (error, trace) {
+          _log.error(
+              'Error retrieving combined schedule for '
+              '${_scheduleFilterTag ?? "allBands"}',
+              error,
+              trace);
+          return Center(
+            child: Text('Error! $error ${trace.toString()}'),
+          );
+        },
       );
 }

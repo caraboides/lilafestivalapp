@@ -36,7 +36,6 @@ class Notifications {
 
   Future _onSelectNotification(String payload) async {
     if (payload != null) {
-      // TODO(SF) ERROR HANDLING add more debugprints everywhere
       // TODO(SF) FEATURE handle this somehow?
       _log.debug('Notification selected with payload: $payload');
     }

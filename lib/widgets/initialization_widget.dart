@@ -9,6 +9,7 @@ import '../models/theme.dart';
 import '../providers/combined_schedule.dart';
 import '../providers/provider_module.dart';
 import '../services/notifications/notifications.dart';
+import '../utils/logging.dart';
 import 'one_time_execution_mixin.dart';
 
 class InitializationWidget extends StatefulHookWidget {
@@ -25,6 +26,7 @@ class _InitializationWidgetState extends State<InitializationWidget>
   bool initializedNotifications = false;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
+  Logger get _log => const Logger('InitializationWidget');
 
   void _precacheImages(BuildContext context) {
     if (_theme.logoMenu != null) {
@@ -41,19 +43,26 @@ class _InitializationWidgetState extends State<InitializationWidget>
   ) =>
       enhancedEvents.when(
         data: (events) {
-          if (events.isNotEmpty) {
-            dimeGet<Notifications>().verifyScheduledEventNotifications(events);
-          }
+          _log.debug('Verify notifications for scheduled events');
+          dimeGet<Notifications>().verifyScheduledEventNotifications(events);
           return true;
         },
         loading: () => false,
-        // TODO(SF) ERROR HANDLING
-        error: (_, __) => false,
+        error: (error, trace) {
+          _log.error(
+              'Error retrieving combined schedule, notification verification '
+              'failed',
+              error,
+              trace);
+          // TODO(SF) FEATURE recovery?
+          return true;
+        },
       );
 
   @override
   Widget build(BuildContext context) {
     executeOnce(() {
+      _log.debug('Peform one-time initialization');
       _precacheImages(context);
       dimeInstall(ProviderModule(context));
       dimeGet<Notifications>().initializeNotificationPlugin();

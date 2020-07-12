@@ -38,23 +38,23 @@ class CombinedScheduleProvider
                 );
               },
               loading: () => const AsyncValue.loading(),
-              error: (err, stack) {
+              error: (error, stack) {
                 _log.error(
                     'Error retrieving my schedule for ${tag ?? "all bands"}, '
                     'computing failed',
-                    err,
+                    error,
                     stack);
-                return AsyncValue.error(err, stack);
+                return AsyncValue.error(error, stack);
               },
             ),
             loading: () => const AsyncValue.loading(),
-            error: (err, stack) {
+            error: (error, stack) {
               _log.error(
                   'Error retrieving events for ${tag ?? "all bands"}, '
                   'computing failed',
-                  err,
+                  error,
                   stack);
-              return AsyncValue.error(err, stack);
+              return AsyncValue.error(error, stack);
             },
           );
         });

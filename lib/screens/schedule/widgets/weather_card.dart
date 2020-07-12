@@ -7,8 +7,8 @@ import 'package:weather/weather_library.dart';
 import '../../../models/festival_config.dart';
 import '../../../models/theme.dart';
 import '../../../providers/weather.dart';
+import '../../../utils/logging.dart';
 
-// TODO(SF) ERROR HANDLING
 class WeatherCard extends StatefulWidget {
   WeatherCard(this.date, {Key key}) : super(key: key);
 
@@ -24,6 +24,7 @@ class _WeatherCardState extends State<WeatherCard> {
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
   WeatherProvider get _weather => dimeGet<WeatherProvider>();
+  Logger get _log => const Logger('WeatherCard');
 
   Widget _buildWeatherWidget(Weather weather) => InkWell(
         onTap: () =>
@@ -73,9 +74,11 @@ class _WeatherCardState extends State<WeatherCard> {
             return _lastWeather;
           }).orElse(_fallback),
           loading: () => _fallback,
-          error: (e, trace) {
-            // TODO(SF) ERROR HANDLING
-            print('Error fetching weather: $e: ${trace.toString()}');
+          error: (error, trace) {
+            _log.error(
+                'Error retrieving weather for ${weatherTime.toIso8601String()}',
+                error,
+                trace);
             return _fallback;
           },
         );

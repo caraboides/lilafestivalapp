@@ -10,13 +10,13 @@ import '../../models/enhanced_event.dart';
 import '../../models/event.dart';
 import '../../models/theme.dart';
 import '../../providers/bands.dart';
+import '../../utils/logging.dart';
 import '../../widgets/event_date/event_date.dart';
 import '../../widgets/event_stage.dart';
 import '../../widgets/event_toggle/event_toggle.dart';
 import '../../widgets/scaffold.dart';
 import 'band_detail_view.i18n.dart';
 
-// TODO(SF) ERROR HANDLING
 // TODO(SF) STYLE improve
 class BandDetailView extends StatelessWidget {
   const BandDetailView(this.enhancedEvent);
@@ -32,6 +32,7 @@ class BandDetailView extends StatelessWidget {
   Event get _event => enhancedEvent.event;
 
   FestivalTheme get _festivalTheme => dimeGet<FestivalTheme>();
+  Logger get _log => const Logger('BandDetailView');
 
   String _buildFlag(String country) =>
       String.fromCharCodes(country.runes.map((code) => code + 127397));
@@ -186,6 +187,7 @@ class BandDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Consumer((context, read) {
         // TODO(SF) STATE use family provider and only read single band
+        // TODO(SF) STATE possibly optional? handle errors!
         // TODO(SF) STATE listen to schedule here as well to get update on
         // schedule change
         // TODO(SF) FEATURE highlight event when currently playing?
@@ -194,10 +196,13 @@ class BandDetailView extends StatelessWidget {
           data: (bands) => _buildBandView(context, bands.get(_event.bandName)),
           // TODO(SF) THEME
           loading: () => const Center(child: Text('Loading!')),
-          error: (e, trace) => Center(
-            // TODO(SF) ERROR HANDLING
-            child: Text('Error! $e ${trace.toString()}'),
-          ),
+          error: (error, trace) {
+            _log.error('Error retrieving data for band ${_event.bandName}',
+                error, trace);
+            return Center(
+              child: Text('Error! $error ${trace.toString()}'),
+            );
+          },
         );
       });
 }
