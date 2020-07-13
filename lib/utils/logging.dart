@@ -1,34 +1,30 @@
 import 'package:flutter/foundation.dart';
 
-enum LogLevel {
-  debug,
-  error,
-}
+typedef LogFunction = void Function(String);
+
+// Hide debug prints in release mode
+final LogFunction _debugPrint = kReleaseMode ? (_) {} : debugPrint;
 
 class Logger {
   const Logger(this.module);
 
   final String module;
 
-  // TODO(SF) STYLE improve
-  void Function(String) _logFunction(LogLevel level) {
-    switch (level) {
-      case LogLevel.debug:
-        // TODO(SF) STYLE hide in production mode and during tests
-        return (message) => debugPrint('[DEBUG] $_logModule$message');
-      case LogLevel.error:
-        return (message) => print('[ERROR] $_logModule$message');
-      default:
-        return (message) => print('[INFO] $_logModule$message');
-    }
-  }
-
   String get _logModule => module != null ? '$module: ' : '';
 
-  void debug(String message) => _logFunction(LogLevel.debug)(message);
+  LogFunction _logFunction([
+    String logLevel = 'INFO',
+    LogFunction logFunction = print,
+  ]) =>
+      (message) => logFunction('[$logLevel] $_logModule$message');
+
+  LogFunction get _logDebug => _logFunction('DEBUG', _debugPrint);
+
+  LogFunction get _logError => _logFunction('ERROR');
+
+  void debug(String message) => _logDebug(message);
 
   void error(String message, dynamic error, [StackTrace trace]) =>
-      _logFunction(LogLevel.error)(
-        '$message: ${error?.toString()}${trace?.toString()}',
-      );
+      _logError('$message: ${error?.toString()}'
+          '${trace != null ? " ${trace.toString()}" : ""}');
 }
