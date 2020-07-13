@@ -66,6 +66,7 @@ class _WeatherCardState extends State<WeatherCard> {
 
   @override
   Widget build(BuildContext context) => Consumer((context, read) {
+        // Update weather every hour
         final hour = DateTime.now().hour;
         final weatherTime = widget.date.add(Duration(hours: hour));
         return read(_weather(weatherTime)).when(

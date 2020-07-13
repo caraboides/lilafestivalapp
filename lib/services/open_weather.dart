@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:dcache/dcache.dart';
 import 'package:dime/dime.dart';
@@ -10,6 +11,7 @@ import 'package:optional/optional.dart';
 
 import '../models/festival_config.dart';
 import '../models/global_config.dart';
+import '../utils/date.dart';
 import '../utils/logging.dart';
 
 class OpenWeather {
@@ -45,7 +47,8 @@ class OpenWeather {
     return const Optional<ImmortalList<Weather>>.empty();
   }
 
-  Future<ImmortalList<Weather>> getForecast(int hour) async {
+  Future<ImmortalList<Weather>> _getForecast(int hour) async {
+    // TODO(SF) STYLE knowledge about cache key in two locations
     final currentWeathers = _cache.get(hour);
     if (currentWeathers != null) {
       _log.debug('Reading forecast for hour $hour from cache');
@@ -59,5 +62,20 @@ class OpenWeather {
           _cache.set(hour, list);
           return list;
         }).orElse(ImmortalList<Weather>()));
+  }
+
+  Future<Optional<Weather>> getWeatherForDate(DateTime date) async {
+    _log.debug('Loading weather for $date');
+    final forecast = await _getForecast(date.hour);
+    _log.debug('Selecting weather for $date');
+    final now = DateTime.now();
+    // TODO(SF) WEATHER or should this only check for actual day?
+    final isToday = isSameFestivalDay(now, date);
+    final minHour = isToday ? max(14, now.hour) : 14;
+    return forecast.lastWhere((current) =>
+        // TODO(SF) WEATHER as above - or same actual day?
+        isSameFestivalDay(current.date, date) &&
+        current.date.hour <= minHour &&
+        current.date.hour >= 14);
   }
 }
