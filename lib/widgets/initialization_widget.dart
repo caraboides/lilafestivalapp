@@ -4,11 +4,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
 
-import '../models/enhanced_event.dart';
+import '../models/event.dart';
+import '../models/my_schedule.dart';
 import '../models/theme.dart';
-import '../providers/combined_schedule.dart';
+import '../providers/my_schedule.dart';
 import '../providers/provider_module.dart';
+import '../providers/schedule.dart';
 import '../services/notifications/notifications.dart';
+import '../utils/combined_async_value.dart';
 import '../utils/logging.dart';
 import 'one_time_execution_mixin.dart';
 
@@ -39,21 +42,20 @@ class _InitializationWidgetState extends State<InitializationWidget>
   }
 
   bool _verifyScheduledNotifications(
-    AsyncValue<ImmortalList<EnhancedEvent>> enhancedEvents,
+    AsyncValue<MySchedule> myScheduleProvider,
+    AsyncValue<ImmortalList<Event>> eventProvider,
   ) =>
-      enhancedEvents.when(
-        data: (events) {
-          _log.debug('Verify notifications for scheduled events');
-          dimeGet<Notifications>().verifyScheduledEventNotifications(events);
-          return true;
-        },
+      combineAsyncValues(eventProvider, myScheduleProvider,
+          (events, mySchedule) {
+        _log.debug('Verify notifications for liked events');
+        dimeGet<Notifications>()
+            .verifyScheduledEventNotifications(mySchedule, events);
+      }).when(
+        data: (_) => true,
         loading: () => false,
         error: (error, trace) {
-          _log.error(
-              'Error retrieving combined schedule, notification verification '
-              'failed',
-              error,
-              trace);
+          _log.error('Error retrieving data, notification verification failed',
+              error, trace);
           // TODO(SF) FEATURE recovery?
           return true;
         },
@@ -67,8 +69,11 @@ class _InitializationWidgetState extends State<InitializationWidget>
       dimeInstall(ProviderModule(context));
       dimeGet<Notifications>().initializeNotificationPlugin();
     });
-    final enhancedEvents = useProvider(dimeGet<CombinedScheduleProvider>());
-    executeUntilSuccessful(() => _verifyScheduledNotifications(enhancedEvents));
+    // TODO(SF) STATE improve
+    final mySchedule = useProvider(dimeGet<MyScheduleProvider>().state);
+    final events = useProvider(dimeGet<ScheduleProvider>());
+    executeUntilSuccessful(
+        () => _verifyScheduledNotifications(mySchedule, events));
     return widget.child;
   }
 }

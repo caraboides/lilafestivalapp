@@ -5,9 +5,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:immortal/immortal.dart';
 import 'package:pedantic/pedantic.dart';
 
-import '../../models/enhanced_event.dart';
 import '../../models/event.dart';
 import '../../models/festival_config.dart';
+import '../../models/my_schedule.dart';
 import '../../models/theme.dart';
 import '../../utils/i18n.dart';
 import '../../utils/logging.dart';
@@ -28,7 +28,7 @@ class Notifications {
       AndroidNotificationDetails(
         'event_notification', // TODO(SF) CONFIG constant
         'Gig Reminder'.i18n,
-        'Notifications to remind of scheduled gigs'.i18n,
+        'Notifications to remind of liked gigs'.i18n,
         importance: Importance.Max,
         priority: Priority.High,
         color: _theme.notificationColor,
@@ -107,17 +107,18 @@ class Notifications {
 
   // TODO(SF) TEST
   ImmortalMap<int, Event> _calculateRequiredNotifications(
-    ImmortalList<EnhancedEvent> events,
+    MySchedule mySchedule,
+    ImmortalList<Event> events,
   ) {
     final now = DateTime.now();
     final scheduledEvents = <int, Event>{};
     // TODO(SF) STYLE improve?
-    events.forEach((enhancedEvent) {
-      if (enhancedEvent.event.start
+    events.forEach((event) {
+      if (event.start
           .map((startTime) => startTime.isAfter(now))
           .orElse(false)) {
-        enhancedEvent.notificationId.ifPresent((id) {
-          scheduledEvents[id] = enhancedEvent.event;
+        mySchedule.getNotificationId(event.id).ifPresent((id) {
+          scheduledEvents[id] = event;
         });
       }
     });
@@ -136,14 +137,13 @@ class Notifications {
   }
 
   Future<void> verifyScheduledEventNotifications(
-    ImmortalList<EnhancedEvent> events,
+    MySchedule mySchedule,
+    ImmortalList<Event> events,
   ) async {
-    _nextNotificationId = events.fold(
-        _nextNotificationId,
-        (previousMax, event) => event.notificationId
-            .map((id) => max(id + 1, previousMax))
-            .orElse(previousMax));
-    final requiredNotifications = _calculateRequiredNotifications(events);
+    _nextNotificationId =
+        max(_nextNotificationId, mySchedule.getMaxNotificationId() + 1);
+    final requiredNotifications =
+        _calculateRequiredNotifications(mySchedule, events);
     _log.debug('Verify required notifications $requiredNotifications');
     final pendingNotifications =
         await _plugin.pendingNotificationRequests().catchError((error) {

@@ -9,21 +9,22 @@ import '../../utils/i18n.dart';
 import '../../widgets/periodic_rebuild_mixin.dart';
 import '../../widgets/scaffold.dart';
 import 'schedule.i18n.dart';
-import 'widgets/filtered_event_list.dart';
+import 'widgets/band_schedule_list.dart';
+import 'widgets/daily_schedule_list.dart';
 import 'widgets/weather_card.dart';
 
 // TODO(SF) STYLE hook widget possible?
 class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({this.scheduledOnly = false});
+  const ScheduleScreen({this.likedOnly = false});
 
   static Widget builder(BuildContext context) => const ScheduleScreen();
   static Widget myScheduleBuilder(BuildContext context) =>
-      const ScheduleScreen(scheduledOnly: true);
+      const ScheduleScreen(likedOnly: true);
 
   static String title() => 'Schedule'.i18n;
   static String myScheduleTitle() => 'My Schedule'.i18n;
 
-  final bool scheduledOnly;
+  final bool likedOnly;
 
   @override
   State<StatefulWidget> createState() => _ScheduleScreenState();
@@ -31,17 +32,17 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen>
     with WidgetsBindingObserver, PeriodicRebuildMixin<ScheduleScreen> {
-  bool scheduledOnly = false;
+  bool likedOnly = false;
 
   @override
   void initState() {
     super.initState();
-    scheduledOnly = widget.scheduledOnly;
+    likedOnly = widget.likedOnly;
   }
 
-  void _onScheduledFilterChange(bool newValue) {
+  void _onLikedFilterChange(bool newValue) {
     setState(() {
-      scheduledOnly = newValue;
+      likedOnly = newValue;
     });
   }
 
@@ -90,21 +91,24 @@ class _ScheduleScreenState extends State<ScheduleScreen>
               )
             : Text(_config.festivalName),
         actions: <Widget>[
-          Icon(scheduledOnly ? Icons.star : Icons.star_border),
+          Icon(likedOnly ? Icons.star : Icons.star_border),
           Switch(
-            value: scheduledOnly,
-            onChanged: _onScheduledFilterChange,
+            // TODO(SF) THEME add tooltip?
+            value: likedOnly,
+            onChanged: _onLikedFilterChange,
           ),
         ],
       );
 
-  Widget _buildEventList(BuildContext context, {DateTime date}) => Column(
+  Widget _buildBandScheduleList() => BandScheduleList(likedOnly: likedOnly);
+
+  Widget _buildDailyScheduleList(DateTime date) => Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          if (date != null) WeatherCard(date),
-          FilteredEventList(
+          WeatherCard(date),
+          DailyScheduleList(
             date: date,
-            scheduledOnly: scheduledOnly,
+            likedOnly: likedOnly,
           ),
         ],
       );
@@ -117,10 +121,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
           appBar: _buildAppBar(),
           body: TabBarView(
             children: [
-              _buildEventList(context),
-              ..._days
-                  .map((date) => _buildEventList(context, date: date))
-                  .toMutableList(),
+              _buildBandScheduleList(),
+              ..._days.map(_buildDailyScheduleList).toMutableList(),
             ],
           ),
         ),

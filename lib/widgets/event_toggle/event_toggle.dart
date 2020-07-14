@@ -1,21 +1,28 @@
+import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../models/event.dart';
+import '../../providers/my_schedule.dart';
 import 'event_toggle.i18n.dart';
 
-class EventToggle extends StatelessWidget {
-  const EventToggle({
-    this.isActive,
-    this.onToggle,
-  });
+// TODO(SF) STATE possible to only pass event id?
+class EventToggle extends HookWidget {
+  const EventToggle(this.event);
 
-  final bool isActive;
-  final VoidCallback onToggle;
+  final Event event;
 
   @override
-  Widget build(BuildContext context) => IconButton(
-        icon: Icon(isActive ? Icons.star : Icons.star_border),
-        tooltip: (isActive ? 'Remove gig from schedule' : 'Add gig to schedule')
-            .i18n,
-        onPressed: onToggle,
-      );
+  Widget build(BuildContext context) {
+    final isLiked =
+        useProvider(dimeGet<LikedEventProvider>()(event.id)).isPresent;
+    return IconButton(
+      icon: Icon(isLiked ? Icons.star : Icons.star_border),
+      tooltip:
+          (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,
+      onPressed: () =>
+          dimeGet<MyScheduleProvider>().read(context).toggleEvent(event),
+    );
+  }
 }

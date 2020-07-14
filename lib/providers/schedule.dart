@@ -20,22 +20,24 @@ class ScheduleProvider
         );
 }
 
-class ScheduleFilterProvider extends Computed<AsyncValue<ImmortalList<Event>>> {
-  ScheduleFilterProvider._(this.filter)
-      : super((read) => read(dimeGet<ScheduleProvider>()).whenData(filter));
+class SortedScheduleProvider extends Computed<AsyncValue<ImmortalList<Event>>> {
+  SortedScheduleProvider()
+      : super((read) => read(dimeGet<ScheduleProvider>())
+            .whenData((events) => events.sort()));
+}
 
-  factory ScheduleFilterProvider.allBands() => ScheduleFilterProvider._(
-        (events) => events.sort((a, b) => a.bandName.compareTo(b.bandName)),
-      );
+class DailyScheduleProvider
+    extends ComputedFamily<AsyncValue<ImmortalList<Event>>, DateTime> {
+  DailyScheduleProvider()
+      : super((read, date) => read(dimeGet<SortedScheduleProvider>()).whenData(
+            (events) => events.where((event) => event.start
+                .map((startTime) => isSameFestivalDay(startTime, date))
+                .orElse(false))));
+}
 
-  factory ScheduleFilterProvider.forDay(DateTime day) =>
-      ScheduleFilterProvider._(
-        (events) => events
-            .where((item) => item.start
-                .map((startTime) => isSameFestivalDay(startTime, day))
-                .orElse(false))
-            .sort(),
-      );
-
-  final ImmortalList<Event> Function(ImmortalList<Event>) filter;
+class BandScheduleProvider
+    extends ComputedFamily<AsyncValue<ImmortalList<Event>>, String> {
+  BandScheduleProvider()
+      : super((read, band) => read(dimeGet<ScheduleProvider>()).whenData(
+            (events) => events.where((event) => event.bandName == band)));
 }

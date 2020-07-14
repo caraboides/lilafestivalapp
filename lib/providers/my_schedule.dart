@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dime/dime.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:state_notifier/state_notifier.dart';
+import 'package:optional/optional.dart';
 
 import '../models/event.dart';
 import '../models/my_schedule.dart';
@@ -60,11 +61,11 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
     });
   }
 
-  // TODO(SF) STATE pass to my schedule?
+  // TODO(SF) STATE pass callbacks to my schedule?
+  // TODO(SF) STATE possible to only pass event id?
   void toggleEvent(Event event) {
     _log.debug('Toggle schedule state of event ${event.id}');
     state.whenData((mySchedule) {
-      // TODO(SF) STATE/STYLE move to event toggle?
       mySchedule
           .toggleEvent(event.id,
               onRemove: _notifications.cancelNotification,
@@ -77,4 +78,12 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
       });
     });
   }
+}
+
+class LikedEventProvider extends ComputedFamily<Optional<int>, String> {
+  LikedEventProvider()
+      : super((read, eventId) => read(dimeGet<MyScheduleProvider>().state).when(
+            data: (mySchedule) => mySchedule.getNotificationId(eventId),
+            loading: () => const Optional<int>.empty(),
+            error: (_, __) => const Optional<int>.empty()));
 }

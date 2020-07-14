@@ -7,8 +7,9 @@ extension Localization on String {
         'de_de': 'Auftrittsbenachrichtigungen',
       } +
       {
-        'en_us': 'Notifications to remind of scheduled gigs',
-        'de_de': 'Benachrichtigungen für eingeplante Auftritte',
+        'en_us': 'Notifications to remind of liked gigs',
+        // TODO(SF) I18n find better words
+        'de_de': 'Benachrichtigungen für favorisierte Auftritte',
       } +
       {
         'en_us': 'HH:mm',

@@ -4,11 +4,10 @@ import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
-import '../../../models/enhanced_event.dart';
+import '../../../models/event.dart';
 import '../../../models/theme.dart';
 import '../../../utils/date.dart';
 import '../../../widgets/one_time_execution_mixin.dart';
-import '../../band_detail_view/band_detail_view.dart';
 import 'event_list_item.dart';
 
 // TODO(SF) STYLE possible to use hook widget?
@@ -19,10 +18,8 @@ class EventListView extends StatefulWidget {
     this.date,
   }) : super(key: key);
 
-  final ImmortalList<EnhancedEvent> events;
+  final ImmortalList<Event> events;
   final DateTime date;
-
-  bool get isBandView => date == null;
 
   @override
   State<StatefulWidget> createState() => EventListViewState();
@@ -34,10 +31,10 @@ class EventListViewState extends State<EventListView>
 
   int get _currentOrNextPlayingBandIndex {
     final now = DateTime.now();
-    return widget.date != null && isSameFestivalDay(now, widget.date)
-        ? widget.events.indexWhere((enhancedEvent) =>
-            enhancedEvent.event.start.map(now.isBefore).orElse(false) ||
-            enhancedEvent.event.end.map(now.isBefore).orElse(false))
+    return isSameFestivalDay(now, widget.date)
+        ? widget.events.indexWhere((event) =>
+            event.start.map(now.isBefore).orElse(false) ||
+            event.end.map(now.isBefore).orElse(false))
         : -1;
   }
 
@@ -49,7 +46,7 @@ class EventListViewState extends State<EventListView>
 
   @override
   void didUpdateWidget(EventListView oldWidget) {
-    if (mounted && !widget.isBandView && widget.events != oldWidget.events) {
+    if (mounted && widget.events != oldWidget.events) {
       _scrollToCurrentBand();
     }
     super.didUpdateWidget(oldWidget);
@@ -76,16 +73,14 @@ class EventListViewState extends State<EventListView>
 
   ImmortalList<Widget> _buildListItems() {
     final now = DateTime.now();
-    final items = widget.events.map<Widget>((enhancedEvent) => EventListItem(
-          key: Key(enhancedEvent.event.id),
-          enhancedEvent: enhancedEvent,
-          isBandView: widget.isBandView,
-          onTap: () => BandDetailView.openFor(context, enhancedEvent),
-          isPlaying: enhancedEvent.event.isPlaying(now),
+    final items = widget.events.map<Widget>((event) => EventListItem(
+          key: Key(event.id),
+          event: event,
+          isPlaying: event.isPlaying(now),
         ));
     if (_currentOrNextPlayingBandIndex >= 0 &&
         !widget.events[_currentOrNextPlayingBandIndex]
-            .map((enhancedEvent) => enhancedEvent.event.isPlaying(now))
+            .map((event) => event.isPlaying(now))
             .orElse(false)) {
       return items.insert(
           _currentOrNextPlayingBandIndex,

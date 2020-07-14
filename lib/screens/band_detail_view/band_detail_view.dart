@@ -1,15 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:optional/optional.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/band.dart';
-import '../../models/enhanced_event.dart';
+import '../../models/band_with_events.dart';
 import '../../models/event.dart';
 import '../../models/theme.dart';
-import '../../providers/bands.dart';
+import '../../providers/bands_with_events.dart';
 import '../../utils/logging.dart';
 import '../../widgets/event_date/event_date.dart';
 import '../../widgets/event_stage.dart';
@@ -18,18 +18,16 @@ import '../../widgets/scaffold.dart';
 import 'band_detail_view.i18n.dart';
 
 // TODO(SF) STYLE improve
-class BandDetailView extends StatelessWidget {
-  const BandDetailView(this.enhancedEvent);
+class BandDetailView extends HookWidget {
+  const BandDetailView(this.bandName);
 
-  final EnhancedEvent enhancedEvent;
+  final String bandName;
 
-  static void openFor(BuildContext context, EnhancedEvent event) =>
+  static void openFor(BuildContext context, String bandName) =>
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => BandDetailView(event),
+        builder: (_) => BandDetailView(bandName),
         fullscreenDialog: true,
       ));
-
-  Event get _event => enhancedEvent.event;
 
   FestivalTheme get _festivalTheme => dimeGet<FestivalTheme>();
   Logger get _log => const Logger('BandDetailView');
@@ -117,19 +115,16 @@ class BandDetailView extends StatelessWidget {
           ),
       ];
 
-  Widget _buildEventRow() => Row(
+  Widget _buildEventRow(Event event) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          EventToggle(
-            isActive: enhancedEvent.isScheduled,
-            onToggle: enhancedEvent.toggleEvent,
-          ),
+          EventToggle(event),
           EventDate(
-            start: _event.start,
-            end: _event.end,
+            start: event.start,
+            end: event.end,
             showWeekDay: true,
           ),
-          EventStage(_event.stage),
+          EventStage(event.stage),
         ],
       );
 
@@ -148,9 +143,10 @@ class BandDetailView extends StatelessWidget {
         child: Text(_fallbackText),
       );
 
-  Widget _buildBandView(BuildContext context, Optional<Band> band) {
+  Widget _buildBandView(BuildContext context, BandWithEvents bandWithEvents) {
     final locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
+    final band = bandWithEvents.band;
     return AppScaffold(
       isDialog: true,
       title: 'Band Details'.i18n,
@@ -163,18 +159,21 @@ class BandDetailView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
               child: Text(
-                // TODO(SF) STATE use family provider and display key here
-                _event.bandName.toUpperCase(),
+                bandName.toUpperCase(),
                 style: theme.textTheme.headline3,
                 textAlign: TextAlign.center,
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 5, right: 20, top: 5),
-              child: _buildEventRow(),
+              // TODO(SF) THEME adjust for multiple events
+              child: Column(
+                children:
+                    bandWithEvents.events.map(_buildEventRow).toMutableList(),
+              ),
             ),
             ...band
-                .map<List<Widget>>((d) => _buildDetails(theme, locale, d))
+                .map<List<Widget>>((b) => _buildDetails(theme, locale, b))
                 .orElse(
               <Widget>[_fallbackInfo],
             ),
@@ -185,24 +184,22 @@ class BandDetailView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Consumer((context, read) {
-        // TODO(SF) STATE use family provider and only read single band
-        // TODO(SF) STATE possibly optional? handle errors!
-        // TODO(SF) STATE listen to schedule here as well to get update on
-        // schedule change
-        // TODO(SF) FEATURE highlight event when currently playing?
-        final bandsProvider = read(dimeGet<BandsProvider>());
-        return bandsProvider.when(
-          data: (bands) => _buildBandView(context, bands.get(_event.bandName)),
-          // TODO(SF) THEME
-          loading: () => const Center(child: Text('Loading!')),
-          error: (error, trace) {
-            _log.error('Error retrieving data for band ${_event.bandName}',
-                error, trace);
-            return Center(
-              child: Text('Error! $error ${trace.toString()}'),
-            );
-          },
+  Widget build(BuildContext context) {
+    final bandProvider =
+        useProvider(dimeGet<BandWithEventsProvider>()(bandName));
+    // TODO(SF) FEATURE highlight event when currently playing?
+    return bandProvider.when(
+      data: (band) => _buildBandView(context, band),
+      // TODO(SF) THEME
+      // TODO(SF) STATE improve logging
+      // TODO(SF) THEME move inside scaffold? or navigate back with error?
+      loading: () => const Center(child: Text('Loading!')),
+      error: (error, trace) {
+        _log.error('Error retrieving data for band $bandName', error, trace);
+        return Center(
+          child: Text('Error! $error ${trace.toString()}'),
         );
-      });
+      },
+    );
+  }
 }

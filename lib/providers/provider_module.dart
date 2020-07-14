@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../models/festival_config.dart';
 import 'bands.dart';
-import 'combined_schedule.dart';
+import 'bands_with_events.dart';
+import 'filtered_schedules.dart';
 import 'my_schedule.dart';
 import 'schedule.dart';
 import 'weather.dart';
@@ -13,30 +14,29 @@ class ProviderModule extends BaseDimeModule {
 
   final BuildContext context;
 
-  void _addScheduleProviders([DateTime date]) {
-    // TODO(SF) STATE necessary? constant?
-    final tag = date?.toIso8601String();
-    addSingle<ScheduleFilterProvider>(
-      date != null
-          ? ScheduleFilterProvider.forDay(date)
-          : ScheduleFilterProvider.allBands(),
-      tag: tag,
-    );
-    addSingle<CombinedScheduleProvider>(
-      CombinedScheduleProvider(tag),
-      tag: tag,
-    );
-  }
-
   @override
   void updateInjections() {
     // TODO(SF) STATE or use tag for festivalid?
     final festivalId = dimeGet<FestivalConfig>().festivalId;
+    // Band providers
     addSingle<BandsProvider>(BandsProvider(context, festivalId));
+    addSingle<BandProvider>(BandProvider());
+    addSingle<SortedBandsProvider>(SortedBandsProvider());
+    // Schedule providers
     addSingle<ScheduleProvider>(ScheduleProvider(context, festivalId));
+    addSingle<SortedScheduleProvider>(SortedScheduleProvider());
+    addSingle<DailyScheduleProvider>(DailyScheduleProvider());
+    addSingle<BandScheduleProvider>(BandScheduleProvider());
+    // My Schedule providers
     addSingle<MyScheduleProvider>(MyScheduleProvider());
-    _addScheduleProviders();
-    dimeGet<FestivalConfig>().days.forEach(_addScheduleProviders);
+    addSingle<LikedEventProvider>(LikedEventProvider());
+    // Combined bands and events providers
+    addSingle<BandWithEventsProvider>(BandWithEventsProvider());
+    addSingle<BandsWithEventsProvider>(BandsWithEventsProvider());
+    // Filtered band and event providers
+    addSingle<FilteredDailyScheduleProvider>(FilteredDailyScheduleProvider());
+    addSingle<FilteredBandScheduleProvider>(FilteredBandScheduleProvider());
+    // Weather provider
     addSingle<WeatherProvider>(WeatherProvider());
   }
 }

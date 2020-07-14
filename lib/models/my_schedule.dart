@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
@@ -13,7 +15,7 @@ class MySchedule {
 
   final ImmortalMap<String, int> _eventsWithNotification;
 
-  bool isEventScheduled(String eventId) =>
+  bool isEventLiked(String eventId) =>
       _eventsWithNotification.containsKey(eventId);
 
   Optional<int> getNotificationId(String eventId) =>
@@ -39,4 +41,6 @@ class MySchedule {
   Map<String, int> toJson() => _eventsWithNotification.toMutableMap();
 
   bool get isEmpty => _eventsWithNotification.isEmpty;
+
+  int getMaxNotificationId() => _eventsWithNotification.values.fold(0, max);
 }
