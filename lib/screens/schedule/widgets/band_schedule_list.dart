@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../providers/bands_with_events.dart';
 import '../../../providers/filtered_schedules.dart';
 import '../../../utils/logging.dart';
 import 'band_list_view.dart';
@@ -21,12 +20,9 @@ class BandScheduleList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(SF) STATE this does not work, split up widgets, possibly for events
-    // as well - ooooor use a family with boolean key
-    final provider = likedOnly
-        ? dimeGet<FilteredBandScheduleProvider>()
-        : dimeGet<BandsWithEventsProvider>();
-    return useProvider(provider).when(
+    final provider =
+        useProvider(dimeGet<FilteredBandScheduleProvider>()(likedOnly));
+    return provider.when(
       data: (bands) {
         // TODO(SF) ERROR HANDLING list should not be empty > should this be
         // handled & logged sooner?
@@ -42,7 +38,10 @@ class BandScheduleList extends HookWidget {
       // TODO(SF) THEME
       loading: () => const Center(child: Text('Loading!')),
       error: (error, trace) {
-        _log.error('Error retrieving band schedule', error, trace);
+        _log.error(
+            'Error retrieving ${likedOnly ? "filtered" : "full"} band schedule',
+            error,
+            trace);
         return Center(
           child: Text('Error! $error ${trace.toString()}'),
         );

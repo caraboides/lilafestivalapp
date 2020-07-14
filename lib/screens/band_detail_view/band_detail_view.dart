@@ -191,7 +191,6 @@ class BandDetailView extends HookWidget {
     return bandProvider.when(
       data: (band) => _buildBandView(context, band),
       // TODO(SF) THEME
-      // TODO(SF) STATE improve logging
       // TODO(SF) THEME move inside scaffold? or navigate back with error?
       loading: () => const Center(child: Text('Loading!')),
       error: (error, trace) {

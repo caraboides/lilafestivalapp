@@ -24,6 +24,7 @@ class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
             ));
 
   // TODO(SF) FEATURE retry loading remote data later?
+  // TODO(SF) watch https://github.com/rrousselGit/river_pod/issues/42
   @visibleForTesting
   static Stream<T> loadData<T, J>({
     BuildContext context,
