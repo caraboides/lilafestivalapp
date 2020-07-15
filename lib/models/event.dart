@@ -27,7 +27,7 @@ class Event implements Comparable {
       start
           .map((startTime) => !currentTime.isBefore(startTime))
           .orElse(false) &&
-      end.map((endTime) => !currentTime.isAfter(endTime)).orElse(false);
+      end.map(currentTime.isBefore).orElse(false);
 
   // TODO(SF) TEST
   @override
@@ -38,4 +38,10 @@ class Event implements Comparable {
               .orElse(1))
           .orElse(-1)
       : -1;
+
+  bool isInFutureOf(DateTime currentTime) =>
+      start.map(currentTime.isBefore).orElse(false);
+
+  bool isPlayingOrInFutureOf(DateTime currentTime) =>
+      isInFutureOf(currentTime) || end.map(currentTime.isBefore).orElse(false);
 }

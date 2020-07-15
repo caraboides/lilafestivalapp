@@ -61,21 +61,16 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
     });
   }
 
-  // TODO(SF) STATE pass callbacks to my schedule?
-  // TODO(SF) STATE possible to only pass event id?
   void toggleEvent(Event event) {
     _log.debug('Toggle schedule state of event ${event.id}');
     state.whenData((mySchedule) {
-      mySchedule
-          .toggleEvent(event.id,
-              onRemove: _notifications.cancelNotification,
-              generateValue: () =>
-                  _notifications.scheduleNotificationForEvent(event))
-          .then((newSchedule) {
-        _log.debug('Updating my schedule');
-        state = AsyncValue.data(newSchedule);
-        _saveMySchedule();
-      });
+      final newSchedule = mySchedule.toggleEvent(event.id,
+          onRemove: _notifications.cancelNotification,
+          onAdd: (notificationId) => _notifications
+              .scheduleNotificationForEvent(event, notificationId));
+      _log.debug('Updating my schedule');
+      state = AsyncValue.data(newSchedule);
+      _saveMySchedule();
     });
   }
 }

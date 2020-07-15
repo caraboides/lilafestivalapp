@@ -7,7 +7,6 @@ import '../../models/event.dart';
 import '../../providers/my_schedule.dart';
 import 'event_toggle.i18n.dart';
 
-// TODO(SF) STATE possible to only pass event id?
 class EventToggle extends HookWidget {
   const EventToggle(this.event);
 

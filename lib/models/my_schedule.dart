@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
 
-// TODO(SF) STATE improve
 class MySchedule {
   const MySchedule._(this._eventsWithNotification);
 
@@ -27,20 +26,23 @@ class MySchedule {
   MySchedule _remove(String eventId) =>
       MySchedule._(_eventsWithNotification.remove(eventId));
 
-  Future<MySchedule> toggleEvent(
+  int _nextNotificationId() => _eventsWithNotification.values.fold(0, max) + 1;
+
+  MySchedule toggleEvent(
     String eventId, {
+    ValueChanged<int> onAdd,
     ValueChanged<int> onRemove,
-    ValueGetter<Future<int>> generateValue,
   }) =>
       getNotificationId(eventId).map((notificationId) {
         onRemove(notificationId);
         return _remove(eventId);
-      }).orElseGetAsync(() => generateValue()
-          .then((notificationId) => _add(eventId, notificationId)));
+      }).orElseGet(() {
+        final notificationId = _nextNotificationId();
+        onAdd(notificationId);
+        return _add(eventId, notificationId);
+      });
 
   Map<String, int> toJson() => _eventsWithNotification.toMutableMap();
 
   bool get isEmpty => _eventsWithNotification.isEmpty;
-
-  int getMaxNotificationId() => _eventsWithNotification.values.fold(0, max);
 }

@@ -11,7 +11,7 @@ import '../providers/my_schedule.dart';
 import '../providers/provider_module.dart';
 import '../providers/schedule.dart';
 import '../services/notifications/notifications.dart';
-import '../utils/combined_async_value.dart';
+import '../utils/combined_async_values.dart';
 import '../utils/logging.dart';
 import 'one_time_execution_mixin.dart';
 
@@ -69,7 +69,6 @@ class _InitializationWidgetState extends State<InitializationWidget>
       dimeInstall(ProviderModule(context));
       dimeGet<Notifications>().initializeNotificationPlugin();
     });
-    // TODO(SF) STATE improve
     final mySchedule = useProvider(dimeGet<MyScheduleProvider>().state);
     final events = useProvider(dimeGet<ScheduleProvider>());
     executeUntilSuccessful(

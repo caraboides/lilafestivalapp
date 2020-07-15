@@ -32,9 +32,7 @@ class EventListViewState extends State<EventListView>
   int get _currentOrNextPlayingBandIndex {
     final now = DateTime.now();
     return isSameFestivalDay(now, widget.date)
-        ? widget.events.indexWhere((event) =>
-            event.start.map(now.isBefore).orElse(false) ||
-            event.end.map(now.isBefore).orElse(false))
+        ? widget.events.indexWhere((event) => event.isPlayingOrInFutureOf(now))
         : -1;
   }
 

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dime/dime.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:immortal/immortal.dart';
@@ -14,8 +12,6 @@ import '../../utils/logging.dart';
 import 'notifications.i18n.dart';
 
 class Notifications {
-  int _nextNotificationId = 0;
-
   FlutterLocalNotificationsPlugin get _plugin =>
       dimeGet<FlutterLocalNotificationsPlugin>();
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
@@ -65,17 +61,15 @@ class Notifications {
   }
 
   Future<int> scheduleNotificationForEvent(
-    Event event, [
+    Event event,
     int notificationId,
-  ]) async {
-    final id = notificationId ?? _nextNotificationId++;
-    if (event.start
-        .map((startTime) => startTime.isAfter(DateTime.now()))
-        .orElse(false)) {
-      _log.debug('Schedule notification for event ${event.id} with id $id');
+  ) async {
+    if (event.isInFutureOf(DateTime.now())) {
+      _log.debug('Schedule notification for event ${event.id} with id '
+          '$notificationId');
       await _plugin
           .schedule(
-        id,
+        notificationId,
         _config.festivalName,
         '{band} plays at {time} on the {stage}!'.i18n.fill({
           'band': event.bandName,
@@ -89,13 +83,14 @@ class Notifications {
           const IOSNotificationDetails(),
         ),
         payload: event.id,
+        androidAllowWhileIdle: true,
       )
           .catchError((error) {
         // Will be retried on next app start if still necessary
         _log.error('Scheduling notification failed', error);
       });
     }
-    return id;
+    return notificationId;
   }
 
   Future<void> cancelNotification(int notificationId) {
@@ -114,9 +109,7 @@ class Notifications {
     final scheduledEvents = <int, Event>{};
     // TODO(SF) STYLE improve?
     events.forEach((event) {
-      if (event.start
-          .map((startTime) => startTime.isAfter(now))
-          .orElse(false)) {
+      if (event.isInFutureOf(now)) {
         mySchedule.getNotificationId(event.id).ifPresent((id) {
           scheduledEvents[id] = event;
         });
@@ -140,8 +133,6 @@ class Notifications {
     MySchedule mySchedule,
     ImmortalList<Event> events,
   ) async {
-    _nextNotificationId =
-        max(_nextNotificationId, mySchedule.getMaxNotificationId() + 1);
     final requiredNotifications =
         _calculateRequiredNotifications(mySchedule, events);
     _log.debug('Verify required notifications $requiredNotifications');
@@ -153,7 +144,6 @@ class Notifications {
     // TODO(SF) STYLE improve
     final scheduledNotifications = {};
     for (final notification in pendingNotifications) {
-      _nextNotificationId = max(_nextNotificationId, notification.id + 1);
       if (requiredNotifications[notification.id] == null) {
         unawaited(cancelNotification(notification.id));
       } else {

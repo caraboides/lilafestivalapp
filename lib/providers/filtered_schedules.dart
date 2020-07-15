@@ -7,7 +7,7 @@ import 'package:quiver/core.dart';
 import '../models/band_with_events.dart';
 import '../models/event.dart';
 import '../models/my_schedule.dart';
-import '../utils/combined_async_value.dart';
+import '../utils/combined_async_values.dart';
 import 'bands_with_events.dart';
 import 'my_schedule.dart';
 import 'schedule.dart';
@@ -40,13 +40,12 @@ class FilteredDailyScheduleProvider extends ComputedFamily<
               read(dimeGet<DailyScheduleProvider>()(filter.date));
           final myScheduleProvider = read(dimeGet<MyScheduleProvider>().state);
           return combineAsyncValues<ImmortalList<Event>, ImmortalList<Event>,
-              MySchedule>(
-            dailySchedule,
-            myScheduleProvider,
-            (events, mySchedule) => filter.likedOnly
-                ? events.where((event) => mySchedule.isEventLiked(event.id))
-                : events,
-          );
+                  MySchedule>(
+              dailySchedule,
+              myScheduleProvider,
+              (events, mySchedule) => filter.likedOnly
+                  ? events.where((event) => mySchedule.isEventLiked(event.id))
+                  : events);
         });
 }
 

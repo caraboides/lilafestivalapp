@@ -6,7 +6,7 @@ import 'package:optional/optional.dart';
 import '../models/band.dart';
 import '../models/band_with_events.dart';
 import '../models/event.dart';
-import '../utils/combined_async_value.dart';
+import '../utils/combined_async_values.dart';
 import 'bands.dart';
 import 'schedule.dart';
 

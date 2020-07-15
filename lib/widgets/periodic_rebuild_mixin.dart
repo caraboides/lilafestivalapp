@@ -31,7 +31,7 @@ mixin PeriodicRebuildMixin<T extends StatefulWidget>
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
-        _rebuildTimer.cancel();
+        _rebuildTimer?.cancel();
         break;
       case AppLifecycleState.resumed:
         _rebuild();
