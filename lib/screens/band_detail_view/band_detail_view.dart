@@ -3,6 +3,7 @@ import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:immortal/immortal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/band.dart';
@@ -11,13 +12,15 @@ import '../../models/event.dart';
 import '../../models/theme.dart';
 import '../../providers/bands_with_events.dart';
 import '../../utils/logging.dart';
+import '../../widgets/dense_event_list.dart';
 import '../../widgets/event_date/event_date.dart';
+import '../../widgets/event_playing_indicator/event_playing_indicator.dart';
 import '../../widgets/event_stage.dart';
 import '../../widgets/event_toggle/event_toggle.dart';
 import '../../widgets/scaffold.dart';
 import 'band_detail_view.i18n.dart';
 
-// TODO(SF) STYLE improve
+// TODO(SF) STYLE NOW improve
 class BandDetailView extends HookWidget {
   const BandDetailView(this.bandName);
 
@@ -115,19 +118,6 @@ class BandDetailView extends HookWidget {
           ),
       ];
 
-  Widget _buildEventRow(Event event) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          EventToggle(event),
-          EventDate(
-            start: event.start,
-            end: event.end,
-            showWeekDay: true,
-          ),
-          EventStage(event.stage),
-        ],
-      );
-
   Widget _buildBandLogo(String logo) => Container(
         color: Colors.black,
         child: CachedNetworkImage(
@@ -142,6 +132,42 @@ class BandDetailView extends HookWidget {
         alignment: Alignment.center,
         child: Text(_fallbackText),
       );
+
+  Widget _buildSingleEventEntry(Event event) => Padding(
+        padding: const EdgeInsets.only(right: 10, top: 9, bottom: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            EventToggle(event),
+            const SizedBox(width: 24),
+            EventDate(
+              start: event.start,
+              end: event.end,
+              showWeekDay: true,
+            ),
+            EventPlayingIndicator(isPlaying: event.isPlaying(DateTime.now())),
+            EventStage(event.stage),
+          ],
+        ),
+      );
+
+  Widget _buildMultiEventEntry(ImmortalList<Event> events) => Padding(
+        padding: const EdgeInsets.only(top: 12, bottom: 7),
+        child: DenseEventList(
+          events: events,
+          currentTime: DateTime.now(),
+        ),
+      );
+
+  Widget _buildEvents(ImmortalList<Event> events) => events.isEmpty
+      ? const SizedBox(height: 5)
+      : SafeArea(
+          top: false,
+          bottom: false,
+          minimum: const EdgeInsets.symmetric(horizontal: 10),
+          child: events.length == 1
+              ? _buildSingleEventEntry(events.first.value)
+              : _buildMultiEventEntry(events));
 
   Widget _buildBandView(BuildContext context, BandWithEvents bandWithEvents) {
     final locale = Localizations.localeOf(context);
@@ -164,14 +190,7 @@ class BandDetailView extends HookWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 5, right: 20, top: 5),
-              // TODO(SF) THEME adjust for multiple events
-              child: Column(
-                children:
-                    bandWithEvents.events.map(_buildEventRow).toMutableList(),
-              ),
-            ),
+            _buildEvents(bandWithEvents.events),
             ...band
                 .map<List<Widget>>((b) => _buildDetails(theme, locale, b))
                 .orElse(
@@ -187,11 +206,10 @@ class BandDetailView extends HookWidget {
   Widget build(BuildContext context) {
     final bandProvider =
         useProvider(dimeGet<BandWithEventsProvider>()(bandName));
-    // TODO(SF) FEATURE highlight event when currently playing?
     return bandProvider.when(
       data: (band) => _buildBandView(context, band),
-      // TODO(SF) THEME
-      // TODO(SF) THEME move inside scaffold? or navigate back with error?
+      // TODO(SF) THEME NOW
+      // TODO(SF) THEME NOW move inside scaffold? or navigate back with error?
       loading: () => const Center(child: Text('Loading!')),
       error: (error, trace) {
         _log.error('Error retrieving data for band $bandName', error, trace);

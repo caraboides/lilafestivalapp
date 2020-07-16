@@ -50,12 +50,11 @@ class FestivalApp extends StatelessWidget {
             Locale('en', 'US'),
             Locale('de', 'DE'),
           ],
-          // TODO(SF) I18N necessary to wrap i18n per route? maybe root routes
-          // only? or separate '/' route for init? > consider in 'isRoot' fn
           routes: dimeGet<Navigation>()
               .routesByPath
-              .mapValues((_, route) =>
-                  (context) => I18n(child: route.builder(context)))
+              .mapValues((_, route) => (context) => route.isRoot
+                  ? I18n(child: route.builder(context))
+                  : route.builder(context))
               .toMutableMap(),
         ),
       );

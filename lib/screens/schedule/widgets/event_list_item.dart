@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../../models/event.dart';
 import '../../../models/theme.dart';
+import '../../../widgets/event_details.dart';
 import '../../../widgets/event_toggle/event_toggle.dart';
 import '../../band_detail_view/band_detail_view.dart';
-import 'event_details.dart';
 
 class EventListItem extends StatelessWidget {
   const EventListItem({
@@ -45,7 +45,8 @@ class EventListItem extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8, right: 16),
                     child: EventDetails(
                       event: event,
-                      isBandView: false,
+                      showBandName: true,
+                      alignByStage: true,
                     ),
                   ),
                 )

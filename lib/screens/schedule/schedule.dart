@@ -93,7 +93,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         actions: <Widget>[
           Icon(likedOnly ? Icons.star : Icons.star_border),
           Switch(
-            // TODO(SF) THEME add tooltip?
+            // TODO(SF) THEME NOW add tooltip?
             value: likedOnly,
             onChanged: _onLikedFilterChange,
           ),
@@ -106,9 +106,11 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           WeatherCard(date),
-          DailyScheduleList(
-            date: date,
-            likedOnly: likedOnly,
+          Expanded(
+            child: DailyScheduleList(
+              date: date,
+              likedOnly: likedOnly,
+            ),
           ),
         ],
       );

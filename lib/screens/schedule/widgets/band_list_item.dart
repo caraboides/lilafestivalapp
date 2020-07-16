@@ -1,50 +1,55 @@
 import 'package:flutter/material.dart';
 
 import '../../../models/band_with_events.dart';
-import '../../../widgets/event_toggle/event_toggle.dart';
+import '../../../models/event.dart';
+import '../../../widgets/dense_event_list.dart';
+import '../../../widgets/event_band_name.dart';
+import '../../../widgets/event_detail_row.dart';
 import '../../band_detail_view/band_detail_view.dart';
-import 'event_details.dart';
 
 class BandListItem extends StatelessWidget {
   const BandListItem({
     Key key,
     this.bandWithEvents,
-    this.isPlaying,
+    this.currentTime,
   }) : super(key: key);
 
   final BandWithEvents bandWithEvents;
-  final bool isPlaying;
+  final DateTime currentTime;
 
   void _onTap(BuildContext context) =>
       BandDetailView.openFor(context, bandWithEvents.bandName);
 
-  // TODO(SF) THEME only display band name once for multiple events
-  Widget _buildEvents() => Column(
-        children: bandWithEvents.events
-            .map((event) => Row(
-                  key: Key(event.id),
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    EventToggle(event),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8, right: 16),
-                        child: EventDetails(
-                          event: event,
-                          isBandView: true,
-                        ),
-                      ),
-                    )
-                  ],
-                ))
-            .toMutableList(),
+  Widget _buildSingleEventEntry(Event event) => Padding(
+        padding: const EdgeInsets.only(bottom: 6),
+        child: EventDetailRow(
+          event: event,
+          currentTime: currentTime,
+        ),
       );
+
+  Widget _buildMultiEventEntry() => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 56),
+              child: EventBandName(bandWithEvents.bandName),
+            ),
+            DenseEventList(
+              events: bandWithEvents.events,
+              currentTime: currentTime,
+            ),
+          ]);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Material(
-      color: isPlaying ? theme.accentColor : theme.canvasColor,
+      color: bandWithEvents.isPlaying(currentTime)
+          ? theme.accentColor
+          : theme.canvasColor,
       child: InkWell(
         onTap: () => _onTap(context),
         child: SafeArea(
@@ -52,10 +57,12 @@ class BandListItem extends StatelessWidget {
           bottom: false,
           minimum: const EdgeInsets.symmetric(horizontal: 10),
           child: Container(
-            // TODO(SF) THEME maybe set min height?
-            // height: _theme.eventListItemHeight,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: _buildEvents(),
+            constraints: const BoxConstraints(minHeight: 38),
+            alignment: Alignment.topLeft,
+            padding: const EdgeInsets.only(top: 10, bottom: 4),
+            child: bandWithEvents.events.length == 1
+                ? _buildSingleEventEntry(bandWithEvents.events.first.value)
+                : _buildMultiEventEntry(),
           ),
         ),
       ),

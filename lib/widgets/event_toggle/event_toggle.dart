@@ -17,6 +17,7 @@ class EventToggle extends HookWidget {
     final isLiked =
         useProvider(dimeGet<LikedEventProvider>()(event.id)).isPresent;
     return IconButton(
+      padding: EdgeInsets.zero,
       icon: Icon(isLiked ? Icons.star : Icons.star_border),
       tooltip:
           (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,

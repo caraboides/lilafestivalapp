@@ -96,14 +96,12 @@ class EventListViewState extends State<EventListView>
     executeOnce(() {
       _scrollToCurrentBand(timeout: const Duration(milliseconds: 200));
     });
-    return Expanded(
-      child: ListView(
-        controller: _scrollController,
-        children: ListTile.divideTiles(
-          context: context,
-          tiles: _buildListItems().toMutableList(),
-        ).toList(),
-      ),
+    return ListView(
+      controller: _scrollController,
+      children: ListTile.divideTiles(
+        context: context,
+        tiles: _buildListItems().toMutableList(),
+      ).toList(),
     );
   }
 }

@@ -14,7 +14,7 @@ class BandListView extends StatelessWidget {
     return bands.map<Widget>((bandWithEvents) => BandListItem(
           key: Key(bandWithEvents.bandName),
           bandWithEvents: bandWithEvents,
-          isPlaying: bandWithEvents.isPlaying(now),
+          currentTime: now,
         ));
   }
 
