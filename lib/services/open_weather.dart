@@ -69,11 +69,9 @@ class OpenWeather {
     final forecast = await _getForecast(date.hour);
     _log.debug('Selecting weather for $date');
     final now = DateTime.now();
-    // TODO(SF) WEATHER or should this only check for actual day?
     final isToday = isSameFestivalDay(now, date);
     final minHour = isToday ? max(14, now.hour) : 14;
     return forecast.lastWhere((current) =>
-        // TODO(SF) WEATHER as above - or same actual day?
         isSameFestivalDay(current.date, date) &&
         current.date.hour <= minHour &&
         current.date.hour >= 14);

@@ -22,6 +22,7 @@ import '../../widgets/loading_screen/loading_screen.dart';
 import '../../widgets/scaffold.dart';
 import 'band_detail_view.i18n.dart';
 
+// TODO(SF) FEATURE periodic rebuild for is playing indicator?
 class BandDetailView extends HookWidget {
   const BandDetailView(this.bandName);
 

@@ -41,7 +41,6 @@ class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
       assetPath: assetPath,
       fromJson: fromJson,
     );
-    // TODO(SF) STATE possible to close closed stream?
     ref.onDispose(streamController.close);
 
     return streamController.stream;

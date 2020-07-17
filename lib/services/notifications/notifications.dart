@@ -1,7 +1,6 @@
 import 'package:dime/dime.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:immortal/immortal.dart';
-import 'package:pedantic/pedantic.dart';
 
 import '../../models/event.dart';
 import '../../models/festival_config.dart';
@@ -107,7 +106,6 @@ class Notifications {
   ) {
     final now = DateTime.now();
     final scheduledEvents = <int, Event>{};
-    // TODO(SF) STYLE improve?
     events.forEach((event) {
       if (event.isInFutureOf(now)) {
         mySchedule.getNotificationId(event.id).ifPresent((id) {
@@ -141,18 +139,16 @@ class Notifications {
       _log.error('Retrieving pending notifications failed', error);
       return [];
     });
-    // TODO(SF) STYLE improve
-    final scheduledNotifications = {};
-    for (final notification in pendingNotifications) {
-      if (requiredNotifications[notification.id] == null) {
-        unawaited(cancelNotification(notification.id));
-      } else {
-        scheduledNotifications[notification.id] = true;
-      }
-    }
+    final pendingNotificationIds = ImmortalSet(
+        pendingNotifications.map((notification) => notification.id));
+    // Cancel notifications that are not needed anymore
+    pendingNotificationIds
+        .difference(requiredNotifications.keys)
+        .forEach(cancelNotification);
+    // Schedule missing notifications
     requiredNotifications.forEach((notificationId, event) {
-      if (scheduledNotifications[notificationId] == null) {
-        unawaited(scheduleNotificationForEvent(event, notificationId));
+      if (!pendingNotificationIds.contains(notificationId)) {
+        scheduleNotificationForEvent(event, notificationId);
       }
     });
   }

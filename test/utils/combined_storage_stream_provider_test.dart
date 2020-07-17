@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,13 +60,18 @@ class TestData {
 }
 
 Future<T> Function(Invocation) mockResponse<T>(T data,
-        [int milliseconds = 0]) =>
-    (_) => Future.delayed(Duration(milliseconds: milliseconds), () => data);
+        [int delayInMilliseconds = 0]) =>
+    (_) =>
+        Future.delayed(Duration(milliseconds: delayInMilliseconds), () => data);
+
+Future<T> Function(Invocation) mockError<T>([int delayInMilliseconds = 0]) =>
+    (_) => Future.delayed(Duration(milliseconds: delayInMilliseconds),
+        () => throw Exception('Test'));
 
 Future<Optional<dynamic>> Function(Invocation) mockOptionalResponse(
         TestData data,
-        [int milliseconds = 0]) =>
-    mockResponse(Optional.ofNullable(data?.toJson()), milliseconds);
+        [int delayInMilliseconds = 0]) =>
+    mockResponse(Optional.ofNullable(data?.toJson()), delayInMilliseconds);
 
 Stream<TestData> createStream() => CombinedStorageStreamProvider.loadData(
       context: buildContextMock,
@@ -83,58 +90,113 @@ bool assertList(List<TestData> actual, List<String> expected) =>
 const TestData remoteData = TestData('remoteData');
 const TestData appStorageData = TestData('appStorageData');
 const TestData assetData = TestData('assetData');
+const String jsonAssetData = '{"value":"assetData"}';
+
+void mockRemoteData([int delayInMilliseconds = 0, dynamic data = remoteData]) =>
+    when(festivalHubMock.loadJsonData(any))
+        .thenAnswer(mockOptionalResponse(data, delayInMilliseconds));
+
+void mockAppStorageData(
+        [int delayInMilliseconds = 0, dynamic data = appStorageData]) =>
+    when(appStorageMock.loadJson(any))
+        .thenAnswer(mockOptionalResponse(data, delayInMilliseconds));
+
+void mockAssetData(
+    [int delayInMilliseconds = 0, dynamic data = jsonAssetData]) {
+  when(buildContextMock.dependOnInheritedWidgetOfExactType())
+      .thenReturn(defaultAssetBundleMock);
+  when(defaultAssetBundleMock.bundle).thenReturn(assetBundleMock);
+  when(assetBundleMock.loadString(any))
+      .thenAnswer(mockResponse(data, delayInMilliseconds));
+}
+
+Future<bool> assertStreamData(List<String> expectedData) async {
+  final data = await createStream().toList();
+  return assertList(data, expectedData);
+}
 
 void main() {
   group('StreamFallbackProvider', () {
     setUpAll(() {
       dimeInstall(TestModule());
+      // Supress debug prints
+      debugPrint = (message, {wrapWidth}) {};
     });
 
     test('resolves remote data only if returned first', () async {
-      when(festivalHubMock.loadJsonData(any))
-          .thenAnswer(mockOptionalResponse(remoteData));
-      when(appStorageMock.loadJson(any))
-          .thenAnswer(mockOptionalResponse(appStorageData, 10));
-      final data = await createStream().toList();
-      expect(assertList(data, ['remoteData']), true);
+      mockRemoteData();
+      mockAppStorageData(10);
+      expect(await assertStreamData(['remoteData']), true);
     });
 
     test('resolves app storage data before remote data', () async {
-      when(festivalHubMock.loadJsonData(any))
-          .thenAnswer(mockOptionalResponse(remoteData, 10));
-      when(appStorageMock.loadJson(any))
-          .thenAnswer(mockOptionalResponse(appStorageData, 0));
-      final data = await createStream().toList();
-      expect(assertList(data, ['appStorageData', 'remoteData']), true);
+      mockRemoteData(10);
+      mockAppStorageData(0);
+      expect(await assertStreamData(['appStorageData', 'remoteData']), true);
     });
 
     test(
         'resolves asset data before remote data if app storage data is missing',
         () async {
-      when(festivalHubMock.loadJsonData(any))
-          .thenAnswer(mockOptionalResponse(remoteData, 10));
-      when(appStorageMock.loadJson(any))
-          .thenAnswer(mockOptionalResponse(null, 0));
-      when(buildContextMock.dependOnInheritedWidgetOfExactType())
-          .thenReturn(defaultAssetBundleMock);
-      when(defaultAssetBundleMock.bundle).thenReturn(assetBundleMock);
-      when(assetBundleMock.loadString(any))
-          .thenAnswer(mockResponse('{"value":"assetData"}', 0));
-      final data = await createStream().toList();
-      expect(assertList(data, ['assetData', 'remoteData']), true);
+      mockRemoteData(10);
+      mockAppStorageData(0, null);
+      mockAssetData();
+      expect(await assertStreamData(['assetData', 'remoteData']), true);
     });
 
     test('resolves remote data only if no fallback was found', () async {
-      when(festivalHubMock.loadJsonData(any))
-          .thenAnswer(mockOptionalResponse(remoteData));
-      when(appStorageMock.loadJson(any))
-          .thenAnswer(mockOptionalResponse(null, 0));
-      when(buildContextMock.dependOnInheritedWidgetOfExactType())
-          .thenReturn(defaultAssetBundleMock);
-      when(defaultAssetBundleMock.bundle).thenReturn(assetBundleMock);
-      when(assetBundleMock.loadString(any)).thenAnswer(mockResponse(null, 0));
-      final data = await createStream().toList();
-      expect(assertList(data, ['remoteData']), true);
+      mockRemoteData(10);
+      mockAppStorageData(0, null);
+      mockAssetData(0, null);
+      expect(await assertStreamData(['remoteData']), true);
+    });
+
+    test('resolves app data only if loading remote data failed first',
+        () async {
+      mockRemoteData(0, null);
+      mockAppStorageData(10);
+      expect(await assertStreamData(['appStorageData']), true);
+    });
+
+    test('resolves app data only if loading remote data failed afterwards',
+        () async {
+      mockRemoteData(10, null);
+      mockAppStorageData(0);
+      expect(await assertStreamData(['appStorageData']), true);
+    });
+
+    test(
+        'resolves asset data only if loading remote and app storage data '
+        'failed first', () async {
+      mockRemoteData(0, null);
+      mockAppStorageData(10, null);
+      mockAssetData();
+      expect(await assertStreamData(['assetData']), true);
+    });
+
+    test(
+        'resolves asset data only if loading remote and app storage data '
+        'failed afterwards', () async {
+      mockRemoteData(15, null);
+      mockAppStorageData(10, null);
+      mockAssetData();
+      expect(await assertStreamData(['assetData']), true);
+    });
+
+    test('throws error if loading all data failed, offline returned first',
+        () async {
+      mockRemoteData(15, null);
+      mockAppStorageData(10, null);
+      mockAssetData(0, null);
+      expect(createStream().toList(), throwsException);
+    });
+
+    test('throws error if loading all data failed, remote returned first',
+        () async {
+      mockRemoteData(0, null);
+      mockAppStorageData(10, null);
+      mockAssetData(0, null);
+      expect(createStream().toList(), throwsException);
     });
   });
 }

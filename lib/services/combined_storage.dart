@@ -66,6 +66,16 @@ class CombinedStorage {
             () => _loadDataFromAssets(context, assetPath, fromJson)),
       );
 
+  void _sendDataToStream<T>(StreamController streamController, T data) {}
+
+  Future<void> _sendErrorToStream(StreamController streamController) {
+    if (!streamController.isClosed) {
+      streamController
+          .addError(Exception('Loading both remote and offline data failed'));
+    }
+    return streamController.close();
+  }
+
   // TODO(SF) STYLE replace null checks everywhere with optionals?
   // TODO(SF) STYLE improve?
   StreamController<T> loadData<T, J>({
@@ -76,6 +86,9 @@ class CombinedStorage {
     T Function(J) fromJson,
   }) {
     final streamController = StreamController<T>();
+    var loadingRemoteDataFailed = false;
+    var loadingOfflineDataFailed = false;
+    var loadingOfflineDataFinished = false;
     _log.debug('Loading remote data from $remoteUrl');
     _festivalHub.loadJsonData<J>(remoteUrl).then(
           (result) => result.ifPresent((json) {
@@ -83,18 +96,29 @@ class CombinedStorage {
               final data = fromJson(json);
               _log.debug('Loading remote data from $remoteUrl was successful, '
                   'closing stream');
-              // TODO(SF) STATE what if already closed?
-              streamController.add(data);
+              if (!streamController.isClosed) {
+                streamController.add(data);
+              }
               streamController.close();
               _appStorage.storeJson(appStorageKey, json);
             } catch (error) {
               _log.error('Error loading remote data from $remoteUrl', error);
-              // TODO(SF) STATE close stream if fallback data was loaded already
+              loadingRemoteDataFailed = true;
+              if (loadingOfflineDataFailed) {
+                _sendErrorToStream(streamController);
+              } else if (loadingOfflineDataFinished) {
+                streamController.close();
+              }
             }
           }, orElse: () {
             _log.debug('Loading remote data from $remoteUrl failed, '
                 'rely on offline data');
-            // TODO(SF) STATE close stream if fallback data was loaded already
+            loadingRemoteDataFailed = true;
+            if (loadingOfflineDataFailed) {
+              _sendErrorToStream(streamController);
+            } else if (loadingOfflineDataFinished) {
+              streamController.close();
+            }
           }),
         );
 
@@ -109,12 +133,17 @@ class CombinedStorage {
         _log.debug('Loading offline data was successful');
         if (!streamController.isClosed) {
           streamController.add(data);
-          // TODO(SF) STATE close stream if loading remote data failed
+          loadingOfflineDataFinished = true;
+          if (loadingRemoteDataFailed) {
+            streamController.close();
+          }
         }
       }, orElse: () {
         _log.debug('Loading offline data failed');
-        // TODO(SF) STATE send error to stream if loading failed completely
-        // TODO(SF) STATE close stream if loading remote data failed
+        loadingOfflineDataFailed = true;
+        if (loadingRemoteDataFailed) {
+          _sendErrorToStream(streamController);
+        }
       }),
     );
 
