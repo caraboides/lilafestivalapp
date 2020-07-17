@@ -24,6 +24,7 @@ final BorderSide _borderSlim = _border.copyWith(width: 1);
 final ThemeData theme = ThemeData(
   primaryColor: const Color(0xFF15928c),
   accentColor: const Color(0xFFbafb00),
+  errorColor: _menuFontColor,
   textTheme: Typography.blackMountainView.copyWith(
     headline4: TextStyle(
       fontFamily: displayFontFamily,

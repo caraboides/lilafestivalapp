@@ -7,6 +7,7 @@ const String displayFontFamily = 'Display Font';
 final ThemeData theme = ThemeData(
   primaryColor: Colors.grey[850],
   accentColor: const Color(0xFFD2D522),
+  errorColor: Colors.redAccent[700],
   textTheme: Typography.blackMountainView.copyWith(
     headline4: TextStyle(
       fontFamily: displayFontFamily,

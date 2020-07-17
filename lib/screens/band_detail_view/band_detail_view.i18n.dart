@@ -25,6 +25,14 @@ extension Localization on String {
       {
         'en_us': 'Play on Spotify',
         'de_de': 'Reinhören bei Spotify',
+      } +
+      {
+        'en_us': 'There was an error retrieving band data.',
+        'de_de': 'Beim Laden der Band-Daten ist ein Fehler aufgetreten.'
+      } +
+      {
+        'en_us': 'Loading band data.',
+        'de_de': 'Band-Daten werden geladen.',
       };
 
   String get i18n => localize(this, _t);

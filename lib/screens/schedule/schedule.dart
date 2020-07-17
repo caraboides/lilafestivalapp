@@ -9,8 +9,8 @@ import '../../utils/i18n.dart';
 import '../../widgets/periodic_rebuild_mixin.dart';
 import '../../widgets/scaffold.dart';
 import 'schedule.i18n.dart';
-import 'widgets/band_schedule_list.dart';
-import 'widgets/daily_schedule_list.dart';
+import 'widgets/band_schedule_list/band_schedule_list.dart';
+import 'widgets/daily_schedule_list/daily_schedule_list.dart';
 import 'widgets/weather_card.dart';
 
 // TODO(SF) STYLE hook widget possible?
@@ -92,10 +92,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             : Text(_config.festivalName),
         actions: <Widget>[
           Icon(likedOnly ? Icons.star : Icons.star_border),
-          Switch(
-            // TODO(SF) THEME NOW add tooltip?
-            value: likedOnly,
-            onChanged: _onLikedFilterChange,
+          Tooltip(
+            message:
+                (likedOnly ? 'Show full schedule' : 'Show my schedule only')
+                    .i18n,
+            child: Switch(
+              value: likedOnly,
+              onChanged: _onLikedFilterChange,
+            ),
           ),
         ],
       );
