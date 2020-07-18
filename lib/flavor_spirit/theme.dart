@@ -65,6 +65,7 @@ final ThemeData theme = ThemeData(
     shape: Border(bottom: _border),
     color: const Color(0xFFb3dddd),
   ),
+  backgroundColor: Colors.white,
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(

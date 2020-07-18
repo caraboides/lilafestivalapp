@@ -47,6 +47,7 @@ final ThemeData theme = ThemeData(
     margin: const EdgeInsets.only(left: 4, top: 4, right: 4, bottom: 1),
     color: Colors.grey[400],
   ),
+  backgroundColor: Colors.white,
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(

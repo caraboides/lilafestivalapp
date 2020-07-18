@@ -9,10 +9,12 @@ class LoadingScreen extends StatelessWidget {
   final String description;
 
   @override
-  Widget build(BuildContext context) => MessageScreen(
-        headline: 'Loading...'.i18n,
-        description: description,
-        // TODO(SF) THEME or linear progress indicator at the top?
-        icon: const CircularProgressIndicator(),
-      );
+  Widget build(BuildContext context) => Column(children: <Widget>[
+        const LinearProgressIndicator(),
+        MessageScreen(
+          headline: 'Loading...'.i18n,
+          description: description,
+          icon: Icon(Icons.star_half),
+        ),
+      ]);
 }
