@@ -8,7 +8,7 @@ import '../../../../utils/logging.dart';
 import '../../../../widgets/error_screen/error_screen.dart';
 import '../../../../widgets/loading_screen/loading_screen.dart';
 import '../band_list_view.dart';
-import '../empty_schedule.dart';
+import '../empty_schedule/empty_schedule.dart';
 import 'band_schedule_list.i18n.dart';
 
 class BandScheduleList extends HookWidget {

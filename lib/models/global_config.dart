@@ -11,6 +11,7 @@ class GlobalConfig {
     this.repositoryUrl,
     this.creators,
     this.references,
+    this.weatherBaseUrl,
     this.weatherApiKey,
   });
 
@@ -21,5 +22,6 @@ class GlobalConfig {
   final String repositoryUrl;
   final ImmortalList<Reference> creators;
   final ImmortalList<Reference> references;
+  final String weatherBaseUrl;
   final String weatherApiKey;
 }

@@ -22,7 +22,7 @@ class OpenWeather {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
   Logger get _log => const Logger('WEATHER');
 
-  String _buildQueryUrl() => 'http://api.openweathermap.org/data/2.5/forecast?'
+  String _buildQueryUrl() => '${_globalConfig.weatherBaseUrl}/forecast?'
       'lat=${_config.weatherGeoLocation.lat}&'
       'lon=${_config.weatherGeoLocation.lng}&'
       'appid=${_globalConfig.weatherApiKey}&'

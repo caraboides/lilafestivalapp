@@ -6,6 +6,7 @@ import '../../models/event.dart';
 import '../../models/festival_config.dart';
 import '../../models/my_schedule.dart';
 import '../../models/theme.dart';
+import '../../utils/constants.dart';
 import '../../utils/i18n.dart';
 import '../../utils/logging.dart';
 import 'notifications.i18n.dart';
@@ -21,7 +22,7 @@ class Notifications {
 
   AndroidNotificationDetails get _androidPlatformChannelSpecifics =>
       AndroidNotificationDetails(
-        'event_notification', // TODO(SF) CONFIG constant
+        Constants.notificationChannelId,
         'Gig Reminder'.i18n,
         'Notifications to remind of liked gigs'.i18n,
         importance: Importance.Max,
@@ -49,7 +50,7 @@ class Notifications {
     _plugin
         .initialize(
       const InitializationSettings(
-        AndroidInitializationSettings('notification_icon'),
+        AndroidInitializationSettings(Constants.notificationIcon),
         IOSInitializationSettings(),
       ),
       onSelectNotification: _onSelectNotification,

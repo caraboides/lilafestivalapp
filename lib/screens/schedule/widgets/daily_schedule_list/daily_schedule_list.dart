@@ -7,7 +7,7 @@ import '../../../../providers/filtered_schedules.dart';
 import '../../../../utils/logging.dart';
 import '../../../../widgets/error_screen/error_screen.dart';
 import '../../../../widgets/loading_screen/loading_screen.dart';
-import '../empty_schedule.dart';
+import '../empty_schedule/empty_schedule.dart';
 import '../event_list_view.dart';
 import 'daily_schedule_list.i18n.dart';
 

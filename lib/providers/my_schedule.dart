@@ -9,14 +9,12 @@ import '../models/event.dart';
 import '../models/my_schedule.dart';
 import '../services/app_storage.dart';
 import '../services/notifications/notifications.dart';
+import '../utils/constants.dart';
 import '../utils/logging.dart';
 
 class MyScheduleProvider extends StateNotifierProvider<MyScheduleController> {
   MyScheduleProvider() : super((ref) => MyScheduleController.create());
 }
-
-// TODO(SF) STYLE collection of constants
-const _myScheduleFileName = 'my_schedule.txt';
 
 class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   MyScheduleController._() : super(const AsyncValue<MySchedule>.loading());
@@ -29,10 +27,11 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   AppStorage get _appStorage => dimeGet<AppStorage>();
   Notifications get _notifications => dimeGet<Notifications>();
   Logger get _log => const Logger('MY_SCHEDULE');
+  String get _appStorageFileName => Constants.myScheduleAppStorageFileName;
 
   Future<void> _loadMySchedule() async {
     _log.debug('Reading from app storage');
-    final result = await _appStorage.loadJson(_myScheduleFileName);
+    final result = await _appStorage.loadJson(_appStorageFileName);
     final mySchedule = result.map((json) {
       try {
         final data = MySchedule.fromJson(json);
@@ -56,7 +55,7 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
     _debounce = Timer(const Duration(milliseconds: 200), () {
       state.whenData((mySchedule) {
         _log.debug('Writing my schedule to app storage');
-        _appStorage.storeJson(_myScheduleFileName, mySchedule.toJson());
+        _appStorage.storeJson(_appStorageFileName, mySchedule.toJson());
       });
     });
   }

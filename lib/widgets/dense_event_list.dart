@@ -16,7 +16,7 @@ class DenseEventList extends StatelessWidget {
   final WrapAlignment wrapAlignment;
 
   Widget _buildEventRow(Event event) => EventDetailRow(
-        // key: Key(event.id),
+        key: Key(event.id),
         event: event,
         currentTime: currentTime,
         dense: true,

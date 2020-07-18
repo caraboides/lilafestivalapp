@@ -6,6 +6,7 @@ import 'package:optional/optional.dart';
 
 import '../models/band.dart';
 import '../utils/combined_storage_stream_provider.dart';
+import '../utils/constants.dart';
 
 class BandsProvider
     extends CombinedStorageStreamProvider<ImmortalMap<String, Band>> {
@@ -13,8 +14,8 @@ class BandsProvider
       : super(
           context: context,
           remoteUrl: '/bands?festival=$festivalId',
-          appStorageKey: 'bands.json',
-          assetPath: 'assets/bands.json',
+          appStorageKey: Constants.bandsAppStorageFileName,
+          assetPath: Constants.bandsAssetFileName,
           fromJson: (jsonMap) => ImmortalMap<String, dynamic>(jsonMap)
               .mapValues((bandName, json) => Band.fromJson(bandName, json)),
         );

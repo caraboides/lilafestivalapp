@@ -5,6 +5,7 @@ import 'package:immortal/immortal.dart';
 
 import '../models/event.dart';
 import '../utils/combined_storage_stream_provider.dart';
+import '../utils/constants.dart';
 import '../utils/date.dart';
 
 class ScheduleProvider
@@ -13,8 +14,8 @@ class ScheduleProvider
       : super(
           context: context,
           remoteUrl: '/schedule?festival=$festivalId',
-          appStorageKey: 'schedule.json',
-          assetPath: 'assets/schedule.json',
+          appStorageKey: Constants.scheduleAppStorageFileName,
+          assetPath: Constants.scheduleAssetFileName,
           fromJson: (jsonMap) => ImmortalMap<String, dynamic>(jsonMap)
               .mapEntries<Event>((id, json) => Event.fromJson(id, json)),
         );
