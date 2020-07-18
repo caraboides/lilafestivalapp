@@ -48,4 +48,15 @@ class AppStorage {
       _log.error('Error storing data in $fileName', error);
     }
   }
+
+  Future<void> removeFile(String fileName) async {
+    try {
+      _log.debug('Removing file $fileName');
+      final file = await _getFileHandle(fileName);
+      await file.delete();
+      _log.debug('Removing file $fileName was successful');
+    } catch (error) {
+      _log.error('Error removing file $fileName', error);
+    }
+  }
 }

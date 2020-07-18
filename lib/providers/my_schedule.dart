@@ -29,22 +29,47 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   Logger get _log => const Logger('MY_SCHEDULE');
   String get _appStorageFileName => Constants.myScheduleAppStorageFileName;
 
-  Future<void> _loadMySchedule() async {
+  Future<Optional<MySchedule>> _readFromAppStorage(String fileName) async {
     _log.debug('Reading from app storage');
-    final result = await _appStorage.loadJson(_appStorageFileName);
-    final mySchedule = result.map((json) {
-      try {
-        final data = MySchedule.fromJson(json);
-        _log.debug('Reading from app storage was successful');
-        return data;
-      } catch (error) {
-        _log.error('Error reading from app storage, using empty', error);
+    return _appStorage.loadJson(fileName).then((result) => result.map((json) {
+          try {
+            final data = Optional.of(MySchedule.fromJson(json));
+            _log.debug('Reading from app storage was successful');
+            return data;
+          } catch (error) {
+            _log.error('Error reading from app storage', error);
+            return const Optional<MySchedule>.empty();
+          }
+        }).orElseGet(() {
+          _log.debug('Reading from app storage failed');
+          return const Optional<MySchedule>.empty();
+        }));
+  }
+
+  Future<MySchedule> _handleLegacyFile() {
+    _log.debug('Reading from app storage failed, reading legacy file');
+    return _readFromAppStorage(Constants.myScheduleAppStorageLegacyFileName)
+        .then(
+      (result) => result.map((mySchedule) {
+        _log.debug('Copying legacy file to new file');
+        _appStorage
+            .storeJson(_appStorageFileName, mySchedule.toJson())
+            .then((_) {
+          _log.debug('Removing legacy file');
+          _appStorage.removeFile(Constants.myScheduleAppStorageLegacyFileName);
+        });
+        return mySchedule;
+      }).orElseGet(() {
+        _log.debug('Reading from legacy file failed, using empty');
         return MySchedule.empty();
-      }
-    }).orElseGet(() {
-      _log.debug('Reading from app storage failed, using empty');
-      return MySchedule.empty();
-    });
+      }),
+    );
+  }
+
+  Future<void> _loadMySchedule() async {
+    final mySchedule = await _readFromAppStorage(_appStorageFileName).then(
+      (result) => result.orElseGetAsync(_handleLegacyFile),
+    );
     state = AsyncValue.data(mySchedule);
   }
 
