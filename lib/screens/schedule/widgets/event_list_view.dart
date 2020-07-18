@@ -10,7 +10,6 @@ import '../../../utils/date.dart';
 import '../../../widgets/one_time_execution_mixin.dart';
 import 'event_list_item.dart';
 
-// TODO(SF) STYLE possible to use hook widget?
 class EventListView extends StatefulWidget {
   const EventListView({
     Key key,

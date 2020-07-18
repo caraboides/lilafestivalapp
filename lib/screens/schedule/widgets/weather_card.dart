@@ -1,5 +1,6 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:weather/weather_library.dart';
@@ -9,17 +10,10 @@ import '../../../models/theme.dart';
 import '../../../providers/weather.dart';
 import '../../../utils/logging.dart';
 
-class WeatherCard extends StatefulWidget {
+class WeatherCard extends HookWidget {
   WeatherCard(this.date, {Key key}) : super(key: key);
 
   final DateTime date;
-
-  @override
-  State<StatefulWidget> createState() => _WeatherCardState();
-}
-
-class _WeatherCardState extends State<WeatherCard> {
-  Widget _lastWeather;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
@@ -62,26 +56,27 @@ class _WeatherCardState extends State<WeatherCard> {
         ),
       );
 
-  Widget get _fallback => _lastWeather ?? Container();
-
   @override
-  Widget build(BuildContext context) => Consumer((context, read) {
-        // Update weather every hour
-        final hour = DateTime.now().hour;
-        final weatherTime = widget.date.add(Duration(hours: hour));
-        return read(_weather(weatherTime)).when(
-          data: (result) => result.map((weather) {
-            _lastWeather = _buildWeatherCard(weather);
-            return _lastWeather;
-          }).orElse(_fallback),
-          loading: () => _fallback,
-          error: (error, trace) {
-            _log.error(
-                'Error retrieving weather for ${weatherTime.toIso8601String()}',
-                error,
-                trace);
-            return _fallback;
-          },
-        );
-      });
+  Widget build(BuildContext context) {
+    // Update weather every hour
+    final hour = DateTime.now().hour;
+    final weatherTime = date.add(Duration(hours: hour));
+    final weather = useProvider(_weather(weatherTime));
+    final lastWeather = useState<Widget>(null);
+    final fallback = lastWeather.value ?? Container();
+    return weather.when(
+      data: (result) => result.map((weather) {
+        lastWeather.value = _buildWeatherCard(weather);
+        return lastWeather.value;
+      }).orElse(fallback),
+      loading: () => fallback,
+      error: (error, trace) {
+        _log.error(
+            'Error retrieving weather for ${weatherTime.toIso8601String()}',
+            error,
+            trace);
+        return fallback;
+      },
+    );
+  }
 }

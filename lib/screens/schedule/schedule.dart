@@ -13,7 +13,6 @@ import 'widgets/band_schedule_list/band_schedule_list.dart';
 import 'widgets/daily_schedule_list/daily_schedule_list.dart';
 import 'widgets/weather_card.dart';
 
-// TODO(SF) STYLE hook widget possible?
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({this.likedOnly = false});
 
