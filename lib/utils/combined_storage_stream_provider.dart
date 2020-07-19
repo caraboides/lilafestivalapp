@@ -9,11 +9,11 @@ import '../services/combined_storage.dart';
 // TODO(SF) STATE Autodispose stream provider?
 class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
   CombinedStorageStreamProvider({
-    BuildContext context,
-    String remoteUrl,
-    String appStorageKey,
-    String assetPath,
-    T Function(dynamic) fromJson,
+    @required BuildContext context,
+    @required String remoteUrl,
+    @required String appStorageKey,
+    @required String assetPath,
+    @required T Function(dynamic) fromJson,
   }) : super((ref) => loadData(
               context: context,
               ref: ref,
@@ -27,12 +27,12 @@ class CombinedStorageStreamProvider<T> extends StreamProvider<T> {
   // TODO(SF) watch https://github.com/rrousselGit/river_pod/issues/42
   @visibleForTesting
   static Stream<T> loadData<T, J>({
-    BuildContext context,
-    String remoteUrl,
-    String appStorageKey,
-    String assetPath,
-    T Function(J) fromJson,
-    ProviderReference ref,
+    @required BuildContext context,
+    @required String remoteUrl,
+    @required String appStorageKey,
+    @required String assetPath,
+    @required T Function(J) fromJson,
+    @required ProviderReference ref,
   }) {
     final streamController = dimeGet<CombinedStorage>().loadData(
       context: context,

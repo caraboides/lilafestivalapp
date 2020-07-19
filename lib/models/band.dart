@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
+
 class Band {
   Band({
-    this.name,
+    @required this.name,
     this.spotify,
     this.image,
     this.logo,

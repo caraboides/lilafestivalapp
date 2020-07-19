@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 
 class FestivalTheme {
   const FestivalTheme({
-    this.theme,
-    this.aboutTheme,
-    this.menuTheme,
+    @required this.theme,
+    @required this.aboutTheme,
+    @required this.menuTheme,
+    @required this.primaryButton,
+    @required this.notificationColor,
     this.menuDrawerDecoration,
     this.appBarBorder,
     this.tabBarDecoration,
-    this.tabBarHeight,
-    this.primaryButton,
     this.logo,
     this.logoMenu,
-    this.notificationColor,
   });
 
   final ThemeData theme;
@@ -21,10 +20,9 @@ class FestivalTheme {
   final BoxDecoration menuDrawerDecoration;
   final ShapeBorder appBarBorder;
   final BoxDecoration tabBarDecoration;
-  final double tabBarHeight;
   final MaterialButton Function({
-    String label,
-    VoidCallback onPressed,
+    @required String label,
+    @required VoidCallback onPressed,
   }) primaryButton;
   final Logo logo;
   final Logo logoMenu;
@@ -32,6 +30,7 @@ class FestivalTheme {
 
   final double eventListItemHeight = 70;
   final double weatherCardHeight = 40;
+  final double tabBarHeight = 48;
 
   // TODO(SF) THEME make schedule icons in general configurable?
 
@@ -50,9 +49,9 @@ class FestivalTheme {
 
 class Logo {
   const Logo({
-    this.assetPath,
-    this.width,
-    this.height,
+    @required this.assetPath,
+    @required this.width,
+    @required this.height,
   });
 
   final String assetPath;

@@ -14,10 +14,7 @@ import 'schedule.dart';
 
 @immutable
 class DailyScheduleFilter {
-  const DailyScheduleFilter({
-    this.date,
-    this.likedOnly,
-  });
+  const DailyScheduleFilter(this.date, {this.likedOnly = false});
 
   final DateTime date;
   final bool likedOnly;

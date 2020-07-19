@@ -14,7 +14,7 @@ class CombinedStorage {
 
   AppStorage get _appStorage => dimeGet<AppStorage>();
   FestivalHub get _festivalHub => dimeGet<FestivalHub>();
-  Logger get _log => const Logger('COMBINED_STORAGE');
+  Logger get _log => const Logger(module: 'COMBINED_STORAGE');
 
   Future<Optional<T>> _loadDataFromAssets<T, J>(
     BuildContext context,
@@ -56,17 +56,15 @@ class CombinedStorage {
   }
 
   Future<Optional<T>> _loadOfflineData<T, J>({
-    BuildContext context,
-    String appStorageKey,
-    String assetPath,
-    T Function(J) fromJson,
+    @required BuildContext context,
+    @required String appStorageKey,
+    @required String assetPath,
+    @required T Function(J) fromJson,
   }) =>
       _loadDataFromAppStorage(appStorageKey, fromJson).then(
         (result) => result.map((data) => Optional.of(data)).orElseGetAsync(
             () => _loadDataFromAssets(context, assetPath, fromJson)),
       );
-
-  void _sendDataToStream<T>(StreamController streamController, T data) {}
 
   Future<void> _sendErrorToStream(StreamController streamController) {
     if (!streamController.isClosed) {
@@ -76,14 +74,12 @@ class CombinedStorage {
     return streamController.close();
   }
 
-  // TODO(SF) STYLE replace null checks everywhere with optionals?
-  // TODO(SF) STYLE improve?
   StreamController<T> loadData<T, J>({
-    BuildContext context,
-    String remoteUrl,
-    String appStorageKey,
-    String assetPath,
-    T Function(J) fromJson,
+    @required BuildContext context,
+    @required String remoteUrl,
+    @required String appStorageKey,
+    @required String assetPath,
+    @required T Function(J) fromJson,
   }) {
     final streamController = StreamController<T>();
     var loadingRemoteDataFailed = false;

@@ -18,6 +18,6 @@ class ServiceModule extends BaseDimeModule {
     addSingle<OpenWeather>(OpenWeather());
     addSingle<FlutterLocalNotificationsPlugin>(
         FlutterLocalNotificationsPlugin());
-    addSingle<Notifications>(Notifications());
+    addSingle<Notifications>(const Notifications());
   }
 }

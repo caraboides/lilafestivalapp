@@ -35,7 +35,7 @@ class BandDetailView extends HookWidget {
       ));
 
   FestivalTheme get _festivalTheme => dimeGet<FestivalTheme>();
-  Logger get _log => const Logger('BandDetailView');
+  Logger get _log => const Logger(module: 'BandDetailView');
 
   String _buildFlag(String country) =>
       String.fromCharCodes(country.runes.map((code) => code + 127397));

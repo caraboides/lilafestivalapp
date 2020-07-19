@@ -15,10 +15,10 @@ class Menu extends StatelessWidget {
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
   Widget _buildEntry({
-    ThemeData theme,
-    String label,
-    IconData icon,
-    VoidCallback onTap,
+    @required ThemeData theme,
+    @required String label,
+    @required IconData icon,
+    @required VoidCallback onTap,
   }) =>
       ListTile(
         title: Text(

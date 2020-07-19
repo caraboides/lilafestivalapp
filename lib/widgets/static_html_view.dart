@@ -11,7 +11,7 @@ class StaticHtmlView extends StatelessWidget {
 
   final String html;
 
-  Logger get _log => const Logger('StaticHtmlView');
+  Logger get _log => const Logger(module: 'StaticHtmlView');
 
   String _buildUrl(BuildContext context) {
     final contentBase64 = base64Encode(const Utf8Encoder().convert(html));

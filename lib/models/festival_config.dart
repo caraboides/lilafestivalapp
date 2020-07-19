@@ -5,22 +5,21 @@ import 'app_route.dart';
 import 'lat_lng.dart';
 import 'reference.dart';
 
-// TODO(SF) STYLE add required annotations or similiar
 class FestivalConfig {
   const FestivalConfig({
-    this.festivalId,
-    this.festivalName,
-    this.festivalFullName,
-    this.festivalUrl,
-    this.startDate,
-    this.endDate,
-    this.daySwitchOffset,
-    this.fontReferences,
-    this.aboutMessages,
-    this.stageAlignment,
-    this.routes,
-    this.weatherGeoLocation,
-    this.weatherCityId,
+    @required this.festivalId,
+    @required this.festivalName,
+    @required this.festivalFullName,
+    @required this.festivalUrl,
+    @required this.startDate,
+    @required this.endDate,
+    @required this.daySwitchOffset,
+    @required this.fontReferences,
+    @required this.aboutMessages,
+    @required this.stageAlignment,
+    @required this.routes,
+    @required this.weatherGeoLocation,
+    @required this.weatherCityId,
   });
 
   final String festivalId;

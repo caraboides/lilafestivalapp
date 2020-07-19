@@ -18,7 +18,7 @@ class WeatherCard extends HookWidget {
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
   WeatherProvider get _weather => dimeGet<WeatherProvider>();
-  Logger get _log => const Logger('WeatherCard');
+  Logger get _log => const Logger(module: 'WeatherCard');
 
   Widget _buildWeatherWidget(Weather weather) => InkWell(
         onTap: () =>

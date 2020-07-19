@@ -9,9 +9,9 @@ import '../../band_detail_view/band_detail_view.dart';
 
 class BandListItem extends StatelessWidget {
   const BandListItem({
+    @required this.bandWithEvents,
+    @required this.currentTime,
     Key key,
-    this.bandWithEvents,
-    this.currentTime,
   }) : super(key: key);
 
   final BandWithEvents bandWithEvents;
@@ -22,10 +22,7 @@ class BandListItem extends StatelessWidget {
 
   Widget _buildSingleEventEntry(Event event) => Padding(
         padding: const EdgeInsets.only(bottom: 6),
-        child: EventDetailRow(
-          event: event,
-          currentTime: currentTime,
-        ),
+        child: EventDetailRow(event: event, currentTime: currentTime),
       );
 
   Widget _buildMultiEventEntry() => Column(

@@ -87,7 +87,6 @@ final FestivalTheme festivalTheme = FestivalTheme(
   ),
   menuDrawerDecoration: BoxDecoration(border: Border(right: _border)),
   appBarBorder: Border(bottom: _border),
-  tabBarHeight: 48,
   tabBarDecoration: BoxDecoration(border: Border(bottom: _border)),
   primaryButton: ({label, onPressed}) => FlatButton(
     shape: Border(

@@ -67,7 +67,6 @@ final FestivalTheme festivalTheme = FestivalTheme(
       color: theme.accentColor.withOpacity(0.87),
     ),
   ),
-  tabBarHeight: 48,
   primaryButton: ({label, onPressed}) => RaisedButton(
     color: theme.accentColor,
     textTheme: ButtonTextTheme.normal,

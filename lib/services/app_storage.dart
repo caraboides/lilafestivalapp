@@ -9,7 +9,7 @@ import '../utils/logging.dart';
 class AppStorage {
   String directory;
 
-  Logger get _log => const Logger('APP_STORAGE');
+  Logger get _log => const Logger(module: 'APP_STORAGE');
 
   Future<String> _getDirectory() async =>
       directory ??= (await getApplicationDocumentsDirectory()).path;

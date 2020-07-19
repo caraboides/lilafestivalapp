@@ -12,16 +12,16 @@ import '../event_list_view.dart';
 import 'daily_schedule_list.i18n.dart';
 
 class DailyScheduleList extends HookWidget {
-  const DailyScheduleList({
+  const DailyScheduleList(
+    this.date, {
+    this.likedOnly = false,
     Key key,
-    this.date,
-    this.likedOnly,
   }) : super(key: key);
 
   final DateTime date;
   final bool likedOnly;
 
-  Logger get _log => const Logger('DailyScheduleList');
+  Logger get _log => const Logger(module: 'DailyScheduleList');
 
   Widget _buildErrorScreen() =>
       ErrorScreen('There was an error retrieving the running order.'.i18n);
@@ -29,11 +29,11 @@ class DailyScheduleList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final provider = useProvider(dimeGet<FilteredDailyScheduleProvider>()(
-        DailyScheduleFilter(date: date, likedOnly: likedOnly)));
+        DailyScheduleFilter(date, likedOnly: likedOnly)));
     return provider.when(
       data: (events) {
         if (events.isEmpty) {
-          return likedOnly ? EmptySchedule() : _buildErrorScreen();
+          return likedOnly ? const EmptySchedule() : _buildErrorScreen();
         }
         return EventListView(
           events: events,

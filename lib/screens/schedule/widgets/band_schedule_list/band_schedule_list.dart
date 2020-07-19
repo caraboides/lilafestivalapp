@@ -14,12 +14,12 @@ import 'band_schedule_list.i18n.dart';
 class BandScheduleList extends HookWidget {
   const BandScheduleList({
     Key key,
-    this.likedOnly,
+    this.likedOnly = false,
   });
 
   final bool likedOnly;
 
-  Logger get _log => const Logger('BandScheduleList');
+  Logger get _log => const Logger(module: 'BandScheduleList');
 
   Widget _buildErrorScreen() =>
       ErrorScreen('There was an error retrieving the bands.'.i18n);
@@ -31,9 +31,9 @@ class BandScheduleList extends HookWidget {
     return provider.when(
       data: (bands) {
         if (bands.isEmpty) {
-          return likedOnly ? EmptySchedule() : _buildErrorScreen();
+          return likedOnly ? const EmptySchedule() : _buildErrorScreen();
         }
-        return BandListView(bands: bands);
+        return BandListView(bands);
       },
       loading: () => LoadingScreen('Loading bands.'.i18n),
       error: (error, trace) {

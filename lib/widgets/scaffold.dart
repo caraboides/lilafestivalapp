@@ -6,11 +6,11 @@ import '../screens/menu/menu.dart';
 
 class AppScaffold extends StatelessWidget {
   const AppScaffold({
+    @required this.body,
     this.title,
     this.appBar,
-    this.body,
     this.isDialog = false,
-  });
+  }) : assert(title != null || appBar != null);
 
   final String title;
   final AppBar appBar;

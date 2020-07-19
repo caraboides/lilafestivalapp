@@ -6,7 +6,7 @@ typedef LogFunction = void Function(String);
 final LogFunction _debugPrint = kReleaseMode ? (_) {} : debugPrint;
 
 class Logger {
-  const Logger(this.module);
+  const Logger({this.module});
 
   final String module;
 

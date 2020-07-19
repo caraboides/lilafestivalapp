@@ -110,10 +110,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         children: <Widget>[
           WeatherCard(date),
           Expanded(
-            child: DailyScheduleList(
-              date: date,
-              likedOnly: likedOnly,
-            ),
+            child: DailyScheduleList(date, likedOnly: likedOnly),
           ),
         ],
       );

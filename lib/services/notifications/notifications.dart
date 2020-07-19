@@ -12,11 +12,13 @@ import '../../utils/logging.dart';
 import 'notifications.i18n.dart';
 
 class Notifications {
+  const Notifications();
+
   FlutterLocalNotificationsPlugin get _plugin =>
       dimeGet<FlutterLocalNotificationsPlugin>();
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
-  Logger get _log => const Logger('NOTIFICATIONS');
+  Logger get _log => const Logger(module: 'NOTIFICATIONS');
 
   // TODO(SF) BUILD release proguard: -keep class com.dexterous.** { *; }
 

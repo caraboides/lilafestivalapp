@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
+
 class LatLng {
   const LatLng({
-    this.lat,
-    this.lng,
+    @required this.lat,
+    @required this.lng,
   });
 
   final double lat;

@@ -11,7 +11,7 @@ class FestivalHub {
   const FestivalHub();
 
   GlobalConfig get _config => dimeGet<GlobalConfig>();
-  Logger get _log => const Logger('FESTIVAL_HUB');
+  Logger get _log => const Logger(module: 'FESTIVAL_HUB');
 
   Future<Optional<J>> loadJsonData<J>(String url) async {
     _log.debug('Loading data from $url');

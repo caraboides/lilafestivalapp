@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class AppRoute {
   const AppRoute({
-    this.path,
-    this.getName,
-    this.icon,
+    @required this.path,
+    @required this.getName,
+    @required this.icon,
+    @required this.builder,
     this.isRoot = false,
-    this.builder,
   });
 
   final String path;

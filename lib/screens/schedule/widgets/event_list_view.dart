@@ -12,19 +12,19 @@ import 'event_list_item.dart';
 
 class EventListView extends StatefulWidget {
   const EventListView({
+    @required this.events,
+    @required this.date,
     Key key,
-    this.events,
-    this.date,
   }) : super(key: key);
 
   final ImmortalList<Event> events;
   final DateTime date;
 
   @override
-  State<StatefulWidget> createState() => EventListViewState();
+  State<StatefulWidget> createState() => _EventListViewState();
 }
 
-class EventListViewState extends State<EventListView>
+class _EventListViewState extends State<EventListView>
     with OneTimeExecutionMixin {
   final _scrollController = ScrollController();
 
@@ -71,8 +71,8 @@ class EventListViewState extends State<EventListView>
   ImmortalList<Widget> _buildListItems() {
     final now = DateTime.now();
     final items = widget.events.map<Widget>((event) => EventListItem(
+          event,
           key: Key(event.id),
-          event: event,
           isPlaying: event.isPlaying(now),
         ));
     if (_currentOrNextPlayingBandIndex >= 0 &&

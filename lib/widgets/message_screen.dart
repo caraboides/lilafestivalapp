@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class MessageScreen extends StatelessWidget {
   const MessageScreen({
-    this.headline,
-    this.description,
-    this.icon,
+    @required this.headline,
+    @required this.description,
+    @required this.icon,
   });
 
   final String headline;

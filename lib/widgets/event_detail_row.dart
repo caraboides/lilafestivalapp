@@ -7,9 +7,9 @@ import 'event_toggle/event_toggle.dart';
 
 class EventDetailRow extends StatelessWidget {
   const EventDetailRow({
+    @required this.event,
+    @required this.currentTime,
     Key key,
-    this.event,
-    this.currentTime,
     this.dense = false,
   }) : super(key: key);
 
@@ -28,11 +28,7 @@ class EventDetailRow extends StatelessWidget {
                 ? SizedBox(height: 42, child: EventToggle(event))
                 : EventToggle(event),
             const SizedBox(width: 8),
-            EventDetails(
-              event: event,
-              showBandName: !dense,
-              showWeekDay: true,
-            ),
+            EventDetails(event, showBandName: !dense, showWeekDay: true),
           ]),
           EventPlayingIndicator(isPlaying: event.isPlaying(currentTime)),
         ],

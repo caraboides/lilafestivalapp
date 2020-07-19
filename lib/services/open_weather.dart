@@ -20,7 +20,7 @@ class OpenWeather {
 
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
-  Logger get _log => const Logger('WEATHER');
+  Logger get _log => const Logger(module: 'WEATHER');
 
   String _buildQueryUrl() => '${_globalConfig.weatherBaseUrl}/forecast?'
       'lat=${_config.weatherGeoLocation.lat}&'

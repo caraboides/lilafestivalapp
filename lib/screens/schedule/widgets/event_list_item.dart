@@ -8,10 +8,10 @@ import '../../../widgets/event_toggle/event_toggle.dart';
 import '../../band_detail_view/band_detail_view.dart';
 
 class EventListItem extends StatelessWidget {
-  const EventListItem({
+  const EventListItem(
+    this.event, {
+    this.isPlaying = false,
     Key key,
-    this.event,
-    this.isPlaying,
   }) : super(key: key);
 
   final Event event;
@@ -44,7 +44,7 @@ class EventListItem extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8, right: 16),
                     child: EventDetails(
-                      event: event,
+                      event,
                       showBandName: true,
                       alignByStage: true,
                     ),

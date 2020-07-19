@@ -1,12 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:optional/optional.dart';
 
 class Event implements Comparable {
   Event({
-    this.bandName,
-    this.id,
-    this.stage,
-    this.start,
-    this.end,
+    @required this.bandName,
+    @required this.id,
+    @required this.stage,
+    @required this.start,
+    @required this.end,
   });
 
   factory Event.fromJson(String id, Map<String, dynamic> json) => Event(

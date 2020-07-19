@@ -26,7 +26,7 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
 
   AppStorage get _appStorage => dimeGet<AppStorage>();
   Notifications get _notifications => dimeGet<Notifications>();
-  Logger get _log => const Logger('MY_SCHEDULE');
+  Logger get _log => const Logger(module: 'MY_SCHEDULE');
   String get _appStorageFileName => Constants.myScheduleAppStorageFileName;
 
   Future<Optional<MySchedule>> _readFromAppStorage(String fileName) async {

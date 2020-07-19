@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
 import '../models/event.dart';
@@ -6,8 +6,8 @@ import 'event_detail_row.dart';
 
 class DenseEventList extends StatelessWidget {
   const DenseEventList({
-    this.events,
-    this.currentTime,
+    @required this.events,
+    @required this.currentTime,
     this.wrapAlignment = WrapAlignment.spaceBetween,
   });
 
@@ -16,8 +16,8 @@ class DenseEventList extends StatelessWidget {
   final WrapAlignment wrapAlignment;
 
   Widget _buildEventRow(Event event) => EventDetailRow(
-        key: Key(event.id),
         event: event,
+        key: Key(event.id),
         currentTime: currentTime,
         dense: true,
       );

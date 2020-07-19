@@ -5,7 +5,7 @@ import '../../../models/band_with_events.dart';
 import 'band_list_item.dart';
 
 class BandListView extends StatelessWidget {
-  const BandListView({Key key, this.bands}) : super(key: key);
+  const BandListView(this.bands, {Key key}) : super(key: key);
 
   final ImmortalList<BandWithEvents> bands;
 

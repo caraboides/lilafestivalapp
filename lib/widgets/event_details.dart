@@ -8,9 +8,9 @@ import 'event_date/event_date.dart';
 import 'event_stage.dart';
 
 class EventDetails extends StatelessWidget {
-  const EventDetails({
+  const EventDetails(
+    this.event, {
     Key key,
-    this.event,
     this.showBandName = false,
     this.showWeekDay = false,
     this.alignByStage = false,

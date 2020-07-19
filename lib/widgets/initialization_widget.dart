@@ -29,7 +29,7 @@ class _InitializationWidgetState extends State<InitializationWidget>
   bool initializedNotifications = false;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
-  Logger get _log => const Logger('InitializationWidget');
+  Logger get _log => const Logger(module: 'InitializationWidget');
 
   void _precacheImages(BuildContext context) {
     if (_theme.logoMenu != null) {

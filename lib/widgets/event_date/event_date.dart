@@ -6,8 +6,8 @@ import 'event_date.i18n.dart';
 
 class EventDate extends StatelessWidget {
   const EventDate({
-    this.start,
-    this.end,
+    @required this.start,
+    @required this.end,
     this.showWeekDay = false,
   });
 
