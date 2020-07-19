@@ -60,8 +60,7 @@ class WeatherCard extends HookWidget {
   Widget build(BuildContext context) {
     // Update weather every hour
     final hour = DateTime.now().hour;
-    final weatherTime = date.add(Duration(hours: hour));
-    final weather = useProvider(_weather(weatherTime));
+    final weather = useProvider(_weather(WeatherKey(date, hour)));
     final lastWeather = useState<Widget>(null);
     final fallback = lastWeather.value ?? Container();
     return weather.when(
@@ -72,7 +71,7 @@ class WeatherCard extends HookWidget {
       loading: () => fallback,
       error: (error, trace) {
         _log.error(
-            'Error retrieving weather for ${weatherTime.toIso8601String()}',
+            'Error retrieving weather for ${date.toIso8601String()}@$hour',
             error,
             trace);
         return fallback;

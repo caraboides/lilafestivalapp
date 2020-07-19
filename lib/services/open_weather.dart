@@ -47,26 +47,27 @@ class OpenWeather {
     return const Optional<ImmortalList<Weather>>.empty();
   }
 
-  Future<ImmortalList<Weather>> _getForecast(int hour) async {
-    // TODO(SF) STYLE knowledge about cache key in two locations
-    final currentWeathers = _cache.get(hour);
+  Future<ImmortalList<Weather>> _getForecast(int cacheKey) async {
+    final currentWeathers = _cache.get(cacheKey);
     if (currentWeathers != null) {
-      _log.debug('Reading forecast for hour $hour from cache');
+      _log.debug('Reading forecast for key $cacheKey from cache');
       return Future.value(currentWeathers);
     }
-    _log.debug('Loading forecast for hour $hour');
+    _log.debug('Loading forecast for key $cacheKey');
     return _loadForecast().then((weathers) => weathers.map((list) {
-          _log.debug(
-            'Loading weather for hour $hour was successful, writing to cache',
-          );
-          _cache.set(hour, list);
+          _log.debug('Loading weather for key $cacheKey was successful, '
+              'writing to cache');
+          _cache.set(cacheKey, list);
           return list;
         }).orElse(ImmortalList<Weather>()));
   }
 
-  Future<Optional<Weather>> getWeatherForDate(DateTime date) async {
-    _log.debug('Loading weather for $date');
-    final forecast = await _getForecast(date.hour);
+  Future<Optional<Weather>> getWeatherForDate(
+    DateTime date,
+    int cacheKey,
+  ) async {
+    _log.debug('Loading weather for key $cacheKey');
+    final forecast = await _getForecast(cacheKey);
     _log.debug('Selecting weather for $date');
     final now = DateTime.now();
     final isToday = isSameFestivalDay(now, date);
