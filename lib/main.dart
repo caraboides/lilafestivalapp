@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:i18n_extension/i18n_widget.dart';
 
 import 'models/festival_config.dart';
 import 'models/theme.dart';
@@ -50,12 +49,7 @@ class FestivalApp extends StatelessWidget {
             Locale('en', 'US'),
             Locale('de', 'DE'),
           ],
-          routes: dimeGet<Navigation>()
-              .routesByPath
-              .mapValues((_, route) => (context) => route.isRoot
-                  ? I18n(child: route.builder(context))
-                  : route.builder(context))
-              .toMutableMap(),
+          routes: dimeGet<Navigation>().namedRoutes.toMutableMap(),
         ),
       );
 }

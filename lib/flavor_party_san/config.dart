@@ -55,4 +55,7 @@ final FestivalConfig config = FestivalConfig(
   ]),
   weatherGeoLocation: const LatLng(lat: 51.25, lng: 10.67),
   weatherCityId: '2838240',
+  history: ImmortalList([
+    const NestedRoute(key: 'party_san_2019', title: '2019'),
+  ]),
 );

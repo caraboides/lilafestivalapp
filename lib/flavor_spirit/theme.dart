@@ -15,7 +15,7 @@ final List<Shadow> _appBarTextShadows = const [
           offset: offset,
         ))
     .toList();
-const String displayFontFamily = 'Display Font';
+const String _displayFontFamily = 'Display Font';
 const Color _menuFontColor = Color(0xFFd6102b);
 final Color _darkBackgroundColor = Colors.grey[850];
 final BorderSide _border = BorderSide(color: Colors.black, width: 2);
@@ -27,12 +27,12 @@ final ThemeData theme = ThemeData(
   errorColor: _menuFontColor,
   textTheme: Typography.blackMountainView.copyWith(
     headline4: TextStyle(
-      fontFamily: displayFontFamily,
+      fontFamily: _displayFontFamily,
       fontSize: 24,
       color: Colors.black,
     ),
     headline3: TextStyle(
-      fontFamily: displayFontFamily,
+      fontFamily: _displayFontFamily,
       fontSize: 28,
       color: Colors.black,
     ),
@@ -44,7 +44,7 @@ final ThemeData theme = ThemeData(
   appBarTheme: AppBarTheme(
     textTheme: Typography.whiteMountainView.copyWith(
       headline6: TextStyle(
-        fontFamily: displayFontFamily,
+        fontFamily: _displayFontFamily,
         fontSize: 26,
         shadows: _appBarTextShadows,
       ),
@@ -52,11 +52,11 @@ final ThemeData theme = ThemeData(
   ),
   tabBarTheme: const TabBarTheme(
     labelStyle: TextStyle(
-      fontFamily: displayFontFamily,
+      fontFamily: _displayFontFamily,
       fontSize: 18,
     ),
     unselectedLabelStyle: TextStyle(
-      fontFamily: displayFontFamily,
+      fontFamily: _displayFontFamily,
       fontSize: 18,
     ),
   ),
@@ -84,6 +84,8 @@ final FestivalTheme festivalTheme = FestivalTheme(
     iconTheme: theme.iconTheme.copyWith(
       color: _menuFontColor.withOpacity(0.87),
     ),
+    accentColor: _menuFontColor,
+    dividerColor: _menuFontColor,
   ),
   menuDrawerDecoration: BoxDecoration(border: Border(right: _border)),
   appBarBorder: Border(bottom: _border),

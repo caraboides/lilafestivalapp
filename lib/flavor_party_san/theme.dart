@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../models/theme.dart';
 
-const String displayFontFamily = 'Display Font';
+const String _displayFontFamily = 'Display Font';
+final Color _lightDividerColor = Colors.grey[800];
 
 final ThemeData theme = ThemeData(
   primaryColor: Colors.grey[850],
@@ -10,12 +11,12 @@ final ThemeData theme = ThemeData(
   errorColor: Colors.redAccent[700],
   textTheme: Typography.blackMountainView.copyWith(
     headline4: TextStyle(
-      fontFamily: displayFontFamily,
+      fontFamily: _displayFontFamily,
       fontSize: 24,
       color: Colors.black,
     ),
     headline3: TextStyle(
-      fontFamily: displayFontFamily,
+      fontFamily: _displayFontFamily,
       fontSize: 28,
       color: Colors.black,
     ),
@@ -28,18 +29,18 @@ final ThemeData theme = ThemeData(
   appBarTheme: AppBarTheme(
     textTheme: Typography.whiteMountainView.copyWith(
       headline6: const TextStyle(
-        fontFamily: displayFontFamily,
+        fontFamily: _displayFontFamily,
         fontSize: 26,
       ),
     ),
   ),
   tabBarTheme: const TabBarTheme(
     labelStyle: TextStyle(
-      fontFamily: displayFontFamily,
+      fontFamily: _displayFontFamily,
       fontSize: 18,
     ),
     unselectedLabelStyle: TextStyle(
-      fontFamily: displayFontFamily,
+      fontFamily: _displayFontFamily,
       fontSize: 18,
     ),
   ),
@@ -55,7 +56,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
   aboutTheme: theme.copyWith(
     textTheme: Typography.whiteMountainView,
     scaffoldBackgroundColor: theme.primaryColor,
-    dividerColor: Colors.grey[800],
+    dividerColor: _lightDividerColor,
     buttonTheme: theme.buttonTheme.copyWith(textTheme: ButtonTextTheme.accent),
     iconTheme: theme.iconTheme.copyWith(color: Colors.white70),
   ),
@@ -66,6 +67,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
     iconTheme: theme.iconTheme.copyWith(
       color: theme.accentColor.withOpacity(0.87),
     ),
+    dividerColor: _lightDividerColor,
   ),
   primaryButton: ({label, onPressed}) => RaisedButton(
     color: theme.accentColor,

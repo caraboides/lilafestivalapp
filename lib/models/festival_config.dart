@@ -20,6 +20,7 @@ class FestivalConfig {
     @required this.routes,
     @required this.weatherGeoLocation,
     @required this.weatherCityId,
+    @required this.history,
   });
 
   final String festivalId;
@@ -35,6 +36,7 @@ class FestivalConfig {
   final ImmortalList<AppRoute> routes;
   final LatLng weatherGeoLocation;
   final String weatherCityId;
+  final ImmortalList<NestedRoute> history;
 
   ImmortalList<DateTime> get days => ImmortalList.generate(
       endDate.difference(startDate).inDays + 1,
