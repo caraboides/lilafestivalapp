@@ -1,4 +1,5 @@
 import 'package:dime/dime.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'app_storage.dart';
@@ -19,5 +20,6 @@ class ServiceModule extends BaseDimeModule {
     addSingle<FlutterLocalNotificationsPlugin>(
         FlutterLocalNotificationsPlugin());
     addSingle<Notifications>(const Notifications());
+    addSingle<BaseCacheManager>(DefaultCacheManager());
   }
 }
