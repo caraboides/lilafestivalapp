@@ -6,24 +6,26 @@ import 'package:optional/optional.dart';
 import '../models/band.dart';
 import '../models/band_with_events.dart';
 import '../models/event.dart';
+import '../utils/band_key.dart';
 import '../utils/combined_async_values.dart';
 import 'bands.dart';
 import 'schedule.dart';
 
 class BandWithEventsProvider
-    extends ComputedFamily<AsyncValue<BandWithEvents>, String> {
+    extends ComputedFamily<AsyncValue<BandWithEvents>, BandKey> {
   BandWithEventsProvider()
-      : super((read, bandName) {
-          final bandProvider = read(dimeGet<BandProvider>()(bandName));
+      : super((read, key) {
+          final bandProvider = read(dimeGet<BandProvider>()(key));
           final eventsForBandsProvider =
-              read(dimeGet<BandScheduleProvider>()(bandName));
+              read(dimeGet<BandScheduleProvider>()(key));
           return combineAsyncValues<BandWithEvents, Optional<Band>,
               ImmortalList<Event>>(
             bandProvider,
             eventsForBandsProvider,
             (band, events) => BandWithEvents(
+              festivalId: key.festivalId,
+              bandName: key.bandName,
               band: band,
-              bandName: bandName,
               events: events,
             ),
           );
@@ -31,11 +33,12 @@ class BandWithEventsProvider
 }
 
 class BandsWithEventsProvider
-    extends Computed<AsyncValue<ImmortalList<BandWithEvents>>> {
+    extends ComputedFamily<AsyncValue<ImmortalList<BandWithEvents>>, String> {
   BandsWithEventsProvider()
-      : super((read) {
-          final bandsProvider = read(dimeGet<SortedBandsProvider>());
-          final schedule = read(dimeGet<SortedScheduleProvider>());
+      : super((read, festivalId) {
+          final bandsProvider =
+              read(dimeGet<SortedBandsProvider>()(festivalId));
+          final schedule = read(dimeGet<SortedScheduleProvider>()(festivalId));
           return combineAsyncValues<
               ImmortalList<BandWithEvents>,
               ImmortalList<Band>,
@@ -43,9 +46,10 @@ class BandsWithEventsProvider
             final eventsByBand = events.asMapOfLists((event) => event.bandName);
             return bands.map(
               (band) => BandWithEvents(
+                festivalId: festivalId,
+                bandName: band.name,
                 band: Optional.of(band),
                 events: eventsByBand[band.name].orElse(ImmortalList<Event>()),
-                bandName: band.name,
               ),
             );
           });

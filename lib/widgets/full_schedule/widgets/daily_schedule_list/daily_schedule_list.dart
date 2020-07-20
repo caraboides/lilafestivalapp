@@ -30,15 +30,19 @@ class DailyScheduleList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(SF) HISTORY pass festival id
-    final provider = useProvider(dimeGet<FilteredDailyScheduleProvider>()(
-        DailyScheduleFilter(date, likedOnly: likedOnly)));
+    final provider = useProvider(
+        dimeGet<FilteredDailyScheduleProvider>()(DailyScheduleFilter(
+      festivalId: festivalId,
+      date: date,
+      likedOnly: likedOnly,
+    )));
     return provider.when(
       data: (events) {
         if (events.isEmpty) {
           return likedOnly ? const EmptySchedule() : _buildErrorScreen();
         }
         return EventListView(
+          festivalId: festivalId,
           events: events,
           date: date,
         );

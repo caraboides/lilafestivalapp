@@ -1,7 +1,6 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 
-import '../models/festival_config.dart';
 import 'bands.dart';
 import 'bands_with_events.dart';
 import 'filtered_schedules.dart';
@@ -16,14 +15,12 @@ class ProviderModule extends BaseDimeModule {
 
   @override
   void updateInjections() {
-    // TODO(SF) STATE or use tag for festivalid?
-    final festivalId = dimeGet<FestivalConfig>().festivalId;
     // Band providers
-    addSingle<BandsProvider>(BandsProvider(context, festivalId));
+    addSingle<BandsProvider>(BandsProvider(context));
     addSingle<BandProvider>(BandProvider());
     addSingle<SortedBandsProvider>(SortedBandsProvider());
     // Schedule providers
-    addSingle<ScheduleProvider>(ScheduleProvider(context, festivalId));
+    addSingle<ScheduleProvider>(ScheduleProvider(context));
     addSingle<SortedScheduleProvider>(SortedScheduleProvider());
     addSingle<DailyScheduleProvider>(DailyScheduleProvider());
     addSingle<BandScheduleProvider>(BandScheduleProvider());

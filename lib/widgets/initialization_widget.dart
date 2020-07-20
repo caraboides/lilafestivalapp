@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
 
 import '../models/event.dart';
+import '../models/festival_config.dart';
 import '../models/my_schedule.dart';
 import '../models/theme.dart';
 import '../providers/my_schedule.dart';
@@ -29,6 +30,7 @@ class _InitializationWidgetState extends State<InitializationWidget>
   bool initializedNotifications = false;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
+  FestivalConfig get _config => dimeGet<FestivalConfig>();
   Logger get _log => const Logger(module: 'InitializationWidget');
 
   void _precacheImages(BuildContext context) {
@@ -70,7 +72,7 @@ class _InitializationWidgetState extends State<InitializationWidget>
       dimeGet<Notifications>().initializeNotificationPlugin();
     });
     final mySchedule = useProvider(dimeGet<MyScheduleProvider>().state);
-    final events = useProvider(dimeGet<ScheduleProvider>());
+    final events = useProvider(dimeGet<ScheduleProvider>()(_config.festivalId));
     executeUntilSuccessful(
         () => _verifyScheduledNotifications(mySchedule, events));
     return widget.child;

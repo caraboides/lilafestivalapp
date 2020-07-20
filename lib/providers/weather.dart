@@ -3,23 +3,18 @@ import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weather/weather_library.dart';
 import 'package:optional/optional.dart';
-import 'package:quiver/core.dart' as quiver;
 
 import '../services/open_weather.dart';
+import '../utils/combined_key.dart';
 
-@immutable
-class WeatherKey {
-  const WeatherKey(this.date, this.cacheKey);
+class WeatherKey extends CombinedKey<int, DateTime> {
+  const WeatherKey({
+    @required int cacheKey,
+    @required DateTime date,
+  }) : super(key1: cacheKey, key2: date);
 
-  final DateTime date;
-  final int cacheKey;
-
-  @override
-  int get hashCode => quiver.hash2(date.hashCode, cacheKey.hashCode);
-
-  @override
-  bool operator ==(dynamic other) =>
-      other is WeatherKey && date == other.date && cacheKey == other.cacheKey;
+  int get cacheKey => key1;
+  DateTime get date => key2;
 }
 
 class WeatherProvider

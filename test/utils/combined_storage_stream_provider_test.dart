@@ -10,7 +10,7 @@ import 'package:lilafestivalapp/services/combined_storage.dart';
 import 'package:mockito/mockito.dart';
 import 'package:optional/optional.dart';
 
-import 'package:lilafestivalapp/utils/combined_storage_stream_provider.dart';
+import 'package:lilafestivalapp/utils/combined_storage_stream.dart';
 import 'package:lilafestivalapp/services/app_storage.dart';
 import 'package:lilafestivalapp/services/festival_hub.dart';
 
@@ -73,7 +73,7 @@ Future<Optional<dynamic>> Function(Invocation) mockOptionalResponse(
         [int delayInMilliseconds = 0]) =>
     mockResponse(Optional.ofNullable(data?.toJson()), delayInMilliseconds);
 
-Stream<TestData> createStream() => CombinedStorageStreamProvider.loadData(
+Stream<TestData> createStream() => createCombinedStorageStream(
       context: buildContextMock,
       remoteUrl: 'remoteUrl',
       appStorageKey: 'appStorageKey',

@@ -60,7 +60,10 @@ class WeatherCard extends HookWidget {
   Widget build(BuildContext context) {
     // Update weather every hour
     final hour = DateTime.now().hour;
-    final weather = useProvider(_weather(WeatherKey(date, hour)));
+    final weather = useProvider(_weather(WeatherKey(
+      date: date,
+      cacheKey: hour,
+    )));
     final lastWeather = useState<Widget>(null);
     final fallback = lastWeather.value ?? Container();
     return weather.when(

@@ -11,6 +11,7 @@ import '../../models/band_with_events.dart';
 import '../../models/event.dart';
 import '../../models/theme.dart';
 import '../../providers/bands_with_events.dart';
+import '../../utils/band_key.dart';
 import '../../utils/logging.dart';
 import '../../widgets/dense_event_list.dart';
 import '../../widgets/error_screen/error_screen.dart';
@@ -24,13 +25,13 @@ import 'band_detail_view.i18n.dart';
 
 // TODO(SF) FEATURE periodic rebuild for is playing indicator?
 class BandDetailView extends HookWidget {
-  const BandDetailView(this.bandName);
+  const BandDetailView(this.bandKey);
 
-  final String bandName;
+  final BandKey bandKey;
 
-  static void openFor(BuildContext context, String bandName) =>
+  static void openFor(BuildContext context, BandKey bandKey) =>
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => BandDetailView(bandName),
+        builder: (_) => BandDetailView(bandKey),
         fullscreenDialog: true,
       ));
 
@@ -170,7 +171,7 @@ class BandDetailView extends HookWidget {
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
             child: Text(
-              bandName.toUpperCase(),
+              bandKey.bandName.toUpperCase(),
               style: theme.textTheme.headline3,
               textAlign: TextAlign.center,
             ),
@@ -195,15 +196,17 @@ class BandDetailView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final bandProvider =
-        useProvider(dimeGet<BandWithEventsProvider>()(bandName));
+        useProvider(dimeGet<BandWithEventsProvider>()(bandKey));
     return AppScaffold(
       isDialog: true,
+      // TODO(SF) HISTORY add year to title if history festival
       title: 'Band Details'.i18n,
       body: bandProvider.when(
         data: (band) => _buildBandView(context, band),
         loading: () => LoadingScreen('Loading band data.'.i18n),
         error: (error, trace) {
-          _log.error('Error retrieving data for band $bandName', error, trace);
+          _log.error('Error retrieving data for band ${bandKey.bandName}',
+              error, trace);
           return ErrorScreen('There was an error retrieving band data.'.i18n);
         },
       ),

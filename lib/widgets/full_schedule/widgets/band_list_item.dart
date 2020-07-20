@@ -18,7 +18,7 @@ class BandListItem extends StatelessWidget {
   final DateTime currentTime;
 
   void _onTap(BuildContext context) =>
-      BandDetailView.openFor(context, bandWithEvents.bandName);
+      BandDetailView.openFor(context, bandWithEvents.bandKey);
 
   Widget _buildSingleEventEntry(Event event) => Padding(
         padding: const EdgeInsets.only(bottom: 6),

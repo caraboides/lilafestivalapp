@@ -14,6 +14,8 @@ import 'band_schedule_list.i18n.dart';
 class BandScheduleList extends HookWidget {
   const BandScheduleList({
     Key key,
+    // TODO(SF) HISTORY or pass FilteredBandScheduleKey here already?
+    // TODO(SF) HISTORY naming! band schedule
     @required this.festivalId,
     this.likedOnly = false,
   });
@@ -28,9 +30,11 @@ class BandScheduleList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(SF) HISTORY pass festivalId
-    final provider =
-        useProvider(dimeGet<FilteredBandScheduleProvider>()(likedOnly));
+    final provider = useProvider(
+        dimeGet<FilteredBandScheduleProvider>()(FilteredBandScheduleKey(
+      festivalId: festivalId,
+      likedOnly: likedOnly,
+    )));
     return provider.when(
       data: (bands) {
         if (bands.isEmpty) {
