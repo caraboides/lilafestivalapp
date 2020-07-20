@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../models/band_with_events.dart';
 import '../../../models/event.dart';
-import '../../../widgets/dense_event_list.dart';
-import '../../../widgets/event_band_name.dart';
-import '../../../widgets/event_detail_row.dart';
-import '../../band_detail_view/band_detail_view.dart';
+import '../../../screens/band_detail_view/band_detail_view.dart';
+import '../../dense_event_list.dart';
+import '../../event_band_name.dart';
+import '../../event_detail_row.dart';
 
 class BandListItem extends StatelessWidget {
   const BandListItem({

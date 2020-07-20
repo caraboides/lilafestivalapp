@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../../models/event.dart';
 import '../../../models/theme.dart';
-import '../../../widgets/event_details.dart';
-import '../../../widgets/event_toggle/event_toggle.dart';
-import '../../band_detail_view/band_detail_view.dart';
+import '../../../screens/band_detail_view/band_detail_view.dart';
+import '../../event_details.dart';
+import '../../event_toggle/event_toggle.dart';
 
 class EventListItem extends StatelessWidget {
   const EventListItem(

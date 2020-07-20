@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../providers/filtered_schedules.dart';
 import '../../../../utils/logging.dart';
-import '../../../../widgets/error_screen/error_screen.dart';
-import '../../../../widgets/loading_screen/loading_screen.dart';
+import '../../../error_screen/error_screen.dart';
+import '../../../loading_screen/loading_screen.dart';
 import '../band_list_view.dart';
 import '../empty_schedule/empty_schedule.dart';
 import 'band_schedule_list.i18n.dart';
@@ -14,9 +14,11 @@ import 'band_schedule_list.i18n.dart';
 class BandScheduleList extends HookWidget {
   const BandScheduleList({
     Key key,
+    @required this.festivalId,
     this.likedOnly = false,
   });
 
+  final String festivalId;
   final bool likedOnly;
 
   Logger get _log => const Logger(module: 'BandScheduleList');
@@ -26,6 +28,7 @@ class BandScheduleList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO(SF) HISTORY pass festivalId
     final provider =
         useProvider(dimeGet<FilteredBandScheduleProvider>()(likedOnly));
     return provider.when(

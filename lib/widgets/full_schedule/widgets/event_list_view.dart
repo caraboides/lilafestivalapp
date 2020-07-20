@@ -7,7 +7,7 @@ import 'package:immortal/immortal.dart';
 import '../../../models/event.dart';
 import '../../../models/theme.dart';
 import '../../../utils/date.dart';
-import '../../../widgets/one_time_execution_mixin.dart';
+import '../../one_time_execution_mixin.dart';
 import 'event_list_item.dart';
 
 class EventListView extends StatefulWidget {
