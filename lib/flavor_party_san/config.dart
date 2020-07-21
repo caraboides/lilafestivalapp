@@ -9,12 +9,12 @@ import 'screens/faq/faq.dart';
 import 'screens/shuttle/shuttle.dart';
 
 final FestivalConfig config = FestivalConfig(
-  festivalId: 'party_san_2019',
+  festivalId: 'party_san_2021',
   festivalName: 'Party.San',
   festivalFullName: 'Party.San Open Air',
   festivalUrl: 'https://www.party-san.de',
-  startDate: DateTime(2019, 8, 8),
-  endDate: DateTime(2019, 8, 10),
+  startDate: DateTime(2021, 8, 12),
+  endDate: DateTime(2021, 8, 14),
   daySwitchOffset: const Duration(hours: 3),
   fontReferences: ImmortalList([
     Reference(
