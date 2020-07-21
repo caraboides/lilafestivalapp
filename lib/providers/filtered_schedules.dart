@@ -42,22 +42,23 @@ class DailyScheduleFilter {
       likedOnly == other.likedOnly;
 }
 
-class FilteredDailyScheduleProvider extends ComputedFamily<
-    AsyncValue<ImmortalList<Event>>, DailyScheduleFilter> {
+class FilteredDailyScheduleProvider extends Family<
+    Computed<AsyncValue<ImmortalList<Event>>>, DailyScheduleFilter> {
   FilteredDailyScheduleProvider()
-      : super((read, key) {
-          final dailySchedule =
-              read(dimeGet<DailyScheduleProvider>()(key.dailyScheduleKey));
-          final myScheduleProvider =
-              read(dimeGet<MyScheduleProvider>()(key.festivalId).state);
-          return combineAsyncValues<ImmortalList<Event>, ImmortalList<Event>,
-                  MySchedule>(
-              dailySchedule,
-              myScheduleProvider,
-              (events, mySchedule) => key.likedOnly
-                  ? events.where((event) => mySchedule.isEventLiked(event.id))
-                  : events);
-        });
+      : super((key) => Computed((read) {
+              final dailySchedule =
+                  read(dimeGet<DailyScheduleProvider>()(key.dailyScheduleKey));
+              final myScheduleProvider =
+                  read(dimeGet<MyScheduleProvider>()(key.festivalId).state);
+              return combineAsyncValues<ImmortalList<Event>,
+                      ImmortalList<Event>, MySchedule>(
+                  dailySchedule,
+                  myScheduleProvider,
+                  (events, mySchedule) => key.likedOnly
+                      ? events
+                          .where((event) => mySchedule.isEventLiked(event.id))
+                      : events);
+            }));
 }
 
 class BandScheduleKey extends CombinedKey<String, bool> {
@@ -70,21 +71,21 @@ class BandScheduleKey extends CombinedKey<String, bool> {
   bool get likedOnly => key2;
 }
 
-class FilteredBandScheduleProvider extends ComputedFamily<
-    AsyncValue<ImmortalList<BandWithEvents>>, BandScheduleKey> {
+class FilteredBandScheduleProvider extends Family<
+    Computed<AsyncValue<ImmortalList<BandWithEvents>>>, BandScheduleKey> {
   FilteredBandScheduleProvider()
-      : super((read, key) {
-          final bandsWithEvents =
-              read(dimeGet<BandsWithEventsProvider>()(key.festivalId));
-          final myScheduleProvider =
-              read(dimeGet<MyScheduleProvider>()(key.festivalId).state);
-          return combineAsyncValues<ImmortalList<BandWithEvents>,
-                  ImmortalList<BandWithEvents>, MySchedule>(
-              bandsWithEvents,
-              myScheduleProvider,
-              (bands, mySchedule) => key.likedOnly
-                  ? bands.where((bandWithEvents) => bandWithEvents.events
-                      .any((event) => mySchedule.isEventLiked(event.id)))
-                  : bands);
-        });
+      : super((key) => Computed((read) {
+              final bandsWithEvents =
+                  read(dimeGet<BandsWithEventsProvider>()(key.festivalId));
+              final myScheduleProvider =
+                  read(dimeGet<MyScheduleProvider>()(key.festivalId).state);
+              return combineAsyncValues<ImmortalList<BandWithEvents>,
+                      ImmortalList<BandWithEvents>, MySchedule>(
+                  bandsWithEvents,
+                  myScheduleProvider,
+                  (bands, mySchedule) => key.likedOnly
+                      ? bands.where((bandWithEvents) => bandWithEvents.events
+                          .any((event) => mySchedule.isEventLiked(event.id)))
+                      : bands);
+            }));
 }

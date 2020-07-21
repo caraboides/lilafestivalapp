@@ -13,11 +13,12 @@ import '../utils/combined_storage_stream.dart';
 import '../utils/constants.dart';
 import '../utils/date.dart';
 
-class ScheduleProvider
-    extends StreamProviderFamily<ImmortalList<Event>, String> {
+class ScheduleProvider extends Family<
+    ProviderBase<StreamProviderDependency<ImmortalList<Event>>,
+        AsyncValue<ImmortalList<Event>>>,
+    String> {
   ScheduleProvider(BuildContext context)
-      : super((ref, festivalId) => _createStream(
-              ref: ref,
+      : super((festivalId) => _createStreamProvider(
               festivalId: festivalId,
               context: context,
             ));
@@ -32,33 +33,33 @@ class ScheduleProvider
       ImmortalMap<String, dynamic>(jsonMap)
           .mapEntries<Event>((id, json) => Event.fromJson(id, json));
 
-  static Stream<ImmortalList<Event>> _createStream({
-    @required ProviderReference ref,
+  static ProviderBase<StreamProviderDependency<ImmortalList<Event>>,
+      AsyncValue<ImmortalList<Event>>> _createStreamProvider({
     @required String festivalId,
     @required BuildContext context,
   }) =>
       festivalId == _config.festivalId
-          ? createCombinedStorageStream(
-              context: context,
-              ref: ref,
-              remoteUrl: _remoteUrl(festivalId),
-              appStorageKey: Constants.scheduleAppStorageFileName,
-              assetPath: Constants.scheduleAssetFileName,
-              fromJson: _fromJson,
-            )
-          : createCacheStream(
-              remoteUrl:
-                  _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
-              fromJson: _fromJson,
-            );
+          ? StreamProvider((ref) => createCombinedStorageStream(
+                context: context,
+                ref: ref,
+                remoteUrl: _remoteUrl(festivalId),
+                appStorageKey: Constants.scheduleAppStorageFileName,
+                assetPath: Constants.scheduleAssetFileName,
+                fromJson: _fromJson,
+              ))
+          : StreamProvider.autoDispose((ref) => createCacheStream(
+                remoteUrl:
+                    _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
+                fromJson: _fromJson,
+              ));
 }
 
 class SortedScheduleProvider
-    extends ComputedFamily<AsyncValue<ImmortalList<Event>>, String> {
+    extends Family<Computed<AsyncValue<ImmortalList<Event>>>, String> {
   SortedScheduleProvider()
-      : super((read, festivalId) =>
+      : super((festivalId) => Computed((read) =>
             read(dimeGet<ScheduleProvider>()(festivalId))
-                .whenData((events) => events.sort()));
+                .whenData((events) => events.sort())));
 }
 
 class DailyScheduleKey extends CombinedKey<String, DateTime> {
@@ -71,21 +72,23 @@ class DailyScheduleKey extends CombinedKey<String, DateTime> {
   DateTime get date => key2;
 }
 
-class DailyScheduleProvider
-    extends ComputedFamily<AsyncValue<ImmortalList<Event>>, DailyScheduleKey> {
+class DailyScheduleProvider extends Family<
+    Computed<AsyncValue<ImmortalList<Event>>>, DailyScheduleKey> {
   DailyScheduleProvider()
-      : super((read, key) =>
+      : super((key) => Computed((read) =>
             read(dimeGet<SortedScheduleProvider>()(key.festivalId)).whenData(
               (events) => events.where((event) => event.start
                   .map((startTime) => isSameFestivalDay(startTime, key.date))
                   .orElse(false)),
-            ));
+            )));
 }
 
 class BandScheduleProvider
-    extends ComputedFamily<AsyncValue<ImmortalList<Event>>, BandKey> {
+    extends Family<Computed<AsyncValue<ImmortalList<Event>>>, BandKey> {
   BandScheduleProvider()
-      : super((read, key) => read(dimeGet<ScheduleProvider>()(key.festivalId))
-            .whenData((events) =>
-                events.where((event) => event.bandName == key.bandName)));
+      : super((key) => Computed(
+              (read) => read(dimeGet<ScheduleProvider>()(key.festivalId))
+                  .whenData((events) =>
+                      events.where((event) => event.bandName == key.bandName)),
+            ));
 }

@@ -16,23 +16,27 @@ import '../utils/constants.dart';
 import '../utils/logging.dart';
 
 class MyScheduleProvider
-    extends StateNotifierProviderFamily<MyScheduleController, String> {
+    extends Family<StateNotifierProvider<MyScheduleController>, String> {
   MyScheduleProvider() : super(_createProvider);
 
   static FestivalConfig get _config => dimeGet<FestivalConfig>();
 
-  static MyScheduleController _createProvider(
-          ProviderReference ref, String festivalId) =>
-      MyScheduleController.create(
-        festivalId: festivalId,
-        // Only handle legacy file for oldest history festival
-        handleLegacyFile: _config.history.last
-            .map((legacyFestival) => festivalId == legacyFestival.key)
-            .orElse(false),
-      );
+  static StateNotifierProvider<MyScheduleController> _createProvider(
+          String festivalId) =>
+      festivalId == _config.festivalId
+          ? StateNotifierProvider((ref) => MyScheduleController.create(
+                festivalId: festivalId,
+              ))
+          // TODO(SF) HISTORY possible to use autodispose here?
+          : StateNotifierProvider((ref) => MyScheduleController.create(
+                festivalId: festivalId,
+                // Only handle legacy file for oldest history festival
+                handleLegacyFile: _config.history.last
+                    .map((legacyFestival) => festivalId == legacyFestival.key)
+                    .orElse(false),
+              ));
 }
 
-// TODO(SF) HISTORY autodispose possible for history? bands + schedule as well
 class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   MyScheduleController._({
     @required this.festivalId,
@@ -140,12 +144,12 @@ class EventKey extends CombinedKey<String, String> {
   String get eventId => key2;
 }
 
-class LikedEventProvider extends ComputedFamily<Optional<int>, EventKey> {
+class LikedEventProvider extends Family<Computed<Optional<int>>, EventKey> {
   LikedEventProvider()
-      : super((read, key) =>
+      : super((key) => Computed((read) =>
             read(dimeGet<MyScheduleProvider>()(key.festivalId).state).when(
               data: (mySchedule) => mySchedule.getNotificationId(key.eventId),
               loading: () => const Optional<int>.empty(),
               error: (_, __) => const Optional<int>.empty(),
-            ));
+            )));
 }

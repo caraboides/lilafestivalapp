@@ -18,8 +18,8 @@ class WeatherKey extends CombinedKey<int, DateTime> {
 }
 
 class WeatherProvider
-    extends FutureProviderFamily<Optional<Weather>, WeatherKey> {
+    extends Family<FutureProvider<Optional<Weather>>, WeatherKey> {
   WeatherProvider()
-      : super((ref, weatherKey) => dimeGet<OpenWeather>()
-            .getWeatherForDate(weatherKey.date, weatherKey.cacheKey));
+      : super((weatherKey) => FutureProvider((ref) => dimeGet<OpenWeather>()
+            .getWeatherForDate(weatherKey.date, weatherKey.cacheKey)));
 }

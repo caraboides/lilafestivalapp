@@ -12,11 +12,12 @@ import '../utils/cache_stream.dart';
 import '../utils/combined_storage_stream.dart';
 import '../utils/constants.dart';
 
-class BandsProvider
-    extends StreamProviderFamily<ImmortalMap<String, Band>, String> {
+class BandsProvider extends Family<
+    ProviderBase<StreamProviderDependency<ImmortalMap<String, Band>>,
+        AsyncValue<ImmortalMap<String, Band>>>,
+    String> {
   BandsProvider(BuildContext context)
-      : super((ref, festivalId) => _createStream(
-              ref: ref,
+      : super((festivalId) => _createStreamProvider(
               festivalId: festivalId,
               context: context,
             ));
@@ -30,38 +31,41 @@ class BandsProvider
       ImmortalMap<String, dynamic>(jsonMap)
           .mapValues((bandName, json) => Band.fromJson(bandName, json));
 
-  static Stream<ImmortalMap<String, Band>> _createStream({
-    @required ProviderReference ref,
+  static ProviderBase<StreamProviderDependency<ImmortalMap<String, Band>>,
+      AsyncValue<ImmortalMap<String, Band>>> _createStreamProvider({
     @required String festivalId,
     @required BuildContext context,
   }) =>
       festivalId == _config.festivalId
-          ? createCombinedStorageStream(
-              context: context,
-              ref: ref,
-              remoteUrl: _remoteUrl(festivalId),
-              appStorageKey: Constants.bandsAppStorageFileName,
-              assetPath: Constants.bandsAssetFileName,
-              fromJson: _fromJson,
-            )
-          : createCacheStream(
-              remoteUrl:
-                  _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
-              fromJson: _fromJson,
-            );
+          ? StreamProvider((ref) => createCombinedStorageStream(
+                context: context,
+                ref: ref,
+                remoteUrl: _remoteUrl(festivalId),
+                appStorageKey: Constants.bandsAppStorageFileName,
+                assetPath: Constants.bandsAssetFileName,
+                fromJson: _fromJson,
+              ))
+          : StreamProvider.autoDispose((ref) => createCacheStream(
+                remoteUrl:
+                    _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
+                fromJson: _fromJson,
+              ));
 }
 
-class BandProvider extends ComputedFamily<AsyncValue<Optional<Band>>, BandKey> {
+class BandProvider
+    extends Family<Computed<AsyncValue<Optional<Band>>>, BandKey> {
   BandProvider()
-      : super((read, key) => read(dimeGet<BandsProvider>()(key.festivalId))
-            .whenData((bands) => bands[key.bandName]));
+      : super((key) => Computed((read) =>
+            read(dimeGet<BandsProvider>()(key.festivalId))
+                .whenData((bands) => bands[key.bandName])));
 }
 
 class SortedBandsProvider
-    extends ComputedFamily<AsyncValue<ImmortalList<Band>>, String> {
+    extends Family<Computed<AsyncValue<ImmortalList<Band>>>, String> {
   SortedBandsProvider()
-      : super((read, festivalId) =>
-            read(dimeGet<BandsProvider>()(festivalId)).whenData(
-              (bands) => bands.values.sort((a, b) => a.name.compareTo(b.name)),
-            ));
+      : super((festivalId) => Computed(
+            (read) => read(dimeGet<BandsProvider>()(festivalId)).whenData(
+                  (bands) =>
+                      bands.values.sort((a, b) => a.name.compareTo(b.name)),
+                )));
 }
