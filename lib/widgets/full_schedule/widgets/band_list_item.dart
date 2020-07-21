@@ -22,7 +22,11 @@ class BandListItem extends StatelessWidget {
 
   Widget _buildSingleEventEntry(Event event) => Padding(
         padding: const EdgeInsets.only(bottom: 6),
-        child: EventDetailRow(event: event, currentTime: currentTime),
+        child: EventDetailRow(
+          festivalId: bandWithEvents.festivalId,
+          event: event,
+          currentTime: currentTime,
+        ),
       );
 
   Widget _buildMultiEventEntry() => Column(
@@ -35,6 +39,7 @@ class BandListItem extends StatelessWidget {
               child: EventBandName(bandWithEvents.bandName),
             ),
             DenseEventList(
+              festivalId: bandWithEvents.festivalId,
               events: bandWithEvents.events,
               currentTime: currentTime,
             ),

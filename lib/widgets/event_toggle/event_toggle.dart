@@ -8,21 +8,28 @@ import '../../providers/my_schedule.dart';
 import 'event_toggle.i18n.dart';
 
 class EventToggle extends HookWidget {
-  const EventToggle(this.event);
+  const EventToggle({
+    @required this.event,
+    @required this.festivalId,
+  });
 
+  final String festivalId;
   final Event event;
 
   @override
   Widget build(BuildContext context) {
-    final isLiked =
-        useProvider(dimeGet<LikedEventProvider>()(event.id)).isPresent;
+    final isLiked = useProvider(dimeGet<LikedEventProvider>()(EventKey(
+      festivalId: festivalId,
+      eventId: event.id,
+    ))).isPresent;
     return IconButton(
       padding: EdgeInsets.zero,
       icon: Icon(isLiked ? Icons.star : Icons.star_border),
       tooltip:
           (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,
-      onPressed: () =>
-          dimeGet<MyScheduleProvider>().read(context).toggleEvent(event),
+      onPressed: () => dimeGet<MyScheduleProvider>()(festivalId)
+          .read(context)
+          .toggleEvent(event),
     );
   }
 }

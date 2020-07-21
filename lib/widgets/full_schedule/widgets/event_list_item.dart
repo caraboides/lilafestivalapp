@@ -46,7 +46,7 @@ class EventListItem extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                EventToggle(event),
+                EventToggle(festivalId: festivalId, event: event),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8, right: 16),

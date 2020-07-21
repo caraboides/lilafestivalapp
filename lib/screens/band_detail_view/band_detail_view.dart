@@ -127,7 +127,7 @@ class BandDetailView extends HookWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            EventToggle(event),
+            EventToggle(festivalId: bandKey.festivalId, event: event),
             const SizedBox(width: 24),
             EventDate(
               start: event.start,
@@ -143,6 +143,7 @@ class BandDetailView extends HookWidget {
   Widget _buildMultiEventEntry(ImmortalList<Event> events) => Padding(
         padding: const EdgeInsets.only(top: 12, bottom: 7),
         child: DenseEventList(
+          festivalId: bandKey.festivalId,
           events: events,
           currentTime: DateTime.now(),
         ),

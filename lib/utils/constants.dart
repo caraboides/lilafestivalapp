@@ -2,7 +2,8 @@ class Constants {
   const Constants();
 
   // FILE NAMES
-  static const String myScheduleAppStorageFileName = 'my_schedule.json';
+  static String myScheduleAppStorageFileName(String id) =>
+      'my_schedule_$id.json';
   static const String myScheduleAppStorageLegacyFileName = 'my_schedule.txt';
   static const String bandsAppStorageFileName = 'bands.json';
   static const String bandsAssetFileName = 'assets/bands.json';

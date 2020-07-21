@@ -71,8 +71,10 @@ class _InitializationWidgetState extends State<InitializationWidget>
       dimeInstall(ProviderModule(context));
       dimeGet<Notifications>().initializeNotificationPlugin();
     });
-    final mySchedule = useProvider(dimeGet<MyScheduleProvider>().state);
-    final events = useProvider(dimeGet<ScheduleProvider>()(_config.festivalId));
+    final festivalId = _config.festivalId;
+    final mySchedule =
+        useProvider(dimeGet<MyScheduleProvider>()(festivalId).state);
+    final events = useProvider(dimeGet<ScheduleProvider>()(festivalId));
     executeUntilSuccessful(
         () => _verifyScheduledNotifications(mySchedule, events));
     return widget.child;

@@ -6,16 +6,19 @@ import 'event_detail_row.dart';
 
 class DenseEventList extends StatelessWidget {
   const DenseEventList({
+    @required this.festivalId,
     @required this.events,
     @required this.currentTime,
     this.wrapAlignment = WrapAlignment.spaceBetween,
   });
 
+  final String festivalId;
   final ImmortalList<Event> events;
   final DateTime currentTime;
   final WrapAlignment wrapAlignment;
 
   Widget _buildEventRow(Event event) => EventDetailRow(
+        festivalId: festivalId,
         event: event,
         key: Key(event.id),
         currentTime: currentTime,

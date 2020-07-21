@@ -1,33 +1,62 @@
 import 'dart:async';
 
 import 'package:dime/dime.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:state_notifier/state_notifier.dart';
 import 'package:optional/optional.dart';
 
 import '../models/event.dart';
+import '../models/festival_config.dart';
 import '../models/my_schedule.dart';
 import '../services/app_storage.dart';
 import '../services/notifications/notifications.dart';
+import '../utils/combined_key.dart';
 import '../utils/constants.dart';
 import '../utils/logging.dart';
 
-class MyScheduleProvider extends StateNotifierProvider<MyScheduleController> {
-  MyScheduleProvider() : super((ref) => MyScheduleController.create());
+class MyScheduleProvider
+    extends StateNotifierProviderFamily<MyScheduleController, String> {
+  MyScheduleProvider() : super(_createProvider);
+
+  static FestivalConfig get _config => dimeGet<FestivalConfig>();
+
+  static MyScheduleController _createProvider(
+          ProviderReference ref, String festivalId) =>
+      MyScheduleController.create(
+        festivalId: festivalId,
+        // Only handle legacy file for oldest history festival
+        handleLegacyFile: _config.history.last
+            .map((legacyFestival) => festivalId == legacyFestival.key)
+            .orElse(false),
+      );
 }
 
+// TODO(SF) HISTORY autodispose possible for history? bands + schedule as well
 class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
-  MyScheduleController._() : super(const AsyncValue<MySchedule>.loading());
+  MyScheduleController._({
+    @required this.festivalId,
+    this.handleLegacyFile = false,
+  }) : super(const AsyncValue<MySchedule>.loading());
 
-  factory MyScheduleController.create() =>
-      MyScheduleController._().._loadMySchedule();
+  factory MyScheduleController.create({
+    @required String festivalId,
+    bool handleLegacyFile = false,
+  }) =>
+      MyScheduleController._(
+        festivalId: festivalId,
+        handleLegacyFile: handleLegacyFile,
+      ).._loadMySchedule();
 
+  final String festivalId;
+  final bool handleLegacyFile;
   Timer _debounce;
 
   AppStorage get _appStorage => dimeGet<AppStorage>();
   Notifications get _notifications => dimeGet<Notifications>();
   Logger get _log => const Logger(module: 'MY_SCHEDULE');
-  String get _appStorageFileName => Constants.myScheduleAppStorageFileName;
+  String get _appStorageFileName =>
+      Constants.myScheduleAppStorageFileName(festivalId);
 
   Future<Optional<MySchedule>> _readFromAppStorage(String fileName) async {
     _log.debug('Reading from app storage');
@@ -46,7 +75,7 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
         }));
   }
 
-  Future<MySchedule> _handleLegacyFile() {
+  Future<MySchedule> _readFromLegacyFile() {
     _log.debug('Reading from app storage failed, reading legacy file');
     return _readFromAppStorage(Constants.myScheduleAppStorageLegacyFileName)
         .then(
@@ -68,7 +97,9 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
 
   Future<void> _loadMySchedule() async {
     final mySchedule = await _readFromAppStorage(_appStorageFileName).then(
-      (result) => result.orElseGetAsync(_handleLegacyFile),
+      (result) => result.orElseGetAsync(handleLegacyFile
+          ? _readFromLegacyFile
+          : () async => MySchedule.empty()),
     );
     state = AsyncValue.data(mySchedule);
   }
@@ -99,10 +130,22 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   }
 }
 
-class LikedEventProvider extends ComputedFamily<Optional<int>, String> {
+class EventKey extends CombinedKey<String, String> {
+  const EventKey({
+    @required String festivalId,
+    @required String eventId,
+  }) : super(key1: festivalId, key2: eventId);
+
+  String get festivalId => key1;
+  String get eventId => key2;
+}
+
+class LikedEventProvider extends ComputedFamily<Optional<int>, EventKey> {
   LikedEventProvider()
-      : super((read, eventId) => read(dimeGet<MyScheduleProvider>().state).when(
-            data: (mySchedule) => mySchedule.getNotificationId(eventId),
-            loading: () => const Optional<int>.empty(),
-            error: (_, __) => const Optional<int>.empty()));
+      : super((read, key) =>
+            read(dimeGet<MyScheduleProvider>()(key.festivalId).state).when(
+              data: (mySchedule) => mySchedule.getNotificationId(key.eventId),
+              loading: () => const Optional<int>.empty(),
+              error: (_, __) => const Optional<int>.empty(),
+            ));
 }

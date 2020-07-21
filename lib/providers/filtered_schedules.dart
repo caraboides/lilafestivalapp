@@ -48,7 +48,8 @@ class FilteredDailyScheduleProvider extends ComputedFamily<
       : super((read, key) {
           final dailySchedule =
               read(dimeGet<DailyScheduleProvider>()(key.dailyScheduleKey));
-          final myScheduleProvider = read(dimeGet<MyScheduleProvider>().state);
+          final myScheduleProvider =
+              read(dimeGet<MyScheduleProvider>()(key.festivalId).state);
           return combineAsyncValues<ImmortalList<Event>, ImmortalList<Event>,
                   MySchedule>(
               dailySchedule,
@@ -75,7 +76,8 @@ class FilteredBandScheduleProvider extends ComputedFamily<
       : super((read, key) {
           final bandsWithEvents =
               read(dimeGet<BandsWithEventsProvider>()(key.festivalId));
-          final myScheduleProvider = read(dimeGet<MyScheduleProvider>().state);
+          final myScheduleProvider =
+              read(dimeGet<MyScheduleProvider>()(key.festivalId).state);
           return combineAsyncValues<ImmortalList<BandWithEvents>,
                   ImmortalList<BandWithEvents>, MySchedule>(
               bandsWithEvents,
