@@ -12,13 +12,11 @@ import 'event_list_item.dart';
 
 class EventListView extends StatefulWidget {
   const EventListView({
-    @required this.festivalId,
     @required this.events,
     @required this.date,
     Key key,
   }) : super(key: key);
 
-  final String festivalId;
   final ImmortalList<Event> events;
   final DateTime date;
 
@@ -73,7 +71,6 @@ class _EventListViewState extends State<EventListView>
   ImmortalList<Widget> _buildListItems() {
     final now = DateTime.now();
     final items = widget.events.map<Widget>((event) => EventListItem(
-          festivalId: widget.festivalId,
           event: event,
           key: Key(event.id),
           isPlaying: event.isPlaying(now),

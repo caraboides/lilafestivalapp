@@ -1,8 +1,10 @@
 import 'package:dime/dime.dart';
+import 'package:dime_flutter/flutter_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../providers/festival_scope.dart';
 import '../../../../providers/filtered_schedules.dart';
 import '../../../../utils/logging.dart';
 import '../../../error_screen/error_screen.dart';
@@ -14,13 +16,11 @@ import 'daily_schedule_list.i18n.dart';
 class DailyScheduleList extends HookWidget {
   const DailyScheduleList(
     this.date, {
-    @required this.festivalId,
     this.likedOnly = false,
     Key key,
   }) : super(key: key);
 
   final DateTime date;
-  final String festivalId;
   final bool likedOnly;
 
   Logger get _log => const Logger(module: 'DailyScheduleList');
@@ -30,6 +30,7 @@ class DailyScheduleList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final festivalId = DimeFlutter.get<FestivalIdProvider>(context).festivalId;
     final provider = useProvider(
         dimeGet<FilteredDailyScheduleProvider>()(DailyScheduleFilter(
       festivalId: festivalId,
@@ -42,7 +43,6 @@ class DailyScheduleList extends HookWidget {
           return likedOnly ? const EmptySchedule() : _buildErrorScreen();
         }
         return EventListView(
-          festivalId: festivalId,
           events: events,
           date: date,
         );

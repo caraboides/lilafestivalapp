@@ -6,6 +6,7 @@ import 'package:optional/optional.dart';
 
 import '../models/band.dart';
 import '../models/festival_config.dart';
+import '../models/global_config.dart';
 import '../utils/band_key.dart';
 import '../utils/cache_stream.dart';
 import '../utils/combined_storage_stream.dart';
@@ -21,6 +22,7 @@ class BandsProvider
             ));
 
   static FestivalConfig get _config => dimeGet<FestivalConfig>();
+  static GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
   static String _remoteUrl(String festivalId) => '/bands?festival=$festivalId';
 
@@ -43,7 +45,8 @@ class BandsProvider
               fromJson: _fromJson,
             )
           : createCacheStream(
-              remoteUrl: _remoteUrl(festivalId),
+              remoteUrl:
+                  _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
               fromJson: _fromJson,
             );
 }

@@ -18,12 +18,11 @@ class BandListItem extends StatelessWidget {
   final DateTime currentTime;
 
   void _onTap(BuildContext context) =>
-      BandDetailView.openFor(context, bandWithEvents.bandKey);
+      BandDetailView.openFor(context, bandWithEvents.bandName);
 
   Widget _buildSingleEventEntry(Event event) => Padding(
         padding: const EdgeInsets.only(bottom: 6),
         child: EventDetailRow(
-          festivalId: bandWithEvents.festivalId,
           event: event,
           currentTime: currentTime,
         ),
@@ -39,7 +38,6 @@ class BandListItem extends StatelessWidget {
               child: EventBandName(bandWithEvents.bandName),
             ),
             DenseEventList(
-              festivalId: bandWithEvents.festivalId,
               events: bandWithEvents.events,
               currentTime: currentTime,
             ),

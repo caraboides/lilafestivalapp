@@ -5,6 +5,7 @@ import 'package:immortal/immortal.dart';
 
 import '../models/event.dart';
 import '../models/festival_config.dart';
+import '../models/global_config.dart';
 import '../utils/band_key.dart';
 import '../utils/cache_stream.dart';
 import '../utils/combined_key.dart';
@@ -22,6 +23,7 @@ class ScheduleProvider
             ));
 
   static FestivalConfig get _config => dimeGet<FestivalConfig>();
+  static GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
   static String _remoteUrl(String festivalId) =>
       '/schedule?festival=$festivalId';
@@ -45,7 +47,8 @@ class ScheduleProvider
               fromJson: _fromJson,
             )
           : createCacheStream(
-              remoteUrl: _remoteUrl(festivalId),
+              remoteUrl:
+                  _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
               fromJson: _fromJson,
             );
 }

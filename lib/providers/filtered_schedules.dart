@@ -60,8 +60,8 @@ class FilteredDailyScheduleProvider extends ComputedFamily<
         });
 }
 
-class FilteredBandScheduleKey extends CombinedKey<String, bool> {
-  const FilteredBandScheduleKey({
+class BandScheduleKey extends CombinedKey<String, bool> {
+  const BandScheduleKey({
     @required String festivalId,
     @required bool likedOnly,
   }) : super(key1: festivalId, key2: likedOnly);
@@ -71,7 +71,7 @@ class FilteredBandScheduleKey extends CombinedKey<String, bool> {
 }
 
 class FilteredBandScheduleProvider extends ComputedFamily<
-    AsyncValue<ImmortalList<BandWithEvents>>, FilteredBandScheduleKey> {
+    AsyncValue<ImmortalList<BandWithEvents>>, BandScheduleKey> {
   FilteredBandScheduleProvider()
       : super((read, key) {
           final bandsWithEvents =

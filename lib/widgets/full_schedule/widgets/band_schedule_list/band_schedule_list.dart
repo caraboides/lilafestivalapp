@@ -1,8 +1,10 @@
 import 'package:dime/dime.dart';
+import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../providers/festival_scope.dart';
 import '../../../../providers/filtered_schedules.dart';
 import '../../../../utils/logging.dart';
 import '../../../error_screen/error_screen.dart';
@@ -14,13 +16,9 @@ import 'band_schedule_list.i18n.dart';
 class BandScheduleList extends HookWidget {
   const BandScheduleList({
     Key key,
-    // TODO(SF) HISTORY or pass FilteredBandScheduleKey here already?
-    // TODO(SF) HISTORY naming! band schedule
-    @required this.festivalId,
     this.likedOnly = false,
   });
 
-  final String festivalId;
   final bool likedOnly;
 
   Logger get _log => const Logger(module: 'BandScheduleList');
@@ -30,8 +28,9 @@ class BandScheduleList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = useProvider(
-        dimeGet<FilteredBandScheduleProvider>()(FilteredBandScheduleKey(
+    final festivalId = DimeFlutter.get<FestivalIdProvider>(context).festivalId;
+    final provider =
+        useProvider(dimeGet<FilteredBandScheduleProvider>()(BandScheduleKey(
       festivalId: festivalId,
       likedOnly: likedOnly,
     )));

@@ -16,9 +16,9 @@ dependencies:
   flutter_hooks: ^0.10.0
   hooks_riverpod: ^0.3.0
   i18n_extension: ^1.4.1
-  dime: ^0.4.0
+  dime_flutter: ^0.4.0
   immortal: ^2.1.1
-  url_launcher: ^5.4.11
+  url_launcher: ^5.5.0
   package_info: ^0.4.1
   path_provider: ^1.6.11
   http: ^0.12.1

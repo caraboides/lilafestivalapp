@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dime/dime.dart';
+import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -11,6 +12,7 @@ import '../../models/band_with_events.dart';
 import '../../models/event.dart';
 import '../../models/theme.dart';
 import '../../providers/bands_with_events.dart';
+import '../../providers/festival_scope.dart';
 import '../../utils/band_key.dart';
 import '../../utils/logging.dart';
 import '../../widgets/dense_event_list.dart';
@@ -25,15 +27,19 @@ import 'band_detail_view.i18n.dart';
 
 // TODO(SF) FEATURE periodic rebuild for is playing indicator?
 class BandDetailView extends HookWidget {
-  const BandDetailView(this.bandKey);
+  const BandDetailView(this.bandName);
 
-  final BandKey bandKey;
+  final String bandName;
 
-  static void openFor(BuildContext context, BandKey bandKey) =>
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => BandDetailView(bandKey),
-        fullscreenDialog: true,
-      ));
+  static void openFor(BuildContext context, String bandName) {
+    final festivalId = DimeFlutter.get<FestivalIdProvider>(context).festivalId;
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => DimeScopeFlutter(
+          modules: <BaseDimeModule>[FestivalScopeModule(festivalId)],
+          child: BandDetailView(bandName)),
+      fullscreenDialog: true,
+    ));
+  }
 
   FestivalTheme get _festivalTheme => dimeGet<FestivalTheme>();
   Logger get _log => const Logger(module: 'BandDetailView');
@@ -127,7 +133,7 @@ class BandDetailView extends HookWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            EventToggle(festivalId: bandKey.festivalId, event: event),
+            EventToggle(event),
             const SizedBox(width: 24),
             EventDate(
               start: event.start,
@@ -143,7 +149,6 @@ class BandDetailView extends HookWidget {
   Widget _buildMultiEventEntry(ImmortalList<Event> events) => Padding(
         padding: const EdgeInsets.only(top: 12, bottom: 7),
         child: DenseEventList(
-          festivalId: bandKey.festivalId,
           events: events,
           currentTime: DateTime.now(),
         ),
@@ -172,7 +177,7 @@ class BandDetailView extends HookWidget {
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
             child: Text(
-              bandKey.bandName.toUpperCase(),
+              bandName.toUpperCase(),
               style: theme.textTheme.headline3,
               textAlign: TextAlign.center,
             ),
@@ -196,8 +201,11 @@ class BandDetailView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bandProvider =
-        useProvider(dimeGet<BandWithEventsProvider>()(bandKey));
+    final festivalId = DimeFlutter.get<FestivalIdProvider>(context).festivalId;
+    final bandProvider = useProvider(dimeGet<BandWithEventsProvider>()(BandKey(
+      festivalId: festivalId,
+      bandName: bandName,
+    )));
     return AppScaffold(
       isDialog: true,
       // TODO(SF) HISTORY add year to title if history festival
@@ -206,8 +214,7 @@ class BandDetailView extends HookWidget {
         data: (band) => _buildBandView(context, band),
         loading: () => LoadingScreen('Loading band data.'.i18n),
         error: (error, trace) {
-          _log.error('Error retrieving data for band ${bandKey.bandName}',
-              error, trace);
+          _log.error('Error retrieving data for band $bandName', error, trace);
           return ErrorScreen('There was an error retrieving band data.'.i18n);
         },
       ),

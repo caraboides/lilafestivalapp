@@ -23,7 +23,6 @@ class BandWithEventsProvider
             bandProvider,
             eventsForBandsProvider,
             (band, events) => BandWithEvents(
-              festivalId: key.festivalId,
               bandName: key.bandName,
               band: band,
               events: events,
@@ -46,7 +45,6 @@ class BandsWithEventsProvider
             final eventsByBand = events.asMapOfLists((event) => event.bandName);
             return bands.map(
               (band) => BandWithEvents(
-                festivalId: festivalId,
                 bandName: band.name,
                 band: Optional.of(band),
                 events: eventsByBand[band.name].orElse(ImmortalList<Event>()),

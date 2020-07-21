@@ -1,8 +1,10 @@
 import 'package:dime/dime.dart';
+import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/festival_config.dart';
 import '../../models/theme.dart';
+import '../../providers/festival_scope.dart';
 import '../../widgets/full_schedule/full_schedule.dart';
 import '../../widgets/periodic_rebuild_mixin.dart';
 import 'schedule.i18n.dart';
@@ -38,11 +40,13 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       : Text(_config.festivalName);
 
   @override
-  Widget build(BuildContext context) => FullSchedule(
-        festivalId: _config.festivalId,
-        titleWidget: _buildTitleWidget(),
-        days: _config.days,
-        likedOnly: widget.likedOnly,
-        displayWeather: true,
+  Widget build(BuildContext context) => DimeScopeFlutter(
+        modules: <BaseDimeModule>[FestivalScopeModule(_config.festivalId)],
+        child: FullSchedule(
+          titleWidget: _buildTitleWidget(),
+          days: _config.days,
+          likedOnly: widget.likedOnly,
+          displayWeather: true,
+        ),
       );
 }

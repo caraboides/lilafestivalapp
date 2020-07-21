@@ -13,14 +13,12 @@ import 'widgets/daily_schedule_list/daily_schedule_list.dart';
 
 class FullSchedule extends StatefulWidget {
   const FullSchedule({
-    @required this.festivalId,
     @required this.titleWidget,
     @required this.days,
     this.likedOnly = false,
     this.displayWeather = false,
   });
 
-  final String festivalId;
   final Widget titleWidget;
   final ImmortalList<DateTime> days;
   final bool likedOnly;
@@ -95,21 +93,14 @@ class _FullScheduleState extends State<FullSchedule> {
         ],
       );
 
-  Widget _buildBandScheduleList() => BandScheduleList(
-        festivalId: widget.festivalId,
-        likedOnly: _likedOnly,
-      );
+  Widget _buildBandScheduleList() => BandScheduleList(likedOnly: _likedOnly);
 
   Widget _buildDailyScheduleList(DateTime date) => Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           if (widget.displayWeather) WeatherCard(date),
           Expanded(
-            child: DailyScheduleList(
-              date,
-              festivalId: widget.festivalId,
-              likedOnly: _likedOnly,
-            ),
+            child: DailyScheduleList(date, likedOnly: _likedOnly),
           ),
         ],
       );
