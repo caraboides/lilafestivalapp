@@ -27,6 +27,7 @@ class FestivalConfig {
   final String festivalName;
   final String festivalFullName;
   final String festivalUrl;
+  // TODO(SF) THEME display those somewhere?
   final DateTime startDate;
   final DateTime endDate;
   final Duration daySwitchOffset;
@@ -37,12 +38,4 @@ class FestivalConfig {
   final LatLng weatherGeoLocation;
   final String weatherCityId;
   final ImmortalList<NestedRoute> history;
-
-  ImmortalList<DateTime> get days => ImmortalList.generate(
-      endDate.difference(startDate).inDays + 1,
-      (index) => DateTime(
-            startDate.year,
-            startDate.month,
-            startDate.day + index,
-          ));
 }

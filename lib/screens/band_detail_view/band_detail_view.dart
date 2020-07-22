@@ -208,7 +208,10 @@ class BandDetailView extends HookWidget {
     )));
     return AppScaffold(
       isDialog: true,
-      title: 'Band Details'.i18n + festivalScope.titleSuffix,
+      title: 'Band Details'.i18n +
+          (festivalScope.isCurrentFestival
+              ? ''
+              : festivalScope.titleSuffixString),
       body: bandProvider.when(
         data: (band) => _buildBandView(context, band),
         loading: () => LoadingScreen('Loading band data.'.i18n),

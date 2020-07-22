@@ -11,6 +11,18 @@ extension Localization on String {
         'de_de': 'Tag {number}',
       } +
       {
+        'en_us': 'Loading schedule.',
+        'de_de': 'Plan wird geladen.',
+      } +
+      {
+        'en_us': 'There was an error retrieving the schedule.',
+        'de_de': 'Beim Laden des Plans ist ein Fehler aufgetreten.',
+      } +
+      {
+        'en_us': 'MMM dd',
+        'de_de': 'dd.MM.',
+      } +
+      {
         'en_us': 'Show full schedule',
         'de_de': 'Vollständigen Plan anzeigen',
       } +

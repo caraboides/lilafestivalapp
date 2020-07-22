@@ -14,7 +14,6 @@ Stream<T> createCacheStream<T, J>({
   @required T Function(J) fromJson,
 }) {
   _log.debug('Loading data from $remoteUrl');
-  // TODO(SF) HISTORY set cache headers
   // TODO(SF) FEATURE with DownloadProgress
   final stream = dimeGet<BaseCacheManager>().getFileStream(remoteUrl);
   return stream.asyncMap<T>((fileResponse) async {

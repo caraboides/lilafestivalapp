@@ -3,7 +3,6 @@ import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/festival_config.dart';
-import '../../models/theme.dart';
 import '../../providers/festival_scope.dart';
 import '../../widgets/full_schedule/full_schedule.dart';
 import '../../widgets/periodic_rebuild_mixin.dart';
@@ -28,25 +27,17 @@ class ScheduleScreen extends StatefulWidget {
 // TODO(SF) STYLE create hook four periodic rebuild?
 class _ScheduleScreenState extends State<ScheduleScreen>
     with WidgetsBindingObserver, PeriodicRebuildMixin<ScheduleScreen> {
-  FestivalTheme get _theme => dimeGet<FestivalTheme>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
-
-  Widget _buildTitleWidget() => _theme.logo != null
-      ? Image.asset(
-          _theme.logo.assetPath,
-          width: _theme.logo.width,
-          height: _theme.logo.height,
-        )
-      : Text(_config.festivalName);
 
   @override
   Widget build(BuildContext context) => DimeScopeFlutter(
         modules: <BaseDimeModule>[
-          FestivalScopeModule(FestivalScope(festivalId: _config.festivalId))
+          FestivalScopeModule(FestivalScope(
+            festivalId: _config.festivalId,
+            isCurrentFestival: true,
+          ))
         ],
         child: FullSchedule(
-          titleWidget: _buildTitleWidget(),
-          days: _config.days,
           likedOnly: widget.likedOnly,
           displayWeather: true,
         ),

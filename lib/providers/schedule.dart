@@ -92,3 +92,17 @@ class BandScheduleProvider
                       events.where((event) => event.bandName == key.bandName)),
             ));
 }
+
+class FestivalDaysProvider
+    extends Family<Computed<AsyncValue<ImmortalList<DateTime>>>, String> {
+  FestivalDaysProvider()
+      : super((festivalId) => Computed((read) =>
+            read(dimeGet<ScheduleProvider>()(festivalId)).whenData(
+              (events) => events
+                  .map((event) => event.start.map(toFestivalDay).orElse(null))
+                  .toSet()
+                  .remove(null)
+                  .toList()
+                  .sort(),
+            )));
+}

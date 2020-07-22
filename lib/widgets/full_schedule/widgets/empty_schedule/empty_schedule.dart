@@ -6,6 +6,7 @@ import 'empty_schedule.i18n.dart';
 class EmptySchedule extends StatelessWidget {
   const EmptySchedule();
 
+  // TODO(SF) THEME use different text for history?
   @override
   Widget build(BuildContext context) => MessageScreen(
         headline: "Don't you like music?".i18n,

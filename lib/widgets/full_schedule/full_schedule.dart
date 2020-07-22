@@ -1,26 +1,31 @@
 import 'package:dime/dime.dart';
+import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../../models/festival_config.dart';
 import '../../models/theme.dart';
+import '../../providers/festival_scope.dart';
+import '../../providers/schedule.dart';
 import '../../utils/date.dart';
 import '../../utils/i18n.dart';
+import '../../utils/logging.dart';
+import '../error_screen/error_screen.dart';
+import '../loading_screen/loading_screen.dart';
 import '../scaffold.dart';
 import '../weather_card.dart';
 import 'full_schedule.i18n.dart';
 import 'widgets/band_schedule_list/band_schedule_list.dart';
 import 'widgets/daily_schedule_list/daily_schedule_list.dart';
 
-class FullSchedule extends StatefulWidget {
+class FullSchedule extends StatefulHookWidget {
   const FullSchedule({
-    @required this.titleWidget,
-    @required this.days,
     this.likedOnly = false,
     this.displayWeather = false,
   });
 
-  final Widget titleWidget;
-  final ImmortalList<DateTime> days;
   final bool likedOnly;
   final bool displayWeather;
 
@@ -28,11 +33,12 @@ class FullSchedule extends StatefulWidget {
   State<StatefulWidget> createState() => _FullScheduleState();
 }
 
-// TODO(SF) STYLE HISTORY possible to use hookwidget?
 class _FullScheduleState extends State<FullSchedule> {
   bool _likedOnly = false;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
+  FestivalConfig get _config => dimeGet<FestivalConfig>();
+  Logger get _log => const Logger(module: 'FullSchedule');
 
   @override
   void initState() {
@@ -46,24 +52,43 @@ class _FullScheduleState extends State<FullSchedule> {
     });
   }
 
-  int _initialTab() {
+  int _initialTab(ImmortalList<DateTime> days) {
     final now = DateTime.now();
-    return 1 + widget.days.indexWhere((day) => isSameFestivalDay(now, day));
+    return 1 + days.indexWhere((day) => isSameFestivalDay(now, day));
   }
 
-  TabBar _buildTabBar() => TabBar(
+  TabBar _buildTabBar(ImmortalList<DateTime> days) => TabBar(
         tabs: [
           Tab(child: Text('Bands'.i18n)),
-          ...List.generate(
-            widget.days.length,
-            (index) => Tab(
-              child: Text('Day {number}'.i18n.fill({'number': index + 1})),
-            ),
-          ),
+          ...days
+              .mapIndexed((index, date) => Tooltip(
+                  message: 'MMM dd'.i18n.dateFormat(date),
+                  child: Tab(
+                      child: Text(
+                    'Day {number}'.i18n.fill({'number': index + 1}),
+                  ))))
+              .toMutableList(),
         ],
       );
 
-  AppBar _buildAppBar() => AppBar(
+  Widget _buildTitleWidget(FestivalScope festivalScope) {
+    if (festivalScope.isCurrentFestival) {
+      return _theme.logo != null
+          ? Image.asset(
+              _theme.logo.assetPath,
+              width: _theme.logo.width,
+              height: _theme.logo.height,
+            )
+          : Text(_config.festivalName);
+    }
+    return Text(_config.festivalName + festivalScope.titleSuffixString);
+  }
+
+  AppBar _buildAppBar(
+    ImmortalList<DateTime> days,
+    FestivalScope festivalScope,
+  ) =>
+      AppBar(
         bottom: _theme.tabBarDecoration != null
             ? PreferredSize(
                 child: Stack(
@@ -72,13 +97,13 @@ class _FullScheduleState extends State<FullSchedule> {
                       height: _theme.tabBarHeight,
                       decoration: _theme.tabBarDecoration,
                     ),
-                    _buildTabBar(),
+                    _buildTabBar(days),
                   ],
                 ),
                 preferredSize: Size.fromHeight(_theme.tabBarHeight),
               )
-            : _buildTabBar(),
-        title: widget.titleWidget,
+            : _buildTabBar(days),
+        title: _buildTitleWidget(festivalScope),
         actions: <Widget>[
           Icon(_likedOnly ? Icons.star : Icons.star_border),
           Tooltip(
@@ -105,18 +130,39 @@ class _FullScheduleState extends State<FullSchedule> {
         ],
       );
 
-  @override
-  Widget build(BuildContext context) => DefaultTabController(
-        length: widget.days.length + 1,
-        initialIndex: _initialTab(),
+  Widget _buildScheduleView(
+    ImmortalList<DateTime> days,
+    FestivalScope festivalScope,
+  ) =>
+      DefaultTabController(
+        length: days.length + 1,
+        initialIndex: _initialTab(days),
         child: AppScaffold(
-          appBar: _buildAppBar(),
+          appBar: _buildAppBar(days, festivalScope),
           body: TabBarView(
             children: [
               _buildBandScheduleList(),
-              ...widget.days.map(_buildDailyScheduleList).toMutableList(),
+              ...days.map(_buildDailyScheduleList).toMutableList(),
             ],
           ),
         ),
       );
+
+  @override
+  Widget build(BuildContext context) {
+    final festivalScope = DimeFlutter.get<FestivalScope>(context);
+    final provider =
+        useProvider(dimeGet<FestivalDaysProvider>()(festivalScope.festivalId));
+    return provider.when(
+      data: (days) => _buildScheduleView(days, festivalScope),
+      loading: () => LoadingScreen('Loading schedule.'.i18n),
+      error: (error, trace) {
+        _log.error(
+            'Error retrieving festival days for ${festivalScope.festivalId}',
+            error,
+            trace);
+        return ErrorScreen('There was an error retrieving the schedule.'.i18n);
+      },
+    );
+  }
 }

@@ -4,11 +4,15 @@ import 'package:flutter/foundation.dart';
 class FestivalScope {
   const FestivalScope({
     @required this.festivalId,
-    String titleSuffix,
-  }) : titleSuffix = titleSuffix != null ? ' $titleSuffix' : '';
+    this.isCurrentFestival = false,
+    this.titleSuffix,
+  });
 
   final String festivalId;
   final String titleSuffix;
+  final bool isCurrentFestival;
+
+  String get titleSuffixString => titleSuffix != null ? ' $titleSuffix' : '';
 }
 
 class FestivalScopeModule extends BaseDimeModule {
