@@ -16,7 +16,7 @@ class EventToggle extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final festivalId = DimeFlutter.get<FestivalIdProvider>(context).festivalId;
+    final festivalId = DimeFlutter.get<FestivalScope>(context).festivalId;
     final isLiked = useProvider(dimeGet<LikedEventProvider>()(EventKey(
       festivalId: festivalId,
       eventId: event.id,

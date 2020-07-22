@@ -32,10 +32,10 @@ class BandDetailView extends HookWidget {
   final String bandName;
 
   static void openFor(BuildContext context, String bandName) {
-    final festivalId = DimeFlutter.get<FestivalIdProvider>(context).festivalId;
+    final festivalScope = DimeFlutter.get<FestivalScope>(context);
     Navigator.of(context).push(MaterialPageRoute(
       builder: (_) => DimeScopeFlutter(
-          modules: <BaseDimeModule>[FestivalScopeModule(festivalId)],
+          modules: <BaseDimeModule>[FestivalScopeModule(festivalScope)],
           child: BandDetailView(bandName)),
       fullscreenDialog: true,
     ));
@@ -201,15 +201,14 @@ class BandDetailView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final festivalId = DimeFlutter.get<FestivalIdProvider>(context).festivalId;
+    final festivalScope = DimeFlutter.get<FestivalScope>(context);
     final bandProvider = useProvider(dimeGet<BandWithEventsProvider>()(BandKey(
-      festivalId: festivalId,
+      festivalId: festivalScope.festivalId,
       bandName: bandName,
     )));
     return AppScaffold(
       isDialog: true,
-      // TODO(SF) HISTORY add year to title if history festival
-      title: 'Band Details'.i18n,
+      title: 'Band Details'.i18n + festivalScope.titleSuffix,
       body: bandProvider.when(
         data: (band) => _buildBandView(context, band),
         loading: () => LoadingScreen('Loading band data.'.i18n),

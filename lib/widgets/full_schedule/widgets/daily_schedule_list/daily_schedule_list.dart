@@ -30,7 +30,7 @@ class DailyScheduleList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final festivalId = DimeFlutter.get<FestivalIdProvider>(context).festivalId;
+    final festivalId = DimeFlutter.get<FestivalScope>(context).festivalId;
     final provider = useProvider(
         dimeGet<FilteredDailyScheduleProvider>()(DailyScheduleFilter(
       festivalId: festivalId,

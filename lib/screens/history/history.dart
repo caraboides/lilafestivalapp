@@ -12,22 +12,23 @@ import 'history.i18n.dart';
 class History extends StatelessWidget {
   const History({
     this.festivalId,
-    this.festivalTitle,
+    this.titleSuffix,
   });
 
   final String festivalId;
-  final String festivalTitle;
+  final String titleSuffix;
 
   static Widget builder(BuildContext context, NestedRoute nestedRoute) =>
       History(
         festivalId: nestedRoute.key,
-        festivalTitle: nestedRoute.title,
+        titleSuffix: nestedRoute.title,
       );
 
   static String title() => 'History'.i18n;
 
   /* TODO(SF) HISTORY
    * - handle missing running order
+   * - add cancelled flag to bands
    * - use different theme to differentiate from the current festival?
    */
 
@@ -37,9 +38,15 @@ class History extends StatelessWidget {
   // TODO(SF) HISTORY calculate days from events
   @override
   Widget build(BuildContext context) => DimeScopeFlutter(
-        modules: <BaseDimeModule>[FestivalScopeModule(festivalId)],
+        modules: <BaseDimeModule>[
+          FestivalScopeModule(FestivalScope(
+            festivalId: festivalId,
+            titleSuffix: titleSuffix,
+          ))
+        ],
         child: FullSchedule(
-          titleWidget: Text('${_config.festivalName} $festivalTitle'),
+          // TODO(SF) HISTORY move to full schedule?
+          titleWidget: Text('${_config.festivalName} $titleSuffix'),
           days: ImmortalList<DateTime>(),
         ),
       );

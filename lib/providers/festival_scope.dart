@@ -1,18 +1,23 @@
 import 'package:dime/dime.dart';
+import 'package:flutter/foundation.dart';
 
-class FestivalIdProvider {
-  const FestivalIdProvider(this.festivalId);
+class FestivalScope {
+  const FestivalScope({
+    @required this.festivalId,
+    String titleSuffix,
+  }) : titleSuffix = titleSuffix != null ? ' $titleSuffix' : '';
 
   final String festivalId;
+  final String titleSuffix;
 }
 
 class FestivalScopeModule extends BaseDimeModule {
-  FestivalScopeModule(this.festivalId);
+  FestivalScopeModule(this.festivalScope);
 
-  final String festivalId;
+  final FestivalScope festivalScope;
 
   @override
   void updateInjections() {
-    addSingle<FestivalIdProvider>(FestivalIdProvider(festivalId));
+    addSingle<FestivalScope>(festivalScope);
   }
 }

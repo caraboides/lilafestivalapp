@@ -27,7 +27,7 @@ class MyScheduleProvider
           ? StateNotifierProvider((ref) => MyScheduleController.create(
                 festivalId: festivalId,
               ))
-          // TODO(SF) HISTORY possible to use autodispose here?
+          // TODO(SF) STATE possible to use autodispose here?
           : StateNotifierProvider((ref) => MyScheduleController.create(
                 festivalId: festivalId,
                 // Only handle legacy file for oldest history festival
