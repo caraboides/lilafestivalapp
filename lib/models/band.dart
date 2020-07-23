@@ -11,6 +11,7 @@ class Band {
     this.roots,
     this.textDe,
     this.textEn,
+    this.cancelled,
   });
 
   factory Band.fromJson(String bandName, Map<String, dynamic> json) => Band(
@@ -23,6 +24,7 @@ class Band {
         roots: json['roots'],
         textDe: json['description'],
         textEn: json['description_en'],
+        cancelled: json['cancelled'] ?? false,
       );
 
   final String name;
@@ -34,4 +36,5 @@ class Band {
   final String roots;
   final String textDe;
   final String textEn;
+  final bool cancelled;
 }

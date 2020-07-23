@@ -15,11 +15,14 @@ class DenseEventList extends StatelessWidget {
   final DateTime currentTime;
   final WrapAlignment wrapAlignment;
 
-  Widget _buildEventRow(Event event) => EventDetailRow(
-        event: event,
-        key: Key(event.id),
-        currentTime: currentTime,
-        dense: true,
+  Widget _buildEventRow(Event event) => FractionallySizedBox(
+        widthFactor: 0.5,
+        child: EventDetailRow(
+          event: event,
+          key: Key(event.id),
+          currentTime: currentTime,
+          dense: true,
+        ),
       );
 
   @override
@@ -29,7 +32,7 @@ class DenseEventList extends StatelessWidget {
         ),
         child: Wrap(
           direction: Axis.horizontal,
-          alignment: wrapAlignment,
+          alignment: WrapAlignment.spaceBetween,
           children: events.map(_buildEventRow).toMutableList(),
         ),
       );

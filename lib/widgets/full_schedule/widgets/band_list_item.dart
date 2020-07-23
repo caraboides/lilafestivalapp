@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../models/band_with_events.dart';
 import '../../../models/event.dart';
 import '../../../screens/band_detail_view/band_detail_view.dart';
+import '../../band_cancelled/band_cancelled.dart';
 import '../../dense_event_list.dart';
 import '../../event_band_name.dart';
 import '../../event_detail_row.dart';
@@ -20,6 +21,17 @@ class BandListItem extends StatelessWidget {
   void _onTap(BuildContext context) =>
       BandDetailView.openFor(context, bandWithEvents.bandName);
 
+  Widget _buildBandName() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: EventBandName(bandWithEvents.bandName),
+          ),
+          BandCancelled(bandWithEvents),
+        ],
+      );
+
   Widget _buildSingleEventEntry(Event event) => Padding(
         padding: const EdgeInsets.only(bottom: 6),
         child: EventDetailRow(
@@ -34,8 +46,8 @@ class BandListItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left: 56),
-              child: EventBandName(bandWithEvents.bandName),
+              padding: const EdgeInsets.only(left: 56, right: 10),
+              child: _buildBandName(),
             ),
             DenseEventList(
               events: bandWithEvents.events,

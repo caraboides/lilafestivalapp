@@ -23,9 +23,6 @@ class History extends StatelessWidget {
 
   static String title() => 'History'.i18n;
 
-  /* TODO(SF) HISTORY
-   * - add cancelled flag to bands
-   */
   @override
   Widget build(BuildContext context) => HistoryWrapper(
         festivalScope: FestivalScope(

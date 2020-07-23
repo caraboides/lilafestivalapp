@@ -5,12 +5,19 @@ import '../models/theme.dart';
 const String _displayFontFamily = 'Display Font';
 final Color _lightDividerColor = Colors.grey[800];
 final Color _historyBackgroundColor = Colors.grey[400];
+final Color _errorColor = Colors.redAccent[700];
 
 final ThemeData theme = ThemeData(
   primaryColor: Colors.grey[850],
   accentColor: const Color(0xFFD2D522),
-  errorColor: Colors.redAccent[700],
+  errorColor: _errorColor,
   textTheme: Typography.blackMountainView.copyWith(
+    headline6: TextStyle(
+      fontFamily: 'Display Font',
+      fontSize: 17,
+      color: _errorColor,
+      height: 0.9,
+    ),
     headline4: TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 24,

@@ -21,12 +21,18 @@ final Color _darkBackgroundColor = Colors.grey[850];
 final BorderSide _border = BorderSide(color: Colors.black, width: 2);
 final BorderSide _borderSlim = _border.copyWith(width: 1);
 final Color _historyBackgroundColor = Colors.grey[400];
+const Color _primaryColor = Color(0xFF15928c);
 
 final ThemeData theme = ThemeData(
-  primaryColor: const Color(0xFF15928c),
+  primaryColor: _primaryColor,
   accentColor: const Color(0xFFbafb00),
   errorColor: _menuFontColor,
   textTheme: Typography.blackMountainView.copyWith(
+    headline6: const TextStyle(
+      fontFamily: 'Display Font',
+      fontSize: 16,
+      color: _primaryColor,
+    ),
     headline4: TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 24,

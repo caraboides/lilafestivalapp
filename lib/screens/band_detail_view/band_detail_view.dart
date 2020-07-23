@@ -15,6 +15,7 @@ import '../../providers/bands_with_events.dart';
 import '../../providers/festival_scope.dart';
 import '../../utils/band_key.dart';
 import '../../utils/logging.dart';
+import '../../widgets/band_cancelled/band_cancelled.dart';
 import '../../widgets/dense_event_list.dart';
 import '../../widgets/error_screen/error_screen.dart';
 import '../../widgets/event_date/event_date.dart';
@@ -156,15 +157,20 @@ class BandDetailView extends HookWidget {
         ),
       );
 
-  Widget _buildEvents(ImmortalList<Event> events) => events.isEmpty
-      ? const SizedBox(height: 5)
-      : SafeArea(
-          top: false,
-          bottom: false,
-          minimum: const EdgeInsets.symmetric(horizontal: 10),
-          child: events.length == 1
-              ? _buildSingleEventEntry(events.first.value)
-              : _buildMultiEventEntry(events));
+  Widget _buildEvents(BandWithEvents bandWithEvents) =>
+      bandWithEvents.events.isEmpty
+          ? Container(
+              padding: const EdgeInsets.only(top: 10),
+              alignment: Alignment.center,
+              child: BandCancelled(bandWithEvents),
+            )
+          : SafeArea(
+              top: false,
+              bottom: false,
+              minimum: const EdgeInsets.symmetric(horizontal: 10),
+              child: bandWithEvents.events.length == 1
+                  ? _buildSingleEventEntry(bandWithEvents.events.first.value)
+                  : _buildMultiEventEntry(bandWithEvents.events));
 
   Widget _buildBandView(BuildContext context, BandWithEvents bandWithEvents) {
     final locale = Localizations.localeOf(context);
@@ -184,7 +190,7 @@ class BandDetailView extends HookWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          _buildEvents(bandWithEvents.events),
+          _buildEvents(bandWithEvents),
           band
               .map<Widget>((b) => Padding(
                   padding:
