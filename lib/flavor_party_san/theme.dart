@@ -4,6 +4,7 @@ import '../models/theme.dart';
 
 const String _displayFontFamily = 'Display Font';
 final Color _lightDividerColor = Colors.grey[800];
+final Color _historyBackgroundColor = Colors.grey[400];
 
 final ThemeData theme = ThemeData(
   primaryColor: Colors.grey[850],
@@ -69,6 +70,11 @@ final FestivalTheme festivalTheme = FestivalTheme(
     ),
     dividerColor: _lightDividerColor,
   ),
+  historyTheme: theme.copyWith(
+    canvasColor: _historyBackgroundColor,
+    scaffoldBackgroundColor: _historyBackgroundColor,
+    backgroundColor: _historyBackgroundColor,
+  ),
   primaryButton: ({label, onPressed}) => RaisedButton(
     color: theme.accentColor,
     textTheme: ButtonTextTheme.normal,
@@ -86,4 +92,10 @@ final FestivalTheme festivalTheme = FestivalTheme(
     height: 152,
   ),
   notificationColor: Colors.black,
+  bannerBackgroundColor: theme.primaryColor,
+  bannerTextStyle: TextStyle(
+    color: theme.accentColor,
+    fontFamily: 'Display Font',
+    fontSize: 20,
+  ),
 );

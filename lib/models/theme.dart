@@ -5,8 +5,11 @@ class FestivalTheme {
     @required this.theme,
     @required this.aboutTheme,
     @required this.menuTheme,
+    @required this.historyTheme,
     @required this.primaryButton,
     @required this.notificationColor,
+    @required this.bannerBackgroundColor,
+    @required this.bannerTextStyle,
     this.menuDrawerDecoration,
     this.appBarBorder,
     this.tabBarDecoration,
@@ -17,6 +20,7 @@ class FestivalTheme {
   final ThemeData theme;
   final ThemeData aboutTheme;
   final ThemeData menuTheme;
+  final ThemeData historyTheme;
   final BoxDecoration menuDrawerDecoration;
   final ShapeBorder appBarBorder;
   final BoxDecoration tabBarDecoration;
@@ -27,6 +31,8 @@ class FestivalTheme {
   final Logo logo;
   final Logo logoMenu;
   final Color notificationColor;
+  final Color bannerBackgroundColor;
+  final TextStyle bannerTextStyle;
 
   final double eventListItemHeight = 70;
   final double weatherCardHeight = 40;

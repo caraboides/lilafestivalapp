@@ -20,6 +20,7 @@ const Color _menuFontColor = Color(0xFFd6102b);
 final Color _darkBackgroundColor = Colors.grey[850];
 final BorderSide _border = BorderSide(color: Colors.black, width: 2);
 final BorderSide _borderSlim = _border.copyWith(width: 1);
+final Color _historyBackgroundColor = Colors.grey[400];
 
 final ThemeData theme = ThemeData(
   primaryColor: const Color(0xFF15928c),
@@ -90,6 +91,11 @@ final FestivalTheme festivalTheme = FestivalTheme(
   menuDrawerDecoration: BoxDecoration(border: Border(right: _border)),
   appBarBorder: Border(bottom: _border),
   tabBarDecoration: BoxDecoration(border: Border(bottom: _border)),
+  historyTheme: theme.copyWith(
+    canvasColor: _historyBackgroundColor,
+    scaffoldBackgroundColor: _historyBackgroundColor,
+    backgroundColor: _historyBackgroundColor,
+  ),
   primaryButton: ({label, onPressed}) => FlatButton(
     shape: Border(
       top: _borderSlim,
@@ -113,4 +119,10 @@ final FestivalTheme festivalTheme = FestivalTheme(
     height: 152,
   ),
   notificationColor: theme.primaryColor,
+  bannerBackgroundColor: _darkBackgroundColor,
+  bannerTextStyle: TextStyle(
+    color: theme.accentColor,
+    fontFamily: 'Display Font',
+    fontSize: 20,
+  ),
 );

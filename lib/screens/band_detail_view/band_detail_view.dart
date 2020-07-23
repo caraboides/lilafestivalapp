@@ -21,6 +21,7 @@ import '../../widgets/event_date/event_date.dart';
 import '../../widgets/event_playing_indicator/event_playing_indicator.dart';
 import '../../widgets/event_stage.dart';
 import '../../widgets/event_toggle/event_toggle.dart';
+import '../../widgets/history_wrapper.dart';
 import '../../widgets/loading_screen/loading_screen.dart';
 import '../../widgets/scaffold.dart';
 import 'band_detail_view.i18n.dart';
@@ -34,9 +35,10 @@ class BandDetailView extends HookWidget {
   static void openFor(BuildContext context, String bandName) {
     final festivalScope = DimeFlutter.get<FestivalScope>(context);
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => DimeScopeFlutter(
-          modules: <BaseDimeModule>[FestivalScopeModule(festivalScope)],
-          child: BandDetailView(bandName)),
+      builder: (_) => HistoryWrapper(
+        festivalScope: festivalScope,
+        child: BandDetailView(bandName),
+      ),
       fullscreenDialog: true,
     ));
   }
@@ -208,10 +210,7 @@ class BandDetailView extends HookWidget {
     )));
     return AppScaffold(
       isDialog: true,
-      title: 'Band Details'.i18n +
-          (festivalScope.isCurrentFestival
-              ? ''
-              : festivalScope.titleSuffixString),
+      title: 'Band Details'.i18n + festivalScope.titleSuffix,
       body: bandProvider.when(
         data: (band) => _buildBandView(context, band),
         loading: () => LoadingScreen('Loading band data.'.i18n),

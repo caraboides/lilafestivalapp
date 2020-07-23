@@ -81,28 +81,31 @@ class _FullScheduleState extends State<FullSchedule> {
             )
           : Text(_config.festivalName);
     }
-    return Text(_config.festivalName + festivalScope.titleSuffixString);
+    return Text(_config.festivalName + festivalScope.titleSuffix);
   }
+
+  Widget _buildTabBarContainer(ImmortalList<DateTime> days) =>
+      _theme.tabBarDecoration != null
+          ? PreferredSize(
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: _theme.tabBarHeight,
+                    decoration: _theme.tabBarDecoration,
+                  ),
+                  _buildTabBar(days),
+                ],
+              ),
+              preferredSize: Size.fromHeight(_theme.tabBarHeight),
+            )
+          : _buildTabBar(days);
 
   AppBar _buildAppBar(
     ImmortalList<DateTime> days,
     FestivalScope festivalScope,
   ) =>
       AppBar(
-        bottom: _theme.tabBarDecoration != null
-            ? PreferredSize(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      height: _theme.tabBarHeight,
-                      decoration: _theme.tabBarDecoration,
-                    ),
-                    _buildTabBar(days),
-                  ],
-                ),
-                preferredSize: Size.fromHeight(_theme.tabBarHeight),
-              )
-            : _buildTabBar(days),
+        bottom: days != null ? _buildTabBarContainer(days) : null,
         title: _buildTitleWidget(festivalScope),
         actions: <Widget>[
           Icon(_likedOnly ? Icons.star : Icons.star_border),
@@ -130,23 +133,33 @@ class _FullScheduleState extends State<FullSchedule> {
         ],
       );
 
+  Widget _buildScaffold({
+    Widget child,
+    FestivalScope festivalScope,
+    ImmortalList<DateTime> days,
+  }) =>
+      AppScaffold(
+        appBar: _buildAppBar(days, festivalScope),
+        body: child,
+      );
+
   Widget _buildScheduleView(
     ImmortalList<DateTime> days,
     FestivalScope festivalScope,
   ) =>
       DefaultTabController(
-        length: days.length + 1,
-        initialIndex: _initialTab(days),
-        child: AppScaffold(
-          appBar: _buildAppBar(days, festivalScope),
-          body: TabBarView(
-            children: [
-              _buildBandScheduleList(),
-              ...days.map(_buildDailyScheduleList).toMutableList(),
-            ],
-          ),
-        ),
-      );
+          length: days.length + 1,
+          initialIndex: _initialTab(days),
+          child: _buildScaffold(
+            days: days,
+            festivalScope: festivalScope,
+            child: TabBarView(
+              children: [
+                _buildBandScheduleList(),
+                ...days.map(_buildDailyScheduleList).toMutableList(),
+              ],
+            ),
+          ));
 
   @override
   Widget build(BuildContext context) {
@@ -155,13 +168,20 @@ class _FullScheduleState extends State<FullSchedule> {
         useProvider(dimeGet<FestivalDaysProvider>()(festivalScope.festivalId));
     return provider.when(
       data: (days) => _buildScheduleView(days, festivalScope),
-      loading: () => LoadingScreen('Loading schedule.'.i18n),
+      loading: () => _buildScaffold(
+        festivalScope: festivalScope,
+        child: LoadingScreen('Loading schedule.'.i18n),
+      ),
       error: (error, trace) {
         _log.error(
             'Error retrieving festival days for ${festivalScope.festivalId}',
             error,
             trace);
-        return ErrorScreen('There was an error retrieving the schedule.'.i18n);
+        return _buildScaffold(
+          festivalScope: festivalScope,
+          child:
+              ErrorScreen('There was an error retrieving the schedule.'.i18n),
+        );
       },
     );
   }
