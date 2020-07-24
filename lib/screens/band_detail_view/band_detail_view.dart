@@ -8,12 +8,12 @@ import 'package:immortal/immortal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/band.dart';
+import '../../models/band_key.dart';
 import '../../models/band_with_events.dart';
 import '../../models/event.dart';
 import '../../models/theme.dart';
 import '../../providers/bands_with_events.dart';
 import '../../providers/festival_scope.dart';
-import '../../utils/band_key.dart';
 import '../../utils/logging.dart';
 import '../../widgets/band_cancelled/band_cancelled.dart';
 import '../../widgets/dense_event_list.dart';

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
 
+import '../models/band_key.dart';
+import '../models/combined_key.dart';
 import '../models/event.dart';
 import '../models/festival_config.dart';
 import '../models/global_config.dart';
-import '../utils/band_key.dart';
 import '../utils/cache_stream.dart';
-import '../utils/combined_key.dart';
 import '../utils/combined_storage_stream.dart';
 import '../utils/constants.dart';
 import '../utils/date.dart';

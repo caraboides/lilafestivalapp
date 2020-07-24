@@ -4,9 +4,9 @@ import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
 
 import '../models/band.dart';
+import '../models/band_key.dart';
 import '../models/band_with_events.dart';
 import '../models/event.dart';
-import '../utils/band_key.dart';
 import '../utils/combined_async_values.dart';
 import 'bands.dart';
 import 'schedule.dart';

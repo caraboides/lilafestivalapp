@@ -5,9 +5,9 @@ import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
 
 import '../models/band.dart';
+import '../models/band_key.dart';
 import '../models/festival_config.dart';
 import '../models/global_config.dart';
-import '../utils/band_key.dart';
 import '../utils/cache_stream.dart';
 import '../utils/combined_storage_stream.dart';
 import '../utils/constants.dart';

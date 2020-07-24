@@ -5,10 +5,10 @@ import 'package:immortal/immortal.dart';
 import 'package:quiver/core.dart';
 
 import '../models/band_with_events.dart';
+import '../models/combined_key.dart';
 import '../models/event.dart';
 import '../models/my_schedule.dart';
 import '../utils/combined_async_values.dart';
-import '../utils/combined_key.dart';
 import 'bands_with_events.dart';
 import 'my_schedule.dart';
 import 'schedule.dart';

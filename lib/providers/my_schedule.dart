@@ -6,12 +6,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:state_notifier/state_notifier.dart';
 import 'package:optional/optional.dart';
 
+import '../models/combined_key.dart';
 import '../models/event.dart';
 import '../models/festival_config.dart';
 import '../models/my_schedule.dart';
 import '../services/app_storage.dart';
 import '../services/notifications/notifications.dart';
-import '../utils/combined_key.dart';
 import '../utils/constants.dart';
 import '../utils/logging.dart';
 

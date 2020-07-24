@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weather/weather_library.dart';
 import 'package:optional/optional.dart';
 
+import '../models/combined_key.dart';
 import '../services/open_weather.dart';
-import '../utils/combined_key.dart';
 
 class WeatherKey extends CombinedKey<int, DateTime> {
   const WeatherKey({
