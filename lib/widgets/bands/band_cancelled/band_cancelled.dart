@@ -1,9 +1,9 @@
 import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/band_with_events.dart';
-import '../../models/theme.dart';
-import '../../providers/festival_scope.dart';
+import '../../../models/band_with_events.dart';
+import '../../../models/theme.dart';
+import '../../../providers/festival_scope.dart';
 
 import 'band_cancelled.i18n.dart';
 

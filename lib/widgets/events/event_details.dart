@@ -1,8 +1,8 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 
-import '../models/event.dart';
-import '../models/festival_config.dart';
+import '../../models/event.dart';
+import '../../models/festival_config.dart';
 import 'event_band_name.dart';
 import 'event_date/event_date.dart';
 import 'event_stage.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/event.dart';
+import '../../models/event.dart';
 import 'event_details.dart';
 import 'event_playing_indicator/event_playing_indicator.dart';
 import 'event_toggle/event_toggle.dart';

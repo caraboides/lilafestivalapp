@@ -5,10 +5,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:weather/weather_library.dart';
 
-import '../models/festival_config.dart';
-import '../models/theme.dart';
-import '../providers/weather.dart';
-import '../utils/logging.dart';
+import '../../../models/festival_config.dart';
+import '../../../models/theme.dart';
+import '../../../providers/weather.dart';
+import '../../../utils/logging.dart';
 
 class WeatherCard extends HookWidget {
   WeatherCard(this.date, {Key key}) : super(key: key);

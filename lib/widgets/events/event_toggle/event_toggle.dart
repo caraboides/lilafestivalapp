@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../models/event.dart';
-import '../../providers/festival_scope.dart';
-import '../../providers/my_schedule.dart';
+import '../../../models/event.dart';
+import '../../../providers/festival_scope.dart';
+import '../../../providers/my_schedule.dart';
 import 'event_toggle.i18n.dart';
 
 class EventToggle extends HookWidget {

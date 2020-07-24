@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 
-import '../models/global_config.dart';
+import '../../models/global_config.dart';
 
 // TODO(SF) STATE find better solution? determine next band-playing-change
 // or day switch

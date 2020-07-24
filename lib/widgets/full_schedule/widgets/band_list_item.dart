@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../models/band_with_events.dart';
 import '../../../models/event.dart';
 import '../../../screens/band_detail_view/band_detail_view.dart';
-import '../../band_cancelled/band_cancelled.dart';
-import '../../dense_event_list.dart';
-import '../../event_band_name.dart';
-import '../../event_detail_row.dart';
+import '../../bands/band_cancelled/band_cancelled.dart';
+import '../../events/dense_event_list.dart';
+import '../../events/event_band_name.dart';
+import '../../events/event_detail_row.dart';
 
 class BandListItem extends StatelessWidget {
   const BandListItem({

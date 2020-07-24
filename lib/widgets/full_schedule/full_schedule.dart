@@ -12,13 +12,13 @@ import '../../providers/schedule.dart';
 import '../../utils/date.dart';
 import '../../utils/i18n.dart';
 import '../../utils/logging.dart';
-import '../error_screen/error_screen.dart';
-import '../loading_screen/loading_screen.dart';
+import '../messages/error_screen/error_screen.dart';
+import '../messages/loading_screen/loading_screen.dart';
 import '../scaffold.dart';
-import '../weather_card.dart';
 import 'full_schedule.i18n.dart';
 import 'widgets/band_schedule_list/band_schedule_list.dart';
 import 'widgets/daily_schedule_list/daily_schedule_list.dart';
+import 'widgets/weather_card.dart';
 
 class FullSchedule extends StatefulHookWidget {
   const FullSchedule({

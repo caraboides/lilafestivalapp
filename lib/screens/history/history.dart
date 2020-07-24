@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/app_route.dart';
 import '../../providers/festival_scope.dart';
 import '../../widgets/full_schedule/full_schedule.dart';
-import '../../widgets/history_wrapper.dart';
+import '../../widgets/history/history_wrapper.dart';
 import 'history.i18n.dart';
 
 class History extends StatelessWidget {

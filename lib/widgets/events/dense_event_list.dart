@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
-import '../models/event.dart';
+import '../../models/event.dart';
 import 'event_detail_row.dart';
 
 class DenseEventList extends StatelessWidget {

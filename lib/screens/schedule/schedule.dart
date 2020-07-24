@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../models/festival_config.dart';
 import '../../providers/festival_scope.dart';
 import '../../widgets/full_schedule/full_schedule.dart';
-import '../../widgets/periodic_rebuild_mixin.dart';
+import '../../widgets/mixins/periodic_rebuild_mixin.dart';
 import 'schedule.i18n.dart';
 
 class ScheduleScreen extends StatefulWidget {

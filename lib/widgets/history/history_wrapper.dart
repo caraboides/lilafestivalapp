@@ -1,8 +1,8 @@
 import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 
-import '../models/theme.dart';
-import '../providers/festival_scope.dart';
+import '../../models/theme.dart';
+import '../../providers/festival_scope.dart';
 
 class HistoryWrapper extends StatelessWidget {
   const HistoryWrapper({
@@ -24,15 +24,13 @@ class HistoryWrapper extends StatelessWidget {
             ? child
             : Theme(
                 data: _theme.historyTheme,
-                child: MaterialBannerTheme(
-                  data: _theme.theme.bannerTheme,
-                  child: Banner(
-                    message: festivalScope.title,
-                    location: BannerLocation.bottomEnd,
-                    color: _theme.bannerBackgroundColor,
-                    textStyle: _theme.bannerTextStyle,
-                    child: child,
-                  ),
-                )),
+                child: Banner(
+                  message: festivalScope.title,
+                  location: BannerLocation.bottomEnd,
+                  color: _theme.bannerBackgroundColor,
+                  textStyle: _theme.bannerTextStyle,
+                  child: child,
+                ),
+              ),
       );
 }

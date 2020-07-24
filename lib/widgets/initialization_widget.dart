@@ -14,7 +14,7 @@ import '../providers/schedule.dart';
 import '../services/notifications/notifications.dart';
 import '../utils/combined_async_values.dart';
 import '../utils/logging.dart';
-import 'one_time_execution_mixin.dart';
+import 'mixins/one_time_execution_mixin.dart';
 
 class InitializationWidget extends StatefulHookWidget {
   InitializationWidget(this.child);

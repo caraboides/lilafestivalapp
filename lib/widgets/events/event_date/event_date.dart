@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
 
-import '../../utils/i18n.dart';
+import '../../../utils/i18n.dart';
 import 'event_date.i18n.dart';
 
 class EventDate extends StatelessWidget {

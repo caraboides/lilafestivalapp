@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../message_screen.dart';
+import '../../../messages/message_screen.dart';
 import 'empty_schedule.i18n.dart';
 
 class EmptySchedule extends StatelessWidget {
