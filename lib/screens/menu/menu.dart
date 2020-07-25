@@ -69,12 +69,14 @@ class Menu extends StatelessWidget {
     final locale = Localizations.localeOf(context);
     return ListView(
       children: <Widget>[
-        if (_theme.logoMenu != null)
-          Image.asset(
+        Visibility(
+          visible: _theme.logoMenu != null,
+          child: Image.asset(
             _theme.logoMenu.assetPath,
             height: _theme.logoMenu.height,
             width: _theme.logoMenu.width,
           ),
+        ),
         ..._navigation.routes
             .map((route) => route.isNested
                 ? _buildNestedEntry(

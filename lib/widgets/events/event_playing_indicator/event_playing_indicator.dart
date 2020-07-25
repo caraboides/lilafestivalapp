@@ -8,10 +8,14 @@ class EventPlayingIndicator extends StatelessWidget {
   final bool isPlaying;
 
   @override
-  Widget build(BuildContext context) => isPlaying
-      ? Tooltip(
-          message: 'Gig is currently taking place'.i18n,
-          child: Icon(Icons.priority_high),
-        )
-      : const SizedBox(width: 24);
+  Widget build(BuildContext context) => Visibility(
+        visible: isPlaying,
+        child: SizedBox(
+          width: 24,
+          child: Tooltip(
+            message: 'Gig is currently taking place'.i18n,
+            child: Center(child: Icon(Icons.priority_high)),
+          ),
+        ),
+      );
 }

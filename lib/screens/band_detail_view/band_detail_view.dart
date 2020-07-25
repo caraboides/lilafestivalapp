@@ -96,15 +96,20 @@ class BandDetailView extends HookWidget {
             'Origin',
             _isValueSet(band.origin) ? _buildFlag(band.origin) : _fallbackText,
           ),
-          if (_isValueSet(band.style))
-            _buildDetailRow(theme, 'Style', band.style),
-          if (_isValueSet(band.roots))
-            _buildDetailRow(theme, 'Roots', band.roots),
+          Visibility(
+            visible: _isValueSet(band.style),
+            child: _buildDetailRow(theme, 'Style', band.style),
+          ),
+          Visibility(
+            visible: _isValueSet(band.roots),
+            child: _buildDetailRow(theme, 'Roots', band.roots),
+          ),
           const SizedBox(
             height: 10,
           ),
-          if (_isValueSet(band.spotify))
-            Padding(
+          Visibility(
+            visible: _isValueSet(band.spotify),
+            child: Padding(
               padding: const EdgeInsets.only(top: 10),
               child: _festivalTheme.primaryButton(
                 label: 'Play on Spotify'.i18n,
@@ -113,6 +118,7 @@ class BandDetailView extends HookWidget {
                 },
               ),
             ),
+          ),
         ],
       );
 
@@ -160,7 +166,7 @@ class BandDetailView extends HookWidget {
   Widget _buildEvents(BandWithEvents bandWithEvents) =>
       bandWithEvents.events.isEmpty
           ? Container(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10, bottom: 2),
               alignment: Alignment.center,
               child: BandCancelled(bandWithEvents),
             )
@@ -180,8 +186,10 @@ class BandDetailView extends HookWidget {
       alignment: Alignment.topCenter,
       child: ListView(
         children: <Widget>[
-          if (band.isPresent && _isValueSet(band.value.logo))
-            _buildBandLogo(band.value.logo),
+          Visibility(
+            visible: band.isPresent && _isValueSet(band.value.logo),
+            child: _buildBandLogo(band.value.logo),
+          ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
             child: Text(
@@ -197,11 +205,13 @@ class BandDetailView extends HookWidget {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: _buildDetails(theme, locale, b)))
               .orElse(_fallbackInfo),
-          if (band.isPresent && _isValueSet(band.value.image))
-            Padding(
+          Visibility(
+            visible: band.isPresent && _isValueSet(band.value.image),
+            child: Padding(
               padding: const EdgeInsets.only(top: 5),
               child: CachedNetworkImage(imageUrl: band.value.image),
             ),
+          ),
         ],
       ),
     );

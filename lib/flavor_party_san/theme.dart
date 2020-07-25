@@ -3,32 +3,38 @@ import 'package:flutter/material.dart';
 import '../models/theme.dart';
 
 const String _displayFontFamily = 'Display Font';
+final Color _primaryColor = Colors.grey[850];
+final Color _errorColor = Colors.redAccent[700];
 final Color _lightDividerColor = Colors.grey[800];
 final Color _historyBackgroundColor = Colors.grey[400];
-final Color _errorColor = Colors.redAccent[700];
 
 final ThemeData theme = ThemeData(
-  primaryColor: Colors.grey[850],
+  primaryColor: _primaryColor,
   accentColor: const Color(0xFFD2D522),
   errorColor: _errorColor,
   textTheme: Typography.blackMountainView.copyWith(
     headline6: TextStyle(
-      fontFamily: 'Display Font',
+      fontFamily: _displayFontFamily,
       fontSize: 17,
       color: _errorColor,
-      height: 0.9,
+      height: 1.05,
     ),
-    headline4: TextStyle(
+    headline4: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 24,
       color: Colors.black,
     ),
-    headline3: TextStyle(
+    headline3: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 28,
       color: Colors.black,
     ),
-    subtitle2: TextStyle(
+    headline2: TextStyle(
+      fontFamily: _displayFontFamily,
+      fontSize: 28,
+      color: _primaryColor.withOpacity(0.87),
+    ),
+    subtitle2: const TextStyle(
       // TODO(SF) THEME can be part of global theme
       fontWeight: FontWeight.bold,
     ),

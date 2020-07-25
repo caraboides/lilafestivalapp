@@ -38,7 +38,7 @@ class _InitializationWidgetState extends State<InitializationWidget>
       precacheImage(
         AssetImage(_theme.logoMenu.assetPath),
         context,
-        size: Size(_theme.logoMenu.width, _theme.logoMenu.height),
+        size: _theme.logoMenu.size,
       );
     }
   }

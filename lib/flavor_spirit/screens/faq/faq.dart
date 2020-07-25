@@ -123,19 +123,19 @@ class FAQ extends StatelessWidget {
                     'viel Geld haben, gibt es noch ausreichend Tickets an der '
                     'Abendkasse für alle Tage:',
               ]),
-              Text(
+              const Text(
                 'Vorverkauf: 62.- Eur (für das gesamte Festival)',
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
-              Text(
+              const Text(
                 'Abendkasse: 72.- Eur (für das gesamte Festival)',
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
-              Text(
+              const Text(
                 'Freitag (inkl. Do.): 48.- Eur (VVK, Abendkasse etwas teurer)',
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
-              Text(
+              const Text(
                 'Samstag: 45.- Eur (VVK, Abendkasse etwas teurer)',
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),

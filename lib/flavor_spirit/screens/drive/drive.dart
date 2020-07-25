@@ -34,7 +34,7 @@ class Drive extends StatelessWidget {
       body: ListView(
           padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
           children: <Widget>[
-            Text(
+            const Text(
               'Adresse: Flugplatz / Altes Lager, 14913 Niedergörsdorf',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
@@ -79,7 +79,7 @@ class Drive extends StatelessWidget {
               'über die A 13, Abfahrt Duben oder Freiwalde',
               'über die A 10, Abfahrt Ludwigsfelde Ost',
             ]),
-            Text(
+            const Text(
               'ab Altes Lager einfach der Ausschilderung folgen!!! (Und bitte '
               'lasst die Beschilderung stehen. Festivalposter gibt es, sofern '
               'noch vorhanden, am Infostand!',

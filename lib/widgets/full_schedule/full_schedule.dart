@@ -126,7 +126,10 @@ class _FullScheduleState extends State<FullSchedule> {
   Widget _buildDailyScheduleList(DateTime date) => Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          if (widget.displayWeather) WeatherCard(date),
+          Visibility(
+            visible: widget.displayWeather,
+            child: WeatherCard(date),
+          ),
           Expanded(
             child: DailyScheduleList(date, likedOnly: _likedOnly),
           ),

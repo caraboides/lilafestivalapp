@@ -18,7 +18,7 @@ final List<Shadow> _appBarTextShadows = const [
 const String _displayFontFamily = 'Display Font';
 const Color _menuFontColor = Color(0xFFd6102b);
 final Color _darkBackgroundColor = Colors.grey[850];
-final BorderSide _border = BorderSide(color: Colors.black, width: 2);
+const BorderSide _border = BorderSide(color: Colors.black, width: 2);
 final BorderSide _borderSlim = _border.copyWith(width: 1);
 final Color _historyBackgroundColor = Colors.grey[400];
 const Color _primaryColor = Color(0xFF15928c);
@@ -29,21 +29,27 @@ final ThemeData theme = ThemeData(
   errorColor: _menuFontColor,
   textTheme: Typography.blackMountainView.copyWith(
     headline6: const TextStyle(
-      fontFamily: 'Display Font',
+      fontFamily: _displayFontFamily,
       fontSize: 16,
       color: _primaryColor,
     ),
-    headline4: TextStyle(
+    headline4: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 24,
       color: Colors.black,
     ),
-    headline3: TextStyle(
+    headline3: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 28,
       color: Colors.black,
     ),
-    subtitle2: TextStyle(
+    headline2: TextStyle(
+      fontFamily: _displayFontFamily,
+      fontSize: 28,
+      color: _primaryColor.withOpacity(0.87),
+      height: 1.1,
+    ),
+    subtitle2: const TextStyle(
       fontWeight: FontWeight.bold,
     ),
   ),
@@ -67,10 +73,10 @@ final ThemeData theme = ThemeData(
       fontSize: 18,
     ),
   ),
-  cardTheme: CardTheme(
+  cardTheme: const CardTheme(
     margin: EdgeInsets.zero,
     shape: Border(bottom: _border),
-    color: const Color(0xFFb3dddd),
+    color: Color(0xFFb3dddd),
   ),
   backgroundColor: Colors.white,
 );
@@ -94,9 +100,9 @@ final FestivalTheme festivalTheme = FestivalTheme(
     accentColor: _menuFontColor,
     dividerColor: _menuFontColor,
   ),
-  menuDrawerDecoration: BoxDecoration(border: Border(right: _border)),
-  appBarBorder: Border(bottom: _border),
-  tabBarDecoration: BoxDecoration(border: Border(bottom: _border)),
+  menuDrawerDecoration: const BoxDecoration(border: Border(right: _border)),
+  appBarBorder: const Border(bottom: _border),
+  tabBarDecoration: const BoxDecoration(border: Border(bottom: _border)),
   historyTheme: theme.copyWith(
     canvasColor: _historyBackgroundColor,
     scaffoldBackgroundColor: _historyBackgroundColor,

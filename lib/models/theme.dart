@@ -35,8 +35,14 @@ class FestivalTheme {
   final TextStyle bannerTextStyle;
 
   final double eventListItemHeight = 70;
+  final double denseEventListItemHeight = 42;
+  final double bandListHeaderHeight = 30;
+  final double bandListItemMinHeight = 38;
   final double weatherCardHeight = 40;
   final double tabBarHeight = 48;
+  final double alphabeticalIndexWidth = 32;
+  // TODO(SF) THEME value ok?
+  final int minItemCountForAlphabeticalIndex = 10;
 
   // TODO(SF) THEME make schedule icons in general configurable?
 
@@ -63,4 +69,6 @@ class Logo {
   final String assetPath;
   final double width;
   final double height;
+
+  Size get size => Size(width, height);
 }

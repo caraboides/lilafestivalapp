@@ -28,8 +28,14 @@ class EventDetails extends StatelessWidget {
             : CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          if (showBandName) EventBandName(event.bandName),
-          if (showBandName) const SizedBox(height: 3.5),
+          Visibility(
+            visible: showBandName,
+            child: EventBandName(event.bandName),
+          ),
+          Visibility(
+            visible: showBandName,
+            child: const SizedBox(height: 3.5),
+          ),
           EventDate(
             start: event.start,
             end: event.end,

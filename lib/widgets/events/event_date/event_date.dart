@@ -16,28 +16,30 @@ class EventDate extends StatelessWidget {
   final bool showWeekDay;
 
   List<Widget> _buildTimes(BuildContext context) {
-    if (!start.isPresent) {
-      return <Widget>[];
-    }
     final textStyle = Theme.of(context).textTheme.caption;
     return <Widget>[
       Text(
         (showWeekDay ? 'E HH:mm' : 'HH:mm').i18n.dateFormat(start.value),
         style: textStyle,
       ),
-      if (end.isPresent)
-        Text(
+      Visibility(
+        visible: end.isPresent,
+        child: Text(
           ' - ${'HH:mm'.i18n.dateFormat(end.value)}',
           style: showWeekDay
               ? textStyle
               : textStyle.copyWith(color: textStyle.color.withOpacity(.33)),
         ),
+      ),
     ];
   }
 
   @override
-  Widget build(BuildContext context) => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: _buildTimes(context),
+  Widget build(BuildContext context) => Visibility(
+        visible: start.isPresent,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: _buildTimes(context),
+        ),
       );
 }
