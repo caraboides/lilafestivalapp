@@ -38,4 +38,5 @@ final GlobalConfig config = GlobalConfig(
   ]),
   weatherBaseUrl: 'http://api.openweathermap.org/data/2.5',
   weatherApiKey: const String.fromEnvironment('WEATHER_API_KEY'),
+  weatherMinHour: 14,
 );

@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weather/weather_library.dart';
 import 'package:optional/optional.dart';
+// TODO(SF) FIXME
+// ignore: implementation_imports
+import 'package:riverpod/src/stream_provider/stream_provider.dart';
 
 import '../models/combined_key.dart';
 import '../services/open_weather.dart';
@@ -18,8 +21,13 @@ class WeatherKey extends CombinedKey<int, DateTime> {
 }
 
 class WeatherProvider
-    extends Family<FutureProvider<Optional<Weather>>, WeatherKey> {
-  WeatherProvider()
-      : super((weatherKey) => FutureProvider((ref) => dimeGet<OpenWeather>()
-            .getWeatherForDate(weatherKey.date, weatherKey.cacheKey)));
+    extends Family<AutoDisposeStreamProvider<Optional<Weather>>, WeatherKey> {
+  WeatherProvider() : super(_createStreamProvider);
+
+  static OpenWeather get _weather => dimeGet<OpenWeather>();
+
+  static AutoDisposeStreamProvider<Optional<Weather>> _createStreamProvider(
+          WeatherKey weatherKey) =>
+      StreamProvider.autoDispose(
+          (ref) => _weather.getWeatherForDate(weatherKey.date));
 }

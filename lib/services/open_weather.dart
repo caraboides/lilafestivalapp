@@ -1,25 +1,41 @@
-import 'dart:convert';
 import 'dart:math';
 
-import 'package:dcache/dcache.dart';
 import 'package:dime/dime.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:i18n_extension/i18n_widget.dart';
 import 'package:immortal/immortal.dart';
 import 'package:weather/weather_library.dart';
-import 'package:http/http.dart' as http;
 import 'package:optional/optional.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 import '../models/festival_config.dart';
 import '../models/global_config.dart';
+import '../utils/cache_stream.dart';
+import '../utils/constants.dart';
 import '../utils/date.dart';
 import '../utils/logging.dart';
 
-class OpenWeather {
-  final _cache =
-      SimpleCache<int, ImmortalList<Weather>>(storage: SimpleStorage(size: 1));
+// TODO(SF) STATE create custom cache manager for history as well
+class WeatherCacheManager extends BaseCacheManager {
+  WeatherCacheManager()
+      : super(
+          Constants.weatherCacheKey,
+          maxAgeCacheObject: const Duration(hours: 1),
+          maxNrOfCacheObjects: 1,
+        );
 
+  @override
+  Future<String> getFilePath() async {
+    var directory = await getTemporaryDirectory();
+    return path.join(directory.path, Constants.weatherCacheKey);
+  }
+}
+
+class OpenWeather {
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
   FestivalConfig get _config => dimeGet<FestivalConfig>();
+  WeatherCacheManager get _cache => dimeGet<WeatherCacheManager>();
   Logger get _log => const Logger(module: 'WEATHER');
 
   String _buildQueryUrl() => '${_globalConfig.weatherBaseUrl}/forecast?'
@@ -28,53 +44,27 @@ class OpenWeather {
       'appid=${_globalConfig.weatherApiKey}&'
       'lang=${I18n.language}';
 
+  ImmortalList<Weather> _forecastFromJson(Map<String, dynamic> json) =>
+      ImmortalList(json['list']).map((w) => Weather(w));
+
   /// For API documentation, see: https://openweathermap.org/forecast5
-  Future<Optional<ImmortalList<Weather>>> _loadForecast() async {
-    try {
-      final response = await http.get(_buildQueryUrl());
-      if (response.statusCode == 200) {
-        final jsonForecasts = json.decode(response.body);
-        _log.debug('Loading forecast was successful');
-        final weathers =
-            ImmortalList(jsonForecasts['list']).map((w) => Weather(w));
-        return Optional.of(weathers);
-      } else {
-        _log.error('Loading forecast failed', response.body);
-      }
-    } catch (error) {
-      _log.error('Error loading forecast', error);
-    }
-    return const Optional<ImmortalList<Weather>>.empty();
-  }
+  Stream<ImmortalList<Weather>> _getForecast() => createCacheStream(
+        remoteUrl: _buildQueryUrl(),
+        fromJson: _forecastFromJson,
+        cacheManager: _cache,
+      );
 
-  Future<ImmortalList<Weather>> _getForecast(int cacheKey) async {
-    final currentWeathers = _cache.get(cacheKey);
-    if (currentWeathers != null) {
-      _log.debug('Reading forecast for key $cacheKey from cache');
-      return Future.value(currentWeathers);
-    }
-    _log.debug('Loading forecast for key $cacheKey');
-    return _loadForecast().then((weathers) => weathers.map((list) {
-          _log.debug('Loading weather for key $cacheKey was successful, '
-              'writing to cache');
-          _cache.set(cacheKey, list);
-          return list;
-        }).orElse(ImmortalList<Weather>()));
-  }
-
-  Future<Optional<Weather>> getWeatherForDate(
-    DateTime date,
-    int cacheKey,
-  ) async {
-    _log.debug('Loading weather for key $cacheKey');
-    final forecast = await _getForecast(cacheKey);
-    _log.debug('Selecting weather for $date');
-    final now = DateTime.now();
-    final isToday = isSameFestivalDay(now, date);
-    final minHour = isToday ? max(14, now.hour) : 14;
-    return forecast.lastWhere((current) =>
-        isSameFestivalDay(current.date, date) &&
-        current.date.hour <= minHour &&
-        current.date.hour >= 14);
-  }
+  Stream<Optional<Weather>> getWeatherForDate(DateTime date) =>
+      _getForecast().map<Optional<Weather>>((forecast) {
+        _log.debug('Selecting weather for $date');
+        final now = DateTime.now();
+        final isToday = isSameFestivalDay(now, date);
+        final maxHour = isToday
+            ? max(_globalConfig.weatherMinHour, now.hour)
+            : _globalConfig.weatherMinHour;
+        return forecast.lastWhere((current) =>
+            isSameFestivalDay(current.date, date) &&
+            current.date.hour <= maxHour &&
+            current.date.hour >= _globalConfig.weatherMinHour);
+      });
 }

@@ -21,5 +21,6 @@ class ServiceModule extends BaseDimeModule {
         FlutterLocalNotificationsPlugin());
     addSingle<Notifications>(const Notifications());
     addSingle<BaseCacheManager>(DefaultCacheManager());
+    addSingle<WeatherCacheManager>(WeatherCacheManager());
   }
 }

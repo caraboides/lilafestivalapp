@@ -14,6 +14,7 @@ class GlobalConfig {
     @required this.references,
     @required this.weatherBaseUrl,
     @required this.weatherApiKey,
+    @required this.weatherMinHour,
   });
 
   final Duration periodicRebuildDuration;
@@ -25,4 +26,5 @@ class GlobalConfig {
   final ImmortalList<Reference> references;
   final String weatherBaseUrl;
   final String weatherApiKey;
+  final int weatherMinHour;
 }

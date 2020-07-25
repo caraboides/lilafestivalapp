@@ -71,13 +71,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
-  dcache:
-    dependency: "direct main"
-    description:
-      name: dcache
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0"
   dime:
     dependency: transitive
     description:
