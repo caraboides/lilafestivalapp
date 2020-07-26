@@ -42,6 +42,7 @@ class AppStorage {
       _log.debug('Storing data in $fileName');
       final file = await _getFileHandle(fileName);
       final fileContent = jsonEncode(json);
+      await file.create(recursive: true);
       await file.writeAsString(fileContent);
       _log.debug('Storing data in $fileName was successful');
     } catch (error) {
