@@ -22,9 +22,6 @@ class BandListItem extends StatelessWidget {
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
 
-  void _onTap(BuildContext context) =>
-      BandDetailView.openFor(context, bandWithEvents.bandName);
-
   Widget _buildBandName() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +64,8 @@ class BandListItem extends StatelessWidget {
           ? theme.accentColor
           : theme.canvasColor,
       child: InkWell(
-        onTap: () => _onTap(context),
+        onTap: () =>
+            BandDetailView.openFor(bandWithEvents.bandName, context: context),
         child: SafeArea(
           top: false,
           bottom: false,

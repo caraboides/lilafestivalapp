@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
+import '../providers/festival_scope.dart';
 import 'app_route.dart';
 import 'lat_lng.dart';
 import 'reference.dart';
@@ -38,4 +39,6 @@ class FestivalConfig {
   final LatLng weatherGeoLocation;
   final String weatherCityId;
   final ImmortalList<NestedRoute> history;
+
+  FestivalScope get currentFestivalScope => FestivalScope.current(festivalId);
 }

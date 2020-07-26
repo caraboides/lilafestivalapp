@@ -11,6 +11,7 @@ import '../../models/band.dart';
 import '../../models/band_key.dart';
 import '../../models/band_with_events.dart';
 import '../../models/event.dart';
+import '../../models/festival_config.dart';
 import '../../models/theme.dart';
 import '../../providers/bands_with_events.dart';
 import '../../providers/festival_scope.dart';
@@ -33,9 +34,12 @@ class BandDetailView extends HookWidget {
 
   final String bandName;
 
-  static void openFor(BuildContext context, String bandName) {
-    final festivalScope = DimeFlutter.get<FestivalScope>(context);
-    Navigator.of(context).push(MaterialPageRoute(
+  static void openFor(String bandName, {BuildContext context}) {
+    final navigatorKey = dimeGet<GlobalKey<NavigatorState>>();
+    final festivalScope = context != null
+        ? DimeFlutter.get<FestivalScope>(context)
+        : _config.currentFestivalScope;
+    navigatorKey.currentState.push(MaterialPageRoute(
       builder: (_) => HistoryWrapper(
         festivalScope: festivalScope,
         child: BandDetailView(bandName),
@@ -44,6 +48,7 @@ class BandDetailView extends HookWidget {
     ));
   }
 
+  static FestivalConfig get _config => dimeGet<FestivalConfig>();
   FestivalTheme get _festivalTheme => dimeGet<FestivalTheme>();
   Logger get _log => const Logger(module: 'BandDetailView');
 

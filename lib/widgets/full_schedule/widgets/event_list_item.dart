@@ -20,16 +20,13 @@ class EventListItem extends StatelessWidget {
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
 
-  void _onTap(BuildContext context) =>
-      BandDetailView.openFor(context, event.bandName);
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Material(
       color: isPlaying ? theme.accentColor : theme.canvasColor,
       child: InkWell(
-        onTap: () => _onTap(context),
+        onTap: () => BandDetailView.openFor(event.bandName, context: context),
         child: SafeArea(
           top: false,
           bottom: false,

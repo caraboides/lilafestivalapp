@@ -3,11 +3,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class FestivalScope {
-  const FestivalScope({
+  const FestivalScope._({
     @required this.festivalId,
     this.isCurrentFestival = false,
     this.title,
   });
+
+  factory FestivalScope.current(String festivalId) => FestivalScope._(
+        festivalId: festivalId,
+        isCurrentFestival: true,
+      );
+
+  factory FestivalScope.history({
+    @required String festivalId,
+    @required String title,
+  }) =>
+      FestivalScope._(
+        festivalId: festivalId,
+        title: title,
+      );
 
   final String festivalId;
   final String title;

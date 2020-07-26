@@ -6,6 +6,7 @@ import '../../models/event.dart';
 import '../../models/festival_config.dart';
 import '../../models/my_schedule.dart';
 import '../../models/theme.dart';
+import '../../screens/band_detail_view/band_detail_view.dart';
 import '../../utils/constants.dart';
 import '../../utils/i18n.dart';
 import '../../utils/logging.dart';
@@ -34,8 +35,9 @@ class Notifications {
 
   Future _onSelectNotification(String payload) async {
     if (payload != null) {
-      // TODO(SF) FEATURE handle this somehow?
-      _log.debug('Notification selected with payload: $payload');
+      _log.debug('Notification selected with payload: $payload '
+          '- opening band detail view');
+      BandDetailView.openFor(payload);
     }
   }
 
@@ -84,7 +86,7 @@ class Notifications {
           _androidPlatformChannelSpecifics,
           const IOSNotificationDetails(),
         ),
-        payload: event.id,
+        payload: event.bandName,
         androidAllowWhileIdle: true,
       )
           .catchError((error) {

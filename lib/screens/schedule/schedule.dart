@@ -32,10 +32,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   @override
   Widget build(BuildContext context) => DimeScopeFlutter(
         modules: <BaseDimeModule>[
-          FestivalScopeModule(FestivalScope(
-            festivalId: _config.festivalId,
-            isCurrentFestival: true,
-          ))
+          FestivalScopeModule(_config.currentFestivalScope)
         ],
         child: FullSchedule(
           likedOnly: widget.likedOnly,
