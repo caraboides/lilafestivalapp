@@ -31,6 +31,11 @@ for i in "$@"; do
   esac
 done
 
+if [[ -z $FLAVOR ]]; then
+  echo "Please specify a flavor: --flavor=<FLAVOR> / -f=<FLAVOR> with FLAVOR = [spirit|party_san]"
+  exit 1
+fi
+
 echo "Running app for flavor ${FLAVOR} in ${BUILD} build and ${RELEASE} mode..."
 
 if [[ -n $YEAR ]]; then

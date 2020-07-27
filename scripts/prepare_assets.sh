@@ -5,7 +5,20 @@ source .env
 set +a
 
 FLAVOR=$1
-FESTIVAL_ID="${FLAVOR}_${2}"
+YEAR=$2
+
+if [[ -z $FLAVOR ]]; then
+  echo "Please specify a flavor: [spirit|party_san]"
+  exit 1
+fi
+if [[ -z $YEAR ]]; then
+  echo "Please specify a year, e.g. 2021"
+  exit 1
+fi
+
+FESTIVAL_ID="${FLAVOR}_${YEAR}"
+
+echo "Preparing assets for ${FESTIVAL_ID}..."
 
 mkdir -p assets
 rm -rf assets/*

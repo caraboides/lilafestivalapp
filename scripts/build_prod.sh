@@ -7,6 +7,11 @@ set +a
 FLAVOR=$1
 YEAR=$2
 
+if [[ -z $FLAVOR ]]; then
+  echo "Please specify a flavor: [spirit|party_san]"
+  exit 1
+fi
+
 echo "Building app for flavor ${FLAVOR} in production build and release mode..."
 
 if [[ -n $YEAR ]]; then
