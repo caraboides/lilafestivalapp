@@ -20,7 +20,7 @@ class BandListView extends StatelessWidget {
 
   double _getListItemHeight(int numEvents) => numEvents == 1
       ? _theme.eventListItemHeight
-      : min(
+      : max(
           _theme.bandListHeaderHeight +
               (numEvents / 2).ceil() * _theme.denseEventListItemHeight,
           _theme.bandListItemMinHeight);

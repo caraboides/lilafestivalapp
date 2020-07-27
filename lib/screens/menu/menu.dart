@@ -6,6 +6,7 @@ import '../../models/app_route.dart';
 import '../../models/global_config.dart';
 import '../../models/theme.dart';
 import '../../services/navigation.dart';
+import '../../widgets/visibility_builder.dart';
 import 'menu.i18n.dart';
 
 class Menu extends StatelessWidget {
@@ -69,9 +70,9 @@ class Menu extends StatelessWidget {
     final locale = Localizations.localeOf(context);
     return ListView(
       children: <Widget>[
-        Visibility(
+        VisibilityBuilder(
           visible: _theme.logoMenu != null,
-          child: Image.asset(
+          builder: (_) => Image.asset(
             _theme.logoMenu.assetPath,
             height: _theme.logoMenu.height,
             width: _theme.logoMenu.width,

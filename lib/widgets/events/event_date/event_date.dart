@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
 
 import '../../../utils/i18n.dart';
+import '../../visibility_builder.dart';
 import 'event_date.i18n.dart';
 
 class EventDate extends StatelessWidget {
@@ -22,9 +23,9 @@ class EventDate extends StatelessWidget {
         (showWeekDay ? 'E HH:mm' : 'HH:mm').i18n.dateFormat(start.value),
         style: textStyle,
       ),
-      Visibility(
+      VisibilityBuilder(
         visible: end.isPresent,
-        child: Text(
+        builder: (_) => Text(
           ' - ${'HH:mm'.i18n.dateFormat(end.value)}',
           style: showWeekDay
               ? textStyle
@@ -35,9 +36,9 @@ class EventDate extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Visibility(
+  Widget build(BuildContext context) => VisibilityBuilder(
         visible: start.isPresent,
-        child: Row(
+        builder: (_) => Row(
           mainAxisSize: MainAxisSize.min,
           children: _buildTimes(context),
         ),

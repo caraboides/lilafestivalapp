@@ -26,6 +26,7 @@ import '../../widgets/history/history_wrapper.dart';
 import '../../widgets/messages/error_screen/error_screen.dart';
 import '../../widgets/messages/loading_screen/loading_screen.dart';
 import '../../widgets/scaffold.dart';
+import '../../widgets/visibility_builder.dart';
 import 'band_detail_view.i18n.dart';
 
 // TODO(SF) FEATURE periodic rebuild for is playing indicator?
@@ -101,13 +102,13 @@ class BandDetailView extends HookWidget {
             'Origin',
             _isValueSet(band.origin) ? _buildFlag(band.origin) : _fallbackText,
           ),
-          Visibility(
+          VisibilityBuilder(
             visible: _isValueSet(band.style),
-            child: _buildDetailRow(theme, 'Style', band.style),
+            builder: (_) => _buildDetailRow(theme, 'Style', band.style),
           ),
-          Visibility(
+          VisibilityBuilder(
             visible: _isValueSet(band.roots),
-            child: _buildDetailRow(theme, 'Roots', band.roots),
+            builder: (_) => _buildDetailRow(theme, 'Roots', band.roots),
           ),
           const SizedBox(
             height: 10,
@@ -191,9 +192,9 @@ class BandDetailView extends HookWidget {
       alignment: Alignment.topCenter,
       child: ListView(
         children: <Widget>[
-          Visibility(
+          VisibilityBuilder(
             visible: band.isPresent && _isValueSet(band.value.logo),
-            child: _buildBandLogo(band.value.logo),
+            builder: (_) => _buildBandLogo(band.value.logo),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -210,9 +211,9 @@ class BandDetailView extends HookWidget {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: _buildDetails(theme, locale, b)))
               .orElse(_fallbackInfo),
-          Visibility(
+          VisibilityBuilder(
             visible: band.isPresent && _isValueSet(band.value.image),
-            child: Padding(
+            builder: (_) => Padding(
               padding: const EdgeInsets.only(top: 5),
               child: CachedNetworkImage(imageUrl: band.value.image),
             ),
