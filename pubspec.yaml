@@ -26,6 +26,8 @@ dependencies:
   webview_flutter: ^0.3.22+1
   flutter_local_notifications: ^1.4.4+2
   flutter_cache_manager: ^1.4.1
+  flutter_blurhash: ^0.5.0
+  shimmer: ^1.1.1
 
 dev_dependencies:
   flutter_test:

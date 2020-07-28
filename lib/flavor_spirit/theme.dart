@@ -137,4 +137,5 @@ final FestivalTheme festivalTheme = FestivalTheme(
     fontFamily: 'Display Font',
     fontSize: 20,
   ),
+  shimmerColor: Colors.white,
 );

@@ -15,6 +15,7 @@ class FestivalTheme {
     this.tabBarDecoration,
     this.logo,
     this.logoMenu,
+    this.shimmerColor,
   });
 
   final ThemeData theme;
@@ -33,6 +34,7 @@ class FestivalTheme {
   final Color notificationColor;
   final Color bannerBackgroundColor;
   final TextStyle bannerTextStyle;
+  final Color shimmerColor;
 
   final double eventListItemHeight = 70;
   final double denseEventListItemHeight = 42;

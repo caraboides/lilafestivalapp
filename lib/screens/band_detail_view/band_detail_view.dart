@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dime/dime.dart';
 import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/band.dart';
@@ -50,7 +52,7 @@ class BandDetailView extends HookWidget {
   }
 
   static FestivalConfig get _config => dimeGet<FestivalConfig>();
-  FestivalTheme get _festivalTheme => dimeGet<FestivalTheme>();
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
   Logger get _log => const Logger(module: 'BandDetailView');
 
   String _buildFlag(String country) =>
@@ -117,7 +119,7 @@ class BandDetailView extends HookWidget {
             visible: _isValueSet(band.spotify),
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: _festivalTheme.primaryButton(
+              child: _theme.primaryButton(
                 label: 'Play on Spotify'.i18n,
                 onPressed: () {
                   launch(band.spotify);
@@ -128,13 +130,42 @@ class BandDetailView extends HookWidget {
         ],
       );
 
-  Widget _buildBandLogo(String logo) => Container(
-        color: Colors.black,
-        child: CachedNetworkImage(
-          imageUrl: logo,
-        ),
-        height: 100,
+  Widget _buildImagePlaceholder(ThemeData theme, ImageData imageData) => Stack(
+        children: <Widget>[
+          if (imageData.hasHash) BlurHash(hash: imageData.hash),
+          Shimmer.fromColors(
+            baseColor: Colors.transparent,
+            highlightColor: _theme.shimmerColor,
+            child: Container(color: theme.scaffoldBackgroundColor),
+            loop: 1,
+          ),
+        ],
       );
+
+  Widget _buildImage(ThemeData theme, String imgUrl, [ImageData imgData]) =>
+      CachedNetworkImage(
+        imageUrl: imgUrl,
+        placeholder: imgData != null
+            ? (_, __) => _buildImagePlaceholder(theme, imgData)
+            : null,
+        placeholderFadeInDuration: const Duration(milliseconds: 200),
+      );
+
+  Widget _buildBandLogo(ThemeData theme, String imgUrl, ImageData imgData) =>
+      Container(
+        color: Colors.black,
+        height: 100,
+        alignment: Alignment.center,
+        child: _buildImage(theme, imgUrl, imgData),
+      );
+
+  Widget _buildBandImage(ThemeData theme, String imgUrl, ImageData imgData) =>
+      imgData.hasRatio
+          ? AspectRatio(
+              aspectRatio: imgData.ratio,
+              child: _buildImage(theme, imgUrl, imgData),
+            )
+          : _buildImage(theme, imgUrl);
 
   Widget get _fallbackInfo => Container(
         padding:
@@ -194,7 +225,8 @@ class BandDetailView extends HookWidget {
         children: <Widget>[
           VisibilityBuilder(
             visible: band.isPresent && _isValueSet(band.value.logo),
-            builder: (_) => _buildBandLogo(band.value.logo),
+            builder: (_) =>
+                _buildBandLogo(theme, band.value.logo, band.value.logoData),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -215,7 +247,8 @@ class BandDetailView extends HookWidget {
             visible: band.isPresent && _isValueSet(band.value.image),
             builder: (_) => Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: CachedNetworkImage(imageUrl: band.value.image),
+              child: _buildBandImage(
+                  theme, band.value.image, band.value.imageData),
             ),
           ),
         ],
