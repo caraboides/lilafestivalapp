@@ -108,7 +108,16 @@ class _FullScheduleState extends State<FullSchedule> {
         bottom: days != null ? _buildTabBarContainer(days) : null,
         title: _buildTitleWidget(festivalScope),
         actions: <Widget>[
-          Icon(_likedOnly ? Icons.star : Icons.star_border),
+          Center(
+            child: AnimatedCrossFade(
+              firstChild: Icon(Icons.star),
+              secondChild: Icon(Icons.star_border),
+              crossFadeState: _likedOnly
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+              duration: const Duration(milliseconds: 250),
+            ),
+          ),
           Tooltip(
             message:
                 (_likedOnly ? 'Show full schedule' : 'Show my schedule only')
