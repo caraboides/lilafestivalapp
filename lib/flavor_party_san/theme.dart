@@ -32,7 +32,7 @@ final ThemeData theme = ThemeData(
     headline2: TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 28,
-      color: _primaryColor.withOpacity(0.87),
+      color: _primaryColor.withOpacity(0.54),
     ),
     subtitle2: const TextStyle(
       // TODO(SF) THEME can be part of global theme
