@@ -5,14 +5,50 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../models/event.dart';
+import '../../../models/theme.dart';
 import '../../../providers/festival_scope.dart';
 import '../../../providers/my_schedule.dart';
 import 'event_toggle.i18n.dart';
 
 class EventToggle extends HookWidget {
-  const EventToggle(this.event);
+  const EventToggle(this.event, {this.dense = false});
 
   final Event event;
+  final bool dense;
+
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
+  static const _iconSize = 24.0;
+
+  Widget _buildIconButton({
+    BuildContext context,
+    double size,
+    Widget icon,
+    String tooltip,
+    VoidCallback onPressed,
+  }) =>
+      Semantics(
+        button: true,
+        enabled: true,
+        child: InkResponse(
+          onTap: onPressed,
+          child: Tooltip(
+            message: tooltip,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: size, minHeight: size),
+              child: Container(
+                height: _iconSize,
+                width: _iconSize,
+                alignment: Alignment.center,
+                child: icon,
+              ),
+            ),
+          ),
+          splashColor: _theme.toggleSplashColor,
+          radius: dense
+              ? _theme.toggleDenseSplashRadius
+              : Material.defaultSplashRadius,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +57,29 @@ class EventToggle extends HookWidget {
       festivalId: festivalId,
       eventId: event.id,
     ))).isPresent;
-    return IconButton(
-      padding: EdgeInsets.zero,
-      icon: Icon(isLiked ? Icons.star : Icons.star_border),
+    final size = dense ? _theme.toggleDenseIconSize : _theme.toggleIconSize;
+
+    final button = _buildIconButton(
+      context: context,
+      size: size,
+      icon: AnimatedCrossFade(
+        firstChild: Icon(Icons.star),
+        secondChild: Icon(Icons.star_border),
+        crossFadeState:
+            isLiked ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+        duration: const Duration(milliseconds: 150),
+      ),
       tooltip:
           (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,
       onPressed: () => dimeGet<MyScheduleProvider>()(festivalId)
           .read(context)
           .toggleEvent(event),
     );
+    return dense
+        ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: button,
+          )
+        : button;
   }
 }

@@ -38,6 +38,9 @@ class FestivalTheme {
 
   final double eventListItemHeight = 70;
   final double denseEventListItemHeight = 42;
+  final double toggleIconSize = 48;
+  final double toggleDenseIconSize = 32;
+  final double toggleDenseSplashRadius = 24;
   final double bandListHeaderHeight = 30;
   final double bandListItemMinHeight = 38;
   final double weatherCardHeight = 40;
@@ -59,6 +62,8 @@ class FestivalTheme {
         title: Text(title),
         shape: appBarBorder,
       );
+
+  Color get toggleSplashColor => theme.accentColor.withOpacity(0.54);
 }
 
 class Logo {
