@@ -4,7 +4,7 @@ import 'package:dime/dime.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:i18n_extension/i18n_widget.dart';
 import 'package:immortal/immortal.dart';
-import 'package:weather/weather_library.dart';
+import 'package:weather/weather.dart';
 import 'package:optional/optional.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';

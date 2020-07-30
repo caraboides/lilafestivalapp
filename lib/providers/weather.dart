@@ -1,7 +1,7 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:weather/weather_library.dart';
+import 'package:weather/weather.dart';
 import 'package:optional/optional.dart';
 // TODO(SF) FIXME
 // ignore: implementation_imports

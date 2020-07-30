@@ -14,7 +14,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   hooks_riverpod: ^0.5.1
-  i18n_extension: ^1.4.1
+  i18n_extension: ^1.4.2
   dime_flutter: ^0.4.0
   immortal: ^2.1.1
   url_launcher: ^5.5.0
@@ -22,7 +22,7 @@ dependencies:
   path_provider: ^1.6.11
   http: ^0.12.2
   cached_network_image: ^2.2.0+1
-  weather: ^1.2.0
+  weather: ^1.2.2
   webview_flutter: ^0.3.22+1
   flutter_local_notifications: ^1.4.4+2
   flutter_cache_manager: ^1.4.1
