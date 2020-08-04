@@ -8,6 +8,7 @@ import '../../../models/event.dart';
 import '../../../models/theme.dart';
 import '../../../utils/date.dart';
 import '../../mixins/one_time_execution_mixin.dart';
+import 'divided_list_tile.dart';
 import 'event_list_item.dart';
 
 class EventListView extends StatefulWidget {
@@ -68,39 +69,48 @@ class _EventListViewState extends State<EventListView>
     });
   }
 
-  ImmortalList<Widget> _buildListItems() {
-    final now = DateTime.now();
-    final items = widget.events.map<Widget>((event) => EventListItem(
-          event: event,
-          key: Key(event.id),
-          isPlaying: event.isPlaying(now),
-        ));
-    if (_currentOrNextPlayingBandIndex >= 0 &&
-        !widget.events[_currentOrNextPlayingBandIndex]
-            .map((event) => event.isPlaying(now))
-            .orElse(false)) {
-      return items.insert(
-          _currentOrNextPlayingBandIndex,
-          Container(
-            key: const Key('change-over'),
-            height: 2,
-            color: Theme.of(context).accentColor,
-          ));
-    }
-    return items;
-  }
+  Widget _buildEventListItem(DateTime now, Event event) => EventListItem(
+        event: event,
+        key: Key(event.id),
+        isPlaying: event.isPlaying(now),
+      );
+
+  Widget _buildCurrentOrNextListItem(DateTime now, Event event) => Column(
+        children: <Widget>[
+          Visibility(
+            visible: !event.isPlaying(now),
+            child: DividedListTile(
+              child: Container(
+                key: const Key('change-over'),
+                height: 2,
+                color: Theme.of(context).accentColor,
+              ),
+            ),
+          ),
+          _buildEventListItem(now, event),
+        ],
+      );
+
+  Widget _buildListItem(DateTime now, int index) => widget.events[index]
+      .map((event) => _currentOrNextPlayingBandIndex >= 0 &&
+              _currentOrNextPlayingBandIndex == index
+          ? _buildCurrentOrNextListItem(now, event)
+          : _buildEventListItem(now, event))
+      .orElse(Container());
 
   @override
   Widget build(BuildContext context) {
     executeOnce(() {
       _scrollToCurrentBand(timeout: const Duration(milliseconds: 200));
     });
-    return ListView(
+    final now = DateTime.now();
+    return ListView.builder(
       controller: _scrollController,
-      children: ListTile.divideTiles(
-        context: context,
-        tiles: _buildListItems().toMutableList(),
-      ).toList(),
+      itemCount: widget.events.length,
+      itemBuilder: (context, index) => DividedListTile(
+        isLast: index == widget.events.length - 1,
+        child: _buildListItem(now, index),
+      ),
     );
   }
 }
