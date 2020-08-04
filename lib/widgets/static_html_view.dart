@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../utils/logging.dart';
 
-class StaticHtmlView extends StatelessWidget {
+class StaticHtmlView extends HookWidget {
   const StaticHtmlView(this.html);
 
   final String html;
@@ -19,19 +20,35 @@ class StaticHtmlView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => WebView(
-        initialUrl: _buildUrl(context),
-        javascriptMode: JavascriptMode.unrestricted,
-        navigationDelegate: (request) {
-          launch(request.url);
-          return NavigationDecision.prevent;
-        },
-        onWebResourceError: (error) {
-          _log.error(
-            'Web resource failed to load: type ${error.errorType} code '
-            '${error.errorCode} on url ${error.failingUrl}',
-            error.description,
-          );
-        },
-      );
+  Widget build(BuildContext context) {
+    final loadingState = useState(true);
+    return Column(
+      children: <Widget>[
+        Visibility(
+          visible: loadingState.value,
+          child: const LinearProgressIndicator(),
+        ),
+        Expanded(
+          child: WebView(
+            initialUrl: _buildUrl(context),
+            javascriptMode: JavascriptMode.unrestricted,
+            navigationDelegate: (request) {
+              launch(request.url);
+              return NavigationDecision.prevent;
+            },
+            onPageFinished: (_) {
+              loadingState.value = false;
+            },
+            onWebResourceError: (error) {
+              _log.error(
+                'Web resource failed to load: type ${error.errorType} code '
+                '${error.errorCode} on url ${error.failingUrl}',
+                error.description,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
 }
