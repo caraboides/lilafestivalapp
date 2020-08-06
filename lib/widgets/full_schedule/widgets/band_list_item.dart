@@ -9,6 +9,7 @@ import '../../bands/band_cancelled/band_cancelled.dart';
 import '../../events/dense_event_list.dart';
 import '../../events/event_band_name.dart';
 import '../../events/event_detail_row.dart';
+import 'material_color_transition.dart';
 
 class BandListItem extends StatelessWidget {
   const BandListItem({
@@ -59,7 +60,7 @@ class BandListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Material(
+    return MaterialColorTransition(
       color: bandWithEvents.isPlaying(currentTime)
           ? theme.accentColor
           : theme.canvasColor,

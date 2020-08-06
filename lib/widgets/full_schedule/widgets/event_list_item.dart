@@ -7,6 +7,7 @@ import '../../../models/theme.dart';
 import '../../../screens/band_detail_view/band_detail_view.dart';
 import '../../events/event_details.dart';
 import '../../events/event_toggle/event_toggle.dart';
+import 'material_color_transition.dart';
 
 class EventListItem extends StatelessWidget {
   const EventListItem({
@@ -23,7 +24,7 @@ class EventListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Material(
+    return MaterialColorTransition(
       color: isPlaying ? theme.accentColor : theme.canvasColor,
       child: InkWell(
         onTap: () => BandDetailView.openFor(event.bandName, context: context),
