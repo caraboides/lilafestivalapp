@@ -3,9 +3,14 @@ import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tuple/tuple.dart';
+import 'package:immortal/immortal.dart';
 
+import '../../../../models/band_with_events.dart';
+import '../../../../providers/bands_with_events.dart';
 import '../../../../providers/festival_scope.dart';
 import '../../../../providers/filtered_schedules.dart';
+import '../../../../utils/combined_async_values.dart';
 import '../../../../utils/logging.dart';
 import '../../../messages/error_screen/error_screen.dart';
 import '../../../messages/loading_screen/loading_screen.dart';
@@ -29,17 +34,30 @@ class BandScheduleList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final festivalId = DimeFlutter.get<FestivalScope>(context).festivalId;
-    final provider =
+    final mapProvider =
+        useProvider(dimeGet<BandsWithEventsProvider>()(festivalId));
+    final listProvider =
         useProvider(dimeGet<FilteredBandScheduleProvider>()(BandScheduleKey(
       festivalId: festivalId,
       likedOnly: likedOnly,
     )));
-    return provider.when(
-      data: (bands) {
-        if (bands.isEmpty) {
-          return likedOnly ? const EmptySchedule() : _buildErrorScreen();
+    return combineAsyncValues(
+        mapProvider,
+        listProvider,
+        (bandMap, bandList) =>
+            Tuple2<ImmortalMap<String, BandWithEvents>, ImmortalList<String>>(
+                bandMap, bandList)).when(
+      data: (bandTuple) {
+        if (bandTuple.item1.isEmpty) {
+          return _buildErrorScreen();
         }
-        return BandListView(bands);
+        if (bandTuple.item2.isEmpty) {
+          return const EmptySchedule();
+        }
+        return BandListView(
+          bands: bandTuple.item1,
+          bandIds: bandTuple.item2,
+        );
       },
       loading: () => LoadingScreen('Loading bands.'.i18n),
       error: (error, trace) {

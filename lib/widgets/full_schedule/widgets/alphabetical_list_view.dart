@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
 import '../../../models/theme.dart';
+import 'animated_list_view.dart';
 import 'divided_list_tile.dart';
 
 typedef AlphabeticalIndexGetter = String Function(int);
@@ -14,12 +15,14 @@ class AlphabeticalListView extends StatefulWidget {
     @required this.listItemHeights,
     @required this.getAlphabeticalIndex,
     @required this.buildListItem,
+    @required this.itemIds,
   });
 
   final ImmortalList<double> listItemHeights;
   final AlphabeticalIndexGetter getAlphabeticalIndex;
-  final ListItemBuilder buildListItem;
+  final AnimatedListViewBuilder buildListItem;
   final int itemCount;
+  final ImmortalList<String> itemIds;
 
   @override
   State<StatefulWidget> createState() => _AlphabeticalListViewState();
@@ -31,6 +34,9 @@ class _AlphabeticalListViewState extends State<AlphabeticalListView> {
   ImmortalList<double> _listItemOffsets;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
+
+  bool get _displayIndices =>
+      widget.itemCount >= _theme.minItemCountForAlphabeticalIndex;
 
   void _calculateOffsets() {
     var currentOffset = 0.0;
@@ -99,52 +105,68 @@ class _AlphabeticalListViewState extends State<AlphabeticalListView> {
         ),
       );
 
-  Widget _buildListItem(BuildContext context, int index) => Row(
+  Widget _buildListItemWithAlphabeticalIndex({
+    BuildContext context,
+    Animation<double> animation,
+    int index,
+    String itemId,
+  }) =>
+      Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            child: _buildListItemWithoutAlphabeticalIndex(context, index),
-          ),
-          _buildAlphabeticalIndex(
-            context: context,
-            index: index,
-            isVisible: _showLetterAtListItem(index),
+          Expanded(child: _buildListItem(context, animation, index, itemId)),
+          FadeTransition(
+            opacity: animation,
+            child: _buildAlphabeticalIndex(
+              context: context,
+              index: index,
+              isVisible: _displayIndices && _showLetterAtListItem(index),
+            ),
           ),
         ],
       );
 
-  Widget _buildListItemWithoutAlphabeticalIndex(
+  Widget _buildListItem(
     BuildContext context,
+    Animation<double> animation,
     int index,
+    String itemId,
   ) =>
       DividedListTile(
         isLast: index == widget.itemCount - 1,
-        child: widget.buildListItem(context, index),
+        child: widget.buildListItem(
+          context: context,
+          animation: animation,
+          index: index,
+          itemId: itemId,
+        ),
       );
 
   @override
-  Widget build(BuildContext context) =>
-      widget.itemCount < _theme.minItemCountForAlphabeticalIndex
-          ? ListView.builder(
-              itemCount: widget.itemCount,
-              itemBuilder: _buildListItemWithoutAlphabeticalIndex,
-            )
-          : Stack(
-              children: <Widget>[
-                ListView.builder(
-                  controller: _scrollController,
-                  itemCount: widget.itemCount,
-                  itemBuilder: _buildListItem,
-                ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: _buildAlphabeticalIndex(
-                    context: context,
-                    index: _currentPosition,
-                    isVisible: !_showLetterAtListItem(_currentPosition),
-                  ),
-                ),
-              ],
-            );
+  Widget build(BuildContext context) {
+    final listView = AnimatedListView(
+      scrollController: _scrollController,
+      initialItemCount: widget.itemCount,
+      itemBuilder: _buildListItemWithAlphabeticalIndex,
+      itemIds: widget.itemIds,
+    );
+    return Stack(
+      children: <Widget>[
+        listView,
+        Positioned(
+          top: 0,
+          right: 0,
+          child: AnimatedOpacity(
+            opacity: _displayIndices ? 1.0 : 0.0,
+            child: _buildAlphabeticalIndex(
+              context: context,
+              index: _currentPosition,
+              isVisible: !_showLetterAtListItem(_currentPosition),
+            ),
+            duration: const Duration(milliseconds: 250),
+          ),
+        ),
+      ],
+    );
+  }
 }

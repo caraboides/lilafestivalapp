@@ -44,8 +44,8 @@ class _EventListViewState extends State<EventListView>
   int get _numItems =>
       widget.events.length + (_nextPlayingBandIndex >= 0 ? 1 : 0);
 
-  Optional<Event> eventAt(int index) => widget.eventIds[index]
-      .map((eventIndex) => widget.events[eventIndex])
+  Optional<Event> _eventAt(int index) => widget.eventIds[index]
+      .map((eventId) => widget.events[eventId])
       .orElse(const Optional<Event>.empty());
 
   void _updateCurrentDate() {
@@ -60,7 +60,7 @@ class _EventListViewState extends State<EventListView>
                 .orElse(false))
             : -1;
     _nextPlayingBandIndex = _currentOrNextPlayingBandIndex >= 0 &&
-            eventAt(_currentOrNextPlayingBandIndex)
+            _eventAt(_currentOrNextPlayingBandIndex)
                 .map((event) => !event.isPlaying(_currentTime))
                 .orElse(false)
         ? _currentOrNextPlayingBandIndex
@@ -132,7 +132,12 @@ class _EventListViewState extends State<EventListView>
         ),
       );
 
-  Widget _buildListItem(BuildContext context, int index, String itemId) =>
+  Widget _buildListItem({
+    BuildContext context,
+    Animation<double> animation,
+    int index,
+    String itemId,
+  }) =>
       itemId == _changeOverId
           ? _buildChangeOverIndicator()
           : widget.events[itemId]

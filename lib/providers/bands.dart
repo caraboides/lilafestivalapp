@@ -59,13 +59,3 @@ class BandProvider
             read(dimeGet<BandsProvider>()(key.festivalId))
                 .whenData((bands) => bands[key.bandName])));
 }
-
-class SortedBandsProvider
-    extends Family<Computed<AsyncValue<ImmortalList<Band>>>, String> {
-  SortedBandsProvider()
-      : super((festivalId) => Computed(
-            (read) => read(dimeGet<BandsProvider>()(festivalId)).whenData(
-                  (bands) =>
-                      bands.values.sort((a, b) => a.name.compareTo(b.name)),
-                )));
-}

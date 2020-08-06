@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
+import 'package:optional/optional.dart';
 
 import '../../../models/band_with_events.dart';
 import '../../../models/theme.dart';
@@ -10,9 +11,14 @@ import 'alphabetical_list_view.dart';
 import 'band_list_item.dart';
 
 class BandListView extends StatelessWidget {
-  const BandListView(this.bands, {Key key}) : super(key: key);
+  const BandListView({
+    @required this.bands,
+    @required this.bandIds,
+    Key key,
+  }) : super(key: key);
 
-  final ImmortalList<BandWithEvents> bands;
+  final ImmortalMap<String, BandWithEvents> bands;
+  final ImmortalList<String> bandIds;
 
   static final _isLetterRegex = RegExp(r'^[a-zA-Z]+$');
 
@@ -25,16 +31,23 @@ class BandListView extends StatelessWidget {
               (numEvents / 2).ceil() * _theme.denseEventListItemHeight,
           _theme.bandListItemMinHeight);
 
-  ImmortalList<double> _calculateListItemHeights() => bands.map(
-      (bandWithEvents) => _getListItemHeight(bandWithEvents.events.length));
+  ImmortalList<double> _calculateListItemHeights() =>
+      bandIds.map((bandName) => bands[bandName]
+          .map((bandWithEvents) =>
+              _getListItemHeight(bandWithEvents.events.length))
+          .orElse(0));
 
-  String _getAlphabeticalIndex(int index) => bands[index].map((band) {
+  Optional<BandWithEvents> _bandAt(int index) => bandIds[index]
+      .map((bandName) => bands[bandName])
+      .orElse(const Optional<BandWithEvents>.empty());
+
+  String _getAlphabeticalIndex(int index) => _bandAt(index).map((band) {
         final letter = band.bandName.substring(0, 1);
         // TODO(SF) THEME use different symbol?
         return _isLetterRegex.hasMatch(letter) ? letter : '#';
       }).orElse('');
 
-  Widget _buildListItem(int index, DateTime currentTime) => bands[index]
+  Widget _buildListItem(String itemId, DateTime currentTime) => bands[itemId]
       .map<Widget>((bandWithEvents) => BandListItem(
             key: Key(bandWithEvents.bandName),
             bandWithEvents: bandWithEvents,
@@ -46,10 +59,12 @@ class BandListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentTime = DateTime.now();
     return AlphabeticalListView(
-      itemCount: bands.length,
+      itemCount: bandIds.length,
+      itemIds: bandIds,
       listItemHeights: _calculateListItemHeights(),
       getAlphabeticalIndex: _getAlphabeticalIndex,
-      buildListItem: (_, index) => _buildListItem(index, currentTime),
+      buildListItem: ({context, animation, index, itemId}) =>
+          _buildListItem(itemId, currentTime),
     );
   }
 }

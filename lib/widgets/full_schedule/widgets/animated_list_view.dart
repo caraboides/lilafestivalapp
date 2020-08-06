@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
-typedef AnimatedListViewBuilder = Widget Function(BuildContext, int, String);
+typedef AnimatedListViewBuilder = Widget Function({
+  @required BuildContext context,
+  @required Animation<double> animation,
+  @required int index,
+  @required String itemId,
+});
 
 class AnimatedListView extends StatefulWidget {
   const AnimatedListView({
@@ -49,7 +54,12 @@ class _AnimatedListViewState extends State<AnimatedListView> {
                     index,
                     (context, animation) => _animated(
                       animation: animation,
-                      child: widget.itemBuilder(context, index, itemId),
+                      child: widget.itemBuilder(
+                        context: context,
+                        animation: animation,
+                        index: index,
+                        itemId: itemId,
+                      ),
                     ),
                   )));
       // Insert new events, starting at the beginning
@@ -71,7 +81,11 @@ class _AnimatedListViewState extends State<AnimatedListView> {
             .map<Widget>(
               (itemId) => _animated(
                 animation: animation,
-                child: widget.itemBuilder(context, index, itemId),
+                child: widget.itemBuilder(
+                    context: context,
+                    animation: animation,
+                    index: index,
+                    itemId: itemId),
               ),
             )
             .orElse(Container()),

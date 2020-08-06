@@ -33,24 +33,23 @@ class BandWithEventsProvider
         );
 }
 
-class BandsWithEventsProvider
-    extends Family<Computed<AsyncValue<ImmortalList<BandWithEvents>>>, String> {
+class BandsWithEventsProvider extends Family<
+    Computed<AsyncValue<ImmortalMap<String, BandWithEvents>>>, String> {
   BandsWithEventsProvider()
       : super(
           (festivalId) => Computed((read) {
-            final bandsProvider =
-                read(dimeGet<SortedBandsProvider>()(festivalId));
+            final bandsProvider = read(dimeGet<BandsProvider>()(festivalId));
             final schedule =
                 read(dimeGet<SortedScheduleProvider>()(festivalId));
             return combineAsyncValues<
-                ImmortalList<BandWithEvents>,
-                ImmortalList<Band>,
+                ImmortalMap<String, BandWithEvents>,
+                ImmortalMap<String, Band>,
                 ImmortalList<Event>>(bandsProvider, schedule, (bands, events) {
               final eventsByBand =
                   events.asMapOfLists((event) => event.bandName);
-              return bands.map(
-                (band) => BandWithEvents(
-                  bandName: band.name,
+              return bands.mapValues(
+                (bandName, band) => BandWithEvents(
+                  bandName: bandName,
                   band: Optional.of(band),
                   events: eventsByBand[band.name].orElse(ImmortalList<Event>()),
                 ),
@@ -58,4 +57,13 @@ class BandsWithEventsProvider
             });
           }),
         );
+}
+
+class SortedBandsWithEventsProvider
+    extends Family<Computed<AsyncValue<ImmortalList<BandWithEvents>>>, String> {
+  SortedBandsWithEventsProvider()
+      : super((festivalId) => Computed((read) =>
+            read(dimeGet<BandsWithEventsProvider>()(festivalId)).whenData(
+                (bands) => bands.values
+                    .sort((a, b) => a.bandName.compareTo(b.bandName)))));
 }
