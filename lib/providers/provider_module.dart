@@ -24,6 +24,7 @@ class ProviderModule extends BaseDimeModule {
     addSingle<FestivalDaysProvider>(FestivalDaysProvider());
     addSingle<SortedScheduleProvider>(SortedScheduleProvider());
     addSingle<DailyScheduleProvider>(DailyScheduleProvider());
+    addSingle<DailyScheduleMapProvider>(DailyScheduleMapProvider());
     addSingle<BandScheduleProvider>(BandScheduleProvider());
     // My Schedule providers
     addSingle<MyScheduleProvider>(MyScheduleProvider());

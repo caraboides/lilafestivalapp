@@ -5,7 +5,8 @@ class DividedListTile extends StatelessWidget {
     @required this.child,
     this.height,
     this.isLast = false,
-  });
+    Key key,
+  }) : super(key: key);
 
   final Widget child;
   final double height;

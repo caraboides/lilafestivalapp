@@ -83,6 +83,14 @@ class DailyScheduleProvider extends Family<
             )));
 }
 
+class DailyScheduleMapProvider extends Family<
+    Computed<AsyncValue<ImmortalMap<String, Event>>>, DailyScheduleKey> {
+  DailyScheduleMapProvider()
+      : super((key) => Computed((read) =>
+            read(dimeGet<DailyScheduleProvider>()(key)).whenData(
+                (eventList) => eventList.asMapWithKeys((event) => event.id))));
+}
+
 class BandScheduleProvider
     extends Family<Computed<AsyncValue<ImmortalList<Event>>>, BandKey> {
   BandScheduleProvider()

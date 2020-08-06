@@ -3,22 +3,26 @@ import 'dart:math';
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
+import 'package:optional/optional.dart';
 
 import '../../../models/event.dart';
 import '../../../models/theme.dart';
 import '../../../utils/date.dart';
 import '../../mixins/one_time_execution_mixin.dart';
+import 'animated_list_view.dart';
 import 'divided_list_tile.dart';
 import 'event_list_item.dart';
 
 class EventListView extends StatefulWidget {
   const EventListView({
     @required this.events,
+    @required this.eventIds,
     @required this.date,
     Key key,
   }) : super(key: key);
 
-  final ImmortalList<Event> events;
+  final ImmortalMap<String, Event> events;
+  final ImmortalList<String> eventIds;
   final DateTime date;
 
   @override
@@ -28,12 +32,53 @@ class EventListView extends StatefulWidget {
 class _EventListViewState extends State<EventListView>
     with OneTimeExecutionMixin {
   final _scrollController = ScrollController();
+  DateTime _currentTime;
+  int _currentOrNextPlayingBandIndex = -1;
+  int _nextPlayingBandIndex = -1;
+  ImmortalList<String> _itemIds;
 
-  int get _currentOrNextPlayingBandIndex {
-    final now = DateTime.now();
-    return isSameFestivalDay(now, widget.date)
-        ? widget.events.indexWhere((event) => event.isPlayingOrInFutureOf(now))
+  static const String _changeOverId = 'change-over';
+
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
+
+  int get _numItems =>
+      widget.events.length + (_nextPlayingBandIndex >= 0 ? 1 : 0);
+
+  Optional<Event> eventAt(int index) => widget.eventIds[index]
+      .map((eventIndex) => widget.events[eventIndex])
+      .orElse(const Optional<Event>.empty());
+
+  void _updateCurrentDate() {
+    _currentTime = DateTime.now();
+  }
+
+  void _updatePlayingBandIndices() {
+    _currentOrNextPlayingBandIndex =
+        isSameFestivalDay(_currentTime, widget.date)
+            ? widget.eventIds.indexWhere((eventId) => widget.events[eventId]
+                .map((event) => event.isPlayingOrInFutureOf(_currentTime))
+                .orElse(false))
+            : -1;
+    _nextPlayingBandIndex = _currentOrNextPlayingBandIndex >= 0 &&
+            eventAt(_currentOrNextPlayingBandIndex)
+                .map((event) => !event.isPlaying(_currentTime))
+                .orElse(false)
+        ? _currentOrNextPlayingBandIndex
         : -1;
+  }
+
+  void _updateItemIds() {
+    _itemIds = _nextPlayingBandIndex >= 0
+        ? widget.eventIds.insert(_nextPlayingBandIndex, _changeOverId)
+        : widget.eventIds;
+  }
+
+  @override
+  void initState() {
+    _updateCurrentDate();
+    _updatePlayingBandIndices();
+    _updateItemIds();
+    super.initState();
   }
 
   @override
@@ -44,13 +89,14 @@ class _EventListViewState extends State<EventListView>
 
   @override
   void didUpdateWidget(EventListView oldWidget) {
-    if (mounted && widget.events != oldWidget.events) {
+    _updateCurrentDate();
+    if (mounted && widget.eventIds != oldWidget.eventIds) {
+      _updatePlayingBandIndices();
+      _updateItemIds();
       _scrollToCurrentBand();
     }
     super.didUpdateWidget(oldWidget);
   }
-
-  FestivalTheme get _theme => dimeGet<FestivalTheme>();
 
   void _scrollToCurrentBand({
     Duration timeout = const Duration(milliseconds: 50),
@@ -69,48 +115,40 @@ class _EventListViewState extends State<EventListView>
     });
   }
 
-  Widget _buildEventListItem(DateTime now, Event event) => EventListItem(
-        event: event,
+  Widget _buildEventListItem(int index, Event event) => DividedListTile(
         key: Key(event.id),
-        isPlaying: event.isPlaying(now),
+        isLast: index == _numItems - 1,
+        child: EventListItem(
+          event: event,
+          isPlaying: event.isPlaying(_currentTime),
+        ),
       );
 
-  Widget _buildCurrentOrNextListItem(DateTime now, Event event) => Column(
-        children: <Widget>[
-          Visibility(
-            visible: !event.isPlaying(now),
-            child: DividedListTile(
-              child: Container(
-                key: const Key('change-over'),
-                height: 2,
-                color: Theme.of(context).accentColor,
-              ),
-            ),
-          ),
-          _buildEventListItem(now, event),
-        ],
+  Widget _buildChangeOverIndicator() => DividedListTile(
+        key: const Key(_changeOverId),
+        child: Container(
+          height: 2,
+          color: Theme.of(context).accentColor,
+        ),
       );
 
-  Widget _buildListItem(DateTime now, int index) => widget.events[index]
-      .map((event) => _currentOrNextPlayingBandIndex >= 0 &&
-              _currentOrNextPlayingBandIndex == index
-          ? _buildCurrentOrNextListItem(now, event)
-          : _buildEventListItem(now, event))
-      .orElse(Container());
+  Widget _buildListItem(BuildContext context, int index, String itemId) =>
+      itemId == _changeOverId
+          ? _buildChangeOverIndicator()
+          : widget.events[itemId]
+              .map((event) => _buildEventListItem(index, event))
+              .orElse(Container());
 
   @override
   Widget build(BuildContext context) {
     executeOnce(() {
       _scrollToCurrentBand(timeout: const Duration(milliseconds: 200));
     });
-    final now = DateTime.now();
-    return ListView.builder(
-      controller: _scrollController,
-      itemCount: widget.events.length,
-      itemBuilder: (context, index) => DividedListTile(
-        isLast: index == widget.events.length - 1,
-        child: _buildListItem(now, index),
-      ),
+    return AnimatedListView(
+      scrollController: _scrollController,
+      initialItemCount: _numItems,
+      itemBuilder: _buildListItem,
+      itemIds: _itemIds,
     );
   }
 }

@@ -43,21 +43,22 @@ class DailyScheduleFilter {
 }
 
 class FilteredDailyScheduleProvider extends Family<
-    Computed<AsyncValue<ImmortalList<Event>>>, DailyScheduleFilter> {
+    Computed<AsyncValue<ImmortalList<String>>>, DailyScheduleFilter> {
   FilteredDailyScheduleProvider()
       : super((key) => Computed((read) {
               final dailySchedule =
                   read(dimeGet<DailyScheduleProvider>()(key.dailyScheduleKey));
               final myScheduleProvider =
                   read(dimeGet<MyScheduleProvider>()(key.festivalId).state);
-              return combineAsyncValues<ImmortalList<Event>,
+              return combineAsyncValues<ImmortalList<String>,
                       ImmortalList<Event>, MySchedule>(
                   dailySchedule,
                   myScheduleProvider,
-                  (events, mySchedule) => key.likedOnly
-                      ? events
-                          .where((event) => mySchedule.isEventLiked(event.id))
-                      : events);
+                  (events, mySchedule) => (key.likedOnly
+                          ? events.where(
+                              (event) => mySchedule.isEventLiked(event.id))
+                          : events)
+                      .map((event) => event.id));
             }));
 }
 
