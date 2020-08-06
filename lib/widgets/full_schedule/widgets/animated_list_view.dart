@@ -75,6 +75,7 @@ class _AnimatedListViewState extends State<AnimatedListView> {
   @override
   Widget build(BuildContext context) => AnimatedList(
         key: _listKey,
+        shrinkWrap: true,
         controller: widget.scrollController,
         initialItemCount: widget.initialItemCount,
         itemBuilder: (context, index, animation) => widget.itemIds[index]

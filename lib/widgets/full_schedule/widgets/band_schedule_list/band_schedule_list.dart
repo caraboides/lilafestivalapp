@@ -51,12 +51,16 @@ class BandScheduleList extends HookWidget {
         if (bandTuple.item1.isEmpty) {
           return _buildErrorScreen();
         }
-        if (bandTuple.item2.isEmpty) {
-          return const EmptySchedule();
-        }
-        return BandListView(
-          bands: bandTuple.item1,
-          bandIds: bandTuple.item2,
+        return AnimatedCrossFade(
+          firstChild: const EmptySchedule(),
+          secondChild: BandListView(
+            bands: bandTuple.item1,
+            bandIds: bandTuple.item2,
+          ),
+          crossFadeState: bandTuple.item2.isEmpty
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          duration: const Duration(milliseconds: 350),
         );
       },
       loading: () => LoadingScreen('Loading bands.'.i18n),

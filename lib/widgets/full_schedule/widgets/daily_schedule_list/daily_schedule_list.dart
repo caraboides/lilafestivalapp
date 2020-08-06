@@ -57,15 +57,17 @@ class DailyScheduleList extends HookWidget {
         if (eventTuple.item1.isEmpty) {
           return _buildErrorScreen();
         }
-        // TODO(SF) handle this in event screen?
-        // TODO(SF) at least add some transition animation
-        if (eventTuple.item2.isEmpty) {
-          return const EmptySchedule();
-        }
-        return EventListView(
-          events: eventTuple.item1,
-          eventIds: eventTuple.item2,
-          date: date,
+        return AnimatedCrossFade(
+          firstChild: const EmptySchedule(),
+          secondChild: EventListView(
+            events: eventTuple.item1,
+            eventIds: eventTuple.item2,
+            date: date,
+          ),
+          crossFadeState: eventTuple.item2.isEmpty
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          duration: const Duration(milliseconds: 350),
         );
       },
       loading: () => LoadingScreen('Loading running order.'.i18n),
