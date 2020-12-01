@@ -15,14 +15,14 @@ class Navigation {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   ImmortalList<AppRoute> get routes => ImmortalList([
-        AppRoute(
+        const AppRoute(
           path: '/',
           getName: ScheduleScreen.title,
           icon: Icons.calendar_today,
           isRoot: true,
           builder: ScheduleScreen.builder,
         ),
-        AppRoute(
+        const AppRoute(
           path: '/mySchedule',
           getName: ScheduleScreen.myScheduleTitle,
           icon: Icons.star,
@@ -38,7 +38,7 @@ class Navigation {
             nestedRoutes: _config.history,
             nestedRouteBuilder: History.builder,
           ),
-        AppRoute(
+        const AppRoute(
           path: '/about',
           getName: About.title,
           icon: Icons.info,

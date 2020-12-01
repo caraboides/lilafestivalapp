@@ -14,7 +14,7 @@ class EventPlayingIndicator extends StatelessWidget {
           width: 24,
           child: Tooltip(
             message: 'Gig is currently taking place'.i18n,
-            child: Center(child: Icon(Icons.priority_high)),
+            child: const Center(child: Icon(Icons.priority_high)),
           ),
         ),
       );

@@ -53,7 +53,7 @@ class FestivalTheme {
 
   IconData get aboutIcon => Icons.star;
 
-  Icon get heartIcon => Icon(
+  Icon get heartIcon => const Icon(
         Icons.favorite,
         color: Colors.purple,
       );

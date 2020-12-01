@@ -110,8 +110,8 @@ class _FullScheduleState extends State<FullSchedule> {
         actions: <Widget>[
           Center(
             child: AnimatedCrossFade(
-              firstChild: Icon(Icons.star),
-              secondChild: Icon(Icons.star_border),
+              firstChild: const Icon(Icons.star),
+              secondChild: const Icon(Icons.star_border),
               crossFadeState: _likedOnly
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,

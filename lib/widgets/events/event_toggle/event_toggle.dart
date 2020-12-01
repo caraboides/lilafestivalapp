@@ -63,8 +63,8 @@ class EventToggle extends HookWidget {
       context: context,
       size: size,
       icon: AnimatedCrossFade(
-        firstChild: Icon(Icons.star),
-        secondChild: Icon(Icons.star_border),
+        firstChild: const Icon(Icons.star),
+        secondChild: const Icon(Icons.star_border),
         crossFadeState:
             isLiked ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         duration: const Duration(milliseconds: 150),

@@ -11,6 +11,6 @@ class EmptySchedule extends StatelessWidget {
   Widget build(BuildContext context) => MessageScreen(
         headline: "Don't you like music?".i18n,
         description: 'You did not add any gigs to your schedule yet!'.i18n,
-        icon: Icon(Icons.star_border),
+        icon: const Icon(Icons.star_border),
       );
 }

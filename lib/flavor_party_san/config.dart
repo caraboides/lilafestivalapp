@@ -40,13 +40,13 @@ final FestivalConfig config = FestivalConfig(
   stageAlignment: (stage) =>
       stage == 'Mainstage' ? CrossAxisAlignment.start : CrossAxisAlignment.end,
   routes: ImmortalList([
-    AppRoute(
+    const AppRoute(
       path: '/shuttle',
       getName: Shuttle.title,
       icon: Icons.map,
       builder: Shuttle.builder,
     ),
-    AppRoute(
+    const AppRoute(
       path: '/faq',
       getName: FAQ.title,
       icon: Icons.help,

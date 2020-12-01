@@ -1,6 +1,10 @@
 import 'package:dime/dime.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:immortal/immortal.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:pedantic/pedantic.dart';
 
 import '../../models/event.dart';
 import '../../models/festival_config.dart';
@@ -28,8 +32,8 @@ class Notifications {
         Constants.notificationChannelId,
         'Gig Reminder'.i18n,
         'Notifications to remind of liked gigs'.i18n,
-        importance: Importance.Max,
-        priority: Priority.High,
+        importance: Importance.max,
+        priority: Priority.high,
         color: _theme.notificationColor,
       );
 
@@ -41,21 +45,27 @@ class Notifications {
     }
   }
 
-  void initializeNotificationPlugin() {
+  Future<void> initializeNotificationPlugin() async {
     _log.debug('Initialize notification plugin');
-    _plugin.getNotificationAppLaunchDetails().then((details) {
+    unawaited(_plugin.getNotificationAppLaunchDetails().then((details) {
       if (details != null && details.didNotificationLaunchApp) {
         _log.debug('App was launched with notification');
       }
     }).catchError((error) {
       _log.error('Retrieving notification launch details failed', error);
-    });
+    }));
 
-    _plugin
+    // TODO(SF) move initialization somewhere else if tz is used more often
+    tz.initializeTimeZones();
+    final currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+    _log.debug('Setting local timezone to $currentTimeZone');
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+
+    await _plugin
         .initialize(
       const InitializationSettings(
-        AndroidInitializationSettings(Constants.notificationIcon),
-        IOSInitializationSettings(),
+        android: AndroidInitializationSettings(Constants.notificationIcon),
+        iOS: IOSInitializationSettings(),
       ),
       onSelectNotification: _onSelectNotification,
     )
@@ -72,7 +82,7 @@ class Notifications {
       _log.debug('Schedule notification for event ${event.id} with id '
           '$notificationId');
       await _plugin
-          .schedule(
+          .zonedSchedule(
         notificationId,
         _config.festivalName,
         '{band} plays at {time} on the {stage}!'.i18n.fill({
@@ -81,13 +91,18 @@ class Notifications {
           'stage': event.stage,
         }),
         // TODO(SF) FEATURE configuration option?
-        event.start.value.subtract(const Duration(minutes: 10)),
+        tz.TZDateTime.from(
+          event.start.value.subtract(const Duration(minutes: 10)),
+          tz.local,
+        ),
         NotificationDetails(
-          _androidPlatformChannelSpecifics,
-          const IOSNotificationDetails(),
+          android: _androidPlatformChannelSpecifics,
+          iOS: const IOSNotificationDetails(),
         ),
         payload: event.bandName,
         androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
       )
           .catchError((error) {
         // Will be retried on next app start if still necessary

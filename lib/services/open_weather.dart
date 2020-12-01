@@ -6,8 +6,6 @@ import 'package:i18n_extension/i18n_widget.dart';
 import 'package:immortal/immortal.dart';
 import 'package:weather/weather.dart';
 import 'package:optional/optional.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 
 import '../models/festival_config.dart';
 import '../models/global_config.dart';
@@ -17,19 +15,14 @@ import '../utils/date.dart';
 import '../utils/logging.dart';
 
 // TODO(SF) STATE create custom cache manager for history as well
-class WeatherCacheManager extends BaseCacheManager {
+class WeatherCacheManager extends CacheManager {
   WeatherCacheManager()
-      : super(
+      : super(Config(
           Constants.weatherCacheKey,
-          maxAgeCacheObject: const Duration(hours: 1),
+          // TODO(SF) has this config option still the same meaning?
+          stalePeriod: const Duration(hours: 1),
           maxNrOfCacheObjects: 1,
-        );
-
-  @override
-  Future<String> getFilePath() async {
-    var directory = await getTemporaryDirectory();
-    return path.join(directory.path, Constants.weatherCacheKey);
-  }
+        ));
 }
 
 class OpenWeather {

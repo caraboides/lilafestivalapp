@@ -46,13 +46,13 @@ final FestivalConfig config = FestivalConfig(
     }
   },
   routes: ImmortalList([
-    AppRoute(
+    const AppRoute(
       path: '/drive',
       getName: Drive.title,
       icon: Icons.map,
       builder: Drive.builder,
     ),
-    AppRoute(
+    const AppRoute(
       path: '/faq',
       getName: FAQ.title,
       icon: Icons.help,

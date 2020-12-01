@@ -14,7 +14,7 @@ class LoadingScreen extends StatelessWidget {
         MessageScreen(
           headline: 'Loading...'.i18n,
           description: description,
-          icon: Icon(Icons.star_half),
+          icon: const Icon(Icons.star_half),
         ),
       ]);
 }

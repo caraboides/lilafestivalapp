@@ -150,7 +150,7 @@ class FAQ extends StatelessWidget {
               'hinreichend patrouilliert. Sollte es doch derartige '
               'Vorkommnisse geben, wendet euch bitte an die Security!',
             ),
-            Text(
+            const Text(
               'Keine Hämmer oder große Messer!',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
@@ -175,7 +175,7 @@ class FAQ extends StatelessWidget {
               'Auf den Zeltplatz dürft ihr wie immer alles mitnehmen, was das '
               'kulinarische Herz begehrt, jedoch mit 2 Einschränkungen:',
             ),
-            Text(
+            const Text(
               'Kein Glas',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
@@ -188,7 +188,7 @@ class FAQ extends StatelessWidget {
               'Laternen oder sonstiger Klimbim in und aus Glas. Es wird '
               'rigoros aussortiert und es wäre schade um eure Schätze!',
             ),
-            Text(
+            const Text(
               'Kein offenes Feuer',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
