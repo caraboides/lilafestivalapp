@@ -33,8 +33,8 @@ class BandsProvider extends Family<
 
   static ProviderBase<StreamProviderDependency<ImmortalMap<String, Band>>,
       AsyncValue<ImmortalMap<String, Band>>> _createStreamProvider({
-    @required String festivalId,
-    @required BuildContext context,
+    required String festivalId,
+    required BuildContext context,
   }) =>
       festivalId == _config.festivalId
           ? StreamProvider((ref) => createCombinedStorageStream(

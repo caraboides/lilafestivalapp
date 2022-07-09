@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dime/dime.dart';
+import 'package:optional/optional.dart';
 
 import '../../models/app_route.dart';
 import '../../models/global_config.dart';
 import '../../models/theme.dart';
 import '../../services/navigation.dart';
-import '../../widgets/visibility_builder.dart';
+import '../../widgets/optional_builder.dart';
 import 'menu.i18n.dart';
 
 class Menu extends StatelessWidget {
@@ -17,10 +18,10 @@ class Menu extends StatelessWidget {
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
   Widget _buildEntry({
-    @required ThemeData theme,
-    @required String label,
-    @required IconData icon,
-    @required VoidCallback onTap,
+    required ThemeData theme,
+    required String label,
+    required IconData icon,
+    required VoidCallback onTap,
   }) =>
       ListTile(
         title: Text(
@@ -35,10 +36,10 @@ class Menu extends StatelessWidget {
       );
 
   Widget _buildNestedEntry({
-    @required BuildContext context,
-    @required NavigatorState navigator,
-    @required ThemeData theme,
-    @required AppRoute route,
+    required BuildContext context,
+    required NavigatorState navigator,
+    required ThemeData theme,
+    required NestedAppRoute route,
   }) =>
       ExpansionTile(
         title: Text(
@@ -61,7 +62,7 @@ class Menu extends StatelessWidget {
                     navigator, route.nestedRoutePath(nestedRoute)),
               ),
             )
-            .toMutableList(),
+            .toList(),
       );
 
   Widget _buildEntries(BuildContext context) {
@@ -70,29 +71,23 @@ class Menu extends StatelessWidget {
     final locale = Localizations.localeOf(context);
     return ListView(
       children: <Widget>[
-        VisibilityBuilder(
-          visible: _theme.logoMenu != null,
-          builder: (_) => Image.asset(
-            _theme.logoMenu.assetPath,
-            height: _theme.logoMenu.height,
-            width: _theme.logoMenu.width,
-          ),
+        OptionalBuilder(
+          optional: Optional.of(_theme.logoMenu),
+          builder: (_, logoMenu) => logoMenu.toAsset(),
         ),
-        ..._navigation.routes
-            .map((route) => route.isNested
-                ? _buildNestedEntry(
-                    context: context,
-                    navigator: navigator,
-                    theme: theme,
-                    route: route,
-                  )
-                : _buildEntry(
-                    theme: theme,
-                    label: route.getName(),
-                    icon: route.icon,
-                    onTap: () => _navigation.navigateToRoute(navigator, route),
-                  ))
-            .toMutableList(),
+        ..._navigation.routes.map((route) => route is NestedAppRoute
+            ? _buildNestedEntry(
+                context: context,
+                navigator: navigator,
+                theme: theme,
+                route: route,
+              )
+            : _buildEntry(
+                theme: theme,
+                label: route.getName(),
+                icon: route.icon,
+                onTap: () => _navigation.navigateToRoute(navigator, route),
+              )),
         _buildEntry(
           theme: theme,
           label: 'Privacy Policy'.i18n,

@@ -8,8 +8,8 @@ import 'history.i18n.dart';
 
 class History extends StatelessWidget {
   const History({
-    this.festivalId,
-    this.festivalTitle,
+    required this.festivalId,
+    required this.festivalTitle,
   });
 
   final String festivalId;

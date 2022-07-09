@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class ImageData {
   const ImageData({
     this.width,
@@ -13,20 +11,20 @@ class ImageData {
         hash: json['hash'],
       );
 
-  final int width;
-  final int height;
-  final String hash;
+  final int? width;
+  final int? height;
+  final String? hash;
 
-  bool get hasRatio => width != null && height != null && height > 0;
+  bool get hasRatio => width != null && height != null && height! > 0;
 
-  double get ratio => hasRatio ? width / height : 1;
+  double get ratio => hasRatio ? width! / height! : 1;
 
   bool get hasHash => hash != null && hash != '';
 }
 
 class Band {
   Band({
-    @required this.name,
+    required this.name,
     this.spotify,
     this.image,
     this.imageData,
@@ -37,7 +35,7 @@ class Band {
     this.roots,
     this.textDe,
     this.textEn,
-    this.cancelled,
+    this.cancelled = false,
   });
 
   factory Band.fromJson(String bandName, Map<String, dynamic> json) => Band(
@@ -56,15 +54,15 @@ class Band {
       );
 
   final String name;
-  final String image;
-  final ImageData imageData;
-  final String logo;
-  final ImageData logoData;
-  final String spotify;
-  final String origin;
-  final String style;
-  final String roots;
-  final String textDe;
-  final String textEn;
+  final String? image;
+  final ImageData? imageData;
+  final String? logo;
+  final ImageData? logoData;
+  final String? spotify;
+  final String? origin;
+  final String? style;
+  final String? roots;
+  final String? textDe;
+  final String? textEn;
   final bool cancelled;
 }

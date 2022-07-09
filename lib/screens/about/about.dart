@@ -2,7 +2,8 @@ import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:optional/optional.dart';
 
 import '../../models/festival_config.dart';
 import '../../models/global_config.dart';
@@ -27,11 +28,6 @@ class About extends StatelessWidget {
         child: Divider(height: 1),
       );
 
-  Widget _buildImageLink(Link link) => GestureDetector(
-        child: Image.asset(link.imageAssetPath),
-        onTap: () => launch(link.url),
-      );
-
   Widget _buildButtonLink(
     Link link, {
     bool shrink = false,
@@ -48,20 +44,23 @@ class About extends StatelessWidget {
     Link link, {
     bool shrink = false,
   }) =>
-      link.imageAssetPath != null
-          ? _buildImageLink(link)
-          : _buildButtonLink(link, shrink: shrink);
+      Optional.ofNullable(link.imageAssetPath)
+          .map<Widget>((assetPath) => GestureDetector(
+                child: Image.asset(assetPath),
+                onTap: () => launch(link.url),
+              ))
+          .orElse(_buildButtonLink(link, shrink: shrink));
 
-  List<Widget> _buildLinks(
+  Iterable<Widget> _buildLinks(
     ImmortalList<Link> links, {
     bool shrink = false,
   }) =>
-      links.map((link) => _buildLink(link, shrink: shrink)).toMutableList();
+      links.map((link) => _buildLink(link, shrink: shrink));
 
   Widget _buildReference(
-    String label,
+    String? label,
     ImmortalList<Link> links, {
-    Icon icon,
+    Icon? icon,
   }) =>
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,10 +69,11 @@ class About extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: Text(label),
-              ),
+              if (label != null)
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Text(label),
+                ),
               ..._buildLinks(links, shrink: true),
             ],
           )
@@ -82,22 +82,22 @@ class About extends StatelessWidget {
 
   List<Widget> _buildReferences(
     ImmortalList<Reference> references, {
-    String Function(String label) labelGenerator,
-    Icon icon,
+    String Function(String label)? labelGenerator,
+    Icon? icon,
   }) =>
       references
           .map(
             (reference) => _buildReference(
-              labelGenerator != null
-                  ? labelGenerator(reference.label)
+              labelGenerator != null && reference.label != null
+                  ? labelGenerator(reference.label!)
                   : reference.label,
               reference.links,
               icon: icon,
             ),
           )
-          .toMutableList();
+          .toList();
 
-  List<Widget> _buildMessage(String label, ImmortalList<Link> links) =>
+  List<Widget> _buildMessage(String? label, ImmortalList<Link> links) =>
       <Widget>[
         if (label != null) Text(label),
         Column(
@@ -127,7 +127,7 @@ class About extends StatelessWidget {
   Widget build(BuildContext _) => Theme(
         data: _theme.aboutTheme,
         child: Builder(
-          builder: (context) => AppScaffold(
+          builder: (context) => AppScaffold.withTitle(
             title: 'About'.i18n,
             body: ListView(
               padding: const EdgeInsets.only(

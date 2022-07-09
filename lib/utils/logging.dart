@@ -8,7 +8,7 @@ final LogFunction _debugPrint = kReleaseMode ? (_) {} : debugPrint;
 class Logger {
   const Logger({this.module});
 
-  final String module;
+  final String? module;
 
   String get _logModule => module != null ? '$module: ' : '';
 
@@ -24,7 +24,7 @@ class Logger {
 
   void debug(String message) => _logDebug(message);
 
-  void error(String message, dynamic error, [StackTrace trace]) =>
+  void error(String message, dynamic error, [StackTrace? trace]) =>
       _logError('$message: ${error?.toString()}'
           '${trace != null ? " ${trace.toString()}" : ""}');
 }

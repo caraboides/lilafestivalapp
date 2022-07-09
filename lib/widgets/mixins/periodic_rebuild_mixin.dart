@@ -9,7 +9,7 @@ import '../../models/global_config.dart';
 // > scroll on first build get's obsolete
 mixin PeriodicRebuildMixin<T extends StatefulWidget>
     on State<T>, WidgetsBindingObserver {
-  Timer _rebuildTimer;
+  Timer? _rebuildTimer;
 
   @override
   void initState() {

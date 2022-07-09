@@ -35,8 +35,8 @@ class ScheduleProvider extends Family<
 
   static ProviderBase<StreamProviderDependency<ImmortalList<Event>>,
       AsyncValue<ImmortalList<Event>>> _createStreamProvider({
-    @required String festivalId,
-    @required BuildContext context,
+    required String festivalId,
+    required BuildContext context,
   }) =>
       festivalId == _config.festivalId
           ? StreamProvider((ref) => createCombinedStorageStream(
@@ -64,8 +64,8 @@ class SortedScheduleProvider
 
 class DailyScheduleKey extends CombinedKey<String, DateTime> {
   const DailyScheduleKey({
-    @required String festivalId,
-    @required DateTime date,
+    required String festivalId,
+    required DateTime date,
   }) : super(key1: festivalId, key2: date);
 
   String get festivalId => key1;
@@ -104,13 +104,14 @@ class BandScheduleProvider
 class FestivalDaysProvider
     extends Family<Computed<AsyncValue<ImmortalList<DateTime>>>, String> {
   FestivalDaysProvider()
-      : super((festivalId) => Computed((read) =>
-            read(dimeGet<ScheduleProvider>()(festivalId)).whenData(
-              (events) => events
-                  .map((event) => event.start.map(toFestivalDay).orElse(null))
-                  .toSet()
-                  .remove(null)
-                  .toList()
-                  .sort(),
-            )));
+      : super((festivalId) => Computed(
+            (read) => read(dimeGet<ScheduleProvider>()(festivalId)).whenData(
+                  (events) => events
+                      // TODO(SF) filtermap!
+                      .where((event) => event.start.isPresent)
+                      .map((event) => toFestivalDay(event.start.value))
+                      .toImmortalSet()
+                      .toImmortalList()
+                      .sort(),
+                )));
 }

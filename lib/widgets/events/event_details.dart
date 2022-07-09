@@ -10,7 +10,7 @@ import 'event_stage.dart';
 class EventDetails extends StatelessWidget {
   const EventDetails(
     this.event, {
-    Key key,
+    Key? key,
     this.showBandName = false,
     this.showWeekDay = false,
     this.alignByStage = false,

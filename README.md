@@ -59,3 +59,13 @@ Prepare the assets for a specific festival as follows:
 ```
 
 * The second parameter is required and used to prepare the asset folder and download the correct data for the given year.
+
+There is also a helper script to switch to the newest version of a festivals:
+
+```bash
+./scripts/switch.sh [spirit|party_san]
+# e.g.
+./scripts/switch.sh party_san
+```
+
+* This script should be updated as soon as a new year is available for a festival.

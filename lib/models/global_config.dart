@@ -1,20 +1,19 @@
-import 'package:flutter/foundation.dart';
 import 'package:immortal/immortal.dart';
 
 import 'reference.dart';
 
 class GlobalConfig {
   const GlobalConfig({
-    @required this.periodicRebuildDuration,
-    @required this.privacyPolicyUrlDe,
-    @required this.privacyPolicyUrlEn,
-    @required this.festivalHubBaseUrl,
-    @required this.repositoryUrl,
-    @required this.creators,
-    @required this.references,
-    @required this.weatherBaseUrl,
-    @required this.weatherApiKey,
-    @required this.weatherMinHour,
+    required this.periodicRebuildDuration,
+    required this.privacyPolicyUrlDe,
+    required this.privacyPolicyUrlEn,
+    required this.festivalHubBaseUrl,
+    required this.repositoryUrl,
+    required this.creators,
+    required this.references,
+    required this.weatherBaseUrl,
+    required this.weatherApiKey,
+    required this.weatherMinHour,
   });
 
   final Duration periodicRebuildDuration;

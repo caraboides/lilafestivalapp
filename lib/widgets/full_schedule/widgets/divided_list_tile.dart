@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 class DividedListTile extends StatelessWidget {
   const DividedListTile({
-    @required this.child,
-    this.height,
+    required this.child,
     this.isLast = false,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final Widget child;
-  final double height;
   final bool isLast;
 
   @override

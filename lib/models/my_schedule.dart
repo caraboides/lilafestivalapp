@@ -30,8 +30,8 @@ class MySchedule {
 
   MySchedule toggleEvent(
     String eventId, {
-    ValueChanged<int> onAdd,
-    ValueChanged<int> onRemove,
+    required ValueChanged<int> onAdd,
+    required ValueChanged<int> onRemove,
   }) =>
       getNotificationId(eventId).map((notificationId) {
         onRemove(notificationId);
@@ -42,7 +42,7 @@ class MySchedule {
         return _add(eventId, notificationId);
       });
 
-  Map<String, int> toJson() => _eventsWithNotification.toMutableMap();
+  Map<String, int> toJson() => _eventsWithNotification.toMap();
 
   bool get isEmpty => _eventsWithNotification.isEmpty;
 }

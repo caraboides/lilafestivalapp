@@ -8,20 +8,20 @@ import 'reference.dart';
 
 class FestivalConfig {
   const FestivalConfig({
-    @required this.festivalId,
-    @required this.festivalName,
-    @required this.festivalFullName,
-    @required this.festivalUrl,
-    @required this.startDate,
-    @required this.endDate,
-    @required this.daySwitchOffset,
-    @required this.fontReferences,
-    @required this.aboutMessages,
-    @required this.stageAlignment,
-    @required this.routes,
-    @required this.weatherGeoLocation,
-    @required this.weatherCityId,
-    @required this.history,
+    required this.festivalId,
+    required this.festivalName,
+    required this.festivalFullName,
+    required this.festivalUrl,
+    required this.startDate,
+    required this.endDate,
+    required this.daySwitchOffset,
+    required this.fontReferences,
+    required this.aboutMessages,
+    required this.stageAlignment,
+    required this.routes,
+    required this.weatherGeoLocation,
+    required this.weatherCityId,
+    required this.history,
   });
 
   final String festivalId;
@@ -29,6 +29,7 @@ class FestivalConfig {
   final String festivalFullName;
   final String festivalUrl;
   // TODO(SF) THEME display those somewhere?
+  // TODO(SF) maybe sliver app bar? combine with "onboarding"!
   final DateTime startDate;
   final DateTime endDate;
   final Duration daySwitchOffset;

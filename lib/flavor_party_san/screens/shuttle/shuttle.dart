@@ -1179,7 +1179,7 @@ class Shuttle extends StatelessWidget {
   static String title() => 'Bus Shuttle'.i18n;
 
   @override
-  Widget build(BuildContext context) => AppScaffold(
+  Widget build(BuildContext context) => AppScaffold.withTitle(
         title: title(),
         body: const StaticHtmlView(_html),
       );

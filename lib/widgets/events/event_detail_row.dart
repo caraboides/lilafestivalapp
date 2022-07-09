@@ -7,9 +7,9 @@ import 'event_toggle/event_toggle.dart';
 
 class EventDetailRow extends StatelessWidget {
   const EventDetailRow({
-    @required this.event,
-    @required this.currentTime,
-    Key key,
+    required this.event,
+    required this.currentTime,
+    Key? key,
     this.dense = false,
   }) : super(key: key);
 

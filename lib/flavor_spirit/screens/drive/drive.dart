@@ -29,7 +29,7 @@ class Drive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return AppScaffold(
+    return AppScaffold.withTitle(
       title: 'Anfahrt',
       body: ListView(
           padding: const EdgeInsets.only(top: 20, left: 20, right: 20),

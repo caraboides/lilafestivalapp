@@ -4,8 +4,8 @@ import 'package:quiver/core.dart';
 @immutable
 class CombinedKey<A, B> {
   const CombinedKey({
-    @required this.key1,
-    @required this.key2,
+    required this.key1,
+    required this.key2,
   });
 
   final A key1;

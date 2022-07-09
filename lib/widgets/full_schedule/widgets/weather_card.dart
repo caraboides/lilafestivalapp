@@ -10,8 +10,8 @@ import '../../../models/theme.dart';
 import '../../../providers/weather.dart';
 import '../../../utils/logging.dart';
 
-class WeatherCard extends HookWidget {
-  WeatherCard(this.date, {Key key}) : super(key: key);
+class WeatherCard extends HookConsumerWidget {
+  WeatherCard(this.date, {Key? key}) : super(key: key);
 
   final DateTime date;
 
@@ -29,21 +29,23 @@ class WeatherCard extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               // TODO(SF) FEATURE option for temperature unit?
-              Text('${weather.temperature.celsius.toStringAsFixed(1)}°C'),
+              if (weather.temperature?.celsius != null)
+                Text('${weather.temperature!.celsius!.toStringAsFixed(1)}°C'),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Image.network(
                   'http://openweathermap.org/img/wn/${weather.weatherIcon}@2x.png',
                 ),
               ),
-              Flexible(
-                fit: FlexFit.loose,
-                child: Text(
-                  weather.weatherDescription,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              if (weather.weatherDescription != null)
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Text(
+                    weather.weatherDescription!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
             ],
           ),
         ),
@@ -57,14 +59,14 @@ class WeatherCard extends HookWidget {
       );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Update weather every hour
     final hour = DateTime.now().hour;
-    final weather = useProvider(_weather(WeatherKey(
+    final weather = ref.watch(_weather(WeatherKey(
       date: date,
       cacheKey: hour,
     )));
-    final lastWeather = useState<Widget>(null);
+    final lastWeather = useState<Widget?>(null);
     final fallback = lastWeather.value ?? Container();
     return weather.when(
       data: (result) => result.map((weather) {

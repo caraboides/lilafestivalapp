@@ -15,10 +15,10 @@ import 'event_list_item.dart';
 
 class EventListView extends StatefulWidget {
   const EventListView({
-    @required this.events,
-    @required this.eventIds,
-    @required this.date,
-    Key key,
+    required this.events,
+    required this.eventIds,
+    required this.date,
+    Key? key,
   }) : super(key: key);
 
   final ImmortalMap<String, Event> events;
@@ -32,10 +32,10 @@ class EventListView extends StatefulWidget {
 class _EventListViewState extends State<EventListView>
     with OneTimeExecutionMixin {
   final _scrollController = ScrollController();
-  DateTime _currentTime;
+  late DateTime _currentTime;
   int _currentOrNextPlayingBandIndex = -1;
   int _nextPlayingBandIndex = -1;
-  ImmortalList<String> _itemIds;
+  late ImmortalList<String> _itemIds;
 
   static const String _changeOverId = 'change-over';
 
@@ -133,10 +133,10 @@ class _EventListViewState extends State<EventListView>
       );
 
   Widget _buildListItem({
-    BuildContext context,
-    Animation<double> animation,
-    int index,
-    String itemId,
+    required BuildContext context,
+    required Animation<double> animation,
+    required int index,
+    required String itemId,
   }) =>
       itemId == _changeOverId
           ? _buildChangeOverIndicator()

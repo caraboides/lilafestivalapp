@@ -1,5 +1,4 @@
 import 'package:dime/dime.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weather/weather.dart';
 import 'package:optional/optional.dart';
@@ -12,8 +11,8 @@ import '../services/open_weather.dart';
 
 class WeatherKey extends CombinedKey<int, DateTime> {
   const WeatherKey({
-    @required int cacheKey,
-    @required DateTime date,
+    required int cacheKey,
+    required DateTime date,
   }) : super(key1: cacheKey, key2: date);
 
   int get cacheKey => key1;

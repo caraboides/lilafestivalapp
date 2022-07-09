@@ -11,9 +11,9 @@ import 'material_color_transition.dart';
 
 class EventListItem extends StatelessWidget {
   const EventListItem({
-    @required this.event,
+    required this.event,
     this.isPlaying = false,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final Event event;

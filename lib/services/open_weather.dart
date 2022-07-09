@@ -55,9 +55,12 @@ class OpenWeather {
         final maxHour = isToday
             ? max(_globalConfig.weatherMinHour, now.hour)
             : _globalConfig.weatherMinHour;
-        return forecast.lastWhere((current) =>
-            isSameFestivalDay(current.date, date) &&
-            current.date.hour <= maxHour &&
-            current.date.hour >= _globalConfig.weatherMinHour);
+        return forecast.lastWhereOptional((current) =>
+            Optional.ofNullable(current.date)
+                .map((currentDate) =>
+                    isSameFestivalDay(currentDate, date) &&
+                    currentDate.hour <= maxHour &&
+                    currentDate.hour >= _globalConfig.weatherMinHour)
+                .orElse(false));
       });
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
+import 'package:optional/optional.dart';
 
 import '../models/event.dart';
 import '../models/festival_config.dart';
@@ -16,16 +17,17 @@ import '../utils/combined_async_values.dart';
 import '../utils/logging.dart';
 import 'mixins/one_time_execution_mixin.dart';
 
-class InitializationWidget extends StatefulHookWidget {
+class InitializationWidget extends StatefulHookConsumerWidget {
   InitializationWidget(this.child);
 
   final Widget child;
 
   @override
-  State<StatefulWidget> createState() => _InitializationWidgetState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _InitializationWidgetState();
 }
 
-class _InitializationWidgetState extends State<InitializationWidget>
+class _InitializationWidgetState extends ConsumerState<InitializationWidget>
     with OneTimeExecutionMixin {
   bool initializedNotifications = false;
 
@@ -33,15 +35,12 @@ class _InitializationWidgetState extends State<InitializationWidget>
   FestivalConfig get _config => dimeGet<FestivalConfig>();
   Logger get _log => const Logger(module: 'InitializationWidget');
 
-  void _precacheImages(BuildContext context) {
-    if (_theme.logoMenu != null) {
-      precacheImage(
-        AssetImage(_theme.logoMenu.assetPath),
-        context,
-        size: _theme.logoMenu.size,
-      );
-    }
-  }
+  void _precacheImages(BuildContext context) =>
+      Optional.ofNullable(_theme.logoMenu).ifPresent((logo) => precacheImage(
+            AssetImage(logo.assetPath),
+            context,
+            size: logo.size,
+          ));
 
   bool _verifyScheduledNotifications(
     AsyncValue<MySchedule> myScheduleProvider,
@@ -73,8 +72,8 @@ class _InitializationWidgetState extends State<InitializationWidget>
     });
     final festivalId = _config.festivalId;
     final mySchedule =
-        useProvider(dimeGet<MyScheduleProvider>()(festivalId).state);
-    final events = useProvider(dimeGet<ScheduleProvider>()(festivalId));
+        ref.watch(dimeGet<MyScheduleProvider>()(festivalId).state);
+    final events = ref.watch(dimeGet<ScheduleProvider>()(festivalId));
     executeUntilSuccessful(
         () => _verifyScheduledNotifications(mySchedule, events));
     return widget.child;

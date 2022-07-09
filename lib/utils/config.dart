@@ -15,6 +15,10 @@ final GlobalConfig config = GlobalConfig(
       label: 'Stephanie Freitag',
       links: ImmortalList([
         const Link(url: 'https://github.com/strangeAeon'),
+        const Link(
+          url: 'https://twitter.com/_death_may_die_',
+          label: '@_death_may_die_',
+        ),
       ]),
     ),
     Reference(

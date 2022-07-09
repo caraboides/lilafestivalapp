@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:optional/optional.dart';
 
 import '../../models/band.dart';
 import '../../models/band_key.dart';
@@ -28,21 +29,21 @@ import '../../widgets/history/history_wrapper.dart';
 import '../../widgets/messages/error_screen/error_screen.dart';
 import '../../widgets/messages/loading_screen/loading_screen.dart';
 import '../../widgets/scaffold.dart';
-import '../../widgets/visibility_builder.dart';
+import '../../widgets/optional_builder.dart';
 import 'band_detail_view.i18n.dart';
 
 // TODO(SF) FEATURE periodic rebuild for is playing indicator?
-class BandDetailView extends HookWidget {
+class BandDetailView extends HookConsumerWidget {
   const BandDetailView(this.bandName);
 
   final String bandName;
 
-  static void openFor(String bandName, {BuildContext context}) {
+  static void openFor(String bandName, {BuildContext? context}) {
     final navigatorKey = dimeGet<GlobalKey<NavigatorState>>();
     final festivalScope = context != null
         ? DimeFlutter.get<FestivalScope>(context)
         : _config.currentFestivalScope;
-    navigatorKey.currentState.push(MaterialPageRoute(
+    navigatorKey.currentState?.push(MaterialPageRoute(
       builder: (_) => HistoryWrapper(
         festivalScope: festivalScope,
         child: BandDetailView(bandName),
@@ -58,18 +59,21 @@ class BandDetailView extends HookWidget {
   String _buildFlag(String country) =>
       String.fromCharCodes(country.runes.map((code) => code + 127397));
 
-  static bool _isValueSet(String value) => value?.isNotEmpty ?? false;
+  static bool _isValueSet(String? value) => value?.isNotEmpty ?? false;
+
+  static String? _nonEmptyValue(String? value) =>
+      _isValueSet(value) ? value : null;
+
+  static Optional<String> _valueAsOptional(String? value) =>
+      Optional.ofNullable(_nonEmptyValue(value));
 
   String get _fallbackText => 'Sorry, no info'.i18n;
 
   String _getDescription(Locale locale, Band band) {
     if (locale.languageCode == 'de' && _isValueSet(band.textDe)) {
-      return band.textDe;
+      return band.textDe!;
     }
-    if (_isValueSet(band.textEn)) {
-      return band.textEn;
-    }
-    return _fallbackText;
+    return _nonEmptyValue(band.textEn) ?? _fallbackText;
   }
 
   Widget _buildDetailRow(ThemeData theme, String title, String value) =>
@@ -102,27 +106,29 @@ class BandDetailView extends HookWidget {
           _buildDetailRow(
             theme,
             'Origin',
-            _isValueSet(band.origin) ? _buildFlag(band.origin) : _fallbackText,
+            _valueAsOptional(band.origin).map(_buildFlag).orElse(_fallbackText),
           ),
-          VisibilityBuilder(
-            visible: _isValueSet(band.style),
-            builder: (_) => _buildDetailRow(theme, 'Style', band.style),
+          OptionalBuilder(
+            optional: _valueAsOptional(band.style),
+            builder: (_, styleValue) =>
+                _buildDetailRow(theme, 'Style', styleValue),
           ),
-          VisibilityBuilder(
-            visible: _isValueSet(band.roots),
-            builder: (_) => _buildDetailRow(theme, 'Roots', band.roots),
+          OptionalBuilder(
+            optional: _valueAsOptional(band.roots),
+            builder: (_, rootsValue) =>
+                _buildDetailRow(theme, 'Roots', rootsValue),
           ),
           const SizedBox(
             height: 10,
           ),
-          Visibility(
-            visible: _isValueSet(band.spotify),
-            child: Padding(
+          OptionalBuilder(
+            optional: _valueAsOptional(band.spotify),
+            builder: (_, spotifyValue) => Padding(
               padding: const EdgeInsets.only(top: 10),
               child: _theme.primaryButton(
                 label: 'Play on Spotify'.i18n,
                 onPressed: () {
-                  launch(band.spotify);
+                  launch(spotifyValue);
                 },
               ),
             ),
@@ -132,7 +138,7 @@ class BandDetailView extends HookWidget {
 
   Widget _buildImagePlaceholder(ThemeData theme, ImageData imageData) => Stack(
         children: <Widget>[
-          if (imageData.hasHash) BlurHash(hash: imageData.hash),
+          if (imageData.hasHash) BlurHash(hash: imageData.hash!),
           Shimmer.fromColors(
             baseColor: Colors.transparent,
             highlightColor: _theme.shimmerColor,
@@ -142,7 +148,7 @@ class BandDetailView extends HookWidget {
         ],
       );
 
-  Widget _buildImage(ThemeData theme, String imgUrl, [ImageData imgData]) =>
+  Widget _buildImage(ThemeData theme, String imgUrl, [ImageData? imgData]) =>
       CachedNetworkImage(
         imageUrl: imgUrl,
         placeholder: imgData != null
@@ -151,7 +157,7 @@ class BandDetailView extends HookWidget {
         placeholderFadeInDuration: const Duration(milliseconds: 200),
       );
 
-  Widget _buildBandLogo(ThemeData theme, String imgUrl, ImageData imgData) =>
+  Widget _buildBandLogo(ThemeData theme, String imgUrl, ImageData? imgData) =>
       Container(
         color: Colors.black,
         height: 100,
@@ -159,10 +165,10 @@ class BandDetailView extends HookWidget {
         child: _buildImage(theme, imgUrl, imgData),
       );
 
-  Widget _buildBandImage(ThemeData theme, String imgUrl, ImageData imgData) =>
-      imgData.hasRatio
+  Widget _buildBandImage(ThemeData theme, String imgUrl, ImageData? imgData) =>
+      (imgData?.hasRatio ?? false)
           ? AspectRatio(
-              aspectRatio: imgData.ratio,
+              aspectRatio: imgData!.ratio,
               child: _buildImage(theme, imgUrl, imgData),
             )
           : _buildImage(theme, imgUrl);
@@ -212,7 +218,7 @@ class BandDetailView extends HookWidget {
               bottom: false,
               minimum: const EdgeInsets.symmetric(horizontal: 10),
               child: bandWithEvents.events.length == 1
-                  ? _buildSingleEventEntry(bandWithEvents.events.first.value)
+                  ? _buildSingleEventEntry(bandWithEvents.events.first)
                   : _buildMultiEventEntry(bandWithEvents.events));
 
   Widget _buildBandView(BuildContext context, BandWithEvents bandWithEvents) {
@@ -223,10 +229,10 @@ class BandDetailView extends HookWidget {
       alignment: Alignment.topCenter,
       child: ListView(
         children: <Widget>[
-          VisibilityBuilder(
-            visible: band.isPresent && _isValueSet(band.value.logo),
-            builder: (_) =>
-                _buildBandLogo(theme, band.value.logo, band.value.logoData),
+          OptionalBuilder(
+            optional: band.map((bandValue) => _nonEmptyValue(bandValue.logo)),
+            builder: (_, logoValue) =>
+                _buildBandLogo(theme, logoValue, band.value.logoData),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -243,12 +249,11 @@ class BandDetailView extends HookWidget {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: _buildDetails(theme, locale, b)))
               .orElse(_fallbackInfo),
-          VisibilityBuilder(
-            visible: band.isPresent && _isValueSet(band.value.image),
-            builder: (_) => Padding(
+          OptionalBuilder(
+            optional: band.map((bandValue) => _nonEmptyValue(bandValue.image)),
+            builder: (_, imageValue) => Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: _buildBandImage(
-                  theme, band.value.image, band.value.imageData),
+              child: _buildBandImage(theme, imageValue, band.value.imageData),
             ),
           ),
         ],
@@ -257,14 +262,13 @@ class BandDetailView extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final festivalScope = DimeFlutter.get<FestivalScope>(context);
-    final bandProvider = useProvider(dimeGet<BandWithEventsProvider>()(BandKey(
+    final bandProvider = ref.watch(dimeGet<BandWithEventsProvider>()(BandKey(
       festivalId: festivalScope.festivalId,
       bandName: bandName,
     )));
-    return AppScaffold(
-      isDialog: true,
+    return AppScaffold.forDialog(
       title: 'Band Details'.i18n + festivalScope.titleSuffix,
       body: bandProvider.when(
         data: (band) => _buildBandView(context, band),

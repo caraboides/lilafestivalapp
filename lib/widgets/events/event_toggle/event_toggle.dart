@@ -10,7 +10,7 @@ import '../../../providers/festival_scope.dart';
 import '../../../providers/my_schedule.dart';
 import 'event_toggle.i18n.dart';
 
-class EventToggle extends HookWidget {
+class EventToggle extends HookConsumerWidget {
   const EventToggle(this.event, {this.dense = false});
 
   final Event event;
@@ -20,11 +20,11 @@ class EventToggle extends HookWidget {
   static const _iconSize = 24.0;
 
   Widget _buildIconButton({
-    BuildContext context,
-    double size,
-    Widget icon,
-    String tooltip,
-    VoidCallback onPressed,
+    required double size,
+    required BuildContext context,
+    required Widget icon,
+    required String tooltip,
+    required VoidCallback onPressed,
   }) =>
       Semantics(
         button: true,
@@ -51,12 +51,14 @@ class EventToggle extends HookWidget {
       );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final festivalId = DimeFlutter.get<FestivalScope>(context).festivalId;
-    final isLiked = useProvider(dimeGet<LikedEventProvider>()(EventKey(
-      festivalId: festivalId,
-      eventId: event.id,
-    ))).isPresent;
+    final isLiked = ref
+        .watch(dimeGet<LikedEventProvider>()(EventKey(
+          festivalId: festivalId,
+          eventId: event.id,
+        )))
+        .isPresent;
     final size = dense ? _theme.toggleDenseIconSize : _theme.toggleIconSize;
 
     final button = _buildIconButton(

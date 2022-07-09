@@ -152,7 +152,7 @@ class FAQ extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => AppScaffold(
+  Widget build(BuildContext context) => AppScaffold.withTitle(
         title: title(),
         body: StaticHtmlView(_buildHtml(context)),
       );

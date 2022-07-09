@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
 
@@ -7,9 +6,9 @@ import 'event.dart';
 
 class BandWithEvents {
   const BandWithEvents({
-    @required this.band,
-    @required this.events,
-    @required this.bandName,
+    required this.band,
+    required this.events,
+    required this.bandName,
   });
 
   final String bandName;

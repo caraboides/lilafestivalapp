@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
 typedef AnimatedListViewBuilder = Widget Function({
-  @required BuildContext context,
-  @required Animation<double> animation,
-  @required int index,
-  @required String itemId,
+  required BuildContext context,
+  required Animation<double> animation,
+  required int index,
+  required String itemId,
 });
 
 class AnimatedListView extends StatefulWidget {
   const AnimatedListView({
-    @required this.initialItemCount,
-    @required this.itemBuilder,
-    @required this.itemIds,
-    this.scrollController,
+    required this.initialItemCount,
+    required this.itemBuilder,
+    required this.itemIds,
+    required this.scrollController,
   });
 
   final ScrollController scrollController;
@@ -30,8 +30,10 @@ class _AnimatedListViewState extends State<AnimatedListView> {
   static final _fadeTween =
       Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: Curves.easeInOut));
 
-  Widget _animated(
-          {@required Animation<double> animation, @required Widget child}) =>
+  Widget _animated({
+    required Animation<double> animation,
+    required Widget child,
+  }) =>
       SizeTransition(
         sizeFactor: animation,
         child: FadeTransition(
@@ -50,7 +52,7 @@ class _AnimatedListViewState extends State<AnimatedListView> {
       // Remove old events, starting at the end
       oldWidget.itemIds.removeAll(widget.itemIds).reversed.forEach((itemId) =>
           oldItemIndices[itemId]
-              .map((index) => _listKey.currentState.removeItem(
+              .map((index) => _listKey.currentState?.removeItem(
                     index,
                     (context, animation) => _animated(
                       animation: animation,
@@ -65,7 +67,7 @@ class _AnimatedListViewState extends State<AnimatedListView> {
       // Insert new events, starting at the beginning
       widget.itemIds.removeAll(oldWidget.itemIds).forEach((itemId) {
         newItemIndices[itemId]
-            .map((index) => _listKey.currentState.insertItem(index));
+            .map((index) => _listKey.currentState?.insertItem(index));
       });
     }
 

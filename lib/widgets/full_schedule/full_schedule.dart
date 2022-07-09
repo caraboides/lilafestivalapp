@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:optional/optional.dart';
 
 import '../../models/festival_config.dart';
 import '../../models/theme.dart';
@@ -20,7 +21,7 @@ import 'widgets/band_schedule_list/band_schedule_list.dart';
 import 'widgets/daily_schedule_list/daily_schedule_list.dart';
 import 'widgets/weather_card.dart';
 
-class FullSchedule extends StatefulHookWidget {
+class FullSchedule extends StatefulHookConsumerWidget {
   const FullSchedule({
     this.likedOnly = false,
     this.displayWeather = false,
@@ -30,10 +31,10 @@ class FullSchedule extends StatefulHookWidget {
   final bool displayWeather;
 
   @override
-  State<StatefulWidget> createState() => _FullScheduleState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _FullScheduleState();
 }
 
-class _FullScheduleState extends State<FullSchedule> {
+class _FullScheduleState extends ConsumerState<FullSchedule> {
   bool _likedOnly = false;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
@@ -60,31 +61,23 @@ class _FullScheduleState extends State<FullSchedule> {
   TabBar _buildTabBar(ImmortalList<DateTime> days) => TabBar(
         tabs: [
           Tab(child: Text('Bands'.i18n)),
-          ...days
-              .mapIndexed((index, date) => Tooltip(
-                  message: 'MMM dd'.i18n.dateFormat(date),
-                  child: Tab(
-                      child: Text(
-                    'Day {number}'.i18n.fill({'number': index + 1}),
-                  ))))
-              .toMutableList(),
+          ...days.mapIndexed((index, date) => Tooltip(
+              message: 'MMM dd'.i18n.dateFormat(date),
+              child: Tab(
+                  child: Text(
+                'Day {number}'.i18n.fill({'number': index + 1}),
+              )))),
         ],
       );
 
   Widget _buildTitleWidget(FestivalScope festivalScope) {
     if (festivalScope.isCurrentFestival) {
-      return _theme.logo != null
-          ? Image.asset(
-              _theme.logo.assetPath,
-              width: _theme.logo.width,
-              height: _theme.logo.height,
-            )
-          : Text(_config.festivalName);
+      return _theme.logo?.toAsset() ?? Text(_config.festivalName);
     }
     return Text(_config.festivalName + festivalScope.titleSuffix);
   }
 
-  Widget _buildTabBarContainer(ImmortalList<DateTime> days) =>
+  PreferredSizeWidget _buildTabBarContainer(ImmortalList<DateTime> days) =>
       _theme.tabBarDecoration != null
           ? PreferredSize(
               child: Stack(
@@ -101,11 +94,11 @@ class _FullScheduleState extends State<FullSchedule> {
           : _buildTabBar(days);
 
   AppBar _buildAppBar(
-    ImmortalList<DateTime> days,
+    ImmortalList<DateTime>? days,
     FestivalScope festivalScope,
   ) =>
       AppBar(
-        bottom: days != null ? _buildTabBarContainer(days) : null,
+        bottom: Optional.ofNullable(days).map(_buildTabBarContainer).orElseNull,
         title: _buildTitleWidget(festivalScope),
         actions: <Widget>[
           Center(
@@ -146,11 +139,11 @@ class _FullScheduleState extends State<FullSchedule> {
       );
 
   Widget _buildScaffold({
-    Widget child,
-    FestivalScope festivalScope,
-    ImmortalList<DateTime> days,
+    required Widget child,
+    required FestivalScope festivalScope,
+    ImmortalList<DateTime>? days,
   }) =>
-      AppScaffold(
+      AppScaffold.withAppBar(
         appBar: _buildAppBar(days, festivalScope),
         body: child,
       );
@@ -168,7 +161,7 @@ class _FullScheduleState extends State<FullSchedule> {
             child: TabBarView(
               children: [
                 _buildBandScheduleList(),
-                ...days.map(_buildDailyScheduleList).toMutableList(),
+                ...days.map(_buildDailyScheduleList),
               ],
             ),
           ));
@@ -177,7 +170,7 @@ class _FullScheduleState extends State<FullSchedule> {
   Widget build(BuildContext context) {
     final festivalScope = DimeFlutter.get<FestivalScope>(context);
     final provider =
-        useProvider(dimeGet<FestivalDaysProvider>()(festivalScope.festivalId));
+        ref.watch(dimeGet<FestivalDaysProvider>()(festivalScope.festivalId));
     return provider.when(
       data: (days) => _buildScheduleView(days, festivalScope),
       loading: () => _buildScaffold(

@@ -56,10 +56,10 @@ class CombinedStorage {
   }
 
   Future<Optional<T>> _loadOfflineData<T, J>({
-    @required BuildContext context,
-    @required String appStorageKey,
-    @required String assetPath,
-    @required T Function(J) fromJson,
+    required BuildContext context,
+    required String appStorageKey,
+    required String assetPath,
+    required T Function(J) fromJson,
   }) =>
       _loadDataFromAppStorage(appStorageKey, fromJson).then(
         (result) => result.map((data) => Optional.of(data)).orElseGetAsync(
@@ -75,11 +75,11 @@ class CombinedStorage {
   }
 
   StreamController<T> loadData<T, J>({
-    @required BuildContext context,
-    @required String remoteUrl,
-    @required String appStorageKey,
-    @required String assetPath,
-    @required T Function(J) fromJson,
+    required BuildContext context,
+    required String remoteUrl,
+    required String appStorageKey,
+    required String assetPath,
+    required T Function(J) fromJson,
   }) {
     final streamController = StreamController<T>();
     var loadingRemoteDataFailed = false;

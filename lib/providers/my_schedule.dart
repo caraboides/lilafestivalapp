@@ -31,7 +31,7 @@ class MyScheduleProvider
           : StateNotifierProvider((ref) => MyScheduleController.create(
                 festivalId: festivalId,
                 // Only handle legacy file for oldest history festival
-                handleLegacyFile: _config.history.last
+                handleLegacyFile: _config.history.lastOptional
                     .map((legacyFestival) => festivalId == legacyFestival.key)
                     .orElse(false),
               ));
@@ -39,12 +39,12 @@ class MyScheduleProvider
 
 class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   MyScheduleController._({
-    @required this.festivalId,
+    required this.festivalId,
     this.handleLegacyFile = false,
   }) : super(const AsyncValue<MySchedule>.loading());
 
   factory MyScheduleController.create({
-    @required String festivalId,
+    required String festivalId,
     bool handleLegacyFile = false,
   }) =>
       MyScheduleController._(
@@ -54,7 +54,7 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
 
   final String festivalId;
   final bool handleLegacyFile;
-  Timer _debounce;
+  Timer? _debounce;
 
   AppStorage get _appStorage => dimeGet<AppStorage>();
   Notifications get _notifications => dimeGet<Notifications>();
@@ -110,7 +110,7 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
 
   void _saveMySchedule() {
     if (_debounce?.isActive ?? false) {
-      _debounce.cancel();
+      _debounce?.cancel();
     }
     _debounce = Timer(const Duration(milliseconds: 200), () {
       state.whenData((mySchedule) {
@@ -136,8 +136,8 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
 
 class EventKey extends CombinedKey<String, String> {
   const EventKey({
-    @required String festivalId,
-    @required String eventId,
+    required String festivalId,
+    required String eventId,
   }) : super(key1: festivalId, key2: eventId);
 
   String get festivalId => key1;

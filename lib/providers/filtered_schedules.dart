@@ -16,8 +16,8 @@ import 'schedule.dart';
 @immutable
 class DailyScheduleFilter {
   const DailyScheduleFilter({
-    @required this.date,
-    @required this.festivalId,
+    required this.date,
+    required this.festivalId,
     this.likedOnly = false,
   });
 
@@ -64,8 +64,8 @@ class FilteredDailyScheduleProvider extends Family<
 
 class BandScheduleKey extends CombinedKey<String, bool> {
   const BandScheduleKey({
-    @required String festivalId,
-    @required bool likedOnly,
+    required String festivalId,
+    required bool likedOnly,
   }) : super(key1: festivalId, key2: likedOnly);
 
   String get festivalId => key1;

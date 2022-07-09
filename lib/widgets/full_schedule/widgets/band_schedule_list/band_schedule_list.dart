@@ -18,9 +18,9 @@ import '../band_list_view.dart';
 import '../empty_schedule/empty_schedule.dart';
 import 'band_schedule_list.i18n.dart';
 
-class BandScheduleList extends HookWidget {
+class BandScheduleList extends HookConsumerWidget {
   const BandScheduleList({
-    Key key,
+    Key? key,
     this.likedOnly = false,
   });
 
@@ -32,12 +32,12 @@ class BandScheduleList extends HookWidget {
       ErrorScreen('There was an error retrieving the bands.'.i18n);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final festivalId = DimeFlutter.get<FestivalScope>(context).festivalId;
     final mapProvider =
-        useProvider(dimeGet<BandsWithEventsProvider>()(festivalId));
+        ref.watch(dimeGet<BandsWithEventsProvider>()(festivalId));
     final listProvider =
-        useProvider(dimeGet<FilteredBandScheduleProvider>()(BandScheduleKey(
+        ref.watch(dimeGet<FilteredBandScheduleProvider>()(BandScheduleKey(
       festivalId: festivalId,
       likedOnly: likedOnly,
     )));

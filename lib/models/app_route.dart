@@ -3,8 +3,8 @@ import 'package:immortal/immortal.dart';
 
 class NestedRoute {
   const NestedRoute({
-    @required this.key,
-    @required this.title,
+    required this.key,
+    required this.title,
   });
 
   final String key;
@@ -16,27 +16,54 @@ typedef NestedRouteBuilder = Widget Function(
   NestedRoute nestedRoute,
 );
 
-class AppRoute {
+abstract class AppRoute {
   const AppRoute({
-    @required this.path,
-    @required this.getName,
-    @required this.icon,
-    this.builder,
-    this.nestedRouteBuilder,
-    this.nestedRoutes,
+    required this.path,
+    required this.getName,
+    required this.icon,
     this.isRoot = false,
-  }) : assert(builder != null ||
-            (nestedRoutes != null && nestedRouteBuilder != null));
+  });
 
   final String path;
   final ValueGetter<String> getName;
   final IconData icon;
   final bool isRoot;
+}
+
+class FlatAppRoute extends AppRoute {
+  const FlatAppRoute({
+    required String path,
+    required ValueGetter<String> getName,
+    required IconData icon,
+    required this.builder,
+    bool isRoot = false,
+  }) : super(
+          path: path,
+          getName: getName,
+          icon: icon,
+          isRoot: isRoot,
+        );
+
   final WidgetBuilder builder;
+}
+
+class NestedAppRoute extends AppRoute {
+  const NestedAppRoute({
+    required String path,
+    required ValueGetter<String> getName,
+    required IconData icon,
+    required this.nestedRouteBuilder,
+    required this.nestedRoutes,
+    bool isRoot = false,
+  }) : super(
+          path: path,
+          getName: getName,
+          icon: icon,
+          isRoot: isRoot,
+        );
+
   final NestedRouteBuilder nestedRouteBuilder;
   final ImmortalList<NestedRoute> nestedRoutes;
-
-  bool get isNested => nestedRoutes != null && nestedRouteBuilder != null;
 
   String nestedRoutePath(NestedRoute nestedRoute) => '$path/${nestedRoute.key}';
 }

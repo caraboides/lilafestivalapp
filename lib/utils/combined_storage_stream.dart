@@ -7,12 +7,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../services/combined_storage.dart';
 
 Stream<T> createCombinedStorageStream<T, J>({
-  @required BuildContext context,
-  @required String remoteUrl,
-  @required String appStorageKey,
-  @required String assetPath,
-  @required T Function(J) fromJson,
-  @required ProviderReference ref,
+  required BuildContext context,
+  required String remoteUrl,
+  required String appStorageKey,
+  required String assetPath,
+  required T Function(J) fromJson,
+  required ProviderReference ref,
 }) {
   final streamController = dimeGet<CombinedStorage>().loadData(
     context: context,

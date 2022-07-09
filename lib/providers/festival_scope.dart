@@ -1,10 +1,8 @@
 import 'package:dime/dime.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 class FestivalScope {
   const FestivalScope._({
-    @required this.festivalId,
+    required this.festivalId,
     this.isCurrentFestival = false,
     this.title,
   });
@@ -15,8 +13,8 @@ class FestivalScope {
       );
 
   factory FestivalScope.history({
-    @required String festivalId,
-    @required String title,
+    required String festivalId,
+    required String title,
   }) =>
       FestivalScope._(
         festivalId: festivalId,
@@ -24,7 +22,7 @@ class FestivalScope {
       );
 
   final String festivalId;
-  final String title;
+  final String? title;
   final bool isCurrentFestival;
 
   String get titleSuffix => title != null ? ' $title' : '';

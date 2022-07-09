@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import '../utils/logging.dart';
 
 class AppStorage {
-  String directory;
+  String? directory;
 
   Logger get _log => const Logger(module: 'APP_STORAGE');
 

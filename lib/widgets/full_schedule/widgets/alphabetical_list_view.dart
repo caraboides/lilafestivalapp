@@ -11,11 +11,11 @@ typedef ListItemBuilder = Widget Function(BuildContext, int);
 
 class AlphabeticalListView extends StatefulWidget {
   const AlphabeticalListView({
-    @required this.itemCount,
-    @required this.listItemHeights,
-    @required this.getAlphabeticalIndex,
-    @required this.buildListItem,
-    @required this.itemIds,
+    required this.itemCount,
+    required this.listItemHeights,
+    required this.getAlphabeticalIndex,
+    required this.buildListItem,
+    required this.itemIds,
   });
 
   final ImmortalList<double> listItemHeights;
@@ -30,8 +30,8 @@ class AlphabeticalListView extends StatefulWidget {
 
 class _AlphabeticalListViewState extends State<AlphabeticalListView> {
   int _currentPosition = 0;
-  ScrollController _scrollController;
-  ImmortalList<double> _listItemOffsets;
+  late ScrollController _scrollController;
+  late ImmortalList<double> _listItemOffsets;
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
 
@@ -89,8 +89,8 @@ class _AlphabeticalListViewState extends State<AlphabeticalListView> {
   }
 
   Widget _buildAlphabeticalIndex({
-    @required BuildContext context,
-    @required int index,
+    required BuildContext context,
+    required int index,
     bool isVisible = false,
   }) =>
       Opacity(
@@ -106,10 +106,10 @@ class _AlphabeticalListViewState extends State<AlphabeticalListView> {
       );
 
   Widget _buildListItemWithAlphabeticalIndex({
-    BuildContext context,
-    Animation<double> animation,
-    int index,
-    String itemId,
+    required BuildContext context,
+    required Animation<double> animation,
+    required int index,
+    required String itemId,
   }) =>
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,

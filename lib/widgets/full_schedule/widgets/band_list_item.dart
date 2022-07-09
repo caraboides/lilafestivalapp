@@ -13,9 +13,9 @@ import 'material_color_transition.dart';
 
 class BandListItem extends StatelessWidget {
   const BandListItem({
-    @required this.bandWithEvents,
-    @required this.currentTime,
-    Key key,
+    required this.bandWithEvents,
+    required this.currentTime,
+    Key? key,
   }) : super(key: key);
 
   final BandWithEvents bandWithEvents;
@@ -77,7 +77,7 @@ class BandListItem extends StatelessWidget {
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.only(top: 10, bottom: 4),
             child: bandWithEvents.events.length == 1
-                ? _buildSingleEventEntry(bandWithEvents.events.first.value)
+                ? _buildSingleEventEntry(bandWithEvents.events.first)
                 : _buildMultiEventEntry(),
           ),
         ),

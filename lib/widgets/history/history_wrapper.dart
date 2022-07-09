@@ -6,8 +6,8 @@ import '../../providers/festival_scope.dart';
 
 class HistoryWrapper extends StatelessWidget {
   const HistoryWrapper({
-    @required this.festivalScope,
-    @required this.child,
+    required this.festivalScope,
+    required this.child,
   });
 
   final FestivalScope festivalScope;

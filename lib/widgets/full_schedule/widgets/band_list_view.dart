@@ -12,9 +12,9 @@ import 'band_list_item.dart';
 
 class BandListView extends StatelessWidget {
   const BandListView({
-    @required this.bands,
-    @required this.bandIds,
-    Key key,
+    required this.bands,
+    required this.bandIds,
+    Key? key,
   }) : super(key: key);
 
   final ImmortalMap<String, BandWithEvents> bands;

@@ -6,8 +6,8 @@ import 'event_detail_row.dart';
 
 class DenseEventList extends StatelessWidget {
   const DenseEventList({
-    @required this.events,
-    @required this.currentTime,
+    required this.events,
+    required this.currentTime,
     this.wrapAlignment = WrapAlignment.spaceBetween,
   });
 
@@ -33,7 +33,7 @@ class DenseEventList extends StatelessWidget {
         child: Wrap(
           direction: Axis.horizontal,
           alignment: WrapAlignment.spaceBetween,
-          children: events.map(_buildEventRow).toMutableList(),
+          children: events.map(_buildEventRow).toList(),
         ),
       );
 }

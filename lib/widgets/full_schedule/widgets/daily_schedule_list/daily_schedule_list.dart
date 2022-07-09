@@ -18,11 +18,11 @@ import '../empty_schedule/empty_schedule.dart';
 import '../event_list_view.dart';
 import 'daily_schedule_list.i18n.dart';
 
-class DailyScheduleList extends HookWidget {
+class DailyScheduleList extends HookConsumerWidget {
   const DailyScheduleList(
     this.date, {
     this.likedOnly = false,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final DateTime date;
@@ -34,15 +34,15 @@ class DailyScheduleList extends HookWidget {
       ErrorScreen('There was an error retrieving the running order.'.i18n);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final festivalId = DimeFlutter.get<FestivalScope>(context).festivalId;
     final mapProvider =
-        useProvider(dimeGet<DailyScheduleMapProvider>()(DailyScheduleKey(
+        ref.watch(dimeGet<DailyScheduleMapProvider>()(DailyScheduleKey(
       festivalId: festivalId,
       date: date,
     )));
-    final listProvider = useProvider(
-        dimeGet<FilteredDailyScheduleProvider>()(DailyScheduleFilter(
+    final listProvider =
+        ref.watch(dimeGet<FilteredDailyScheduleProvider>()(DailyScheduleFilter(
       festivalId: festivalId,
       date: date,
       likedOnly: likedOnly,

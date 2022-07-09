@@ -15,30 +15,30 @@ class Navigation {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   ImmortalList<AppRoute> get routes => ImmortalList([
-        const AppRoute(
+        const FlatAppRoute(
           path: '/',
           getName: ScheduleScreen.title,
           icon: Icons.calendar_today,
           isRoot: true,
           builder: ScheduleScreen.builder,
         ),
-        const AppRoute(
+        const FlatAppRoute(
           path: '/mySchedule',
           getName: ScheduleScreen.myScheduleTitle,
           icon: Icons.star,
           isRoot: true,
           builder: ScheduleScreen.myScheduleBuilder,
         ),
-        ..._config.routes.toMutableList(),
+        ..._config.routes,
         if (_config.history.isNotEmpty)
-          AppRoute(
+          NestedAppRoute(
             path: '/history',
             getName: History.title,
             icon: Icons.history,
             nestedRoutes: _config.history,
             nestedRouteBuilder: History.builder,
           ),
-        const AppRoute(
+        const FlatAppRoute(
           path: '/about',
           getName: About.title,
           icon: Icons.info,
@@ -49,20 +49,25 @@ class Navigation {
   ImmortalMap<String, AppRoute> get _routesByPath =>
       routes.asMapWithKeys((route) => route.path);
 
-  ImmortalMap<String, WidgetBuilder> _buildNestedNamedRoutes(AppRoute route) =>
+  ImmortalMap<String, WidgetBuilder> _buildNestedNamedRoutes(
+          NestedAppRoute route) =>
       route.nestedRoutes.asMapWithKeys(route.nestedRoutePath).mapValues(
           (_, nestedRoute) =>
               (context) => route.nestedRouteBuilder(context, nestedRoute));
 
+  ImmortalMap<String, WidgetBuilder> _buildFlatRoute(
+          String routePath, FlatAppRoute route) =>
+      ImmortalMap({
+        routePath: (context) => route.isRoot
+            ? I18n(child: route.builder(context))
+            : route.builder(context),
+      });
+
   ImmortalMap<String, WidgetBuilder> _buildNamedRoutes(
           String routePath, AppRoute route) =>
-      route.isNested
+      route is NestedAppRoute
           ? _buildNestedNamedRoutes(route)
-          : ImmortalMap({
-              routePath: (context) => route.isRoot
-                  ? I18n(child: route.builder(context))
-                  : route.builder(context),
-            });
+          : _buildFlatRoute(routePath, route as FlatAppRoute);
 
   ImmortalMap<String, WidgetBuilder> get namedRoutes =>
       _routesByPath.mapValues(_buildNamedRoutes).flatten();

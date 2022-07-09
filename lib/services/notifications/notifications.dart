@@ -31,13 +31,13 @@ class Notifications {
       AndroidNotificationDetails(
         Constants.notificationChannelId,
         'Gig Reminder'.i18n,
-        'Notifications to remind of liked gigs'.i18n,
+        channelDescription: 'Notifications to remind of liked gigs'.i18n,
         importance: Importance.max,
         priority: Priority.high,
         color: _theme.notificationColor,
       );
 
-  Future _onSelectNotification(String payload) async {
+  Future _onSelectNotification(String? payload) async {
     if (payload != null) {
       _log.debug('Notification selected with payload: $payload '
           '- opening band detail view');
