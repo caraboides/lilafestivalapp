@@ -62,21 +62,21 @@ class EventToggle extends HookConsumerWidget {
     final size = dense ? _theme.toggleDenseIconSize : _theme.toggleIconSize;
 
     final button = _buildIconButton(
-      context: context,
-      size: size,
-      icon: AnimatedCrossFade(
-        firstChild: const Icon(Icons.star),
-        secondChild: const Icon(Icons.star_border),
-        crossFadeState:
-            isLiked ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-        duration: const Duration(milliseconds: 150),
-      ),
-      tooltip:
-          (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,
-      onPressed: () => dimeGet<MyScheduleProvider>()(festivalId)
-          .read(context)
-          .toggleEvent(event),
-    );
+        context: context,
+        size: size,
+        icon: AnimatedCrossFade(
+          firstChild: const Icon(Icons.star),
+          secondChild: const Icon(Icons.star_border),
+          crossFadeState:
+              isLiked ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          duration: const Duration(milliseconds: 150),
+        ),
+        tooltip:
+            (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,
+        // TODO(SF) correct? or use ref.read?
+        onPressed: () => (dimeGet<MyScheduleProvider>()(festivalId).notifier
+                as MyScheduleController)
+            .toggleEvent(event));
     return dense
         ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

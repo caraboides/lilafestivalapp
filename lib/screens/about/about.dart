@@ -51,11 +51,11 @@ class About extends StatelessWidget {
               ))
           .orElse(_buildButtonLink(link, shrink: shrink));
 
-  Iterable<Widget> _buildLinks(
+  List<Widget> _buildLinks(
     ImmortalList<Link> links, {
     bool shrink = false,
   }) =>
-      links.map((link) => _buildLink(link, shrink: shrink));
+      links.map((link) => _buildLink(link, shrink: shrink)).toList();
 
   Widget _buildReference(
     String? label,
@@ -108,8 +108,8 @@ class About extends StatelessWidget {
 
   List<Widget> _buildMessages(ImmortalList<Reference> messages) => messages
       .map((message) => _buildMessage(message.label, message.links))
-      .flattenIterables<Widget>()
-      .toMutableList();
+      .flatten<Widget>() // TODO(SF) is this correct?
+      .toList();
 
   void _showLicenses(BuildContext context) async {
     final packageInfo = await PackageInfo.fromPlatform();

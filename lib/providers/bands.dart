@@ -12,16 +12,12 @@ import '../utils/cache_stream.dart';
 import '../utils/combined_storage_stream.dart';
 import '../utils/constants.dart';
 
-class BandsProvider extends Family<
-    ProviderBase<StreamProviderDependency<ImmortalMap<String, Band>>,
-        AsyncValue<ImmortalMap<String, Band>>>,
-    String> {
-  BandsProvider(BuildContext context)
-      : super((festivalId) => _createStreamProvider(
-              festivalId: festivalId,
-              context: context,
-            ));
+typedef BandsProvider = StreamProviderFamily<ImmortalMap<String, Band>, String>;
 
+typedef BandProvider = ProviderFamily<AsyncValue<Optional<Band>>, BandKey>;
+
+// ignore: avoid_classes_with_only_static_members
+class BandsProviderCreator {
   static FestivalConfig get _config => dimeGet<FestivalConfig>();
   static GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
@@ -29,33 +25,29 @@ class BandsProvider extends Family<
 
   static ImmortalMap<String, Band> _fromJson(Map<String, dynamic> jsonMap) =>
       ImmortalMap<String, dynamic>(jsonMap)
+          // ignore: unnecessary_lambdas
           .mapValues((bandName, json) => Band.fromJson(bandName, json));
 
-  static ProviderBase<StreamProviderDependency<ImmortalMap<String, Band>>,
-      AsyncValue<ImmortalMap<String, Band>>> _createStreamProvider({
-    required String festivalId,
-    required BuildContext context,
-  }) =>
-      festivalId == _config.festivalId
-          ? StreamProvider((ref) => createCombinedStorageStream(
-                context: context,
-                ref: ref,
-                remoteUrl: _remoteUrl(festivalId),
-                appStorageKey: Constants.bandsAppStorageFileName,
-                assetPath: Constants.bandsAssetFileName,
-                fromJson: _fromJson,
-              ))
-          : StreamProvider.autoDispose((ref) => createCacheStream(
-                remoteUrl:
-                    _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
-                fromJson: _fromJson,
-              ));
-}
+  // TODO(SF) autodispose for history festivals..
+  static BandsProvider create(BuildContext context) =>
+      StreamProvider.family<ImmortalMap<String, Band>, String>(
+          (ref, festivalId) => festivalId == _config.festivalId
+              ? createCombinedStorageStream(
+                  context: context,
+                  ref: ref,
+                  remoteUrl: _remoteUrl(festivalId),
+                  appStorageKey: Constants.bandsAppStorageFileName,
+                  assetPath: Constants.bandsAssetFileName,
+                  fromJson: _fromJson,
+                )
+              : createCacheStream(
+                  remoteUrl:
+                      _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
+                  fromJson: _fromJson,
+                ));
 
-class BandProvider
-    extends Family<Computed<AsyncValue<Optional<Band>>>, BandKey> {
-  BandProvider()
-      : super((key) => Computed((read) =>
-            read(dimeGet<BandsProvider>()(key.festivalId))
-                .whenData((bands) => bands[key.bandName])));
+  static BandProvider createBandProvider() =>
+      Provider.family<AsyncValue<Optional<Band>>, BandKey>((ref, key) => ref
+          .read(dimeGet<BandsProvider>()(key.festivalId))
+          .whenData((bands) => bands[key.bandName]));
 }

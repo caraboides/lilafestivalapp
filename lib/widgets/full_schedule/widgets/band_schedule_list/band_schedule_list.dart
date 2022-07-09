@@ -42,11 +42,11 @@ class BandScheduleList extends HookConsumerWidget {
       likedOnly: likedOnly,
     )));
     return combineAsyncValues(
-        mapProvider,
-        listProvider,
-        (bandMap, bandList) =>
-            Tuple2<ImmortalMap<String, BandWithEvents>, ImmortalList<String>>(
-                bandMap, bandList)).when(
+            mapProvider,
+            listProvider,
+            Tuple2<ImmortalMap<String, BandWithEvents>, ImmortalList<String>>
+                .new)
+        .when(
       data: (bandTuple) {
         if (bandTuple.item1.isEmpty) {
           return _buildErrorScreen();

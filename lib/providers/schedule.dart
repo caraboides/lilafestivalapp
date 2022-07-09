@@ -12,55 +12,17 @@ import '../utils/cache_stream.dart';
 import '../utils/combined_storage_stream.dart';
 import '../utils/constants.dart';
 import '../utils/date.dart';
+import '../widgets/full_schedule/widgets/daily_schedule_list/daily_schedule_list.dart';
 
-class ScheduleProvider extends Family<
-    ProviderBase<StreamProviderDependency<ImmortalList<Event>>,
-        AsyncValue<ImmortalList<Event>>>,
-    String> {
-  ScheduleProvider(BuildContext context)
-      : super((festivalId) => _createStreamProvider(
-              festivalId: festivalId,
-              context: context,
-            ));
+// TODO(SF) add types for string keys (festival id etc)
 
-  static FestivalConfig get _config => dimeGet<FestivalConfig>();
-  static GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
+typedef ScheduleProvider = StreamProviderFamily<ImmortalList<Event>, String>;
 
-  static String _remoteUrl(String festivalId) =>
-      '/schedule?festival=$festivalId';
+typedef SortedScheduleProvider
+    = ProviderFamily<AsyncValue<ImmortalList<Event>>, String>;
 
-  static ImmortalList<Event> _fromJson(Map<String, dynamic> jsonMap) =>
-      ImmortalMap<String, dynamic>(jsonMap)
-          .mapEntries<Event>((id, json) => Event.fromJson(id, json));
-
-  static ProviderBase<StreamProviderDependency<ImmortalList<Event>>,
-      AsyncValue<ImmortalList<Event>>> _createStreamProvider({
-    required String festivalId,
-    required BuildContext context,
-  }) =>
-      festivalId == _config.festivalId
-          ? StreamProvider((ref) => createCombinedStorageStream(
-                context: context,
-                ref: ref,
-                remoteUrl: _remoteUrl(festivalId),
-                appStorageKey: Constants.scheduleAppStorageFileName,
-                assetPath: Constants.scheduleAssetFileName,
-                fromJson: _fromJson,
-              ))
-          : StreamProvider.autoDispose((ref) => createCacheStream(
-                remoteUrl:
-                    _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
-                fromJson: _fromJson,
-              ));
-}
-
-class SortedScheduleProvider
-    extends Family<Computed<AsyncValue<ImmortalList<Event>>>, String> {
-  SortedScheduleProvider()
-      : super((festivalId) => Computed((read) =>
-            read(dimeGet<ScheduleProvider>()(festivalId))
-                .whenData((events) => events.sort())));
-}
+typedef FestivalDaysProvider
+    = ProviderFamily<AsyncValue<ImmortalList<DateTime>>, String>;
 
 class DailyScheduleKey extends CombinedKey<String, DateTime> {
   const DailyScheduleKey({
@@ -72,46 +34,86 @@ class DailyScheduleKey extends CombinedKey<String, DateTime> {
   DateTime get date => key2;
 }
 
-class DailyScheduleProvider extends Family<
-    Computed<AsyncValue<ImmortalList<Event>>>, DailyScheduleKey> {
-  DailyScheduleProvider()
-      : super((key) => Computed((read) =>
-            read(dimeGet<SortedScheduleProvider>()(key.festivalId)).whenData(
-              (events) => events.where((event) => event.start
-                  .map((startTime) => isSameFestivalDay(startTime, key.date))
-                  .orElse(false)),
-            )));
-}
+typedef DailyScheduleProvider
+    = ProviderFamily<AsyncValue<ImmortalList<Event>>, DailyScheduleKey>;
 
-class DailyScheduleMapProvider extends Family<
-    Computed<AsyncValue<ImmortalMap<String, Event>>>, DailyScheduleKey> {
-  DailyScheduleMapProvider()
-      : super((key) => Computed((read) =>
-            read(dimeGet<DailyScheduleProvider>()(key)).whenData(
-                (eventList) => eventList.asMapWithKeys((event) => event.id))));
-}
+typedef DailyScheduleMapProvider
+    = ProviderFamily<AsyncValue<ImmortalMap<String, Event>>, DailyScheduleKey>;
 
-class BandScheduleProvider
-    extends Family<Computed<AsyncValue<ImmortalList<Event>>>, BandKey> {
-  BandScheduleProvider()
-      : super((key) => Computed(
-              (read) => read(dimeGet<ScheduleProvider>()(key.festivalId))
-                  .whenData((events) =>
-                      events.where((event) => event.bandName == key.bandName)),
-            ));
-}
+typedef BandScheduleProvider
+    = ProviderFamily<AsyncValue<ImmortalList<Event>>, BandKey>;
 
-class FestivalDaysProvider
-    extends Family<Computed<AsyncValue<ImmortalList<DateTime>>>, String> {
-  FestivalDaysProvider()
-      : super((festivalId) => Computed(
-            (read) => read(dimeGet<ScheduleProvider>()(festivalId)).whenData(
-                  (events) => events
-                      // TODO(SF) filtermap!
-                      .where((event) => event.start.isPresent)
-                      .map((event) => toFestivalDay(event.start.value))
-                      .toImmortalSet()
-                      .toImmortalList()
-                      .sort(),
-                )));
+// ignore: avoid_classes_with_only_static_members
+class ScheduleProviderCreator {
+  static FestivalConfig get _config => dimeGet<FestivalConfig>();
+  static GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
+  static ScheduleProvider get _scheduleProvider => dimeGet<ScheduleProvider>();
+
+  static String _remoteUrl(String festivalId) =>
+      '/schedule?festival=$festivalId';
+
+  static ImmortalList<Event> _fromJson(Map<String, dynamic> jsonMap) =>
+      ImmortalMap<String, dynamic>(jsonMap)
+          // ignore: unnecessary_lambdas
+          .mapEntries<Event>((id, json) => Event.fromJson(id, json));
+
+  // TODO(SF) autodispose for history festivals..
+  static ScheduleProvider create(BuildContext context) =>
+      StreamProvider.family<ImmortalList<Event>, String>(
+        (ref, festivalId) => festivalId == _config.festivalId
+            ? createCombinedStorageStream(
+                context: context,
+                ref: ref,
+                remoteUrl: _remoteUrl(festivalId),
+                appStorageKey: Constants.scheduleAppStorageFileName,
+                assetPath: Constants.scheduleAssetFileName,
+                fromJson: _fromJson,
+              )
+            : createCacheStream(
+                remoteUrl:
+                    _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
+                fromJson: _fromJson,
+              ),
+      );
+
+  static SortedScheduleProvider createSortedProvider() =>
+      Provider.family<AsyncValue<ImmortalList<Event>>, String>(
+          (ref, festivalId) => ref
+              .read(_scheduleProvider(festivalId))
+              .whenData((events) => events.sort()));
+
+  static FestivalDaysProvider createFestivalDaysProvider() =>
+      Provider.family<AsyncValue<ImmortalList<DateTime>>, String>((ref,
+              festivalId) =>
+          ref.read(_scheduleProvider(festivalId)).whenData((events) => events
+              // TODO(SF) filtermap!
+              .where((event) => event.start.isPresent)
+              .map((event) => toFestivalDay(event.start.value))
+              .toImmortalSet()
+              .toImmortalList()
+              .sort()));
+
+  static DailyScheduleProvider createDailyScheduleProvider() => Provider.family<
+          AsyncValue<ImmortalList<Event>>, DailyScheduleKey>(
+      (ref, key) => ref
+          .read(dimeGet<SortedScheduleProvider>()(key.festivalId))
+          .whenData((events) => events.where(
+                (event) => event.start
+                    .map((startTime) => isSameFestivalDay(startTime, key.date))
+                    .orElse(false),
+              )));
+
+  static DailyScheduleMapProvider createDailyScheduleMapProvider() =>
+      Provider.family<AsyncValue<ImmortalMap<String, Event>>, DailyScheduleKey>(
+          (ref, key) => ref
+              .read(dimeGet<DailyScheduleProvider>()(key))
+              .whenData(
+                  (eventList) => eventList.asMapWithKeys((event) => event.id)));
+
+  static BandScheduleProvider createBandsScheduleProvider() =>
+      Provider.family<AsyncValue<ImmortalList<Event>>, BandKey>(
+        (ref, key) => ref.read(_scheduleProvider(key.festivalId)).whenData(
+            (events) =>
+                events.where((event) => event.bandName == key.bandName)),
+      );
 }

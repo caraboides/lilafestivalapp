@@ -1,10 +1,7 @@
 import 'package:dime/dime.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:weather/weather.dart';
 import 'package:optional/optional.dart';
-// TODO(SF) FIXME
-// ignore: implementation_imports
-import 'package:riverpod/src/stream_provider/stream_provider.dart';
+import 'package:weather/weather.dart';
 
 import '../models/combined_key.dart';
 import '../services/open_weather.dart';
@@ -19,14 +16,14 @@ class WeatherKey extends CombinedKey<int, DateTime> {
   DateTime get date => key2;
 }
 
-class WeatherProvider
-    extends Family<AutoDisposeStreamProvider<Optional<Weather>>, WeatherKey> {
-  WeatherProvider() : super(_createStreamProvider);
+typedef WeatherProvider
+    = AutoDisposeStreamProviderFamily<Optional<Weather>, WeatherKey>;
 
+// ignore: avoid_classes_with_only_static_members
+class WeatherProviderCreator {
   static OpenWeather get _weather => dimeGet<OpenWeather>();
 
-  static AutoDisposeStreamProvider<Optional<Weather>> _createStreamProvider(
-          WeatherKey weatherKey) =>
-      StreamProvider.autoDispose(
-          (ref) => _weather.getWeatherForDate(weatherKey.date));
+  static WeatherProvider create() =>
+      StreamProvider.autoDispose.family<Optional<Weather>, WeatherKey>(
+          (ref, weatherKey) => _weather.getWeatherForDate(weatherKey.date));
 }

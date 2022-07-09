@@ -71,8 +71,7 @@ class _InitializationWidgetState extends ConsumerState<InitializationWidget>
       dimeGet<Notifications>().initializeNotificationPlugin();
     });
     final festivalId = _config.festivalId;
-    final mySchedule =
-        ref.watch(dimeGet<MyScheduleProvider>()(festivalId).state);
+    final mySchedule = ref.watch(dimeGet<MyScheduleProvider>()(festivalId));
     final events = ref.watch(dimeGet<ScheduleProvider>()(festivalId));
     executeUntilSuccessful(
         () => _verifyScheduledNotifications(mySchedule, events));

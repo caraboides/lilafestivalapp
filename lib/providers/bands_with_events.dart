@@ -11,59 +11,59 @@ import '../utils/combined_async_values.dart';
 import 'bands.dart';
 import 'schedule.dart';
 
-class BandWithEventsProvider
-    extends Family<Computed<AsyncValue<BandWithEvents>>, BandKey> {
-  BandWithEventsProvider()
-      : super(
-          (key) => Computed((read) {
-            final bandProvider = read(dimeGet<BandProvider>()(key));
-            final eventsForBandsProvider =
-                read(dimeGet<BandScheduleProvider>()(key));
-            return combineAsyncValues<BandWithEvents, Optional<Band>,
-                ImmortalList<Event>>(
-              bandProvider,
-              eventsForBandsProvider,
-              (band, events) => BandWithEvents(
-                bandName: key.bandName,
-                band: band,
-                events: events,
-              ),
-            );
-          }),
-        );
-}
+typedef BandWithEventsProvider
+    = ProviderFamily<AsyncValue<BandWithEvents>, BandKey>;
 
-class BandsWithEventsProvider extends Family<
-    Computed<AsyncValue<ImmortalMap<String, BandWithEvents>>>, String> {
-  BandsWithEventsProvider()
-      : super(
-          (festivalId) => Computed((read) {
-            final bandsProvider = read(dimeGet<BandsProvider>()(festivalId));
-            final schedule =
-                read(dimeGet<SortedScheduleProvider>()(festivalId));
-            return combineAsyncValues<
-                ImmortalMap<String, BandWithEvents>,
-                ImmortalMap<String, Band>,
-                ImmortalList<Event>>(bandsProvider, schedule, (bands, events) {
-              final eventsByBand =
-                  events.asMapOfLists((event) => event.bandName);
-              return bands.mapValues(
-                (bandName, band) => BandWithEvents(
-                  bandName: bandName,
-                  band: Optional.of(band),
-                  events: eventsByBand[band.name].orElse(ImmortalList<Event>()),
-                ),
-              );
-            });
-          }),
-        );
-}
+typedef BandsWithEventsProvider
+    = ProviderFamily<AsyncValue<ImmortalMap<String, BandWithEvents>>, String>;
 
-class SortedBandsWithEventsProvider
-    extends Family<Computed<AsyncValue<ImmortalList<BandWithEvents>>>, String> {
-  SortedBandsWithEventsProvider()
-      : super((festivalId) => Computed((read) =>
-            read(dimeGet<BandsWithEventsProvider>()(festivalId)).whenData(
-                (bands) => bands.values
-                    .sort((a, b) => a.bandName.compareTo(b.bandName)))));
+typedef SortedBandsWithEventsProvider
+    = ProviderFamily<AsyncValue<ImmortalList<BandWithEvents>>, String>;
+
+// ignore: avoid_classes_with_only_static_members
+class BandsWithEventsProviderCreator {
+  static BandWithEventsProvider createBandWithEventsProvider() =>
+      Provider.family<AsyncValue<BandWithEvents>, BandKey>((ref, key) {
+        final bandProvider = ref.read(dimeGet<BandProvider>()(key));
+        final eventsForBandsProvider =
+            ref.read(dimeGet<BandScheduleProvider>()(key));
+        return combineAsyncValues<BandWithEvents, Optional<Band>,
+            ImmortalList<Event>>(
+          bandProvider,
+          eventsForBandsProvider,
+          (band, events) => BandWithEvents(
+            bandName: key.bandName,
+            band: band,
+            events: events,
+          ),
+        );
+      });
+
+  static BandsWithEventsProvider create() =>
+      Provider.family<AsyncValue<ImmortalMap<String, BandWithEvents>>, String>(
+          (ref, festivalId) {
+        final bandsProvider = ref.read(dimeGet<BandsProvider>()(festivalId));
+        final schedule =
+            ref.read(dimeGet<SortedScheduleProvider>()(festivalId));
+        return combineAsyncValues<
+            ImmortalMap<String, BandWithEvents>,
+            ImmortalMap<String, Band>,
+            ImmortalList<Event>>(bandsProvider, schedule, (bands, events) {
+          final eventsByBand = events.asMapOfLists((event) => event.bandName);
+          return bands.mapValues(
+            (bandName, band) => BandWithEvents(
+              bandName: bandName,
+              band: Optional.of(band),
+              events: eventsByBand[band.name].orElse(ImmortalList<Event>()),
+            ),
+          );
+        });
+      });
+
+  static SortedBandsWithEventsProvider createSortedBandsWithEventsProvider() =>
+      Provider.family<AsyncValue<ImmortalList<BandWithEvents>>, String>(
+          (ref, festivalId) => ref
+              .read(dimeGet<BandsWithEventsProvider>()(festivalId))
+              .whenData((bands) => bands.values
+                  .sort((a, b) => a.bandName.compareTo(b.bandName))));
 }

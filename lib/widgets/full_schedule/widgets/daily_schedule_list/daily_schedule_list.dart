@@ -47,12 +47,9 @@ class DailyScheduleList extends HookConsumerWidget {
       date: date,
       likedOnly: likedOnly,
     )));
-    return combineAsyncValues(
-        mapProvider,
-        listProvider,
-        (eventMap, eventList) =>
-            Tuple2<ImmortalMap<String, Event>, ImmortalList<String>>(
-                eventMap, eventList)).when(
+    return combineAsyncValues(mapProvider, listProvider,
+            Tuple2<ImmortalMap<String, Event>, ImmortalList<String>>.new)
+        .when(
       data: (eventTuple) {
         if (eventTuple.item1.isEmpty) {
           return _buildErrorScreen();

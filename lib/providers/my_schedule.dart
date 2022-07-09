@@ -15,27 +15,19 @@ import '../services/notifications/notifications.dart';
 import '../utils/constants.dart';
 import '../utils/logging.dart';
 
-class MyScheduleProvider
-    extends Family<StateNotifierProvider<MyScheduleController>, String> {
-  MyScheduleProvider() : super(_createProvider);
+class EventKey extends CombinedKey<String, String> {
+  const EventKey({
+    required String festivalId,
+    required String eventId,
+  }) : super(key1: festivalId, key2: eventId);
 
-  static FestivalConfig get _config => dimeGet<FestivalConfig>();
-
-  static StateNotifierProvider<MyScheduleController> _createProvider(
-          String festivalId) =>
-      festivalId == _config.festivalId
-          ? StateNotifierProvider((ref) => MyScheduleController.create(
-                festivalId: festivalId,
-              ))
-          // TODO(SF) STATE possible to use autodispose here?
-          : StateNotifierProvider((ref) => MyScheduleController.create(
-                festivalId: festivalId,
-                // Only handle legacy file for oldest history festival
-                handleLegacyFile: _config.history.lastOptional
-                    .map((legacyFestival) => festivalId == legacyFestival.key)
-                    .orElse(false),
-              ));
+  String get festivalId => key1;
+  String get eventId => key2;
 }
+
+typedef MyScheduleProvider = StateNotifierProviderFamily<MyScheduleController,
+    AsyncValue<MySchedule>, String>;
+typedef LikedEventProvider = ProviderFamily<Optional<int>, EventKey>;
 
 class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   MyScheduleController._({
@@ -134,22 +126,32 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   }
 }
 
-class EventKey extends CombinedKey<String, String> {
-  const EventKey({
-    required String festivalId,
-    required String eventId,
-  }) : super(key1: festivalId, key2: eventId);
+// ignore: avoid_classes_with_only_static_members
+class MyScheduleProviderCreator {
+  static FestivalConfig get _config => dimeGet<FestivalConfig>();
 
-  String get festivalId => key1;
-  String get eventId => key2;
-}
+  static MyScheduleProvider create() =>
+      // TODO(SF) STATE possible to use autodispose for history festival?
+      StateNotifierProvider.family(
+          (ref, festivalId) => festivalId == _config.festivalId
+              ? MyScheduleController.create(
+                  festivalId: festivalId,
+                )
+              : MyScheduleController.create(
+                  festivalId: festivalId,
+                  // Only handle legacy file for oldest history festival
+                  handleLegacyFile: _config.history.lastOptional
+                      .map((legacyFestival) => festivalId == legacyFestival.key)
+                      .orElse(false),
+                ));
 
-class LikedEventProvider extends Family<Computed<Optional<int>>, EventKey> {
-  LikedEventProvider()
-      : super((key) => Computed((read) =>
-            read(dimeGet<MyScheduleProvider>()(key.festivalId).state).when(
+  static LikedEventProvider createLikedEventProvider() => Provider.family(
+        (ref, key) => ref
+            .read(dimeGet<MyScheduleProvider>()(key.festivalId))
+            .when(
               data: (mySchedule) => mySchedule.getNotificationId(key.eventId),
               loading: () => const Optional<int>.empty(),
               error: (_, __) => const Optional<int>.empty(),
-            )));
+            ),
+      );
 }

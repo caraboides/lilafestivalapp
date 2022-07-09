@@ -42,25 +42,11 @@ class DailyScheduleFilter {
       likedOnly == other.likedOnly;
 }
 
-class FilteredDailyScheduleProvider extends Family<
-    Computed<AsyncValue<ImmortalList<String>>>, DailyScheduleFilter> {
-  FilteredDailyScheduleProvider()
-      : super((key) => Computed((read) {
-              final dailySchedule =
-                  read(dimeGet<DailyScheduleProvider>()(key.dailyScheduleKey));
-              final myScheduleProvider =
-                  read(dimeGet<MyScheduleProvider>()(key.festivalId).state);
-              return combineAsyncValues<ImmortalList<String>,
-                      ImmortalList<Event>, MySchedule>(
-                  dailySchedule,
-                  myScheduleProvider,
-                  (events, mySchedule) => (key.likedOnly
-                          ? events.where(
-                              (event) => mySchedule.isEventLiked(event.id))
-                          : events)
-                      .map((event) => event.id));
-            }));
-}
+typedef FilteredDailyScheduleProvider
+    = ProviderFamily<AsyncValue<ImmortalList<String>>, DailyScheduleFilter>;
+
+typedef FilteredBandScheduleProvider
+    = ProviderFamily<AsyncValue<ImmortalList<String>>, BandScheduleKey>;
 
 class BandScheduleKey extends CombinedKey<String, bool> {
   const BandScheduleKey({
@@ -72,23 +58,40 @@ class BandScheduleKey extends CombinedKey<String, bool> {
   bool get likedOnly => key2;
 }
 
-class FilteredBandScheduleProvider extends Family<
-    Computed<AsyncValue<ImmortalList<String>>>, BandScheduleKey> {
-  FilteredBandScheduleProvider()
-      : super((key) => Computed((read) {
-              final bandsWithEvents = read(
-                  dimeGet<SortedBandsWithEventsProvider>()(key.festivalId));
-              final myScheduleProvider =
-                  read(dimeGet<MyScheduleProvider>()(key.festivalId).state);
-              return combineAsyncValues<ImmortalList<String>,
-                      ImmortalList<BandWithEvents>, MySchedule>(
-                  bandsWithEvents,
-                  myScheduleProvider,
-                  (bands, mySchedule) => (key.likedOnly
-                          ? bands.where((bandWithEvents) =>
-                              bandWithEvents.events.any(
-                                  (event) => mySchedule.isEventLiked(event.id)))
-                          : bands)
-                      .map((band) => band.bandName));
-            }));
+// ignore: avoid_classes_with_only_static_members
+class FilteredScheduleProviderCreator {
+  static FilteredDailyScheduleProvider createFilteredDailyScheduleProvider() =>
+      ProviderFamily<AsyncValue<ImmortalList<String>>, DailyScheduleFilter>(
+          (ref, key) {
+        final dailySchedule =
+            ref.read(dimeGet<DailyScheduleProvider>()(key.dailyScheduleKey));
+        final myScheduleProvider =
+            ref.read(dimeGet<MyScheduleProvider>()(key.festivalId));
+        return combineAsyncValues<ImmortalList<String>, ImmortalList<Event>,
+                MySchedule>(
+            dailySchedule,
+            myScheduleProvider,
+            (events, mySchedule) => (key.likedOnly
+                    ? events.where((event) => mySchedule.isEventLiked(event.id))
+                    : events)
+                .map((event) => event.id));
+      });
+
+  static FilteredBandScheduleProvider createFilteredBandScheduleProvider() =>
+      Provider.family<AsyncValue<ImmortalList<String>>, BandScheduleKey>(
+          (ref, key) {
+        final bandsWithEvents =
+            ref.read(dimeGet<SortedBandsWithEventsProvider>()(key.festivalId));
+        final myScheduleProvider =
+            ref.read(dimeGet<MyScheduleProvider>()(key.festivalId));
+        return combineAsyncValues<ImmortalList<String>,
+                ImmortalList<BandWithEvents>, MySchedule>(
+            bandsWithEvents,
+            myScheduleProvider,
+            (bands, mySchedule) => (key.likedOnly
+                    ? bands.where((bandWithEvents) => bandWithEvents.events
+                        .any((event) => mySchedule.isEventLiked(event.id)))
+                    : bands)
+                .map((band) => band.bandName));
+      });
 }
