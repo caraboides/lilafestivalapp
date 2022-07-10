@@ -12,7 +12,7 @@ if [[ -z $FLAVOR ]]; then
   exit 1
 fi
 if [[ -z $YEAR ]]; then
-  echo "Please specify a year, e.g. 2021"
+  echo "Please specify a year, e.g. 2022"
   exit 1
 fi
 
