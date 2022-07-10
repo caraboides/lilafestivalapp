@@ -64,36 +64,38 @@ class FilteredScheduleProviderCreator {
   static FilteredDailyScheduleProvider createFilteredDailyScheduleProvider() =>
       ProviderFamily<AsyncValue<ImmortalList<EventId>>, DailyScheduleFilter>(
           (ref, filter) {
-        final dailySchedule =
-            ref.read(dimeGet<DailyScheduleProvider>()(filter.dailyScheduleKey));
+        final dailySchedule = ref
+            .watch(dimeGet<DailyScheduleProvider>()(filter.dailyScheduleKey));
         final myScheduleProvider =
-            ref.read(dimeGet<MyScheduleProvider>()(filter.festivalId));
+            ref.watch(dimeGet<MyScheduleProvider>()(filter.festivalId));
         return combineAsyncValues<ImmortalList<EventId>, ImmortalList<Event>,
-                MySchedule>(
-            dailySchedule,
-            myScheduleProvider,
-            (events, mySchedule) => (filter.likedOnly
-                    ? events.where((event) => mySchedule.isEventLiked(event.id))
-                    : events)
-                .map((event) => event.id));
+            MySchedule>(
+          dailySchedule,
+          myScheduleProvider,
+          (events, mySchedule) => (filter.likedOnly
+                  ? events.where((event) => mySchedule.isEventLiked(event.id))
+                  : events)
+              .map((event) => event.id),
+        );
       });
 
   static FilteredBandScheduleProvider createFilteredBandScheduleProvider() =>
       Provider.family<AsyncValue<ImmortalList<BandName>>, BandScheduleKey>(
           (ref, bandScheduleKey) {
-        final bandsWithEvents = ref.read(
+        final bandsWithEvents = ref.watch(
             dimeGet<SortedBandsWithEventsProvider>()(
                 bandScheduleKey.festivalId));
-        final myScheduleProvider =
-            ref.read(dimeGet<MyScheduleProvider>()(bandScheduleKey.festivalId));
+        final myScheduleProvider = ref
+            .watch(dimeGet<MyScheduleProvider>()(bandScheduleKey.festivalId));
         return combineAsyncValues<ImmortalList<BandName>,
-                ImmortalList<BandWithEvents>, MySchedule>(
-            bandsWithEvents,
-            myScheduleProvider,
-            (bands, mySchedule) => (bandScheduleKey.likedOnly
-                    ? bands.where((bandWithEvents) => bandWithEvents.events
-                        .any((event) => mySchedule.isEventLiked(event.id)))
-                    : bands)
-                .map((band) => band.bandName));
+            ImmortalList<BandWithEvents>, MySchedule>(
+          bandsWithEvents,
+          myScheduleProvider,
+          (bands, mySchedule) => (bandScheduleKey.likedOnly
+                  ? bands.where((bandWithEvents) => bandWithEvents.events
+                      .any((event) => mySchedule.isEventLiked(event.id)))
+                  : bands)
+              .map((band) => band.bandName),
+        );
       });
 }

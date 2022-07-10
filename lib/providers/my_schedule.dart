@@ -24,8 +24,8 @@ class EventKey extends CombinedKey<FestivalId, EventId> {
   EventId get eventId => key2;
 }
 
-typedef MyScheduleProvider = AutoDisposeStateNotifierProviderFamily<
-    MyScheduleController, AsyncValue<MySchedule>, FestivalId>;
+typedef MyScheduleProvider = StateNotifierProviderFamily<MyScheduleController,
+    AsyncValue<MySchedule>, FestivalId>;
 typedef LikedEventProvider = ProviderFamily<Optional<NotificationId>, EventKey>;
 
 class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
@@ -130,13 +130,13 @@ class MyScheduleProviderCreator {
   static FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   static MyScheduleProvider create() =>
-      StateNotifierProvider.autoDispose.family((ref, festivalId) {
+      StateNotifierProvider.family((ref, festivalId) {
         if (festivalId == _config.festivalId) {
-          ref.maintainState = true;
           return MyScheduleController.create(
             festivalId: festivalId,
           );
         }
+        // TODO(SF) autodispose?
         return MyScheduleController.create(
           festivalId: festivalId,
           // Only handle legacy file for oldest history festival
@@ -148,7 +148,7 @@ class MyScheduleProviderCreator {
 
   static LikedEventProvider createLikedEventProvider() => Provider.family(
         (ref, eventKey) =>
-            ref.read(dimeGet<MyScheduleProvider>()(eventKey.festivalId)).when(
+            ref.watch(dimeGet<MyScheduleProvider>()(eventKey.festivalId)).when(
                   data: (mySchedule) =>
                       mySchedule.getNotificationId(eventKey.eventId),
                   loading: () => const Optional<NotificationId>.empty(),

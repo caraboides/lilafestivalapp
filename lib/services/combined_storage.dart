@@ -66,10 +66,11 @@ class CombinedStorage {
             () => _loadDataFromAssets(context, assetPath, fromJson)),
       );
 
-  Future<void> _sendErrorToStream(StreamController streamController) {
+  Future<void> _sendErrorToStream(
+      StreamController streamController, String key) {
     if (!streamController.isClosed) {
-      streamController
-          .addError(Exception('Loading both remote and offline data failed'));
+      streamController.addError(
+          Exception('Loading both remote and offline data failed for $key'));
     }
     return streamController.close();
   }
@@ -101,7 +102,7 @@ class CombinedStorage {
               _log.error('Error loading remote data from $remoteUrl', error);
               loadingRemoteDataFailed = true;
               if (loadingOfflineDataFailed) {
-                _sendErrorToStream(streamController);
+                _sendErrorToStream(streamController, appStorageKey);
               } else if (loadingOfflineDataFinished) {
                 streamController.close();
               }
@@ -111,7 +112,7 @@ class CombinedStorage {
                 'rely on offline data');
             loadingRemoteDataFailed = true;
             if (loadingOfflineDataFailed) {
-              _sendErrorToStream(streamController);
+              _sendErrorToStream(streamController, appStorageKey);
             } else if (loadingOfflineDataFinished) {
               streamController.close();
             }
@@ -126,7 +127,7 @@ class CombinedStorage {
       fromJson: fromJson,
     ).then(
       (result) => result.ifPresent((data) {
-        _log.debug('Loading offline data was successful');
+        _log.debug('Loading offline data was successful for $appStorageKey');
         if (!streamController.isClosed) {
           streamController.add(data);
           loadingOfflineDataFinished = true;
@@ -135,10 +136,10 @@ class CombinedStorage {
           }
         }
       }, orElse: () {
-        _log.debug('Loading offline data failed');
+        _log.debug('Loading offline data failed for $appStorageKey');
         loadingOfflineDataFailed = true;
         if (loadingRemoteDataFailed) {
-          _sendErrorToStream(streamController);
+          _sendErrorToStream(streamController, appStorageKey);
         }
       }),
     );

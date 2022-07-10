@@ -15,7 +15,7 @@ import '../utils/constants.dart';
 import '../utils/date.dart';
 
 typedef ScheduleProvider
-    = AutoDisposeStreamProviderFamily<ImmortalList<Event>, FestivalId>;
+    = StreamProviderFamily<ImmortalList<Event>, FestivalId>;
 
 typedef SortedScheduleProvider
     = ProviderFamily<AsyncValue<ImmortalList<Event>>, FestivalId>;
@@ -56,10 +56,9 @@ class ScheduleProviderCreator {
           .mapEntries<Event>((id, json) => Event.fromJson(id, json));
 
   static ScheduleProvider create(BuildContext context) =>
-      StreamProvider.autoDispose.family<ImmortalList<Event>, FestivalId>(
+      StreamProvider.family<ImmortalList<Event>, FestivalId>(
         (ref, festivalId) {
           if (festivalId == _config.festivalId) {
-            ref.maintainState = true;
             return createCombinedStorageStream(
               context: context,
               ref: ref,
@@ -69,6 +68,7 @@ class ScheduleProviderCreator {
               fromJson: _fromJson,
             );
           }
+          // TODO(SF) autodispose?
           return createCacheStream(
             remoteUrl:
                 _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
@@ -80,24 +80,29 @@ class ScheduleProviderCreator {
   static SortedScheduleProvider createSortedProvider() =>
       Provider.family<AsyncValue<ImmortalList<Event>>, FestivalId>(
           (ref, festivalId) => ref
-              .read(_scheduleProvider(festivalId))
+              .watch(_scheduleProvider(festivalId))
               .whenData((events) => events.sort()));
 
   static FestivalDaysProvider createFestivalDaysProvider() =>
-      Provider.family<AsyncValue<ImmortalList<DateTime>>, FestivalId>((ref,
-              festivalId) =>
-          ref.read(_scheduleProvider(festivalId)).whenData((events) => events
-              // TODO(SF) filtermap!
-              .where((event) => event.start.isPresent)
-              .map((event) => toFestivalDay(event.start.value))
-              .toImmortalSet()
-              .toImmortalList()
-              .sort()));
+      Provider.family<AsyncValue<ImmortalList<DateTime>>, FestivalId>(
+          // ignore: prefer_expression_function_bodies
+          (ref, festivalId) {
+        return ref
+            // TODO(SF) read or watch?
+            .watch(_scheduleProvider(festivalId))
+            .whenData((events) => events
+                // TODO(SF) filtermap!
+                .where((event) => event.start.isPresent)
+                .map((event) => toFestivalDay(event.start.value))
+                .toImmortalSet()
+                .toImmortalList()
+                .sort());
+      });
 
   static DailyScheduleProvider createDailyScheduleProvider() => Provider.family<
           AsyncValue<ImmortalList<Event>>, DailyScheduleKey>(
       (ref, dailyScheduleKey) => ref
-          .read(dimeGet<SortedScheduleProvider>()(dailyScheduleKey.festivalId))
+          .watch(dimeGet<SortedScheduleProvider>()(dailyScheduleKey.festivalId))
           .whenData((events) => events.where(
                 (event) => event.start
                     .map((startTime) =>
@@ -108,14 +113,14 @@ class ScheduleProviderCreator {
   static DailyScheduleMapProvider createDailyScheduleMapProvider() => Provider
       .family<AsyncValue<ImmortalMap<EventId, Event>>, DailyScheduleKey>(
           (ref, dailyScheduleKey) => ref
-              .read(dimeGet<DailyScheduleProvider>()(dailyScheduleKey))
+              .watch(dimeGet<DailyScheduleProvider>()(dailyScheduleKey))
               .whenData(
                   (eventList) => eventList.asMapWithKeys((event) => event.id)));
 
   static BandScheduleProvider createBandsScheduleProvider() =>
       Provider.family<AsyncValue<ImmortalList<Event>>, BandKey>(
         (ref, bandKey) => ref
-            .read(_scheduleProvider(bandKey.festivalId))
+            .watch(_scheduleProvider(bandKey.festivalId))
             .whenData((events) =>
                 events.where((event) => event.bandName == bandKey.bandName)),
       );

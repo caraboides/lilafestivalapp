@@ -14,7 +14,7 @@ import '../utils/combined_storage_stream.dart';
 import '../utils/constants.dart';
 
 typedef BandsProvider
-    = AutoDisposeStreamProviderFamily<ImmortalMap<BandName, Band>, FestivalId>;
+    = StreamProviderFamily<ImmortalMap<BandName, Band>, FestivalId>;
 
 typedef BandProvider = ProviderFamily<AsyncValue<Optional<Band>>, BandKey>;
 
@@ -30,11 +30,10 @@ class BandsProviderCreator {
       ImmortalMap<String, dynamic>(jsonMap)
           .mapValues((bandName, json) => Band.fromJson(bandName, json));
 
-  static BandsProvider create(BuildContext context) => StreamProvider.family
-          .autoDispose<ImmortalMap<BandName, Band>, FestivalId>(
-              (ref, festivalId) {
+  static BandsProvider create(BuildContext context) =>
+      StreamProvider.family<ImmortalMap<BandName, Band>, FestivalId>(
+          (ref, festivalId) {
         if (festivalId == _config.festivalId) {
-          ref.maintainState = true;
           return createCombinedStorageStream(
             context: context,
             ref: ref,
@@ -44,6 +43,7 @@ class BandsProviderCreator {
             fromJson: _fromJson,
           );
         }
+        // TODO(SF) autodispose?
         return createCacheStream(
           remoteUrl: _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
           fromJson: _fromJson,
@@ -52,6 +52,6 @@ class BandsProviderCreator {
 
   static BandProvider createBandProvider() =>
       Provider.family<AsyncValue<Optional<Band>>, BandKey>((ref, bandKey) => ref
-          .read(dimeGet<BandsProvider>()(bandKey.festivalId))
+          .watch(dimeGet<BandsProvider>()(bandKey.festivalId))
           .whenData((bands) => bands[bandKey.bandName]));
 }

@@ -25,27 +25,26 @@ typedef SortedBandsWithEventsProvider
 class BandsWithEventsProviderCreator {
   static BandWithEventsProvider createBandWithEventsProvider() =>
       Provider.family<AsyncValue<BandWithEvents>, BandKey>((ref, bandKey) {
-        final bandProvider = ref.read(dimeGet<BandProvider>()(bandKey));
+        final bandProvider = ref.watch(dimeGet<BandProvider>()(bandKey));
         final eventsForBandsProvider =
-            ref.read(dimeGet<BandScheduleProvider>()(bandKey));
+            ref.watch(dimeGet<BandScheduleProvider>()(bandKey));
         return combineAsyncValues<BandWithEvents, Optional<Band>,
-            ImmortalList<Event>>(
-          bandProvider,
-          eventsForBandsProvider,
-          (band, events) => BandWithEvents(
-            bandName: bandKey.bandName,
-            band: band,
-            events: events,
-          ),
-        );
+                ImmortalList<Event>>(
+            bandProvider,
+            eventsForBandsProvider,
+            (band, events) => BandWithEvents(
+                  bandName: bandKey.bandName,
+                  band: band,
+                  events: events,
+                ));
       });
 
   static BandsWithEventsProvider create() => Provider.family<
           AsyncValue<ImmortalMap<BandName, BandWithEvents>>,
           FestivalId>((ref, festivalId) {
-        final bandsProvider = ref.read(dimeGet<BandsProvider>()(festivalId));
+        final bandsProvider = ref.watch(dimeGet<BandsProvider>()(festivalId));
         final schedule =
-            ref.read(dimeGet<SortedScheduleProvider>()(festivalId));
+            ref.watch(dimeGet<SortedScheduleProvider>()(festivalId));
         return combineAsyncValues<
             ImmortalMap<BandName, BandWithEvents>,
             ImmortalMap<BandName, Band>,
@@ -64,7 +63,7 @@ class BandsWithEventsProviderCreator {
   static SortedBandsWithEventsProvider createSortedBandsWithEventsProvider() =>
       Provider.family<AsyncValue<ImmortalList<BandWithEvents>>, FestivalId>(
           (ref, festivalId) => ref
-              .read(dimeGet<BandsWithEventsProvider>()(festivalId))
+              .watch(dimeGet<BandsWithEventsProvider>()(festivalId))
               .whenData((bands) => bands.values
                   .sort((a, b) => a.bandName.compareTo(b.bandName))));
 }
