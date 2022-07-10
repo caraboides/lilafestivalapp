@@ -7,25 +7,26 @@ import 'package:optional/optional.dart';
 import '../models/combined_key.dart';
 import '../models/event.dart';
 import '../models/festival_config.dart';
+import '../models/ids.dart';
 import '../models/my_schedule.dart';
 import '../services/app_storage.dart';
 import '../services/notifications/notifications.dart';
 import '../utils/constants.dart';
 import '../utils/logging.dart';
 
-class EventKey extends CombinedKey<String, String> {
+class EventKey extends CombinedKey<FestivalId, EventId> {
   const EventKey({
-    required String festivalId,
-    required String eventId,
+    required FestivalId festivalId,
+    required EventId eventId,
   }) : super(key1: festivalId, key2: eventId);
 
-  String get festivalId => key1;
-  String get eventId => key2;
+  FestivalId get festivalId => key1;
+  EventId get eventId => key2;
 }
 
-typedef MyScheduleProvider = StateNotifierProviderFamily<MyScheduleController,
-    AsyncValue<MySchedule>, String>;
-typedef LikedEventProvider = ProviderFamily<Optional<int>, EventKey>;
+typedef MyScheduleProvider = AutoDisposeStateNotifierProviderFamily<
+    MyScheduleController, AsyncValue<MySchedule>, FestivalId>;
+typedef LikedEventProvider = ProviderFamily<Optional<NotificationId>, EventKey>;
 
 class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   MyScheduleController._({
@@ -34,7 +35,7 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   }) : super(const AsyncValue<MySchedule>.loading());
 
   factory MyScheduleController.create({
-    required String festivalId,
+    required FestivalId festivalId,
     bool handleLegacyFile = false,
   }) =>
       MyScheduleController._(
@@ -42,7 +43,7 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
         handleLegacyFile: handleLegacyFile,
       ).._loadMySchedule();
 
-  final String festivalId;
+  final FestivalId festivalId;
   final bool handleLegacyFile;
   Timer? _debounce;
 
@@ -129,27 +130,29 @@ class MyScheduleProviderCreator {
   static FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   static MyScheduleProvider create() =>
-      // TODO(SF) STATE possible to use autodispose for history festival?
-      StateNotifierProvider.family(
-          (ref, festivalId) => festivalId == _config.festivalId
-              ? MyScheduleController.create(
-                  festivalId: festivalId,
-                )
-              : MyScheduleController.create(
-                  festivalId: festivalId,
-                  // Only handle legacy file for oldest history festival
-                  handleLegacyFile: _config.history.lastOptional
-                      .map((legacyFestival) => festivalId == legacyFestival.key)
-                      .orElse(false),
-                ));
+      StateNotifierProvider.autoDispose.family((ref, festivalId) {
+        if (festivalId == _config.festivalId) {
+          ref.maintainState = true;
+          return MyScheduleController.create(
+            festivalId: festivalId,
+          );
+        }
+        return MyScheduleController.create(
+          festivalId: festivalId,
+          // Only handle legacy file for oldest history festival
+          handleLegacyFile: _config.history.lastOptional
+              .map((legacyFestival) => festivalId == legacyFestival.key)
+              .orElse(false),
+        );
+      });
 
   static LikedEventProvider createLikedEventProvider() => Provider.family(
-        (ref, key) => ref
-            .read(dimeGet<MyScheduleProvider>()(key.festivalId))
-            .when(
-              data: (mySchedule) => mySchedule.getNotificationId(key.eventId),
-              loading: () => const Optional<int>.empty(),
-              error: (_, __) => const Optional<int>.empty(),
-            ),
+        (ref, eventKey) =>
+            ref.read(dimeGet<MyScheduleProvider>()(eventKey.festivalId)).when(
+                  data: (mySchedule) =>
+                      mySchedule.getNotificationId(eventKey.eventId),
+                  loading: () => const Optional<NotificationId>.empty(),
+                  error: (_, __) => const Optional<NotificationId>.empty(),
+                ),
       );
 }

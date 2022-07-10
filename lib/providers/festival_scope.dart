@@ -1,9 +1,11 @@
 import 'package:dime/dime.dart';
 
+import '../models/ids.dart';
+
 class FestivalScope {
   const FestivalScope(this.festivalId);
 
-  final String festivalId;
+  final FestivalId festivalId;
 
   static const scopeName = 'festival';
 
@@ -12,7 +14,7 @@ class FestivalScope {
 
 class HistoryFestivalScope extends FestivalScope {
   const HistoryFestivalScope({
-    required String festivalId,
+    required FestivalId festivalId,
     required this.title,
   }) : super(festivalId);
 

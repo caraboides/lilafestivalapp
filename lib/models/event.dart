@@ -1,5 +1,7 @@
 import 'package:optional/optional.dart';
 
+import 'ids.dart';
+
 class Event implements Comparable {
   Event({
     required this.bandName,
@@ -18,7 +20,7 @@ class Event implements Comparable {
       );
 
   final String bandName;
-  final String id;
+  final EventId id;
   final String stage;
   final Optional<DateTime> start;
   final Optional<DateTime> end;

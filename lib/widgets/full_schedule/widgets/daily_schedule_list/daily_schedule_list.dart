@@ -5,6 +5,7 @@ import 'package:immortal/immortal.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../../models/event.dart';
+import '../../../../models/ids.dart';
 import '../../../../providers/festival_scope.dart';
 import '../../../../providers/filtered_schedules.dart';
 import '../../../../providers/schedule.dart';
@@ -46,7 +47,7 @@ class DailyScheduleList extends HookConsumerWidget {
       likedOnly: likedOnly,
     )));
     return combineAsyncValues(mapProvider, listProvider,
-            Tuple2<ImmortalMap<String, Event>, ImmortalList<String>>.new)
+            Tuple2<ImmortalMap<EventId, Event>, ImmortalList<EventId>>.new)
         .when(
       data: (eventTuple) {
         if (eventTuple.item1.isEmpty) {

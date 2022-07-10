@@ -4,34 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
 
+import 'ids.dart';
+
 class MySchedule {
   const MySchedule._(this._eventsWithNotification);
 
-  factory MySchedule.empty() => MySchedule._(ImmortalMap<String, int>.empty());
+  factory MySchedule.empty() =>
+      MySchedule._(ImmortalMap<EventId, NotificationId>.empty());
 
   factory MySchedule.fromJson(Map<String, dynamic> json) =>
-      MySchedule._(ImmortalMap(json.cast<String, int>()));
+      MySchedule._(ImmortalMap(json.cast<EventId, NotificationId>()));
 
-  final ImmortalMap<String, int> _eventsWithNotification;
+  final ImmortalMap<EventId, NotificationId> _eventsWithNotification;
 
-  bool isEventLiked(String eventId) =>
+  bool isEventLiked(EventId eventId) =>
       _eventsWithNotification.containsKey(eventId);
 
-  Optional<int> getNotificationId(String eventId) =>
+  Optional<NotificationId> getNotificationId(EventId eventId) =>
       _eventsWithNotification.get(eventId);
 
-  MySchedule _add(String eventId, int notificationId) =>
+  MySchedule _add(EventId eventId, NotificationId notificationId) =>
       MySchedule._(_eventsWithNotification.add(eventId, notificationId));
 
-  MySchedule _remove(String eventId) =>
+  MySchedule _remove(EventId eventId) =>
       MySchedule._(_eventsWithNotification.remove(eventId));
 
-  int _nextNotificationId() => _eventsWithNotification.values.fold(0, max) + 1;
+  NotificationId _nextNotificationId() =>
+      _eventsWithNotification.values.fold(0, max) + 1;
 
   MySchedule toggleEvent(
-    String eventId, {
-    required ValueChanged<int> onAdd,
-    required ValueChanged<int> onRemove,
+    EventId eventId, {
+    required ValueChanged<NotificationId> onAdd,
+    required ValueChanged<NotificationId> onRemove,
   }) =>
       getNotificationId(eventId).map((notificationId) {
         onRemove(notificationId);

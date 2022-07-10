@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
 
+import 'ids.dart';
+
 class ImageData {
   const ImageData({
     this.width,
@@ -63,7 +65,7 @@ class Band {
         cancelled: json['cancelled'] ?? false,
       );
 
-  final String name;
+  final BandName name;
   final String? image;
   final ImageData? imageData;
   final String? logo;

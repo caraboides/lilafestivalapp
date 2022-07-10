@@ -6,6 +6,7 @@ import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
 
 import '../../../models/event.dart';
+import '../../../models/ids.dart';
 import '../../../models/theme.dart';
 import '../../../utils/date.dart';
 import '../../mixins/one_time_execution_mixin.dart';
@@ -21,8 +22,8 @@ class EventListView extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final ImmortalMap<String, Event> events;
-  final ImmortalList<String> eventIds;
+  final ImmortalMap<EventId, Event> events;
+  final ImmortalList<EventId> eventIds;
   final DateTime date;
 
   @override
@@ -35,9 +36,9 @@ class _EventListViewState extends State<EventListView>
   late DateTime _currentTime;
   int _currentOrNextPlayingBandIndex = -1;
   int _nextPlayingBandIndex = -1;
-  late ImmortalList<String> _itemIds;
+  late ImmortalList<EventId> _itemIds;
 
-  static const String _changeOverId = 'change-over';
+  static const EventId _changeOverId = 'change-over';
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
 
@@ -136,7 +137,7 @@ class _EventListViewState extends State<EventListView>
     required BuildContext context,
     required Animation<double> animation,
     required int index,
-    required String itemId,
+    required EventId itemId,
   }) =>
       itemId == _changeOverId
           ? _buildChangeOverIndicator()

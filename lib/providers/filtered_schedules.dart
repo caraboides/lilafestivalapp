@@ -7,6 +7,7 @@ import 'package:quiver/core.dart';
 import '../models/band_with_events.dart';
 import '../models/combined_key.dart';
 import '../models/event.dart';
+import '../models/ids.dart';
 import '../models/my_schedule.dart';
 import '../utils/combined_async_values.dart';
 import 'bands_with_events.dart';
@@ -22,7 +23,7 @@ class DailyScheduleFilter {
   });
 
   final DateTime date;
-  final String festivalId;
+  final FestivalId festivalId;
   final bool likedOnly;
 
   DailyScheduleKey get dailyScheduleKey => DailyScheduleKey(
@@ -43,52 +44,53 @@ class DailyScheduleFilter {
 }
 
 typedef FilteredDailyScheduleProvider
-    = ProviderFamily<AsyncValue<ImmortalList<String>>, DailyScheduleFilter>;
+    = ProviderFamily<AsyncValue<ImmortalList<EventId>>, DailyScheduleFilter>;
 
 typedef FilteredBandScheduleProvider
-    = ProviderFamily<AsyncValue<ImmortalList<String>>, BandScheduleKey>;
+    = ProviderFamily<AsyncValue<ImmortalList<BandName>>, BandScheduleKey>;
 
-class BandScheduleKey extends CombinedKey<String, bool> {
+class BandScheduleKey extends CombinedKey<FestivalId, bool> {
   const BandScheduleKey({
-    required String festivalId,
+    required FestivalId festivalId,
     required bool likedOnly,
   }) : super(key1: festivalId, key2: likedOnly);
 
-  String get festivalId => key1;
+  FestivalId get festivalId => key1;
   bool get likedOnly => key2;
 }
 
 // ignore: avoid_classes_with_only_static_members
 class FilteredScheduleProviderCreator {
   static FilteredDailyScheduleProvider createFilteredDailyScheduleProvider() =>
-      ProviderFamily<AsyncValue<ImmortalList<String>>, DailyScheduleFilter>(
-          (ref, key) {
+      ProviderFamily<AsyncValue<ImmortalList<EventId>>, DailyScheduleFilter>(
+          (ref, filter) {
         final dailySchedule =
-            ref.read(dimeGet<DailyScheduleProvider>()(key.dailyScheduleKey));
+            ref.read(dimeGet<DailyScheduleProvider>()(filter.dailyScheduleKey));
         final myScheduleProvider =
-            ref.read(dimeGet<MyScheduleProvider>()(key.festivalId));
-        return combineAsyncValues<ImmortalList<String>, ImmortalList<Event>,
+            ref.read(dimeGet<MyScheduleProvider>()(filter.festivalId));
+        return combineAsyncValues<ImmortalList<EventId>, ImmortalList<Event>,
                 MySchedule>(
             dailySchedule,
             myScheduleProvider,
-            (events, mySchedule) => (key.likedOnly
+            (events, mySchedule) => (filter.likedOnly
                     ? events.where((event) => mySchedule.isEventLiked(event.id))
                     : events)
                 .map((event) => event.id));
       });
 
   static FilteredBandScheduleProvider createFilteredBandScheduleProvider() =>
-      Provider.family<AsyncValue<ImmortalList<String>>, BandScheduleKey>(
-          (ref, key) {
-        final bandsWithEvents =
-            ref.read(dimeGet<SortedBandsWithEventsProvider>()(key.festivalId));
+      Provider.family<AsyncValue<ImmortalList<BandName>>, BandScheduleKey>(
+          (ref, bandScheduleKey) {
+        final bandsWithEvents = ref.read(
+            dimeGet<SortedBandsWithEventsProvider>()(
+                bandScheduleKey.festivalId));
         final myScheduleProvider =
-            ref.read(dimeGet<MyScheduleProvider>()(key.festivalId));
-        return combineAsyncValues<ImmortalList<String>,
+            ref.read(dimeGet<MyScheduleProvider>()(bandScheduleKey.festivalId));
+        return combineAsyncValues<ImmortalList<BandName>,
                 ImmortalList<BandWithEvents>, MySchedule>(
             bandsWithEvents,
             myScheduleProvider,
-            (bands, mySchedule) => (key.likedOnly
+            (bands, mySchedule) => (bandScheduleKey.likedOnly
                     ? bands.where((bandWithEvents) => bandWithEvents.events
                         .any((event) => mySchedule.isEventLiked(event.id)))
                     : bands)

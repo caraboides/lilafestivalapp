@@ -8,6 +8,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../../models/event.dart';
 import '../../models/festival_config.dart';
+import '../../models/ids.dart';
 import '../../models/my_schedule.dart';
 import '../../models/theme.dart';
 import '../../screens/band_detail_view/band_detail_view.dart';
@@ -74,9 +75,9 @@ class Notifications {
     });
   }
 
-  Future<int> scheduleNotificationForEvent(
+  Future<NotificationId> scheduleNotificationForEvent(
     Event event,
-    int notificationId,
+    NotificationId notificationId,
   ) async {
     if (event.isInFutureOf(DateTime.now())) {
       _log.debug('Schedule notification for event ${event.id} with id '
@@ -112,7 +113,7 @@ class Notifications {
     return notificationId;
   }
 
-  Future<void> cancelNotification(int notificationId) {
+  Future<void> cancelNotification(NotificationId notificationId) {
     _log.debug('Cancel notification with id $notificationId');
     return _plugin.cancel(notificationId).catchError((error) {
       _log.error('Cancelling notification failed', error);
@@ -120,12 +121,12 @@ class Notifications {
   }
 
   // TODO(SF) TEST
-  ImmortalMap<int, Event> _calculateRequiredNotifications(
+  ImmortalMap<NotificationId, Event> _calculateRequiredNotifications(
     MySchedule mySchedule,
     ImmortalList<Event> events,
   ) {
     final now = DateTime.now();
-    final scheduledEvents = <int, Event>{};
+    final scheduledEvents = <NotificationId, Event>{};
     for (final event in events) {
       if (event.isInFutureOf(now)) {
         mySchedule.getNotificationId(event.id).ifPresent((id) {

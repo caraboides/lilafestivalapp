@@ -3,6 +3,7 @@ import 'package:immortal/immortal.dart';
 
 import '../providers/festival_scope.dart';
 import 'app_route.dart';
+import 'ids.dart';
 import 'lat_lng.dart';
 import 'reference.dart';
 
@@ -24,7 +25,7 @@ class FestivalConfig {
     required this.history,
   });
 
-  final String festivalId;
+  final FestivalId festivalId;
   final String festivalName;
   final String festivalFullName;
   final Uri festivalUrl;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/app_route.dart';
+import '../../models/ids.dart';
 import '../../providers/festival_scope.dart';
 import '../../widgets/full_schedule/full_schedule.dart';
 import '../../widgets/history/history_wrapper.dart';
@@ -12,7 +13,7 @@ class History extends StatelessWidget {
     required this.festivalTitle,
   });
 
-  final String festivalId;
+  final FestivalId festivalId;
   final String festivalTitle;
 
   static Widget builder(BuildContext context, NestedRoute nestedRoute) =>
