@@ -128,7 +128,7 @@ class _EventListViewState extends State<EventListView>
         key: const Key(_changeOverId),
         child: Container(
           height: 2,
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).colorScheme.secondary,
         ),
       );
 

@@ -63,7 +63,12 @@ class BandListView extends StatelessWidget {
       itemIds: bandIds,
       listItemHeights: _calculateListItemHeights(),
       getAlphabeticalIndex: _getAlphabeticalIndex,
-      buildListItem: ({context, animation, index, itemId}) =>
+      buildListItem: ({
+        required context,
+        required animation,
+        required index,
+        required itemId,
+      }) =>
           _buildListItem(itemId, currentTime),
     );
   }

@@ -27,7 +27,7 @@ class FestivalConfig {
   final String festivalId;
   final String festivalName;
   final String festivalFullName;
-  final String festivalUrl;
+  final Uri festivalUrl;
   // TODO(SF) THEME display those somewhere?
   // TODO(SF) maybe sliver app bar? combine with "onboarding"!
   final DateTime startDate;
@@ -41,5 +41,5 @@ class FestivalConfig {
   final String weatherCityId;
   final ImmortalList<NestedRoute> history;
 
-  FestivalScope get currentFestivalScope => FestivalScope.current(festivalId);
+  FestivalScope get currentFestivalScope => FestivalScope(festivalId);
 }

@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
+
 class ImageData {
   const ImageData({
     this.width,
@@ -21,6 +24,13 @@ class ImageData {
 
   bool get hasHash => hash != null && hash != '';
 }
+
+bool _isValueSet(String? value) => value?.isNotEmpty ?? false;
+
+String? _nonEmptyValue(String? value) => _isValueSet(value) ? value : null;
+
+Optional<String> _valueAsOptional(String? value) =>
+    Optional.ofNullable(_nonEmptyValue(value));
 
 class Band {
   Band({
@@ -65,4 +75,23 @@ class Band {
   final String? textDe;
   final String? textEn;
   final bool cancelled;
+
+  Optional<Uri> get spotifyUrl => _valueAsOptional(spotify).map(Uri.parse);
+
+  Optional<String> get optionalOrigin => _valueAsOptional(origin);
+
+  Optional<String> get optionalStyle => _valueAsOptional(style);
+
+  Optional<String> get optionalRoots => _valueAsOptional(roots);
+
+  String? get nonEmptyImage => _nonEmptyValue(image);
+
+  String? get nonEmptyLogo => _nonEmptyValue(logo);
+
+  String? descriptionForLocale(Locale locale) {
+    if (locale.languageCode == 'de' && _isValueSet(textDe)) {
+      return textDe!;
+    }
+    return _nonEmptyValue(textEn);
+  }
 }

@@ -23,7 +23,8 @@ class _MaterialColorTransitionState
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    _color = visitor(_color, widget.color, (value) => ColorTween(begin: value));
+    _color = visitor(_color, widget.color, (value) => ColorTween(begin: value))
+        as ColorTween?;
   }
 
   @override

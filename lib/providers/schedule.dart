@@ -12,7 +12,6 @@ import '../utils/cache_stream.dart';
 import '../utils/combined_storage_stream.dart';
 import '../utils/constants.dart';
 import '../utils/date.dart';
-import '../widgets/full_schedule/widgets/daily_schedule_list/daily_schedule_list.dart';
 
 // TODO(SF) add types for string keys (festival id etc)
 
@@ -54,7 +53,6 @@ class ScheduleProviderCreator {
 
   static ImmortalList<Event> _fromJson(Map<String, dynamic> jsonMap) =>
       ImmortalMap<String, dynamic>(jsonMap)
-          // ignore: unnecessary_lambdas
           .mapEntries<Event>((id, json) => Event.fromJson(id, json));
 
   // TODO(SF) autodispose for history festivals..

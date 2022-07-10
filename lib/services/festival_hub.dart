@@ -16,7 +16,8 @@ class FestivalHub {
   Future<Optional<J>> loadJsonData<J>(String url) async {
     _log.debug('Loading data from $url');
     try {
-      final response = await http.get('${_config.festivalHubBaseUrl}$url');
+      final response =
+          await http.get(Uri.parse('${_config.festivalHubBaseUrl}$url'));
       if (response.statusCode == 200) {
         final json = jsonDecode(utf8.decode(response.bodyBytes));
         _log.debug('Loading data from $url was successful');

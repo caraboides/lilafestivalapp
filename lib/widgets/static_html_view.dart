@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../utils/logging.dart';
 
@@ -33,7 +33,7 @@ class StaticHtmlView extends HookWidget {
             initialUrl: _buildUrl(context),
             javascriptMode: JavascriptMode.unrestricted,
             navigationDelegate: (request) {
-              launch(request.url);
+              launchUrl(Uri.parse(request.url));
               return NavigationDecision.prevent;
             },
             onPageFinished: (_) {

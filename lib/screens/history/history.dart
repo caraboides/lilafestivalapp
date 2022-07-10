@@ -25,7 +25,7 @@ class History extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => HistoryWrapper(
-        festivalScope: FestivalScope.history(
+        festivalScope: HistoryFestivalScope(
           festivalId: festivalId,
           title: festivalTitle,
         ),

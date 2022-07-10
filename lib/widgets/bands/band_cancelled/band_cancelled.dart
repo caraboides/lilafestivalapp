@@ -15,9 +15,9 @@ class BandCancelled extends StatelessWidget {
   Widget build(BuildContext context) {
     final festivalScope = DimeFlutter.get<FestivalScope>(context);
     return Visibility(
-      visible:
-          !festivalScope.isCurrentFestival && bandWithEvents.events.isEmpty ||
-              bandWithEvents.band.map((band) => band.cancelled).orElse(false),
+      visible: festivalScope is HistoryFestivalScope &&
+              bandWithEvents.events.isEmpty ||
+          bandWithEvents.band.map((band) => band.cancelled).orElse(false),
       child: Text(
         'CANCELLED'.i18n,
         style: Theme.of(context).textTheme.headline6,

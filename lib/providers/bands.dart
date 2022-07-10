@@ -25,7 +25,6 @@ class BandsProviderCreator {
 
   static ImmortalMap<String, Band> _fromJson(Map<String, dynamic> jsonMap) =>
       ImmortalMap<String, dynamic>(jsonMap)
-          // ignore: unnecessary_lambdas
           .mapValues((bandName, json) => Band.fromJson(bandName, json));
 
   // TODO(SF) autodispose for history festivals..

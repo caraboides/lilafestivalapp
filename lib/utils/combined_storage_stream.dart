@@ -12,7 +12,7 @@ Stream<T> createCombinedStorageStream<T, J>({
   required String appStorageKey,
   required String assetPath,
   required T Function(J) fromJson,
-  required ProviderReference ref,
+  required Ref ref,
 }) {
   final streamController = dimeGet<CombinedStorage>().loadData(
     context: context,

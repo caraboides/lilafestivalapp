@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import '../models/theme.dart';
 
 const String _displayFontFamily = 'Display Font';
-final Color _primaryColor = Colors.grey[850];
-final Color _errorColor = Colors.redAccent[700];
-final Color _lightDividerColor = Colors.grey[800];
-final Color _historyBackgroundColor = Colors.grey[400];
+final Color _primaryColor = Colors.grey[850]!;
+const Color _secondaryColor = Color(0xFFD2D522);
+final Color _errorColor = Colors.redAccent.shade700;
+final Color _lightDividerColor = Colors.grey.shade800;
+final Color _historyBackgroundColor = Colors.grey.shade400;
 
 final ThemeData theme = ThemeData(
-  primaryColor: _primaryColor,
-  accentColor: const Color(0xFFD2D522),
-  errorColor: _errorColor,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: _primaryColor,
+    secondary: _secondaryColor,
+    error: _errorColor,
+  ),
   textTheme: Typography.blackMountainView.copyWith(
     headline6: TextStyle(
       fontFamily: _displayFontFamily,
@@ -40,12 +43,11 @@ final ThemeData theme = ThemeData(
     ),
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
-  appBarTheme: AppBarTheme(
-    textTheme: Typography.whiteMountainView.copyWith(
-      headline6: const TextStyle(
-        fontFamily: _displayFontFamily,
-        fontSize: 26,
-      ),
+  // TODO(SF) correct?
+  appBarTheme: const AppBarTheme(
+    titleTextStyle: TextStyle(
+      fontFamily: _displayFontFamily,
+      fontSize: 26,
     ),
   ),
   tabBarTheme: const TabBarTheme(
@@ -75,11 +77,12 @@ final FestivalTheme festivalTheme = FestivalTheme(
     iconTheme: theme.iconTheme.copyWith(color: Colors.white70),
   ),
   menuTheme: theme.copyWith(
-    textTheme: theme.textTheme
-        .apply(displayColor: theme.accentColor, bodyColor: theme.accentColor),
+    textTheme: theme.textTheme.apply(
+        displayColor: theme.colorScheme.secondary,
+        bodyColor: theme.colorScheme.secondary),
     canvasColor: theme.primaryColor,
     iconTheme: theme.iconTheme.copyWith(
-      color: theme.accentColor.withOpacity(0.87),
+      color: theme.colorScheme.secondary.withOpacity(0.87),
     ),
     dividerColor: _lightDividerColor,
   ),
@@ -88,9 +91,12 @@ final FestivalTheme festivalTheme = FestivalTheme(
     scaffoldBackgroundColor: _historyBackgroundColor,
     backgroundColor: _historyBackgroundColor,
   ),
-  primaryButton: ({label, onPressed}) => RaisedButton(
-    color: theme.accentColor,
-    textTheme: ButtonTextTheme.normal,
+  primaryButton: ({required label, required onPressed}) => ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      primary: theme.colorScheme.secondary,
+    ),
+    // TODO(SF) how to??
+    // textTheme: ButtonTextTheme.normal,
     onPressed: onPressed,
     child: Text(label),
   ),
@@ -107,7 +113,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
   notificationColor: Colors.black,
   bannerBackgroundColor: theme.primaryColor,
   bannerTextStyle: TextStyle(
-    color: theme.accentColor,
+    color: theme.colorScheme.secondary,
     fontFamily: 'Display Font',
     fontSize: 20,
   ),

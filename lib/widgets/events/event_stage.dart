@@ -10,7 +10,7 @@ class EventStage extends StatelessWidget {
     final textStyle = Theme.of(context).textTheme.caption;
     return Text(
       stage,
-      style: textStyle.copyWith(color: textStyle.color.withOpacity(.87)),
+      style: textStyle?.copyWith(color: textStyle.color?.withOpacity(.87)),
     );
   }
 }

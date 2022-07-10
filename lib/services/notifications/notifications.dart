@@ -1,10 +1,10 @@
 import 'package:dime/dime.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:immortal/immortal.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:immortal/immortal.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:pedantic/pedantic.dart';
 
 import '../../models/event.dart';
 import '../../models/festival_config.dart';
@@ -126,13 +126,13 @@ class Notifications {
   ) {
     final now = DateTime.now();
     final scheduledEvents = <int, Event>{};
-    events.forEach((event) {
+    for (final event in events) {
       if (event.isInFutureOf(now)) {
         mySchedule.getNotificationId(event.id).ifPresent((id) {
           scheduledEvents[id] = event;
         });
       }
-    });
+    }
     // TODO(SF) NOTIFICATIONS handle updated events (e.g. time change)
     // schedule.updatedEvents.forEach((event) {
     //   mySchedule.getNotificationId(event.id).ifPresent((notificationId) {
@@ -157,7 +157,7 @@ class Notifications {
     final pendingNotifications =
         await _plugin.pendingNotificationRequests().catchError((error) {
       _log.error('Retrieving pending notifications failed', error);
-      return [];
+      return <PendingNotificationRequest>[];
     });
     final pendingNotificationIds = ImmortalSet(
         pendingNotifications.map((notification) => notification.id));

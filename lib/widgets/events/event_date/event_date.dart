@@ -29,7 +29,7 @@ class EventDate extends StatelessWidget {
           ' - ${'HH:mm'.i18n.dateFormat(endValue)}',
           style: showWeekDay
               ? textStyle
-              : textStyle.copyWith(color: textStyle.color.withOpacity(.33)),
+              : textStyle?.copyWith(color: textStyle.color?.withOpacity(.33)),
         ),
       ),
     ];

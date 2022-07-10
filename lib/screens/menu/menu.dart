@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:dime/dime.dart';
+import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/app_route.dart';
 import '../../models/global_config.dart';
@@ -92,7 +92,7 @@ class Menu extends StatelessWidget {
           theme: theme,
           label: 'Privacy Policy'.i18n,
           icon: Icons.verified_user,
-          onTap: () => launch(locale.languageCode == 'de'
+          onTap: () => launchUrl(locale.languageCode == 'de'
               ? _globalConfig.privacyPolicyUrlDe
               : _globalConfig.privacyPolicyUrlEn),
         ),

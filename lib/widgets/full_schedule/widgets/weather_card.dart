@@ -19,10 +19,11 @@ class WeatherCard extends HookConsumerWidget {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
   WeatherProvider get _weather => dimeGet<WeatherProvider>();
   Logger get _log => const Logger(module: 'WeatherCard');
+  Uri get _weatherUrl =>
+      Uri.parse('https://openweathermap.org/city/${_config.weatherCityId}');
 
   Widget _buildWeatherWidget(Weather weather) => InkWell(
-        onTap: () =>
-            launch('https://openweathermap.org/city/${_config.weatherCityId}'),
+        onTap: () => launchUrl(_weatherUrl),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Row(
@@ -70,8 +71,9 @@ class WeatherCard extends HookConsumerWidget {
     final fallback = lastWeather.value ?? Container();
     return weather.when(
       data: (result) => result.map((weather) {
-        lastWeather.value = _buildWeatherCard(weather);
-        return lastWeather.value;
+        final weatherCard = _buildWeatherCard(weather);
+        lastWeather.value = weatherCard;
+        return weatherCard;
       }).orElse(fallback),
       loading: () => fallback,
       error: (error, trace) {

@@ -12,7 +12,7 @@ final FestivalConfig config = FestivalConfig(
   festivalId: 'spirit_2019',
   festivalName: 'Spirit',
   festivalFullName: 'Spirit Festival',
-  festivalUrl: 'https://www.spirit-festival.com',
+  festivalUrl: Uri.parse('https://www.spirit-festival.com'),
   startDate: DateTime(2019, 8, 29),
   endDate: DateTime(2019, 8, 31),
   daySwitchOffset: const Duration(hours: 3),
@@ -20,8 +20,8 @@ final FestivalConfig config = FestivalConfig(
     Reference(
       label: 'No Continue',
       links: ImmortalList([
-        const Link(
-          url: 'http://gomaricefont.web.fc2.com/',
+        Link(
+          url: Uri.parse('http://gomaricefont.web.fc2.com/'),
           label: 'Goma Shin',
         ),
       ]),
@@ -31,7 +31,7 @@ final FestivalConfig config = FestivalConfig(
     Reference(
       label: 'Seenotrettung ist kein Verbrechen!',
       links: ImmortalList([
-        const Link(url: 'https://sea-watch.org/'),
+        Link(url: Uri.parse('https://sea-watch.org/')),
       ]),
     ),
   ]),

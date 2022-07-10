@@ -25,7 +25,7 @@ class FestivalTheme {
   final BoxDecoration? menuDrawerDecoration;
   final ShapeBorder? appBarBorder;
   final BoxDecoration? tabBarDecoration;
-  final MaterialButton Function({
+  final Widget Function({
     required String label,
     required VoidCallback onPressed,
   }) primaryButton;
@@ -63,7 +63,7 @@ class FestivalTheme {
         shape: appBarBorder,
       );
 
-  Color get toggleSplashColor => theme.accentColor.withOpacity(0.54);
+  Color get toggleSplashColor => theme.colorScheme.secondary.withOpacity(0.54);
 }
 
 class Logo {

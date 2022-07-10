@@ -1,4 +1,3 @@
-import 'package:dime/dime.dart';
 import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -31,6 +30,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   @override
   Widget build(BuildContext context) => DimeScopeFlutter(
+        scopeName: FestivalScope.scopeName,
         modules: <BaseDimeModule>[
           FestivalScopeModule(_config.currentFestivalScope)
         ],

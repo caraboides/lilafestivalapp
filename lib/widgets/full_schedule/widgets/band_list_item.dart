@@ -62,7 +62,7 @@ class BandListItem extends StatelessWidget {
     final theme = Theme.of(context);
     return MaterialColorTransition(
       color: bandWithEvents.isPlaying(currentTime)
-          ? theme.accentColor
+          ? theme.colorScheme.secondary
           : theme.canvasColor,
       child: InkWell(
         onTap: () =>

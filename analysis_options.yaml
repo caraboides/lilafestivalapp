@@ -5,6 +5,8 @@ analyzer:
     todo: ignore
     missing_required_param: error
     missing_return: error
+  exclude:
+    - test/utils/*.mocks.dart
 #   strong-mode:
 #     implicit-casts: false
 #     implicit-dynamic: false
@@ -41,3 +43,4 @@ linter:
     package_prefixed_library_names: true
     package_names: true
     sort_pub_dependencies: true
+    unnecessary_lambdas: false # does not work for constructors

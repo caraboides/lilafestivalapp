@@ -1,9 +1,7 @@
-import 'package:dime/dime.dart';
 import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:optional/optional.dart';
 
 import '../../models/festival_config.dart';
@@ -71,10 +69,10 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
       );
 
   Widget _buildTitleWidget(FestivalScope festivalScope) {
-    if (festivalScope.isCurrentFestival) {
-      return _theme.logo?.toAsset() ?? Text(_config.festivalName);
+    if (festivalScope is HistoryFestivalScope) {
+      return Text(_config.festivalName + festivalScope.titleSuffix);
     }
-    return Text(_config.festivalName + festivalScope.titleSuffix);
+    return _theme.logo?.toAsset() ?? Text(_config.festivalName);
   }
 
   PreferredSizeWidget _buildTabBarContainer(ImmortalList<DateTime> days) =>

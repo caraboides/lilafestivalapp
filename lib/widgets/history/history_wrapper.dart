@@ -17,20 +17,21 @@ class HistoryWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DimeScopeFlutter(
+        scopeName: FestivalScope.scopeName,
         modules: <BaseDimeModule>[
           FestivalScopeModule(festivalScope),
         ],
-        child: festivalScope.isCurrentFestival
-            ? child
-            : Theme(
+        child: festivalScope is HistoryFestivalScope
+            ? Theme(
                 data: _theme.historyTheme,
                 child: Banner(
-                  message: festivalScope.title,
+                  message: (festivalScope as HistoryFestivalScope).title,
                   location: BannerLocation.bottomEnd,
                   color: _theme.bannerBackgroundColor,
                   textStyle: _theme.bannerTextStyle,
                   child: child,
                 ),
-              ),
+              )
+            : child,
       );
 }

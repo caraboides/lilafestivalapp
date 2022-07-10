@@ -12,7 +12,7 @@ final FestivalConfig config = FestivalConfig(
   festivalId: 'party_san_2021',
   festivalName: 'Party.San',
   festivalFullName: 'Party.San Open Air',
-  festivalUrl: 'https://www.party-san.de',
+  festivalUrl: Uri.parse('https://www.party-san.de'),
   startDate: DateTime(2021, 8, 12),
   endDate: DateTime(2021, 8, 14),
   daySwitchOffset: const Duration(hours: 3),
@@ -20,8 +20,8 @@ final FestivalConfig config = FestivalConfig(
     Reference(
       label: 'Pirata One',
       links: ImmortalList([
-        const Link(
-          url: 'http://www.rfuenzalida.com/',
+        Link(
+          url: Uri.parse('http://www.rfuenzalida.com/'),
           label: 'Rodrigo Fuenzalida',
         ),
       ]),
@@ -30,9 +30,9 @@ final FestivalConfig config = FestivalConfig(
   aboutMessages: ImmortalList([
     Reference(
       links: ImmortalList([
-        const Link(
+        Link(
           imageAssetPath: 'assets/mar.gif',
-          url: 'http://www.metalheadsagainstracism.org/',
+          url: Uri.parse('http://www.metalheadsagainstracism.org/'),
         ),
       ]),
     ),

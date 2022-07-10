@@ -1,6 +1,5 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
@@ -46,8 +45,8 @@ class _InitializationWidgetState extends ConsumerState<InitializationWidget>
     AsyncValue<MySchedule> myScheduleProvider,
     AsyncValue<ImmortalList<Event>> eventProvider,
   ) =>
-      combineAsyncValues(eventProvider, myScheduleProvider,
-          (events, mySchedule) {
+      combineAsyncValues<void, ImmortalList<Event>, MySchedule>(
+          eventProvider, myScheduleProvider, (events, mySchedule) {
         _log.debug('Verify notifications for liked events');
         dimeGet<Notifications>()
             .verifyScheduledEventNotifications(mySchedule, events);

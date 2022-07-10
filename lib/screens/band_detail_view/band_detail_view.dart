@@ -1,14 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dime/dime.dart';
 import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
+import 'package:optional/optional.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:optional/optional.dart';
 
 import '../../models/band.dart';
 import '../../models/band_key.dart';
@@ -28,8 +26,8 @@ import '../../widgets/events/event_toggle/event_toggle.dart';
 import '../../widgets/history/history_wrapper.dart';
 import '../../widgets/messages/error_screen/error_screen.dart';
 import '../../widgets/messages/loading_screen/loading_screen.dart';
-import '../../widgets/scaffold.dart';
 import '../../widgets/optional_builder.dart';
+import '../../widgets/scaffold.dart';
 import 'band_detail_view.i18n.dart';
 
 // TODO(SF) FEATURE periodic rebuild for is playing indicator?
@@ -59,22 +57,10 @@ class BandDetailView extends HookConsumerWidget {
   String _buildFlag(String country) =>
       String.fromCharCodes(country.runes.map((code) => code + 127397));
 
-  static bool _isValueSet(String? value) => value?.isNotEmpty ?? false;
-
-  static String? _nonEmptyValue(String? value) =>
-      _isValueSet(value) ? value : null;
-
-  static Optional<String> _valueAsOptional(String? value) =>
-      Optional.ofNullable(_nonEmptyValue(value));
-
   String get _fallbackText => 'Sorry, no info'.i18n;
 
-  String _getDescription(Locale locale, Band band) {
-    if (locale.languageCode == 'de' && _isValueSet(band.textDe)) {
-      return band.textDe!;
-    }
-    return _nonEmptyValue(band.textEn) ?? _fallbackText;
-  }
+  String _getDescription(Locale locale, Band band) =>
+      band.descriptionForLocale(locale) ?? _fallbackText;
 
   Widget _buildDetailRow(ThemeData theme, String title, String value) =>
       Padding(
@@ -106,15 +92,15 @@ class BandDetailView extends HookConsumerWidget {
           _buildDetailRow(
             theme,
             'Origin',
-            _valueAsOptional(band.origin).map(_buildFlag).orElse(_fallbackText),
+            band.optionalOrigin.map(_buildFlag).orElse(_fallbackText),
           ),
           OptionalBuilder(
-            optional: _valueAsOptional(band.style),
+            optional: band.optionalStyle,
             builder: (_, styleValue) =>
                 _buildDetailRow(theme, 'Style', styleValue),
           ),
           OptionalBuilder(
-            optional: _valueAsOptional(band.roots),
+            optional: band.optionalRoots,
             builder: (_, rootsValue) =>
                 _buildDetailRow(theme, 'Roots', rootsValue),
           ),
@@ -122,13 +108,13 @@ class BandDetailView extends HookConsumerWidget {
             height: 10,
           ),
           OptionalBuilder(
-            optional: _valueAsOptional(band.spotify),
-            builder: (_, spotifyValue) => Padding(
+            optional: band.spotifyUrl,
+            builder: (_, url) => Padding(
               padding: const EdgeInsets.only(top: 10),
               child: _theme.primaryButton(
                 label: 'Play on Spotify'.i18n,
                 onPressed: () {
-                  launch(spotifyValue);
+                  launchUrl(url);
                 },
               ),
             ),
@@ -230,7 +216,8 @@ class BandDetailView extends HookConsumerWidget {
       child: ListView(
         children: <Widget>[
           OptionalBuilder(
-            optional: band.map((bandValue) => _nonEmptyValue(bandValue.logo)),
+            optional: Optional.ofNullable(
+                band.map((bandValue) => bandValue.nonEmptyLogo).orElseNull),
             builder: (_, logoValue) =>
                 _buildBandLogo(theme, logoValue, band.value.logoData),
           ),
@@ -250,7 +237,8 @@ class BandDetailView extends HookConsumerWidget {
                   child: _buildDetails(theme, locale, b)))
               .orElse(_fallbackInfo),
           OptionalBuilder(
-            optional: band.map((bandValue) => _nonEmptyValue(bandValue.image)),
+            optional: Optional.ofNullable(
+                band.map((bandValue) => bandValue.nonEmptyImage).orElseNull),
             builder: (_, imageValue) => Padding(
               padding: const EdgeInsets.only(top: 5),
               child: _buildBandImage(theme, imageValue, band.value.imageData),

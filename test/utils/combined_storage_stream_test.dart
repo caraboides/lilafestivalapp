@@ -2,34 +2,27 @@ import 'dart:async';
 
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immortal/immortal.dart';
+import 'package:lilafestivalapp/services/app_storage.dart';
 import 'package:lilafestivalapp/services/combined_storage.dart';
+import 'package:lilafestivalapp/services/festival_hub.dart';
+import 'package:lilafestivalapp/utils/combined_storage_stream.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:optional/optional.dart';
 
-import 'package:lilafestivalapp/utils/combined_storage_stream.dart';
-import 'package:lilafestivalapp/services/app_storage.dart';
-import 'package:lilafestivalapp/services/festival_hub.dart';
+import 'combined_storage_stream_test.mocks.dart';
 
-class MockAppStorage extends Mock implements AppStorage {}
-
-class MockFestivalHub extends Mock implements FestivalHub {}
-
-class MockBuildContext extends Mock implements BuildContext {}
-
-// ignore: must_be_immutable
-class MockDefaultAssetBundle extends Mock implements DefaultAssetBundle {
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) =>
-      super.toString();
-}
-
-class MockAssetBundle extends Mock implements AssetBundle {}
-
-class MockProviderReference extends Mock implements ProviderReference {}
+@GenerateMocks([
+  AppStorage,
+  FestivalHub,
+  BuildContext,
+  AssetBundle,
+  DefaultAssetBundle,
+])
+class MockProviderReference extends Mock implements Ref {}
 
 final MockAppStorage appStorageMock = MockAppStorage();
 final MockFestivalHub festivalHubMock = MockFestivalHub();
@@ -69,7 +62,7 @@ Future<T> Function(Invocation) mockError<T>([int delayInMilliseconds = 0]) =>
         () => throw Exception('Test'));
 
 Future<Optional<dynamic>> Function(Invocation) mockOptionalResponse(
-        TestData data,
+        TestData? data,
         [int delayInMilliseconds = 0]) =>
     mockResponse(Optional.ofNullable(data?.toJson()), delayInMilliseconds);
 
@@ -92,22 +85,25 @@ const TestData appStorageData = TestData('appStorageData');
 const TestData assetData = TestData('assetData');
 const String jsonAssetData = '{"value":"assetData"}';
 
-void mockRemoteData([int delayInMilliseconds = 0, dynamic data = remoteData]) =>
-    when(festivalHubMock.loadJsonData(any))
+void mockRemoteData(
+        [int delayInMilliseconds = 0, TestData? data = remoteData]) =>
+    when(festivalHubMock.loadJsonData('remoteUrl'))
         .thenAnswer(mockOptionalResponse(data, delayInMilliseconds));
 
 void mockAppStorageData(
-        [int delayInMilliseconds = 0, dynamic data = appStorageData]) =>
-    when(appStorageMock.loadJson(any))
+        [int delayInMilliseconds = 0, TestData? data = appStorageData]) =>
+    when(appStorageMock.loadJson('appStorageKey'))
         .thenAnswer(mockOptionalResponse(data, delayInMilliseconds));
 
 void mockAssetData(
-    [int delayInMilliseconds = 0, dynamic data = jsonAssetData]) {
+    [int delayInMilliseconds = 0, String? data = jsonAssetData]) {
   when(buildContextMock.dependOnInheritedWidgetOfExactType())
       .thenReturn(defaultAssetBundleMock);
   when(defaultAssetBundleMock.bundle).thenReturn(assetBundleMock);
-  when(assetBundleMock.loadString(any))
-      .thenAnswer(mockResponse(data, delayInMilliseconds));
+  when(assetBundleMock.loadString('fallbackDataAssetPath')).thenAnswer(
+      data != null
+          ? mockResponse(data, delayInMilliseconds)
+          : mockError<String>(delayInMilliseconds));
 }
 
 Future<bool> assertStreamData(List<String> expectedData) async {

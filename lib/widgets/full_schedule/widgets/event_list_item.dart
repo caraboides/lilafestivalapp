@@ -25,7 +25,7 @@ class EventListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return MaterialColorTransition(
-      color: isPlaying ? theme.accentColor : theme.canvasColor,
+      color: isPlaying ? theme.colorScheme.secondary : theme.canvasColor,
       child: InkWell(
         onTap: () => BandDetailView.openFor(event.bandName, context: context),
         child: SafeArea(

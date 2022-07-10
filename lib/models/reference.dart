@@ -7,7 +7,7 @@ class Link {
     this.imageAssetPath,
   });
 
-  final String url;
+  final Uri url;
   final String? label;
   final String? imageAssetPath;
 }

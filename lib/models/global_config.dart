@@ -17,10 +17,10 @@ class GlobalConfig {
   });
 
   final Duration periodicRebuildDuration;
-  final String privacyPolicyUrlDe;
-  final String privacyPolicyUrlEn;
+  final Uri privacyPolicyUrlDe;
+  final Uri privacyPolicyUrlEn;
   final String festivalHubBaseUrl;
-  final String repositoryUrl;
+  final Uri repositoryUrl;
   final ImmortalList<Reference> creators;
   final ImmortalList<Reference> references;
   final String weatherBaseUrl;

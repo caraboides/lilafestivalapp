@@ -17,16 +17,19 @@ final List<Shadow> _appBarTextShadows = const [
     .toList();
 const String _displayFontFamily = 'Display Font';
 const Color _menuFontColor = Color(0xFFd6102b);
-final Color _darkBackgroundColor = Colors.grey[850];
+final Color _darkBackgroundColor = Colors.grey[850]!;
 const BorderSide _border = BorderSide(color: Colors.black, width: 2);
 final BorderSide _borderSlim = _border.copyWith(width: 1);
-final Color _historyBackgroundColor = Colors.grey[400];
+final Color _historyBackgroundColor = Colors.grey.shade400;
 const Color _primaryColor = Color(0xFF15928c);
+const Color _secondaryColor = Color(0xFFbafb00);
 
 final ThemeData theme = ThemeData(
-  primaryColor: _primaryColor,
-  accentColor: const Color(0xFFbafb00),
-  errorColor: _menuFontColor,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: _primaryColor,
+    secondary: _secondaryColor,
+    error: _menuFontColor,
+  ),
   textTheme: Typography.blackMountainView.copyWith(
     headline6: const TextStyle(
       fontFamily: _displayFontFamily,
@@ -55,12 +58,11 @@ final ThemeData theme = ThemeData(
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   appBarTheme: AppBarTheme(
-    textTheme: Typography.whiteMountainView.copyWith(
-      headline6: TextStyle(
-        fontFamily: _displayFontFamily,
-        fontSize: 26,
-        shadows: _appBarTextShadows,
-      ),
+    // TODO(SF) correct?
+    titleTextStyle: Typography.whiteMountainView.headline6?.copyWith(
+      fontFamily: _displayFontFamily,
+      fontSize: 26,
+      shadows: _appBarTextShadows,
     ),
   ),
   tabBarTheme: const TabBarTheme(
@@ -97,7 +99,10 @@ final FestivalTheme festivalTheme = FestivalTheme(
     iconTheme: theme.iconTheme.copyWith(
       color: _menuFontColor.withOpacity(0.87),
     ),
-    accentColor: _menuFontColor,
+    // TODO(SF) correct?
+    colorScheme: theme.colorScheme.copyWith(
+      secondary: _menuFontColor,
+    ),
     dividerColor: _menuFontColor,
   ),
   menuDrawerDecoration: const BoxDecoration(border: Border(right: _border)),
@@ -108,17 +113,25 @@ final FestivalTheme festivalTheme = FestivalTheme(
     scaffoldBackgroundColor: _historyBackgroundColor,
     backgroundColor: _historyBackgroundColor,
   ),
-  primaryButton: ({label, onPressed}) => FlatButton(
-    shape: Border(
-      top: _borderSlim,
-      left: _borderSlim,
-      bottom: _border,
-      right: _border,
+  primaryButton: ({required label, required onPressed}) => Container(
+    // TODO(SF) is this correct??
+    decoration: BoxDecoration(
+      border: Border(
+        top: _borderSlim,
+        left: _borderSlim,
+        bottom: _border,
+        right: _border,
+      ),
     ),
-    color: theme.accentColor,
-    textTheme: ButtonTextTheme.normal,
-    onPressed: onPressed,
-    child: Text(label),
+    child: TextButton(
+      style: OutlinedButton.styleFrom(
+        primary: theme.colorScheme.secondary,
+        // TODO(SF) how?
+        // textTheme: ButtonTextTheme.normal,
+      ),
+      onPressed: onPressed,
+      child: Text(label),
+    ),
   ),
   logo: const Logo(
     assetPath: 'assets/logo.png',
@@ -133,7 +146,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
   notificationColor: theme.primaryColor,
   bannerBackgroundColor: _darkBackgroundColor,
   bannerTextStyle: TextStyle(
-    color: theme.accentColor,
+    color: theme.colorScheme.secondary,
     fontFamily: 'Display Font',
     fontSize: 20,
   ),

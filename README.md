@@ -14,7 +14,7 @@ Place `.env` file in the root directory.
 
 ### Generate app icons for all flavors
 
-```bash
+```sh
 flutter pub run flutter_launcher_icons:main
 ```
 
@@ -22,7 +22,7 @@ flutter pub run flutter_launcher_icons:main
 
 Run in the app for a specific festival in development mode as follows:
 
-```bash
+```sh
 ./scripts/run_dev.sh --flavor=[spirit|party_san] [--year=<YEAR>] [--build=<BUILD>] [--release]
 # or
 ./scripts/run_dev.sh -f=[spirit|party_san] [-y=<YEAR>] [-b=<BUILD>] [-r]
@@ -39,7 +39,7 @@ Run in the app for a specific festival in development mode as follows:
 
 Build the production apk for a specific festival as follows:
 
-```bash
+```sh
 ./scripts/build_prod.sh [spirit|party_san] [<YEAR>]
 # e.g.
 ./scripts/build_prod.sh spirit 2019
@@ -52,7 +52,7 @@ Build the production apk for a specific festival as follows:
 
 Prepare the assets for a specific festival as follows:
 
-```bash
+```sh
 ./scripts/prepare_assets.sh [spirit|party_san] <YEAR>
 # e.g.
 ./scripts/prepare_assets.sh party_san 2019
@@ -62,10 +62,25 @@ Prepare the assets for a specific festival as follows:
 
 There is also a helper script to switch to the newest version of a festivals:
 
-```bash
+```sh
 ./scripts/switch.sh [spirit|party_san]
 # e.g.
 ./scripts/switch.sh party_san
 ```
 
 * This script should be updated as soon as a new year is available for a festival.
+
+## Tests
+
+We use mockito for creating mocks in our tests. Since the introduction of null safety in dart, mockito requires code
+generation to generate mocks. You can update these mocks by running
+
+```sh
+flutter pub run build_runner build
+```
+
+Tests can be executed by running
+
+```sh
+flutter test
+```

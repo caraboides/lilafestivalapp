@@ -1,9 +1,9 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:optional/optional.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/festival_config.dart';
 import '../../models/global_config.dart';
@@ -32,12 +32,15 @@ class About extends StatelessWidget {
     Link link, {
     bool shrink = false,
   }) =>
-      FlatButton(
-        child: Text(link.label ?? link.url),
-        onPressed: () => launch(link.url),
-        materialTapTargetSize: shrink
-            ? MaterialTapTargetSize.shrinkWrap
-            : MaterialTapTargetSize.padded,
+      TextButton(
+        // TODO(SF) correct?
+        child: Text(link.label ?? link.url.toString()),
+        onPressed: () => launchUrl(link.url),
+        style: ButtonStyle(
+          tapTargetSize: shrink
+              ? MaterialTapTargetSize.shrinkWrap
+              : MaterialTapTargetSize.padded,
+        ),
       );
 
   Widget _buildLink(
@@ -47,7 +50,7 @@ class About extends StatelessWidget {
       Optional.ofNullable(link.imageAssetPath)
           .map<Widget>((assetPath) => GestureDetector(
                 child: Image.asset(assetPath),
-                onTap: () => launch(link.url),
+                onTap: () => launchUrl(link.url),
               ))
           .orElse(_buildButtonLink(link, shrink: shrink));
 
