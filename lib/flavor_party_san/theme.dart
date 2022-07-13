@@ -8,6 +8,7 @@ const Color _secondaryColor = Color(0xFFD2D522);
 final Color _errorColor = Colors.redAccent.shade700;
 final Color _lightDividerColor = Colors.grey.shade800;
 final Color _historyBackgroundColor = Colors.grey.shade400;
+const double _appBarHeight = 49;
 
 final ThemeData theme = ThemeData(
   colorScheme: ColorScheme.fromSeed(
@@ -49,6 +50,7 @@ final ThemeData theme = ThemeData(
       fontFamily: _displayFontFamily,
       fontSize: 26,
     ),
+    toolbarHeight: _appBarHeight,
   ),
   tabBarTheme: const TabBarTheme(
     labelStyle: TextStyle(

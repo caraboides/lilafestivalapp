@@ -98,7 +98,6 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
     FestivalScope festivalScope,
   ) =>
       AppBar(
-        toolbarHeight: _theme.tabBarHeight + 1,
         bottom: Optional.ofNullable(days).map(_buildTabBarContainer).orElseNull,
         title: _buildTitleWidget(festivalScope),
         actions: <Widget>[

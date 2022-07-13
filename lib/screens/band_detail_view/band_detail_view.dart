@@ -137,6 +137,7 @@ class BandDetailView extends HookConsumerWidget {
   Widget _buildImage(ThemeData theme, String imgUrl, [ImageData? imgData]) =>
       CachedNetworkImage(
         imageUrl: imgUrl,
+        errorWidget: (_, __, ___) => Container(),
         placeholder: imgData != null
             ? (_, __) => _buildImagePlaceholder(theme, imgData)
             : null,

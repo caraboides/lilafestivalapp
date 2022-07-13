@@ -33,7 +33,6 @@ class About extends StatelessWidget {
     bool shrink = false,
   }) =>
       TextButton(
-        // TODO(SF) correct?
         child: Text(link.label ?? link.url.toString()),
         onPressed: () => launchUrl(link.url),
         style: ButtonStyle(
@@ -111,7 +110,7 @@ class About extends StatelessWidget {
 
   List<Widget> _buildMessages(ImmortalList<Reference> messages) => messages
       .map((message) => _buildMessage(message.label, message.links))
-      .flatten<Widget>() // TODO(SF) is this correct?
+      .flatten<Widget>()
       .toList();
 
   void _showLicenses(BuildContext context) async {

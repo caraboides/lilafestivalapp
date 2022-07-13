@@ -23,6 +23,17 @@ echo "Preparing assets for ${FESTIVAL_ID}..."
 mkdir -p assets
 rm -rf assets/*
 cp -r flavor_assets/$FLAVOR/* assets
-curl -f $FESTIVAL_HUB_BASE_URL/bands?festival=$FESTIVAL_ID -o assets/bands.json
-curl -f $FESTIVAL_HUB_BASE_URL/schedule?festival=$FESTIVAL_ID -o assets/schedule.json
+if curl -f $FESTIVAL_HUB_BASE_URL/bands?festival=$FESTIVAL_ID -o assets/bands.json; then
+  echo "Successfully loaded bands"
+else
+  echo "Could not load bands, provide fallback"
+  echo -n '{}' >assets/bands.json
+fi
+if curl -f $FESTIVAL_HUB_BASE_URL/schedule?festival=$FESTIVAL_ID -o assets/schedule.json; then
+  echo "Successfully loaded schedule"
+else
+  echo "Could not load schedule, provide fallback"
+  echo -n '{}' >assets/schedule.json
+fi
 flutter clean
+flutter pub get

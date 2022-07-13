@@ -13,7 +13,6 @@ class ProviderModule extends BaseDimeModule {
 
   final BuildContext context;
 
-  // TODO(SF) this probably doesn't work
   @override
   void updateInjections() {
     // Band providers

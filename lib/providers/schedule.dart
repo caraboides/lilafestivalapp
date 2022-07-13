@@ -88,7 +88,6 @@ class ScheduleProviderCreator {
           // ignore: prefer_expression_function_bodies
           (ref, festivalId) {
         return ref
-            // TODO(SF) read or watch?
             .watch(_scheduleProvider(festivalId))
             .whenData((events) => events
                 // TODO(SF) filtermap!

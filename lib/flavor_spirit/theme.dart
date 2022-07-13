@@ -23,6 +23,8 @@ final BorderSide _borderSlim = _border.copyWith(width: 1);
 final Color _historyBackgroundColor = Colors.grey.shade400;
 const Color _primaryColor = Color(0xFF15928c);
 const Color _secondaryColor = Color(0xFFbafb00);
+const double _primaryButtonHeight = 40;
+const double _appBarHeight = 54;
 
 final ThemeData theme = ThemeData(
   colorScheme: ColorScheme.fromSeed(
@@ -58,12 +60,13 @@ final ThemeData theme = ThemeData(
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   appBarTheme: AppBarTheme(
-    // TODO(SF) NEXT correct?
+    backgroundColor: _primaryColor,
     titleTextStyle: Typography.whiteMountainView.headline6?.copyWith(
       fontFamily: _displayFontFamily,
       fontSize: 26,
       shadows: _appBarTextShadows,
     ),
+    toolbarHeight: _appBarHeight,
   ),
   tabBarTheme: const TabBarTheme(
     labelStyle: TextStyle(
@@ -81,6 +84,13 @@ final ThemeData theme = ThemeData(
     color: Color(0xFFb3dddd),
   ),
   backgroundColor: Colors.white,
+  toggleableActiveColor: _secondaryColor,
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    color: _secondaryColor,
+  ),
+  expansionTileTheme: const ExpansionTileThemeData(
+    iconColor: _menuFontColor,
+  ),
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(
@@ -91,6 +101,11 @@ final FestivalTheme festivalTheme = FestivalTheme(
     dividerColor: Colors.grey[800],
     buttonTheme: theme.buttonTheme.copyWith(textTheme: ButtonTextTheme.accent),
     iconTheme: theme.iconTheme.copyWith(color: Colors.white70),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        primary: _secondaryColor,
+      ),
+    ),
   ),
   menuTheme: theme.copyWith(
     textTheme: theme.textTheme
@@ -99,7 +114,6 @@ final FestivalTheme festivalTheme = FestivalTheme(
     iconTheme: theme.iconTheme.copyWith(
       color: _menuFontColor.withOpacity(0.87),
     ),
-    // TODO(SF) NEXT correct?
     colorScheme: theme.colorScheme.copyWith(
       secondary: _menuFontColor,
     ),
@@ -114,8 +128,8 @@ final FestivalTheme festivalTheme = FestivalTheme(
     backgroundColor: _historyBackgroundColor,
   ),
   primaryButton: ({required label, required onPressed}) => Container(
-    // TODO(SF) NEXT is this correct??
-    decoration: BoxDecoration(
+    height: _primaryButtonHeight,
+    foregroundDecoration: BoxDecoration(
       border: Border(
         top: _borderSlim,
         left: _borderSlim,
@@ -124,10 +138,10 @@ final FestivalTheme festivalTheme = FestivalTheme(
       ),
     ),
     child: TextButton(
-      style: OutlinedButton.styleFrom(
-        primary: theme.colorScheme.secondary,
-        // TODO(SF) NEXT how?
-        // textTheme: ButtonTextTheme.normal,
+      style: TextButton.styleFrom(
+        backgroundColor: theme.colorScheme.secondary,
+        primary: theme.colorScheme.onBackground,
+        shape: const RoundedRectangleBorder(),
       ),
       onPressed: onPressed,
       child: Text(label),
