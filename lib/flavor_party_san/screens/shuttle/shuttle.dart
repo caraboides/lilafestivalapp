@@ -5,6 +5,8 @@ import '../../../widgets/static_html_view.dart';
 import 'shuttle.i18n.dart';
 
 const String _html = '''
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css?family=Pirata+One&display=swap" rel="stylesheet">
 
 <style>
@@ -40,8 +42,9 @@ h2 {
 body {
   margin: 20px;
 }
-
 </style>
+</head>
+<body>
    <header>
       <h2 class="">
          P.S:O:A -&gt; Bhf. Mühlhausen
@@ -1169,6 +1172,7 @@ body {
          </tr>
       </tbody>
    </table>
+</body>
 ''';
 
 class Shuttle extends StatelessWidget {

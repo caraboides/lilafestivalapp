@@ -30,6 +30,7 @@ class StaticHtmlView extends HookWidget {
         ),
         Expanded(
           child: WebView(
+            zoomEnabled: false,
             initialUrl: _buildUrl(context),
             javascriptMode: JavascriptMode.unrestricted,
             navigationDelegate: (request) {

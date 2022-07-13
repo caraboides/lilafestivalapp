@@ -19,7 +19,7 @@ class WeatherCacheManager extends CacheManager {
   WeatherCacheManager()
       : super(Config(
           Constants.weatherCacheKey,
-          // TODO(SF) has this config option still the same meaning?
+          // TODO(SF) NEXT has this config option still the same meaning?
           stalePeriod: const Duration(hours: 1),
           maxNrOfCacheObjects: 1,
         ));

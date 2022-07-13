@@ -5,6 +5,8 @@ import '../../../widgets/static_html_view.dart';
 import 'faq.i18n.dart';
 
 const String _faqHeader = '''
+    <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Pirata+One&display=swap" rel="stylesheet">
     <style>
     h3 {
@@ -18,6 +20,7 @@ const String _faqHeader = '''
       color: #9da400;
     }
     </style>
+    </head>
     ''';
 const String _faq = '''
     <body>

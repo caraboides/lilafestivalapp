@@ -43,9 +43,9 @@ final ThemeData theme = ThemeData(
     ),
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
-  // TODO(SF) correct?
-  appBarTheme: const AppBarTheme(
-    titleTextStyle: TextStyle(
+  appBarTheme: AppBarTheme(
+    backgroundColor: _primaryColor,
+    titleTextStyle: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 26,
     ),
@@ -65,22 +65,33 @@ final ThemeData theme = ThemeData(
     color: Colors.grey[400],
   ),
   backgroundColor: Colors.white,
+  toggleableActiveColor: _secondaryColor,
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    color: _secondaryColor,
+  ),
+  expansionTileTheme: const ExpansionTileThemeData(
+    iconColor: _secondaryColor,
+  ),
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(
   theme: theme,
   aboutTheme: theme.copyWith(
     textTheme: Typography.whiteMountainView,
-    scaffoldBackgroundColor: theme.primaryColor,
+    scaffoldBackgroundColor: _primaryColor,
     dividerColor: _lightDividerColor,
-    buttonTheme: theme.buttonTheme.copyWith(textTheme: ButtonTextTheme.accent),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        primary: _secondaryColor,
+      ),
+    ),
     iconTheme: theme.iconTheme.copyWith(color: Colors.white70),
   ),
   menuTheme: theme.copyWith(
     textTheme: theme.textTheme.apply(
         displayColor: theme.colorScheme.secondary,
         bodyColor: theme.colorScheme.secondary),
-    canvasColor: theme.primaryColor,
+    canvasColor: _primaryColor,
     iconTheme: theme.iconTheme.copyWith(
       color: theme.colorScheme.secondary.withOpacity(0.87),
     ),
@@ -94,9 +105,8 @@ final FestivalTheme festivalTheme = FestivalTheme(
   primaryButton: ({required label, required onPressed}) => ElevatedButton(
     style: ElevatedButton.styleFrom(
       primary: theme.colorScheme.secondary,
+      onPrimary: theme.colorScheme.onSurface,
     ),
-    // TODO(SF) how to??
-    // textTheme: ButtonTextTheme.normal,
     onPressed: onPressed,
     child: Text(label),
   ),
@@ -111,7 +121,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
     height: 152,
   ),
   notificationColor: Colors.black,
-  bannerBackgroundColor: theme.primaryColor,
+  bannerBackgroundColor: _primaryColor,
   bannerTextStyle: TextStyle(
     color: theme.colorScheme.secondary,
     fontFamily: 'Display Font',

@@ -70,7 +70,7 @@ class _InitializationWidgetState extends ConsumerState<InitializationWidget>
       dimeGet<Notifications>().initializeNotificationPlugin();
     });
     final festivalId = _config.festivalId;
-    // TODO(SF) watch or read?
+    // TODO(SF) NEXT watch or read?
     final mySchedule = ref.read(dimeGet<MyScheduleProvider>()(festivalId));
     final events = ref.read(dimeGet<ScheduleProvider>()(festivalId));
     executeUntilSuccessful(

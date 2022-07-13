@@ -71,7 +71,7 @@ class EventToggle extends HookConsumerWidget {
         ),
         tooltip:
             (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,
-        // TODO(SF) correct? or use ref.read?
+        // TODO(SF) NEXT correct? or use ref.read?
         onPressed: () => (dimeGet<MyScheduleProvider>()(festivalId).notifier
                 as MyScheduleController)
             .toggleEvent(event));

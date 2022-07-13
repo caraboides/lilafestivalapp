@@ -58,7 +58,7 @@ final ThemeData theme = ThemeData(
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   appBarTheme: AppBarTheme(
-    // TODO(SF) correct?
+    // TODO(SF) NEXT correct?
     titleTextStyle: Typography.whiteMountainView.headline6?.copyWith(
       fontFamily: _displayFontFamily,
       fontSize: 26,
@@ -99,7 +99,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
     iconTheme: theme.iconTheme.copyWith(
       color: _menuFontColor.withOpacity(0.87),
     ),
-    // TODO(SF) correct?
+    // TODO(SF) NEXT correct?
     colorScheme: theme.colorScheme.copyWith(
       secondary: _menuFontColor,
     ),
@@ -114,7 +114,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
     backgroundColor: _historyBackgroundColor,
   ),
   primaryButton: ({required label, required onPressed}) => Container(
-    // TODO(SF) is this correct??
+    // TODO(SF) NEXT is this correct??
     decoration: BoxDecoration(
       border: Border(
         top: _borderSlim,
@@ -126,7 +126,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
     child: TextButton(
       style: OutlinedButton.styleFrom(
         primary: theme.colorScheme.secondary,
-        // TODO(SF) how?
+        // TODO(SF) NEXT how?
         // textTheme: ButtonTextTheme.normal,
       ),
       onPressed: onPressed,

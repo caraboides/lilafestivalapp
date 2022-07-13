@@ -57,6 +57,8 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
   }
 
   TabBar _buildTabBar(ImmortalList<DateTime> days) => TabBar(
+        indicatorWeight: 2,
+        indicatorColor: _theme.theme.colorScheme.secondary,
         tabs: [
           Tab(child: Text('Bands'.i18n)),
           ...days.mapIndexed((index, date) => Tooltip(
@@ -96,6 +98,7 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
     FestivalScope festivalScope,
   ) =>
       AppBar(
+        toolbarHeight: _theme.tabBarHeight + 1,
         bottom: Optional.ofNullable(days).map(_buildTabBarContainer).orElseNull,
         title: _buildTitleWidget(festivalScope),
         actions: <Widget>[
