@@ -8,6 +8,7 @@ const Color _secondaryColor = Color(0xFFD4B558);
 final Color _errorColor = Colors.redAccent.shade700;
 final Color _lightDividerColor = Colors.grey.shade800;
 final Color _historyBackgroundColor = Colors.grey.shade400;
+const Color _cardColor = Color(0xFFe4d2a9);
 const double _appBarHeight = 49;
 
 final ThemeData theme = ThemeData(
@@ -62,9 +63,12 @@ final ThemeData theme = ThemeData(
       fontSize: 18,
     ),
   ),
-  cardTheme: CardTheme(
-    margin: const EdgeInsets.only(left: 4, top: 4, right: 4, bottom: 1),
-    color: Colors.grey[400],
+  cardTheme: const CardTheme(
+    margin: EdgeInsets.only(bottom: 1),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.zero),
+    ),
+    color: _cardColor,
   ),
   backgroundColor: Colors.white,
   toggleableActiveColor: _secondaryColor,

@@ -54,7 +54,7 @@ class WeatherCard extends HookConsumerWidget {
 
   Widget _buildWeatherCard(Weather weather) => Card(
         child: Container(
-          height: _theme.weatherCardHeight,
+          height: _theme.cardBannerHeight,
           child: _buildWeatherWidget(weather),
         ),
       );

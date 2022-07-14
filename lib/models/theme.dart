@@ -43,7 +43,7 @@ class FestivalTheme {
   final double toggleDenseSplashRadius = 24;
   final double bandListHeaderHeight = 30;
   final double bandListItemMinHeight = 38;
-  final double weatherCardHeight = 40;
+  final double cardBannerHeight = 40;
   final double tabBarHeight = 48;
   final double alphabeticalIndexWidth = 32;
   // TODO(SF) THEME value ok?

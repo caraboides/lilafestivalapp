@@ -9,16 +9,19 @@ import '../../../models/band_with_events.dart';
 import '../../../models/theme.dart';
 import 'alphabetical_list_view.dart';
 import 'band_list_item.dart';
+import 'missing_schedule_banner/missing_schedule_banner.dart';
 
 class BandListView extends StatelessWidget {
   const BandListView({
     required this.bands,
     required this.bandIds,
+    this.scheduleMissing = false,
     Key? key,
   }) : super(key: key);
 
   final ImmortalMap<String, BandWithEvents> bands;
   final ImmortalList<String> bandIds;
+  final bool scheduleMissing;
 
   static final _isLetterRegex = RegExp(r'^[a-zA-Z]+$');
 
@@ -58,18 +61,26 @@ class BandListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentTime = DateTime.now();
-    return AlphabeticalListView(
-      itemCount: bandIds.length,
-      itemIds: bandIds,
-      listItemHeights: _calculateListItemHeights(),
-      getAlphabeticalIndex: _getAlphabeticalIndex,
-      buildListItem: ({
-        required context,
-        required animation,
-        required index,
-        required itemId,
-      }) =>
-          _buildListItem(itemId, currentTime),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        MissingScheduleBanner(),
+        Flexible(
+            fit: FlexFit.loose,
+            child: AlphabeticalListView(
+              itemCount: bandIds.length,
+              itemIds: bandIds,
+              listItemHeights: _calculateListItemHeights(),
+              getAlphabeticalIndex: _getAlphabeticalIndex,
+              buildListItem: ({
+                required context,
+                required animation,
+                required index,
+                required itemId,
+              }) =>
+                  _buildListItem(itemId, currentTime),
+            )),
+      ],
     );
   }
 }
