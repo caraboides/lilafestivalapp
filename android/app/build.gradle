@@ -1,3 +1,5 @@
+import org.apache.commons.codec.binary.Base64
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -41,7 +43,9 @@ if (project.hasProperty('dart-defines')) {
     dartEnvVars = dartEnvVars + project.property('dart-defines')
         .split(',')
         .collectEntries { entry ->
-            def pair = entry.split('=')
+            def entry_bytes = new Base64().decode(entry)
+            def entry_string = new String(entry_bytes, "UTF8")
+            def pair = entry_string.split('=')
             [(pair.first()): pair.last()]
         }
 }

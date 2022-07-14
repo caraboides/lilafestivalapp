@@ -6,6 +6,7 @@ set +a
 
 BUILD=dev
 RELEASE=debug
+COMMAND=run
 
 for i in "$@"; do
   case $i in
@@ -26,6 +27,10 @@ for i in "$@"; do
     RELEASE_OPTION=--release
     shift
     ;;
+  -c | --command=*)
+    COMMAND="${i#*=}"
+    shift
+    ;;
   *) # unknown option
     ;;
   esac
@@ -44,7 +49,7 @@ if [[ -n $YEAR ]]; then
 fi
 
 echo "Starting build..."
-flutter run --flavor $FLAVOR \
+flutter $COMMAND --flavor $FLAVOR \
   --dart-define=APP_ID_SUFFIX=.$BUILD \
   --dart-define=VERSION_NAME_SUFFIX=-$BUILD \
   --dart-define=APP_NAME_PREFIX="[${BUILD}] " \

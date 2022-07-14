@@ -28,6 +28,8 @@ Run in the app for a specific festival in development mode as follows:
 ./scripts/run_dev.sh -f=[spirit|party_san] [-y=<YEAR>] [-b=<BUILD>] [-r]
 # e.g.
 ./scripts/run_dev.sh -f=spirit -y=2019 --release
+# To install the app
+./scripts/run_dev.sh -f=party_san -y=2022 -c=install
 ```
 
 * `--flavor/-f` is required to specify the festival
