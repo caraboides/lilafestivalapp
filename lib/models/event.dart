@@ -31,7 +31,7 @@ class Event implements Comparable {
           .orElse(false) &&
       end.map(currentTime.isBefore).orElse(false);
 
-  // TODO(SF) TEST
+  // TODO(SF) NEXT TEST
   @override
   int compareTo(dynamic other) => other is Event
       ? other.start

@@ -22,7 +22,7 @@ dependencies:
   hooks_riverpod: ^1.0.4
   http: ^0.13.4
   i18n_extension: ^5.0.0
-  immortal: ^3.0.0
+  immortal: ^3.1.0
   package_info_plus: ^1.4.2
   path_provider: ^2.0.11
   shimmer: ^2.0.0

@@ -120,7 +120,7 @@ class Notifications {
     });
   }
 
-  // TODO(SF) TEST
+  // TODO(SF) NEXT TEST
   ImmortalMap<NotificationId, Event> _calculateRequiredNotifications(
     MySchedule mySchedule,
     ImmortalList<Event> events,
@@ -134,7 +134,7 @@ class Notifications {
         });
       }
     }
-    // TODO(SF) NOTIFICATIONS handle updated events (e.g. time change)
+    // TODO(SF) NEXT NOTIFICATIONS handle updated events (e.g. time change)
     // schedule.updatedEvents.forEach((event) {
     //   mySchedule.getNotificationId(event.id).ifPresent((notificationId) {
     //     cancelNotification(notificationId);

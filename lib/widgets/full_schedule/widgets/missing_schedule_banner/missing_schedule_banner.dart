@@ -10,7 +10,6 @@ import 'missing_schedule_banner.i18n.dart';
 class MissingScheduleBanner extends HookConsumerWidget {
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
 
-  // TODO(SF) NEXT test notifications
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final festivalScope = DimeFlutter.get<FestivalScope>(context);

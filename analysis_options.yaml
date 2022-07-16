@@ -44,3 +44,4 @@ linter:
     package_names: true
     sort_pub_dependencies: true
     unnecessary_lambdas: false # does not work for constructors
+    avoid_classes_with_only_static_members: false # used for provider creators

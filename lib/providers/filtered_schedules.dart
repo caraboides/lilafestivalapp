@@ -59,7 +59,6 @@ class BandScheduleKey extends CombinedKey<FestivalId, bool> {
   bool get likedOnly => key2;
 }
 
-// ignore: avoid_classes_with_only_static_members
 class FilteredScheduleProviderCreator {
   static FilteredDailyScheduleProvider createFilteredDailyScheduleProvider() =>
       ProviderFamily<AsyncValue<ImmortalList<EventId>>, DailyScheduleFilter>(

@@ -125,7 +125,6 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
   }
 }
 
-// ignore: avoid_classes_with_only_static_members
 class MyScheduleProviderCreator {
   static FestivalConfig get _config => dimeGet<FestivalConfig>();
 

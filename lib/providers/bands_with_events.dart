@@ -21,7 +21,6 @@ typedef BandsWithEventsProvider = ProviderFamily<
 typedef SortedBandsWithEventsProvider
     = ProviderFamily<AsyncValue<ImmortalList<BandWithEvents>>, FestivalId>;
 
-// ignore: avoid_classes_with_only_static_members
 class BandsWithEventsProviderCreator {
   static BandWithEventsProvider createBandWithEventsProvider() =>
       Provider.family<AsyncValue<BandWithEvents>, BandKey>((ref, bandKey) {

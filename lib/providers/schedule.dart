@@ -42,7 +42,6 @@ typedef DailyScheduleMapProvider
 typedef BandScheduleProvider
     = ProviderFamily<AsyncValue<ImmortalList<Event>>, BandKey>;
 
-// ignore: avoid_classes_with_only_static_members
 class ScheduleProviderCreator {
   static FestivalConfig get _config => dimeGet<FestivalConfig>();
   static GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
@@ -85,18 +84,13 @@ class ScheduleProviderCreator {
 
   static FestivalDaysProvider createFestivalDaysProvider() =>
       Provider.family<AsyncValue<ImmortalList<DateTime>>, FestivalId>(
-          // ignore: prefer_expression_function_bodies
-          (ref, festivalId) {
-        return ref
-            .watch(_scheduleProvider(festivalId))
-            .whenData((events) => events
-                // TODO(SF) filtermap!
-                .where((event) => event.start.isPresent)
-                .map((event) => toFestivalDay(event.start.value))
-                .toImmortalSet()
-                .toImmortalList()
-                .sort());
-      });
+          (ref, festivalId) => ref
+              .watch(_scheduleProvider(festivalId))
+              .whenData((events) => events
+                  .filterMapOptional((event) => event.start.map(toFestivalDay))
+                  .toImmortalSet()
+                  .toImmortalList()
+                  .sort()));
 
   static DailyScheduleProvider createDailyScheduleProvider() => Provider.family<
           AsyncValue<ImmortalList<Event>>, DailyScheduleKey>(

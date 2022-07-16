@@ -19,7 +19,6 @@ class WeatherKey extends CombinedKey<int, DateTime> {
 typedef WeatherProvider
     = AutoDisposeStreamProviderFamily<Optional<Weather>, WeatherKey>;
 
-// ignore: avoid_classes_with_only_static_members
 class WeatherProviderCreator {
   static OpenWeather get _weather => dimeGet<OpenWeather>();
 

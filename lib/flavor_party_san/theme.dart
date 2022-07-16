@@ -40,7 +40,6 @@ final ThemeData theme = ThemeData(
       color: _primaryColor.withOpacity(0.54),
     ),
     subtitle2: const TextStyle(
-      // TODO(SF) THEME can be part of global theme
       fontWeight: FontWeight.bold,
     ),
   ),

@@ -18,7 +18,6 @@ typedef BandsProvider
 
 typedef BandProvider = ProviderFamily<AsyncValue<Optional<Band>>, BandKey>;
 
-// ignore: avoid_classes_with_only_static_members
 class BandsProviderCreator {
   static FestivalConfig get _config => dimeGet<FestivalConfig>();
   static GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
