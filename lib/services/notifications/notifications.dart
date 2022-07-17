@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dime/dime.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
@@ -41,8 +43,14 @@ class Notifications {
   Future _onSelectNotification(String? payload) async {
     if (payload != null) {
       _log.debug('Notification selected with payload: $payload '
-          '- opening band detail view');
-      BandDetailView.openFor(payload);
+          '- trying to open band detail view');
+      try {
+        final bandName = jsonDecode(payload)['band'];
+        BandDetailView.openFor(bandName ?? payload);
+      } catch (error) {
+        _log.error('Error parsing notification payload $payload', error);
+        BandDetailView.openFor(payload);
+      }
     }
   }
 
@@ -100,7 +108,7 @@ class Notifications {
           android: _androidPlatformChannelSpecifics,
           iOS: const IOSNotificationDetails(),
         ),
-        payload: event.bandName,
+        payload: event.notificationPayload,
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
@@ -133,17 +141,6 @@ class Notifications {
         });
       }
     }
-    // TODO(SF) NEXT NOTIFICATIONS handle updated events (e.g. time change)
-    // schedule.updatedEvents.forEach((event) {
-    //   mySchedule.getNotificationId(event.id).ifPresent((notificationId) {
-    //     cancelNotification(notificationId);
-    //     if (event.start
-    //         .map((startTime) => startTime.isAfter(now))
-    //         .orElse(false)) {
-    //       scheduledEvents[notificationId] = event;
-    //     }
-    //   });
-    // });
     return ImmortalMap(scheduledEvents);
   }
 
@@ -159,18 +156,27 @@ class Notifications {
       _log.error('Retrieving pending notifications failed', error);
       return <PendingNotificationRequest>[];
     });
-    final pendingNotificationIds = ImmortalSet(
-        pendingNotifications.map((notification) => notification.id));
+    final pendingNotificationsMap = ImmortalMap.fromEntries(
+        pendingNotifications.map((notification) => MapEntry(
+            notification.id, jsonDecode(notification.payload ?? '{}'))));
+
     // Cancel notifications that are not needed anymore
-    pendingNotificationIds
+    pendingNotificationsMap.keys
         .difference(requiredNotifications.keys)
         .forEach(cancelNotification);
     // Schedule missing notifications
-    await Future.wait(requiredNotifications.mapValues((notificationId, event) {
-      if (!pendingNotificationIds.contains(notificationId)) {
-        return scheduleNotificationForEvent(event, notificationId);
-      }
-      return Future.value(notificationId);
-    }).values);
+    await Future.wait(requiredNotifications
+        .mapValues((notificationId, event) => pendingNotificationsMap
+                .get(notificationId)
+                .map((payload) {
+              // Reschedule changed events
+              if (payload['hash'] != event.hashCode) {
+                return cancelNotification(notificationId).then((value) =>
+                    scheduleNotificationForEvent(event, notificationId));
+              }
+              return Future.value(notificationId);
+            }).orElseGet(
+                    () => scheduleNotificationForEvent(event, notificationId)))
+        .values);
   }
 }

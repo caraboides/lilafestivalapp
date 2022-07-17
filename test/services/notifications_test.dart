@@ -91,38 +91,71 @@ final testSchedule = MySchedule.fromJson({
   'event1': 1,
   'event2': 2,
   'event4': 4,
+  'event5': 5,
 });
 final startDate = DateTime(DateTime.now().year + 1, 8, 1, 20, 0);
-final testEvents = ImmortalList([
-  Event(
-      bandName: 'band1',
-      id: 'event1',
-      stage: 'stage',
-      start: Optional.of(startDate),
-      end: const Optional.empty()),
-  Event(
-      bandName: 'band2',
-      id: 'event2',
-      stage: 'stage',
-      start: Optional.of(startDate.add(const Duration(hours: 1))),
-      end: const Optional.empty()),
-  Event(
-      bandName: 'band3',
-      id: 'event3',
-      stage: 'stage',
-      start: Optional.of(startDate.add(const Duration(hours: 2))),
-      end: const Optional.empty()),
-  Event(
-      bandName: 'band4',
-      id: 'event4',
-      stage: 'stage',
-      start: Optional.of(DateTime.now().subtract(const Duration(days: 1))),
-      end: const Optional.empty()),
-]);
+// Scheduled + pending
+final event1 = Event(
+    bandName: 'band1',
+    id: 'event1',
+    stage: 'stage',
+    start: Optional.of(startDate),
+    end: const Optional.empty());
+// Scheduled, not pending
+final event2 = Event(
+    bandName: 'band2',
+    id: 'event2',
+    stage: 'stage',
+    start: Optional.of(startDate.add(const Duration(hours: 1))),
+    end: const Optional.empty());
+// Not scheduled, pending
+final event3 = Event(
+    bandName: 'band3',
+    id: 'event3',
+    stage: 'stage',
+    start: Optional.of(startDate.add(const Duration(hours: 2))),
+    end: const Optional.empty());
+// Rescheduled + pending
+final event4 = Event(
+    bandName: 'band4',
+    id: 'event4',
+    stage: 'stage',
+    start: Optional.of(startDate.add(const Duration(hours: 3))),
+    end: const Optional.empty());
+// Past + pending
+final event5 = Event(
+    bandName: 'band5',
+    id: 'event5',
+    stage: 'stage',
+    start: Optional.of(DateTime.now().subtract(const Duration(days: 1))),
+    end: const Optional.empty());
+final testEvents = ImmortalList([event1, event2, event3, event4, event5]);
 final testPendingNotifications = <PendingNotificationRequest>[
-  const PendingNotificationRequest(1, null, null, null),
-  const PendingNotificationRequest(4, null, null, null),
-  const PendingNotificationRequest(5, null, null, null),
+  PendingNotificationRequest(
+    1,
+    null,
+    null,
+    '{"band":"band1","id":"event1","hash":${event1.hashCode}}',
+  ),
+  PendingNotificationRequest(
+    3,
+    null,
+    null,
+    '{"band":"band3","id":"event3","hash":${event3.hashCode}}',
+  ),
+  const PendingNotificationRequest(
+    4,
+    null,
+    null,
+    '{"band":"band4","id":"event4","hash":-1}',
+  ),
+  const PendingNotificationRequest(
+    5,
+    null,
+    null,
+    '{"band":"band5","id":"event5","hash":-1}',
+  ),
+  const PendingNotificationRequest(6, null, null, null),
 ];
 
 void main() {
@@ -147,6 +180,7 @@ void main() {
           testSchedule,
           testEvents,
         );
+        // Schedule missing
         verify(notificationsPlugin.zonedSchedule(
           2,
           'name',
@@ -154,29 +188,46 @@ void main() {
           tz.TZDateTime.from(
               startDate.add(const Duration(minutes: 50)), tz.local),
           argThat(NotificationDetailsMatcher()),
-          payload: 'band2',
+          payload: '{"band":"band2","id":"event2",'
+              '"hash":${event2.hashCode}}',
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
         ));
+        // Reschedule changed
+        verify(notificationsPlugin.zonedSchedule(
+          4,
+          'name',
+          'band4 plays at 23:00 on the stage!',
+          tz.TZDateTime.from(
+              startDate.add(const Duration(minutes: 170)), tz.local),
+          argThat(NotificationDetailsMatcher()),
+          payload: '{"band":"band4","id":"event4",'
+              '"hash":${event4.hashCode}}',
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+        ));
+        // Do not schedule existing + obsolete
         verifyNever(notificationsPlugin.zonedSchedule(0, any, any, any, any));
         verifyNever(notificationsPlugin.zonedSchedule(1, any, any, any, any));
         verifyNever(notificationsPlugin.zonedSchedule(3, any, any, any, any));
-        verifyNever(notificationsPlugin.zonedSchedule(4, any, any, any, any));
+        verifyNever(notificationsPlugin.zonedSchedule(5, any, any, any, any));
       });
 
-      test('cancels unnecessary notifications', () async {
+      test('cancels unnecessary and rescheduled notifications', () async {
         when(notificationsPlugin.pendingNotificationRequests())
             .thenAnswer(mockResponse(testPendingNotifications));
         await notifications.verifyScheduledEventNotifications(
           testSchedule,
           testEvents,
         );
+        verify(notificationsPlugin.cancel(3, tag: null));
         verify(notificationsPlugin.cancel(4, tag: null));
         verify(notificationsPlugin.cancel(5, tag: null));
+        verify(notificationsPlugin.cancel(6, tag: null));
         verifyNever(notificationsPlugin.cancel(1, tag: null));
         verifyNever(notificationsPlugin.cancel(2, tag: null));
-        verifyNever(notificationsPlugin.cancel(3, tag: null));
       });
 
       test('handles error retrieving pending notifications', () async {
@@ -193,7 +244,8 @@ void main() {
           tz.TZDateTime.from(
               startDate.subtract(const Duration(minutes: 10)), tz.local),
           argThat(NotificationDetailsMatcher()),
-          payload: 'band1',
+          payload: '{"band":"band1","id":"event1",'
+              '"hash":${event1.hashCode}}',
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
@@ -205,12 +257,27 @@ void main() {
           tz.TZDateTime.from(
               startDate.add(const Duration(minutes: 50)), tz.local),
           argThat(NotificationDetailsMatcher()),
-          payload: 'band2',
+          payload: '{"band":"band2","id":"event2",'
+              '"hash":${event2.hashCode}}',
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
         ));
-        verifyNever(notificationsPlugin.zonedSchedule(4, any, any, any, any));
+        verify(notificationsPlugin.zonedSchedule(
+          4,
+          'name',
+          'band4 plays at 23:00 on the stage!',
+          tz.TZDateTime.from(
+              startDate.add(const Duration(minutes: 170)), tz.local),
+          argThat(NotificationDetailsMatcher()),
+          payload: '{"band":"band4","id":"event4",'
+              '"hash":${event4.hashCode}}',
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+        ));
+        verifyNever(notificationsPlugin.zonedSchedule(3, any, any, any, any));
+        verifyNever(notificationsPlugin.zonedSchedule(5, any, any, any, any));
         verifyNever(notificationsPlugin.cancel(any));
       });
 

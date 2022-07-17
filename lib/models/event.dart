@@ -1,7 +1,12 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
+import 'package:quiver/core.dart' as quiver;
 
 import 'ids.dart';
 
+@immutable
 class Event implements Comparable {
   Event({
     required this.bandName,
@@ -15,8 +20,8 @@ class Event implements Comparable {
         bandName: json['band'] ?? '',
         id: id,
         stage: json['stage'] ?? '',
-        start: Optional.ofNullable(DateTime.tryParse(json['start'])),
-        end: Optional.ofNullable(DateTime.tryParse(json['end'])),
+        start: Optional.ofNullable(DateTime.tryParse(json['start'] ?? '')),
+        end: Optional.ofNullable(DateTime.tryParse(json['end'] ?? '')),
       );
 
   final String bandName;
@@ -45,4 +50,28 @@ class Event implements Comparable {
 
   bool isPlayingOrInFutureOf(DateTime currentTime) =>
       isInFutureOf(currentTime) || end.map(currentTime.isBefore).orElse(false);
+
+  @override
+  int get hashCode => quiver.hashObjects([
+        bandName.hashCode,
+        id.hashCode,
+        stage.hashCode,
+        start.hashCode,
+        end.hashCode
+      ]);
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is Event &&
+      bandName == other.bandName &&
+      id == other.id &&
+      stage == other.stage &&
+      start == other.start &&
+      end == other.end;
+
+  String get notificationPayload => jsonEncode({
+        'band': bandName,
+        'id': id,
+        'hash': hashCode,
+      });
 }
