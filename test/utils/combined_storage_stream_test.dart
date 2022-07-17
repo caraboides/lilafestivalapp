@@ -13,6 +13,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:optional/optional.dart';
 
+import '../test_utils.dart';
 import 'combined_storage_stream_test.mocks.dart';
 
 @GenerateMocks([
@@ -51,15 +52,6 @@ class TestData {
 
   dynamic toJson() => {'value': value};
 }
-
-Future<T> Function(Invocation) mockResponse<T>(T data,
-        [int delayInMilliseconds = 0]) =>
-    (_) =>
-        Future.delayed(Duration(milliseconds: delayInMilliseconds), () => data);
-
-Future<T> Function(Invocation) mockError<T>([int delayInMilliseconds = 0]) =>
-    (_) => Future.delayed(Duration(milliseconds: delayInMilliseconds),
-        () => throw Exception('Test'));
 
 Future<Optional<dynamic>> Function(Invocation) mockOptionalResponse(
         TestData? data,

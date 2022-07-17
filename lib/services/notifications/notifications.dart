@@ -120,7 +120,6 @@ class Notifications {
     });
   }
 
-  // TODO(SF) NEXT TEST
   ImmortalMap<NotificationId, Event> _calculateRequiredNotifications(
     MySchedule mySchedule,
     ImmortalList<Event> events,
@@ -167,10 +166,11 @@ class Notifications {
         .difference(requiredNotifications.keys)
         .forEach(cancelNotification);
     // Schedule missing notifications
-    requiredNotifications.forEach((notificationId, event) {
+    await Future.wait(requiredNotifications.mapValues((notificationId, event) {
       if (!pendingNotificationIds.contains(notificationId)) {
-        scheduleNotificationForEvent(event, notificationId);
+        return scheduleNotificationForEvent(event, notificationId);
       }
-    });
+      return Future.value(notificationId);
+    }).values);
   }
 }
