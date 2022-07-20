@@ -14,6 +14,7 @@ class GlobalConfig {
     required this.weatherBaseUrl,
     required this.weatherApiKey,
     required this.weatherMinHour,
+    required this.scheduleReloadDuration,
   });
 
   final Duration periodicRebuildDuration;
@@ -26,4 +27,5 @@ class GlobalConfig {
   final String weatherBaseUrl;
   final String weatherApiKey;
   final int weatherMinHour;
+  final Duration scheduleReloadDuration;
 }

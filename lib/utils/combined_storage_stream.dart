@@ -13,6 +13,7 @@ Stream<T> createCombinedStorageStream<T, J>({
   required String assetPath,
   required T Function(J) fromJson,
   required Ref ref,
+  Duration? periodicDuration,
 }) {
   final streamController = dimeGet<CombinedStorage>().loadData(
     context: context,
@@ -20,6 +21,7 @@ Stream<T> createCombinedStorageStream<T, J>({
     appStorageKey: appStorageKey,
     assetPath: assetPath,
     fromJson: fromJson,
+    periodicDuration: periodicDuration,
   );
   ref.onDispose(streamController.close);
 

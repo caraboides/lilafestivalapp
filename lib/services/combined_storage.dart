@@ -81,29 +81,68 @@ class CombinedStorage {
     required String appStorageKey,
     required String assetPath,
     required T Function(J) fromJson,
+    Duration? periodicDuration,
   }) {
     final streamController = StreamController<T>();
     var loadingRemoteDataFailed = false;
     var loadingOfflineDataFailed = false;
     var loadingOfflineDataFinished = false;
+    var loadingRemoteDataFinished = false;
+    final periodic = periodicDuration != null;
+    if (periodic) {
+      Timer? periodicTimer;
+      void loadRemoteUpdates() {
+        if (periodicTimer?.isActive ?? false) {
+          return;
+        }
+        _log.debug('Setup timer for updating remote data');
+        periodicTimer = Timer.periodic(periodicDuration, (timer) {
+          _log.debug('Try to update remove data');
+          _festivalHub.loadJsonData<J>(remoteUrl).then(
+                (result) => result.ifPresent((json) {
+                  try {
+                    final data = fromJson(json);
+                    _log.debug(
+                        'Updating remote data from $remoteUrl was successful');
+                    if (!streamController.isClosed) {
+                      streamController.add(data);
+                    }
+                    _appStorage.storeJson(appStorageKey, json);
+                  } catch (error) {
+                    _log.error(
+                        'Error updating remote data from $remoteUrl', error);
+                  }
+                }),
+              );
+        });
+      }
+
+      streamController.onCancel = () => periodicTimer?.cancel();
+      streamController.onPause = () => periodicTimer?.cancel();
+      streamController.onResume = () => loadRemoteUpdates();
+      loadRemoteUpdates();
+    }
     _log.debug('Loading remote data from $remoteUrl');
     _festivalHub.loadJsonData<J>(remoteUrl).then(
           (result) => result.ifPresent((json) {
             try {
               final data = fromJson(json);
               _log.debug('Loading remote data from $remoteUrl was successful, '
-                  'closing stream');
+                  "${periodic ? 'waiting for updates' : 'closing stream'}");
               if (!streamController.isClosed) {
                 streamController.add(data);
+                loadingRemoteDataFinished = true;
               }
-              streamController.close();
+              if (!periodic) {
+                streamController.close();
+              }
               _appStorage.storeJson(appStorageKey, json);
             } catch (error) {
               _log.error('Error loading remote data from $remoteUrl', error);
               loadingRemoteDataFailed = true;
               if (loadingOfflineDataFailed) {
                 _sendErrorToStream(streamController, appStorageKey);
-              } else if (loadingOfflineDataFinished) {
+              } else if (loadingOfflineDataFinished && !periodic) {
                 streamController.close();
               }
             }
@@ -113,13 +152,13 @@ class CombinedStorage {
             loadingRemoteDataFailed = true;
             if (loadingOfflineDataFailed) {
               _sendErrorToStream(streamController, appStorageKey);
-            } else if (loadingOfflineDataFinished) {
+            } else if (loadingOfflineDataFinished && !periodic) {
               streamController.close();
             }
           }),
         );
 
-    _log.debug('Loading offline data');
+    _log.debug('Loading offline data for $appStorageKey');
     _loadOfflineData(
       context: context,
       appStorageKey: appStorageKey,
@@ -128,10 +167,10 @@ class CombinedStorage {
     ).then(
       (result) => result.ifPresent((data) {
         _log.debug('Loading offline data was successful for $appStorageKey');
-        if (!streamController.isClosed) {
+        if (!streamController.isClosed && !loadingRemoteDataFinished) {
           streamController.add(data);
           loadingOfflineDataFinished = true;
-          if (loadingRemoteDataFailed) {
+          if (loadingRemoteDataFailed && !periodic) {
             streamController.close();
           }
         }

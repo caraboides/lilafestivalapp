@@ -65,6 +65,7 @@ class ScheduleProviderCreator {
               appStorageKey: Constants.scheduleAppStorageFileName,
               assetPath: Constants.scheduleAssetFileName,
               fromJson: _fromJson,
+              periodicDuration: _globalConfig.scheduleReloadDuration,
             );
           }
           // TODO(SF) autodispose?
