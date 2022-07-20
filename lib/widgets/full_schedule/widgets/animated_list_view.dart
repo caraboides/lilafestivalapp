@@ -75,22 +75,24 @@ class _AnimatedListViewState extends State<AnimatedListView> {
   }
 
   @override
-  Widget build(BuildContext context) => AnimatedList(
-        key: _listKey,
-        shrinkWrap: true,
-        controller: widget.scrollController,
-        initialItemCount: widget.initialItemCount,
-        itemBuilder: (context, index, animation) => widget.itemIds[index]
-            .map<Widget>(
-              (itemId) => _animated(
-                animation: animation,
-                child: widget.itemBuilder(
-                    context: context,
-                    animation: animation,
-                    index: index,
-                    itemId: itemId),
-              ),
-            )
-            .orElse(Container()),
+  Widget build(BuildContext context) => Scrollbar(
+        child: AnimatedList(
+          key: _listKey,
+          shrinkWrap: true,
+          controller: widget.scrollController,
+          initialItemCount: widget.initialItemCount,
+          itemBuilder: (context, index, animation) => widget.itemIds[index]
+              .map<Widget>(
+                (itemId) => _animated(
+                  animation: animation,
+                  child: widget.itemBuilder(
+                      context: context,
+                      animation: animation,
+                      index: index,
+                      itemId: itemId),
+                ),
+              )
+              .orElse(Container()),
+        ),
       );
 }

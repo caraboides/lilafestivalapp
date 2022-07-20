@@ -214,38 +214,40 @@ class BandDetailView extends HookConsumerWidget {
     final band = bandWithEvents.band;
     return Container(
       alignment: Alignment.topCenter,
-      child: ListView(
-        children: <Widget>[
-          OptionalBuilder(
-            optional: Optional.ofNullable(
-                band.map((bandValue) => bandValue.nonEmptyLogo).orElseNull),
-            builder: (_, logoValue) =>
-                _buildBandLogo(theme, logoValue, band.value.logoData),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-            child: Text(
-              bandName.toUpperCase(),
-              style: theme.textTheme.headline3,
-              textAlign: TextAlign.center,
+      child: Scrollbar(
+        child: ListView(
+          children: <Widget>[
+            OptionalBuilder(
+              optional: Optional.ofNullable(
+                  band.map((bandValue) => bandValue.nonEmptyLogo).orElseNull),
+              builder: (_, logoValue) =>
+                  _buildBandLogo(theme, logoValue, band.value.logoData),
             ),
-          ),
-          _buildEvents(bandWithEvents),
-          band
-              .map<Widget>((b) => Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: _buildDetails(theme, locale, b)))
-              .orElse(_fallbackInfo),
-          OptionalBuilder(
-            optional: Optional.ofNullable(
-                band.map((bandValue) => bandValue.nonEmptyImage).orElseNull),
-            builder: (_, imageValue) => Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: _buildBandImage(theme, imageValue, band.value.imageData),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+              child: Text(
+                bandName.toUpperCase(),
+                style: theme.textTheme.headline3,
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        ],
+            _buildEvents(bandWithEvents),
+            band
+                .map<Widget>((b) => Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: _buildDetails(theme, locale, b)))
+                .orElse(_fallbackInfo),
+            OptionalBuilder(
+              optional: Optional.ofNullable(
+                  band.map((bandValue) => bandValue.nonEmptyImage).orElseNull),
+              builder: (_, imageValue) => Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: _buildBandImage(theme, imageValue, band.value.imageData),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

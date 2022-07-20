@@ -131,60 +131,63 @@ class About extends StatelessWidget {
         child: Builder(
           builder: (context) => AppScaffold.withTitle(
             title: 'About'.i18n,
-            body: ListView(
-              padding: const EdgeInsets.only(
-                  left: 20, right: 20, top: 20, bottom: 10),
-              children: <Widget>[
-                ..._buildMessages(
-                  ImmortalList([
-                    Reference(
-                      label: 'This is an unofficial app for the {festival}:'
-                          .i18n
-                          .fill({'festival': _config.festivalFullName}),
-                      links: ImmortalList([
-                        Link(url: _config.festivalUrl),
-                      ]),
-                    ),
-                    Reference(
-                      label: 'Source code can be found under'.i18n,
-                      links: ImmortalList([
-                        Link(url: _globalConfig.repositoryUrl),
-                      ]),
-                    ),
-                  ]),
-                ),
-                _divider,
-                const SizedBox(height: 5),
-                Text('Created by Projekt LilaHerz'.i18n),
-                const SizedBox(height: 10),
-                ..._buildReferences(
-                  _globalConfig.creators,
-                  icon: _theme.heartIcon,
-                ),
-                _divider,
-                const SizedBox(height: 5),
-                ..._buildReferences(
-                  _globalConfig.references,
-                  labelGenerator: (label) => label.i18n,
-                ),
-                ..._buildReferences(
-                  _config.fontReferences,
-                  labelGenerator: (label) =>
-                      'Font "{font}" by:'.i18n.fill({'font': label}),
-                ),
-                _divider,
-                const SizedBox(height: 5),
-                ..._buildMessages(
-                  _config.aboutMessages,
-                ),
-                _divider,
-                const SizedBox(height: 5),
-                _theme.primaryButton(
-                  label:
-                      MaterialLocalizations.of(context).viewLicensesButtonLabel,
-                  onPressed: () => _showLicenses(context),
-                ),
-              ],
+            body: Scrollbar(
+              child: ListView(
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 20, bottom: 10),
+                children: <Widget>[
+                  ..._buildMessages(
+                    ImmortalList([
+                      Reference(
+                        label: 'This is an unofficial app for the {festival}:'
+                            .i18n
+                            .fill({'festival': _config.festivalFullName}),
+                        links: ImmortalList([
+                          Link(url: _config.festivalUrl),
+                        ]),
+                      ),
+                      Reference(
+                        label: 'Source code can be found under'.i18n,
+                        links: ImmortalList([
+                          Link(url: _globalConfig.repositoryUrl),
+                        ]),
+                      ),
+                    ]),
+                  ),
+                  _divider,
+                  const SizedBox(height: 5),
+                  Text('Created by Projekt LilaHerz'.i18n),
+                  const SizedBox(height: 10),
+                  ..._buildReferences(
+                    _globalConfig.creators,
+                    icon: _theme.heartIcon,
+                  ),
+                  _divider,
+                  const SizedBox(height: 5),
+                  ..._buildReferences(
+                    _globalConfig.references,
+                    labelGenerator: (label) => label.i18n,
+                  ),
+                  ..._buildReferences(
+                    _config.fontReferences,
+                    labelGenerator: (label) =>
+                        'Font "{font}" by:'.i18n.fill({'font': label}),
+                  ),
+                  _divider,
+                  const SizedBox(height: 5),
+                  ..._buildMessages(
+                    _config.aboutMessages,
+                  ),
+                  const SizedBox(height: 13),
+                  _divider,
+                  const SizedBox(height: 5),
+                  _theme.primaryButton(
+                    label: MaterialLocalizations.of(context)
+                        .viewLicensesButtonLabel,
+                    onPressed: () => _showLicenses(context),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

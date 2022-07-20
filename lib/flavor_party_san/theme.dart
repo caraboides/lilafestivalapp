@@ -77,6 +77,9 @@ final ThemeData theme = ThemeData(
   expansionTileTheme: const ExpansionTileThemeData(
     iconColor: _secondaryColor,
   ),
+  dividerTheme: const DividerThemeData(
+    thickness: 1.0,
+  ),
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(
