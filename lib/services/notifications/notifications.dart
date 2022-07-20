@@ -156,9 +156,19 @@ class Notifications {
       _log.error('Retrieving pending notifications failed', error);
       return <PendingNotificationRequest>[];
     });
-    final pendingNotificationsMap = ImmortalMap.fromEntries(
-        pendingNotifications.map((notification) => MapEntry(
-            notification.id, jsonDecode(notification.payload ?? '{}'))));
+    final pendingNotificationsMap =
+        ImmortalMap.fromEntries(pendingNotifications.map((notification) {
+      Map<String, dynamic> payload;
+      try {
+        payload = jsonDecode(notification.payload ?? '{}');
+      } catch (error) {
+        _log.error(
+            'Error decoding notification payload ${notification.payload}',
+            error);
+        payload = {};
+      }
+      return MapEntry(notification.id, payload);
+    }));
 
     // Cancel notifications that are not needed anymore
     pendingNotificationsMap.keys

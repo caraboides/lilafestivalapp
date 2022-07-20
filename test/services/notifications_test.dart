@@ -156,6 +156,7 @@ final testPendingNotifications = <PendingNotificationRequest>[
     '{"band":"band5","id":"event5","hash":-1}',
   ),
   const PendingNotificationRequest(6, null, null, null),
+  const PendingNotificationRequest(7, null, null, 'invalid'),
 ];
 
 void main() {
@@ -226,6 +227,7 @@ void main() {
         verify(notificationsPlugin.cancel(4, tag: null));
         verify(notificationsPlugin.cancel(5, tag: null));
         verify(notificationsPlugin.cancel(6, tag: null));
+        verify(notificationsPlugin.cancel(7, tag: null));
         verifyNever(notificationsPlugin.cancel(1, tag: null));
         verifyNever(notificationsPlugin.cancel(2, tag: null));
       });
