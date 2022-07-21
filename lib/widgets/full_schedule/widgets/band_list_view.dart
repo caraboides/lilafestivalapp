@@ -7,6 +7,7 @@ import 'package:optional/optional.dart';
 
 import '../../../models/band_with_events.dart';
 import '../../../models/theme.dart';
+import '../../../utils/date.dart';
 import 'alphabetical_list_view.dart';
 import 'band_list_item.dart';
 import 'missing_schedule_banner/missing_schedule_banner.dart';
@@ -60,7 +61,7 @@ class BandListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentTime = DateTime.now();
+    final currentTime = currentDate();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

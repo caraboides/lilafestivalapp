@@ -16,6 +16,7 @@ import '../../models/festival_config.dart';
 import '../../models/theme.dart';
 import '../../providers/bands_with_events.dart';
 import '../../providers/festival_scope.dart';
+import '../../utils/date.dart';
 import '../../utils/logging.dart';
 import '../../widgets/bands/band_cancelled/band_cancelled.dart';
 import '../../widgets/events/dense_event_list.dart';
@@ -179,7 +180,7 @@ class BandDetailView extends HookConsumerWidget {
               end: event.end,
               showWeekDay: true,
             ),
-            EventPlayingIndicator(isPlaying: event.isPlaying(DateTime.now())),
+            EventPlayingIndicator(isPlaying: event.isPlaying(currentDate())),
             EventStage(event.stage),
           ],
         ),
@@ -189,7 +190,7 @@ class BandDetailView extends HookConsumerWidget {
         padding: const EdgeInsets.only(top: 12, bottom: 7),
         child: DenseEventList(
           events: events,
-          currentTime: DateTime.now(),
+          currentTime: currentDate(),
         ),
       );
 

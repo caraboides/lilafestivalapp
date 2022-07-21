@@ -14,3 +14,5 @@ DateTime toFestivalDay(DateTime date) {
       date.subtract(dimeGet<FestivalConfig>().daySwitchOffset);
   return DateTime(withoutOffset.year, withoutOffset.month, withoutOffset.day);
 }
+
+DateTime currentDate() => DateTime.now();

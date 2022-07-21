@@ -50,7 +50,7 @@ class _EventListViewState extends State<EventListView>
       .orElse(const Optional<Event>.empty());
 
   void _updateCurrentDate() {
-    _currentTime = DateTime.now();
+    _currentTime = currentDate();
   }
 
   void _updatePlayingBandIndices() {

@@ -52,7 +52,7 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
   }
 
   int _initialTab(ImmortalList<DateTime> days) {
-    final now = DateTime.now();
+    final now = currentDate();
     return 1 + days.indexWhere((day) => isSameFestivalDay(now, day));
   }
 

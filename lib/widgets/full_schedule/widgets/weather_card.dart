@@ -8,6 +8,7 @@ import 'package:weather/weather.dart';
 import '../../../models/festival_config.dart';
 import '../../../models/theme.dart';
 import '../../../providers/weather.dart';
+import '../../../utils/date.dart';
 import '../../../utils/logging.dart';
 
 class WeatherCard extends HookConsumerWidget {
@@ -62,7 +63,7 @@ class WeatherCard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Update weather every hour
-    final hour = DateTime.now().hour;
+    final hour = currentDate().hour;
     final weather = ref.watch(_weather(WeatherKey(
       date: date,
       cacheKey: hour,

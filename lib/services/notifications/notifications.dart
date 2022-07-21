@@ -15,6 +15,7 @@ import '../../models/my_schedule.dart';
 import '../../models/theme.dart';
 import '../../screens/band_detail_view/band_detail_view.dart';
 import '../../utils/constants.dart';
+import '../../utils/date.dart';
 import '../../utils/i18n.dart';
 import '../../utils/logging.dart';
 import 'notifications.i18n.dart';
@@ -87,7 +88,7 @@ class Notifications {
     Event event,
     NotificationId notificationId,
   ) async {
-    if (event.isInFutureOf(DateTime.now())) {
+    if (event.isInFutureOf(currentDate())) {
       _log.debug('Schedule notification for event ${event.id} with id '
           '$notificationId');
       await _plugin
@@ -132,7 +133,7 @@ class Notifications {
     MySchedule mySchedule,
     ImmortalList<Event> events,
   ) {
-    final now = DateTime.now();
+    final now = currentDate();
     final scheduledEvents = <NotificationId, Event>{};
     for (final event in events) {
       if (event.isInFutureOf(now)) {

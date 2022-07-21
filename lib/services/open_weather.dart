@@ -49,7 +49,7 @@ class OpenWeather {
   Stream<Optional<Weather>> getWeatherForDate(DateTime date) =>
       _getForecast().map<Optional<Weather>>((forecast) {
         _log.debug('Selecting weather for $date');
-        final now = DateTime.now();
+        final now = currentDate();
         final isToday = isSameFestivalDay(now, date);
         final maxHour = isToday
             ? max(_globalConfig.weatherMinHour, now.hour)
