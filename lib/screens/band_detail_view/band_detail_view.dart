@@ -123,26 +123,29 @@ class BandDetailView extends HookConsumerWidget {
         ],
       );
 
-  Widget _buildImagePlaceholder(ThemeData theme, ImageData imageData) => Stack(
-        children: <Widget>[
-          if (imageData.hasHash) BlurHash(hash: imageData.hash!),
-          Shimmer.fromColors(
-            baseColor: Colors.transparent,
-            highlightColor: _theme.shimmerColor,
-            child: Container(color: theme.scaffoldBackgroundColor),
-            loop: 1,
+  Widget _buildImage(ThemeData theme, String imgUrl, [ImageData? imgData]) =>
+      Stack(
+        children: [
+          if (imgData?.hasHash ?? false) BlurHash(hash: imgData!.hash!),
+          CachedNetworkImage(
+            imageUrl: imgUrl,
+            errorWidget: (_, __, ___) => Container(),
+            placeholder: (_, __) => Shimmer.fromColors(
+              baseColor: Colors.transparent,
+              highlightColor: _theme.shimmerColor,
+              child: Container(color: theme.scaffoldBackgroundColor),
+              loop: 1,
+            ),
+            placeholderFadeInDuration: const Duration(milliseconds: 1500),
+            imageBuilder: (context, imageProvider) => Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: imageProvider,
+                ),
+              ),
+            ),
           ),
         ],
-      );
-
-  Widget _buildImage(ThemeData theme, String imgUrl, [ImageData? imgData]) =>
-      CachedNetworkImage(
-        imageUrl: imgUrl,
-        errorWidget: (_, __, ___) => Container(),
-        placeholder: imgData != null
-            ? (_, __) => _buildImagePlaceholder(theme, imgData)
-            : null,
-        placeholderFadeInDuration: const Duration(milliseconds: 200),
       );
 
   Widget _buildBandLogo(ThemeData theme, String imgUrl, ImageData? imgData) =>
