@@ -138,6 +138,12 @@ void main() {
       debugPrint = (message, {wrapWidth}) {};
     });
 
+    tearDown(() {
+      reset(festivalHubMock);
+      reset(appStorageMock);
+      reset(assetBundleMock);
+    });
+
     group('without periodic update', () {
       test('resolves remote data only if returned first', () async {
         mockRemoteData();
@@ -152,8 +158,8 @@ void main() {
       });
 
       test(
-          'resolves asset data before remote data if app storage data is missing',
-          () async {
+          'resolves asset data before remote data if app storage data is'
+          'missing', () async {
         mockRemoteData(10);
         mockAppStorageData(0, null);
         mockAssetData();
@@ -323,6 +329,42 @@ void main() {
         expect(
             await assertPeriodicStreamData(['remoteData', 'remoteUpdateData']),
             true);
+      });
+
+      test('cancels and resumes remote update timer', () async {
+        const waitingDelay = Duration(milliseconds: 110);
+        mockPeriodicRemoteData(0, [
+          remoteData,
+          const TestData('update1'),
+          const TestData('update2'),
+          const TestData('update3'),
+        ]);
+        mockAppStorageData(10);
+        final stream = createStream(periodicDuration);
+        final events = <TestData>[];
+        final subscription = stream.listen((event) {
+          events.add(event);
+        });
+
+        verify(festivalHubMock.loadJsonData('remoteUrl')).called(1);
+        assertList(events, ['remoteData']);
+
+        await Future.delayed(waitingDelay);
+        subscription.pause();
+        await Future.delayed(waitingDelay);
+        verify(festivalHubMock.loadJsonData('remoteUrl')).called(1);
+        assertList(events, ['remoteData', 'update1']);
+
+        subscription.resume();
+        await Future.delayed(waitingDelay);
+        verify(festivalHubMock.loadJsonData('remoteUrl')).called(1);
+        assertList(events, ['remoteData', 'update1', 'update2']);
+
+        await subscription.cancel();
+        await Future.delayed(waitingDelay);
+        verifyNoMoreInteractions(festivalHubMock);
+
+        assertList(events, ['remoteData', 'update1', 'update2']);
       });
     });
   });
