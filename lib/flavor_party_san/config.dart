@@ -32,7 +32,7 @@ final FestivalConfig config = FestivalConfig(
       links: ImmortalList([
         Link(
           imageAssetPath: 'assets/mar.gif',
-          url: Uri.parse('http://www.metalheadsagainstracism.org/'),
+          url: Uri.parse('https://www.facebook.com/MetalHeadsAgainst/'),
         ),
       ]),
     ),
