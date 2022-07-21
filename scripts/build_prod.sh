@@ -20,7 +20,7 @@ if [[ -n $YEAR ]]; then
 fi
 
 echo "Starting build..."
-flutter build apk --flavor $FLAVOR \
+flutter build apk --split-per-abi --flavor $FLAVOR \
   --dart-define=WEATHER_API_KEY=$WEATHER_API_KEY \
   --dart-define=FESTIVAL_HUB_BASE_URL=$FESTIVAL_HUB_BASE_URL \
   -t lib/main_$FLAVOR.dart \
