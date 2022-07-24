@@ -68,8 +68,6 @@ android {
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        // TODO(SF) BUILD release?
-        // multiDexEnabled true
     }
 
     flavorDimensions "festival"
@@ -114,6 +112,4 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    // TODO(SF) BUILD release?
-    // implementation 'com.android.support:multidex:1.0.3'
 }

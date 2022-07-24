@@ -29,8 +29,6 @@ class Notifications {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
   Logger get _log => const Logger(module: 'NOTIFICATIONS');
 
-  // TODO(SF) BUILD release proguard: -keep class com.dexterous.** { *; }
-
   AndroidNotificationDetails get _androidPlatformChannelSpecifics =>
       AndroidNotificationDetails(
         Constants.notificationChannelId,
