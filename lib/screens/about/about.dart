@@ -34,7 +34,8 @@ class About extends StatelessWidget {
   }) =>
       TextButton(
         child: Text(link.label ?? link.url.toString()),
-        onPressed: () => launchUrl(link.url),
+        onPressed: () =>
+            launchUrl(link.url, mode: LaunchMode.externalApplication),
         style: ButtonStyle(
           tapTargetSize: shrink
               ? MaterialTapTargetSize.shrinkWrap
@@ -49,7 +50,8 @@ class About extends StatelessWidget {
       Optional.ofNullable(link.imageAssetPath)
           .map<Widget>((assetPath) => GestureDetector(
                 child: Image.asset(assetPath),
-                onTap: () => launchUrl(link.url),
+                onTap: () =>
+                    launchUrl(link.url, mode: LaunchMode.externalApplication),
               ))
           .orElse(_buildButtonLink(link, shrink: shrink));
 

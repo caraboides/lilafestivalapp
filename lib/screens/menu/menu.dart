@@ -92,9 +92,11 @@ class Menu extends StatelessWidget {
           theme: theme,
           label: 'Privacy Policy'.i18n,
           icon: Icons.verified_user,
-          onTap: () => launchUrl(locale.languageCode == 'de'
-              ? _globalConfig.privacyPolicyUrlDe
-              : _globalConfig.privacyPolicyUrlEn),
+          onTap: () => launchUrl(
+              locale.languageCode == 'de'
+                  ? _globalConfig.privacyPolicyUrlDe
+                  : _globalConfig.privacyPolicyUrlEn,
+              mode: LaunchMode.externalApplication),
         ),
       ],
     );

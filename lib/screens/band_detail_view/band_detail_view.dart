@@ -115,7 +115,7 @@ class BandDetailView extends HookConsumerWidget {
               child: _theme.primaryButton(
                 label: 'Play on Spotify'.i18n,
                 onPressed: () {
-                  launchUrl(url);
+                  launchUrl(url, mode: LaunchMode.externalApplication);
                 },
               ),
             ),

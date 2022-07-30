@@ -24,7 +24,8 @@ class WeatherCard extends HookConsumerWidget {
       Uri.parse('https://openweathermap.org/city/${_config.weatherCityId}');
 
   Widget _buildWeatherWidget(Weather weather) => InkWell(
-        onTap: () => launchUrl(_weatherUrl),
+        onTap: () =>
+            launchUrl(_weatherUrl, mode: LaunchMode.externalApplication),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Row(

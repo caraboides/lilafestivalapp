@@ -34,7 +34,8 @@ class StaticHtmlView extends HookWidget {
             initialUrl: _buildUrl(context),
             javascriptMode: JavascriptMode.unrestricted,
             navigationDelegate: (request) {
-              launchUrl(Uri.parse(request.url));
+              launchUrl(Uri.parse(request.url),
+                  mode: LaunchMode.externalApplication);
               return NavigationDecision.prevent;
             },
             onPageFinished: (_) {
