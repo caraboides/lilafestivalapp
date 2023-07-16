@@ -1,7 +1,7 @@
 #!/bin/bash
 
 FLAVOR=$1
-YEAR=2022
+YEAR=2023
 
 if [[ -z $FLAVOR ]]; then
   echo "Please specify a flavor: [spirit|party_san]"

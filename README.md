@@ -72,6 +72,24 @@ There is also a helper script to switch to the newest version of a festivals:
 
 * This script should be updated as soon as a new year is available for a festival.
 
+## Update content
+
+- Update initial `bands.json` and `schedule.json`
+- Update `display_font.tff` if necessary
+- Update flyer in `android/app/src/<festival>/res/drawable/flyer.jpg`
+- Update infos if necessary:
+    - HTML for FAQs, shuttle plan etc
+    - Styling for htmls: font + colors
+- Update `config.dart`:
+    - `festivalId`
+    - start and end date
+    - Update history entries
+    - Update font reference if necessary
+    - Update weather info if necessary
+    - Update stage alignment if necessary
+- Possibly change default year in `switch.sh` script
+- Update colors in `theme.dart` if necessary
+
 ## Tests
 
 We use mockito for creating mocks in our tests. Since the introduction of null safety in dart, mockito requires code

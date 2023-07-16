@@ -9,7 +9,6 @@ import 'shuttle_html.dart';
 const String _shuttleHeader = '''
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css?family=Pirata+One&display=swap" rel="stylesheet">
 
   <style>
     td,
@@ -42,8 +41,13 @@ const String _shuttleHeader = '''
       background-color: #eeeeee;
     }
 
+    @font-face {
+      font-family: 'Impacted2';
+      src: url('https://www.party-san.de/typo3conf/ext/theme_psoa/Resources/Public/Fonts/Impacted2/Impacted20-Regular.woff2?v=4.6.3') format('woff');
+    }
+
     h2 {
-      font-family: 'Pirata One';
+      font-family: 'Impacted2';
       font-size: 27px;
     }
 
