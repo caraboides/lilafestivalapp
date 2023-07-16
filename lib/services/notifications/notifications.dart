@@ -20,6 +20,8 @@ import '../../utils/i18n.dart';
 import '../../utils/logging.dart';
 import 'notifications.i18n.dart';
 
+const notificationTimePeriodInMinutes = 15;
+
 class Notifications {
   const Notifications();
 
@@ -100,7 +102,9 @@ class Notifications {
         }),
         // TODO(SF) FEATURE configuration option?
         tz.TZDateTime.from(
-          event.start.value.subtract(const Duration(minutes: 10)),
+          event.start.value.subtract(const Duration(
+            minutes: notificationTimePeriodInMinutes,
+          )),
           tz.local,
         ),
         NotificationDetails(

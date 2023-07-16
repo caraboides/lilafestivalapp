@@ -187,7 +187,7 @@ void main() {
           'name',
           'band2 plays at 21:00 on the stage!',
           tz.TZDateTime.from(
-              startDate.add(const Duration(minutes: 50)), tz.local),
+              startDate.add(const Duration(minutes: 45)), tz.local),
           argThat(NotificationDetailsMatcher()),
           payload: '{"band":"band2","id":"event2",'
               '"hash":${event2.hashCode}}',
@@ -201,7 +201,7 @@ void main() {
           'name',
           'band4 plays at 23:00 on the stage!',
           tz.TZDateTime.from(
-              startDate.add(const Duration(minutes: 170)), tz.local),
+              startDate.add(const Duration(minutes: 165)), tz.local),
           argThat(NotificationDetailsMatcher()),
           payload: '{"band":"band4","id":"event4",'
               '"hash":${event4.hashCode}}',
@@ -244,7 +244,7 @@ void main() {
           'name',
           'band1 plays at 20:00 on the stage!',
           tz.TZDateTime.from(
-              startDate.subtract(const Duration(minutes: 10)), tz.local),
+              startDate.subtract(const Duration(minutes: 15)), tz.local),
           argThat(NotificationDetailsMatcher()),
           payload: '{"band":"band1","id":"event1",'
               '"hash":${event1.hashCode}}',
@@ -257,7 +257,7 @@ void main() {
           'name',
           'band2 plays at 21:00 on the stage!',
           tz.TZDateTime.from(
-              startDate.add(const Duration(minutes: 50)), tz.local),
+              startDate.add(const Duration(minutes: 45)), tz.local),
           argThat(NotificationDetailsMatcher()),
           payload: '{"band":"band2","id":"event2",'
               '"hash":${event2.hashCode}}',
@@ -270,7 +270,7 @@ void main() {
           'name',
           'band4 plays at 23:00 on the stage!',
           tz.TZDateTime.from(
-              startDate.add(const Duration(minutes: 170)), tz.local),
+              startDate.add(const Duration(minutes: 165)), tz.local),
           argThat(NotificationDetailsMatcher()),
           payload: '{"band":"band4","id":"event4",'
               '"hash":${event4.hashCode}}',
