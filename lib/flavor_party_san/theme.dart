@@ -4,11 +4,11 @@ import '../models/theme.dart';
 
 const String _displayFontFamily = 'Display Font';
 final Color _primaryColor = Colors.grey[850]!;
-const Color _secondaryColor = Color(0xFFD4B558);
+const Color _secondaryColor = Color(0xFFE9D8B3);
 final Color _errorColor = Colors.redAccent.shade700;
 final Color _lightDividerColor = Colors.grey.shade800;
 final Color _historyBackgroundColor = Colors.grey.shade400;
-const Color _cardColor = Color(0xFFe4d2a9);
+const Color _cardColor = Color.fromARGB(255, 235, 224, 201);
 const double _appBarHeight = 49;
 
 final ThemeData theme = ThemeData(
