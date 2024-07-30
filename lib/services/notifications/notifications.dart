@@ -65,11 +65,27 @@ class Notifications {
       _log.error('Retrieving notification launch details failed', error);
     }));
 
+    // Request permissions
+    final bool? result = await _plugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestPermission()
+        .then((success) {
+      _log.debug('Received permission for notifications: $success');
+    }).catchError((error) {
+      _log.error('Retrieving notification launch details failed', error);
+    });
+
     // TODO(SF) move initialization somewhere else if tz is used more often
     tz.initializeTimeZones();
     final currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
     _log.debug('Setting local timezone to $currentTimeZone');
     tz.setLocalLocation(tz.getLocation(currentTimeZone));
+
+    if (!(result ?? false)) {
+      // Did not receive permission to send notifications, skip initialization
+      return;
+    }
 
     await _plugin
         .initialize(

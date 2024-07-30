@@ -11,6 +11,7 @@ Generic festival app with specific festivals as flavors:
 
 Place `.env` file in the root directory.
 <!-- TODO(SF) BUILD release mention signing keys -->
+<!-- flutter v 3.0.5 -->
 
 ### Generate app icons for all flavors
 
