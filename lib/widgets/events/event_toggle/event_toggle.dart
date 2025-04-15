@@ -23,62 +23,64 @@ class EventToggle extends HookConsumerWidget {
     required Widget icon,
     required String tooltip,
     required VoidCallback onPressed,
-  }) =>
-      Semantics(
-        button: true,
-        enabled: true,
-        child: InkResponse(
-          onTap: onPressed,
-          child: Tooltip(
-            message: tooltip,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minWidth: size, minHeight: size),
-              child: Container(
-                height: _iconSize,
-                width: _iconSize,
-                alignment: Alignment.center,
-                child: icon,
-              ),
-            ),
+  }) => Semantics(
+    button: true,
+    enabled: true,
+    child: InkResponse(
+      onTap: onPressed,
+      splashColor: _theme.toggleSplashColor,
+      radius:
+          dense ? _theme.toggleDenseSplashRadius : Material.defaultSplashRadius,
+      child: Tooltip(
+        message: tooltip,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minWidth: size, minHeight: size),
+          child: Container(
+            height: _iconSize,
+            width: _iconSize,
+            alignment: Alignment.center,
+            child: icon,
           ),
-          splashColor: _theme.toggleSplashColor,
-          radius: dense
-              ? _theme.toggleDenseSplashRadius
-              : Material.defaultSplashRadius,
         ),
-      );
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final festivalId = DimeFlutter.get<FestivalScope>(context).festivalId;
-    final isLiked = ref
-        .watch(dimeGet<LikedEventProvider>()(EventKey(
-          festivalId: festivalId,
-          eventId: event.id,
-        )))
-        .isPresent;
+    final isLiked =
+        ref
+            .watch(
+              dimeGet<LikedEventProvider>()(
+                EventKey(festivalId: festivalId, eventId: event.id),
+              ),
+            )
+            .isPresent;
     final size = dense ? _theme.toggleDenseIconSize : _theme.toggleIconSize;
 
     final button = _buildIconButton(
-        context: context,
-        size: size,
-        icon: AnimatedCrossFade(
-          firstChild: const Icon(Icons.star),
-          secondChild: const Icon(Icons.star_border),
-          crossFadeState:
-              isLiked ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-          duration: const Duration(milliseconds: 150),
-        ),
-        tooltip:
-            (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,
-        onPressed: () =>
-            (ref.read(dimeGet<MyScheduleProvider>()(festivalId).notifier))
-                .toggleEvent(event));
+      context: context,
+      size: size,
+      icon: AnimatedCrossFade(
+        firstChild: const Icon(Icons.star),
+        secondChild: const Icon(Icons.star_border),
+        crossFadeState:
+            isLiked ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+        duration: const Duration(milliseconds: 150),
+      ),
+      tooltip:
+          (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,
+      onPressed:
+          () => ref
+              .read(dimeGet<MyScheduleProvider>()(festivalId).notifier)
+              .toggleEvent(event),
+    );
     return dense
         ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: button,
-          )
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: button,
+        )
         : button;
   }
 }

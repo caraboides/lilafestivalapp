@@ -53,8 +53,9 @@ class _AlphabeticalListViewState extends State<AlphabeticalListView> {
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       final offset = _scrollController.offset;
-      final newPosition =
-          _listItemOffsets.lastIndexWhere((itemOffset) => itemOffset <= offset);
+      final newPosition = _listItemOffsets.lastIndexWhere(
+        (itemOffset) => itemOffset <= offset,
+      );
       if (newPosition != _currentPosition) {
         setState(() {
           _currentPosition = newPosition;
@@ -92,55 +93,52 @@ class _AlphabeticalListViewState extends State<AlphabeticalListView> {
     required BuildContext context,
     required int index,
     bool isVisible = false,
-  }) =>
-      Opacity(
-        opacity: isVisible ? 1 : 0,
-        child: Container(
-          width: _theme.alphabeticalIndexWidth,
-          alignment: Alignment.topCenter,
-          child: Text(
-            widget.getAlphabeticalIndex(index),
-            style: Theme.of(context).textTheme.headline2,
-          ),
-        ),
-      );
+  }) => Opacity(
+    opacity: isVisible ? 1 : 0,
+    child: Container(
+      width: _theme.alphabeticalIndexWidth,
+      alignment: Alignment.topCenter,
+      child: Text(
+        widget.getAlphabeticalIndex(index),
+        style: Theme.of(context).textTheme.displayMedium,
+      ),
+    ),
+  );
 
   Widget _buildListItemWithAlphabeticalIndex({
     required BuildContext context,
     required Animation<double> animation,
     required int index,
     required String itemId,
-  }) =>
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(child: _buildListItem(context, animation, index, itemId)),
-          FadeTransition(
-            opacity: animation,
-            child: _buildAlphabeticalIndex(
-              context: context,
-              index: index,
-              isVisible: _displayIndices && _showLetterAtListItem(index),
-            ),
-          ),
-        ],
-      );
+  }) => Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      Expanded(child: _buildListItem(context, animation, index, itemId)),
+      FadeTransition(
+        opacity: animation,
+        child: _buildAlphabeticalIndex(
+          context: context,
+          index: index,
+          isVisible: _displayIndices && _showLetterAtListItem(index),
+        ),
+      ),
+    ],
+  );
 
   Widget _buildListItem(
     BuildContext context,
     Animation<double> animation,
     int index,
     String itemId,
-  ) =>
-      DividedListTile(
-        isLast: index == widget.itemCount - 1,
-        child: widget.buildListItem(
-          context: context,
-          animation: animation,
-          index: index,
-          itemId: itemId,
-        ),
-      );
+  ) => DividedListTile(
+    isLast: index == widget.itemCount - 1,
+    child: widget.buildListItem(
+      context: context,
+      animation: animation,
+      index: index,
+      itemId: itemId,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -158,12 +156,12 @@ class _AlphabeticalListViewState extends State<AlphabeticalListView> {
           right: 0,
           child: AnimatedOpacity(
             opacity: _displayIndices ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 250),
             child: _buildAlphabeticalIndex(
               context: context,
               index: _currentPosition,
               isVisible: !_showLetterAtListItem(_currentPosition),
             ),
-            duration: const Duration(milliseconds: 250),
           ),
         ),
       ],

@@ -10,11 +10,7 @@ import '../../events/event_toggle/event_toggle.dart';
 import 'material_color_transition.dart';
 
 class EventListItem extends StatelessWidget {
-  const EventListItem({
-    required this.event,
-    this.isPlaying = false,
-    Key? key,
-  }) : super(key: key);
+  const EventListItem({required this.event, this.isPlaying = false, super.key});
 
   final Event event;
   final bool isPlaying;
@@ -48,7 +44,7 @@ class EventListItem extends StatelessWidget {
                       alignByStage: true,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

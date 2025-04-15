@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../models/theme.dart';
 
-final List<Shadow> _appBarTextShadows = const [
-  Offset(1.0, 1.0),
-  Offset(1.0, -1.0),
-  Offset(-1.0, 1.0),
-  Offset(2.0, 2.0),
-  Offset(-1.0, -1.0)
-]
-    .map((offset) => Shadow(
-          blurRadius: 1.0,
-          color: Colors.black,
-          offset: offset,
-        ))
-    .toList();
+final List<Shadow> _appBarTextShadows =
+    const [
+          Offset(1, 1),
+          Offset(1, -1),
+          Offset(-1, 1),
+          Offset(2, 2),
+          Offset(-1, -1),
+        ]
+        .map(
+          (offset) =>
+              Shadow(blurRadius: 1, color: Colors.black, offset: offset),
+        )
+        .toList();
 const String _displayFontFamily = 'Display Font';
 const Color _menuFontColor = Color(0xFFd6102b);
 final Color _darkBackgroundColor = Colors.grey[850]!;
@@ -27,41 +27,34 @@ const double _primaryButtonHeight = 40;
 const double _appBarHeight = 54;
 
 final ThemeData theme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: _primaryColor,
-    secondary: _secondaryColor,
-    error: _menuFontColor,
-  ),
   textTheme: Typography.blackMountainView.copyWith(
-    headline6: const TextStyle(
+    titleLarge: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 16,
       color: _primaryColor,
     ),
-    headline4: const TextStyle(
+    headlineMedium: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 24,
       color: Colors.black,
     ),
-    headline3: const TextStyle(
+    displaySmall: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 28,
       color: Colors.black,
     ),
-    headline2: TextStyle(
+    displayMedium: TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 28,
-      color: _primaryColor.withOpacity(0.54),
+      color: _primaryColor.withAlpha(138),
       height: 1.1,
     ),
-    subtitle2: const TextStyle(
-      fontWeight: FontWeight.bold,
-    ),
+    titleSmall: const TextStyle(fontWeight: FontWeight.bold),
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   appBarTheme: AppBarTheme(
     backgroundColor: _primaryColor,
-    titleTextStyle: Typography.whiteMountainView.headline6?.copyWith(
+    titleTextStyle: Typography.whiteMountainView.titleLarge?.copyWith(
       fontFamily: _displayFontFamily,
       fontSize: 26,
       shadows: _appBarTextShadows,
@@ -69,10 +62,7 @@ final ThemeData theme = ThemeData(
     toolbarHeight: _appBarHeight,
   ),
   tabBarTheme: const TabBarTheme(
-    labelStyle: TextStyle(
-      fontFamily: _displayFontFamily,
-      fontSize: 18,
-    ),
+    labelStyle: TextStyle(fontFamily: _displayFontFamily, fontSize: 18),
     unselectedLabelStyle: TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 18,
@@ -83,14 +73,65 @@ final ThemeData theme = ThemeData(
     shape: Border(bottom: _border),
     color: Color(0xFFb3dddd),
   ),
-  backgroundColor: Colors.white,
-  toggleableActiveColor: _secondaryColor,
   progressIndicatorTheme: const ProgressIndicatorThemeData(
     color: _secondaryColor,
   ),
-  expansionTileTheme: const ExpansionTileThemeData(
-    iconColor: _menuFontColor,
+  expansionTileTheme: const ExpansionTileThemeData(iconColor: _menuFontColor),
+  checkboxTheme: CheckboxThemeData(
+    fillColor: WidgetStateProperty.resolveWith<Color?>((
+      Set<WidgetState> states,
+    ) {
+      if (states.contains(WidgetState.disabled)) {
+        return null;
+      }
+      if (states.contains(WidgetState.selected)) {
+        return _secondaryColor;
+      }
+      return null;
+    }),
   ),
+  radioTheme: RadioThemeData(
+    fillColor: WidgetStateProperty.resolveWith<Color?>((
+      Set<WidgetState> states,
+    ) {
+      if (states.contains(WidgetState.disabled)) {
+        return null;
+      }
+      if (states.contains(WidgetState.selected)) {
+        return _secondaryColor;
+      }
+      return null;
+    }),
+  ),
+  switchTheme: SwitchThemeData(
+    thumbColor: WidgetStateProperty.resolveWith<Color?>((
+      Set<WidgetState> states,
+    ) {
+      if (states.contains(WidgetState.disabled)) {
+        return null;
+      }
+      if (states.contains(WidgetState.selected)) {
+        return _secondaryColor;
+      }
+      return null;
+    }),
+    trackColor: WidgetStateProperty.resolveWith<Color?>((
+      Set<WidgetState> states,
+    ) {
+      if (states.contains(WidgetState.disabled)) {
+        return null;
+      }
+      if (states.contains(WidgetState.selected)) {
+        return _secondaryColor;
+      }
+      return null;
+    }),
+  ),
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: _primaryColor,
+    secondary: _secondaryColor,
+    error: _menuFontColor,
+  ).copyWith(surface: Colors.white),
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(
@@ -102,21 +143,17 @@ final FestivalTheme festivalTheme = FestivalTheme(
     buttonTheme: theme.buttonTheme.copyWith(textTheme: ButtonTextTheme.accent),
     iconTheme: theme.iconTheme.copyWith(color: Colors.white70),
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        primary: _secondaryColor,
-      ),
+      style: TextButton.styleFrom(foregroundColor: _secondaryColor),
     ),
   ),
   menuTheme: theme.copyWith(
-    textTheme: theme.textTheme
-        .apply(displayColor: _menuFontColor, bodyColor: _menuFontColor),
+    textTheme: theme.textTheme.apply(
+      displayColor: _menuFontColor,
+      bodyColor: _menuFontColor,
+    ),
     canvasColor: _darkBackgroundColor,
-    iconTheme: theme.iconTheme.copyWith(
-      color: _menuFontColor.withOpacity(0.87),
-    ),
-    colorScheme: theme.colorScheme.copyWith(
-      secondary: _menuFontColor,
-    ),
+    iconTheme: theme.iconTheme.copyWith(color: _menuFontColor.withAlpha(222)),
+    colorScheme: theme.colorScheme.copyWith(secondary: _menuFontColor),
     dividerColor: _menuFontColor,
   ),
   menuDrawerDecoration: const BoxDecoration(border: Border(right: _border)),
@@ -125,33 +162,30 @@ final FestivalTheme festivalTheme = FestivalTheme(
   historyTheme: theme.copyWith(
     canvasColor: _historyBackgroundColor,
     scaffoldBackgroundColor: _historyBackgroundColor,
-    backgroundColor: _historyBackgroundColor,
+    colorScheme: theme.colorScheme.copyWith(surface: _historyBackgroundColor),
   ),
-  primaryButton: ({required label, required onPressed}) => Container(
-    height: _primaryButtonHeight,
-    foregroundDecoration: BoxDecoration(
-      border: Border(
-        top: _borderSlim,
-        left: _borderSlim,
-        bottom: _border,
-        right: _border,
+  primaryButton:
+      ({required label, required onPressed}) => Container(
+        height: _primaryButtonHeight,
+        foregroundDecoration: BoxDecoration(
+          border: Border(
+            top: _borderSlim,
+            left: _borderSlim,
+            bottom: _border,
+            right: _border,
+          ),
+        ),
+        child: TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: theme.colorScheme.onSurface,
+            backgroundColor: theme.colorScheme.secondary,
+            shape: const RoundedRectangleBorder(),
+          ),
+          onPressed: onPressed,
+          child: Text(label),
+        ),
       ),
-    ),
-    child: TextButton(
-      style: TextButton.styleFrom(
-        backgroundColor: theme.colorScheme.secondary,
-        primary: theme.colorScheme.onBackground,
-        shape: const RoundedRectangleBorder(),
-      ),
-      onPressed: onPressed,
-      child: Text(label),
-    ),
-  ),
-  logo: const Logo(
-    assetPath: 'assets/logo.png',
-    width: 158,
-    height: 40,
-  ),
+  logo: const Logo(assetPath: 'assets/logo.png', width: 158, height: 40),
   logoMenu: const Logo(
     assetPath: 'assets/logo_menu.png',
     width: 129,

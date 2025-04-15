@@ -18,11 +18,7 @@ import '../event_list_view.dart';
 import 'daily_schedule_list.i18n.dart';
 
 class DailyScheduleList extends HookConsumerWidget {
-  const DailyScheduleList(
-    this.date, {
-    this.likedOnly = false,
-    Key? key,
-  }) : super(key: key);
+  const DailyScheduleList(this.date, {this.likedOnly = false, super.key});
 
   final DateTime date;
   final bool likedOnly;
@@ -35,20 +31,25 @@ class DailyScheduleList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final festivalId = DimeFlutter.get<FestivalScope>(context).festivalId;
-    final mapProvider =
-        ref.watch(dimeGet<DailyScheduleMapProvider>()(DailyScheduleKey(
-      festivalId: festivalId,
-      date: date,
-    )));
-    final listProvider =
-        ref.watch(dimeGet<FilteredDailyScheduleProvider>()(DailyScheduleFilter(
-      festivalId: festivalId,
-      date: date,
-      likedOnly: likedOnly,
-    )));
-    return combineAsyncValues(mapProvider, listProvider,
-            Tuple2<ImmortalMap<EventId, Event>, ImmortalList<EventId>>.new)
-        .when(
+    final mapProvider = ref.watch(
+      dimeGet<DailyScheduleMapProvider>()(
+        DailyScheduleKey(festivalId: festivalId, date: date),
+      ),
+    );
+    final listProvider = ref.watch(
+      dimeGet<FilteredDailyScheduleProvider>()(
+        DailyScheduleFilter(
+          festivalId: festivalId,
+          date: date,
+          likedOnly: likedOnly,
+        ),
+      ),
+    );
+    return combineAsyncValues(
+      mapProvider,
+      listProvider,
+      Tuple2<ImmortalMap<EventId, Event>, ImmortalList<EventId>>.new,
+    ).when(
       data: (eventTuple) {
         if (eventTuple.item1.isEmpty) {
           return _buildErrorScreen();
@@ -60,19 +61,21 @@ class DailyScheduleList extends HookConsumerWidget {
             eventIds: eventTuple.item2,
             date: date,
           ),
-          crossFadeState: eventTuple.item2.isEmpty
-              ? CrossFadeState.showFirst
-              : CrossFadeState.showSecond,
+          crossFadeState:
+              eventTuple.item2.isEmpty
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
           duration: const Duration(milliseconds: 350),
         );
       },
       loading: () => LoadingScreen('Loading running order.'.i18n),
       error: (error, trace) {
         _log.error(
-            'Error retrieving ${likedOnly ? "filtered" : "full"} schedule for '
-            '${date.toIso8601String()}',
-            error,
-            trace);
+          'Error retrieving ${likedOnly ? "filtered" : "full"} schedule for '
+          '${date.toIso8601String()}',
+          error,
+          trace,
+        );
         return _buildErrorScreen();
       },
     );

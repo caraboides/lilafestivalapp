@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class MaterialColorTransition extends ImplicitlyAnimatedWidget {
-  MaterialColorTransition({
-    Key? key,
+  const MaterialColorTransition({
     required this.color,
     required this.child,
-    Duration duration = const Duration(milliseconds: 350),
-    Curve curve = Curves.linear,
-  }) : super(key: key, curve: curve, duration: duration);
+    super.key,
+    super.duration = const Duration(milliseconds: 350),
+    super.curve,
+  });
 
   final Color color;
   final Widget child;
@@ -23,13 +23,12 @@ class _MaterialColorTransitionState
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    _color = visitor(_color, widget.color, (value) => ColorTween(begin: value))
-        as ColorTween?;
+    _color =
+        visitor(_color, widget.color, (value) => ColorTween(begin: value))
+            as ColorTween?;
   }
 
   @override
-  Widget build(BuildContext context) => Material(
-        color: _color?.evaluate(animation),
-        child: widget.child,
-      );
+  Widget build(BuildContext context) =>
+      Material(color: _color?.evaluate(animation), child: widget.child);
 }

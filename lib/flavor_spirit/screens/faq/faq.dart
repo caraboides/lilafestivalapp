@@ -11,36 +11,38 @@ class FAQ extends StatelessWidget {
   static String title() => 'FAQ'.i18n;
 
   List<Widget> _buildSection(
-          ThemeData theme, String title, List<Widget> content) =>
-      <Widget>[
-        Text(
-          title,
-          style: theme.textTheme.headline4,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 20),
-        ...content.expand((widget) => <Widget>[
-              widget,
-              const SizedBox(height: 10),
-            ]),
-        const SizedBox(height: 20),
-      ];
+    ThemeData theme,
+    String title,
+    List<Widget> content,
+  ) => <Widget>[
+    Text(
+      title,
+      style: theme.textTheme.headlineMedium,
+      textAlign: TextAlign.center,
+    ),
+    const SizedBox(height: 20),
+    ...content.expand((widget) => <Widget>[widget, const SizedBox(height: 10)]),
+    const SizedBox(height: 20),
+  ];
 
   List<Widget> _buildTextList(List<String> content) =>
       content.map((text) => Text(text)).toList();
 
-  List<Widget> _buildList(List<String> content) => _buildTextList(content)
-      .map((item) => Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text('●', style: TextStyle(fontSize: 11)),
-              ),
-              Expanded(child: item),
-            ],
-          ))
-      .toList();
+  List<Widget> _buildList(List<String> content) =>
+      _buildTextList(content)
+          .map(
+            (item) => Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text('●', style: TextStyle(fontSize: 11)),
+                ),
+                Expanded(child: item),
+              ],
+            ),
+          )
+          .toList();
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +53,7 @@ class FAQ extends StatelessWidget {
         padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         children: <Widget>[
           ..._buildSection(theme, 'Vorweg:', <Widget>[
-            const Text(
-              'Was wir nicht wollen:',
-            ),
+            const Text('Was wir nicht wollen:'),
             ..._buildList([
               'Nazis, Faschos, Rassisten, AFD-Spinner, Reichsbürger, '
                   'Aluhutträger oder sonstiges, ideologisch rechtes Pack, '
@@ -84,63 +84,59 @@ class FAQ extends StatelessWidget {
               'Das Festivalgelände mit den Bühnen, Essens-, Getränke- und '
                   'Merchandise-Ständen ist ab folgenden Zeiten geöffnet:',
             ]),
-            Row(
+            const Row(
               children: <Widget>[
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text('Donnerstag:'),
-                    const Text('Freitag:'),
-                    const Text('Samstag:'),
+                    Text('Donnerstag:'),
+                    Text('Freitag:'),
+                    Text('Samstag:'),
                   ],
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text('16 Uhr'),
-                    const Text('13 Uhr'),
-                    const Text('11 Uhr'),
+                    Text('16 Uhr'),
+                    Text('13 Uhr'),
+                    Text('11 Uhr'),
                   ],
                 ),
               ],
             ),
           ]),
-          ..._buildSection(
-            theme,
-            'Tickets',
-            <Widget>[
-              ..._buildTextList([
-                'Tickets, die bis Freitag, den 23.8.2019 bezahlt wurden, '
-                    'werden noch verschickt. Ihr könnt bis einschließlich '
-                    'Montag, den 26.08.2019 Tickets über die Homepage '
-                    'bestellen. Diese werden an der Kasse vor Ort auf euren '
-                    'Namen hinterlegt. Klamotten, die nicht mehr rechtzeitig '
-                    'versendet werden können, werden am Infostand hinterlegt.',
-                'Ansonsten bekommt Ihr weiterhin Karten an allen bekannten '
-                    'Vorverkaufsstellen. Für die Faulen, die '
-                    'Kurzentschlossenen oder für diejenigen, die einfach zu '
-                    'viel Geld haben, gibt es noch ausreichend Tickets an der '
-                    'Abendkasse für alle Tage:',
-              ]),
-              const Text(
-                'Vorverkauf: 62.- Eur (für das gesamte Festival)',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-              const Text(
-                'Abendkasse: 72.- Eur (für das gesamte Festival)',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-              const Text(
-                'Freitag (inkl. Do.): 48.- Eur (VVK, Abendkasse etwas teurer)',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-              const Text(
-                'Samstag: 45.- Eur (VVK, Abendkasse etwas teurer)',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-            ],
-          ),
+          ..._buildSection(theme, 'Tickets', <Widget>[
+            ..._buildTextList([
+              'Tickets, die bis Freitag, den 23.8.2019 bezahlt wurden, '
+                  'werden noch verschickt. Ihr könnt bis einschließlich '
+                  'Montag, den 26.08.2019 Tickets über die Homepage '
+                  'bestellen. Diese werden an der Kasse vor Ort auf euren '
+                  'Namen hinterlegt. Klamotten, die nicht mehr rechtzeitig '
+                  'versendet werden können, werden am Infostand hinterlegt.',
+              'Ansonsten bekommt Ihr weiterhin Karten an allen bekannten '
+                  'Vorverkaufsstellen. Für die Faulen, die '
+                  'Kurzentschlossenen oder für diejenigen, die einfach zu '
+                  'viel Geld haben, gibt es noch ausreichend Tickets an der '
+                  'Abendkasse für alle Tage:',
+            ]),
+            const Text(
+              'Vorverkauf: 62.- Eur (für das gesamte Festival)',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+            const Text(
+              'Abendkasse: 72.- Eur (für das gesamte Festival)',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+            const Text(
+              'Freitag (inkl. Do.): 48.- Eur (VVK, Abendkasse etwas teurer)',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+            const Text(
+              'Samstag: 45.- Eur (VVK, Abendkasse etwas teurer)',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ]),
           ..._buildSection(theme, 'Zelten & Parken', <Widget>[
             const Text(
               'Wie in den letzten Jahren auch, ist das Zelten und Parken nicht '

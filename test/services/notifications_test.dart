@@ -22,7 +22,6 @@ import 'notifications_test.mocks.dart';
 @GenerateMocks([FlutterLocalNotificationsPlugin, FlutterNativeTimezone])
 final MockFlutterLocalNotificationsPlugin notificationsPlugin =
     MockFlutterLocalNotificationsPlugin();
-final MockFlutterNativeTimezone timezone = MockFlutterNativeTimezone();
 
 final testFestivalConfig = FestivalConfig(
   festivalId: 'id',
@@ -96,39 +95,44 @@ final testSchedule = MySchedule.fromJson({
 final startDate = DateTime(DateTime.now().year + 1, 8, 1, 20, 0);
 // Scheduled + pending
 final event1 = Event(
-    bandName: 'band1',
-    id: 'event1',
-    stage: 'stage',
-    start: Optional.of(startDate),
-    end: const Optional.empty());
+  bandName: 'band1',
+  id: 'event1',
+  stage: 'stage',
+  start: Optional.of(startDate),
+  end: const Optional.empty(),
+);
 // Scheduled, not pending
 final event2 = Event(
-    bandName: 'band2',
-    id: 'event2',
-    stage: 'stage',
-    start: Optional.of(startDate.add(const Duration(hours: 1))),
-    end: const Optional.empty());
+  bandName: 'band2',
+  id: 'event2',
+  stage: 'stage',
+  start: Optional.of(startDate.add(const Duration(hours: 1))),
+  end: const Optional.empty(),
+);
 // Not scheduled, pending
 final event3 = Event(
-    bandName: 'band3',
-    id: 'event3',
-    stage: 'stage',
-    start: Optional.of(startDate.add(const Duration(hours: 2))),
-    end: const Optional.empty());
+  bandName: 'band3',
+  id: 'event3',
+  stage: 'stage',
+  start: Optional.of(startDate.add(const Duration(hours: 2))),
+  end: const Optional.empty(),
+);
 // Rescheduled + pending
 final event4 = Event(
-    bandName: 'band4',
-    id: 'event4',
-    stage: 'stage',
-    start: Optional.of(startDate.add(const Duration(hours: 3))),
-    end: const Optional.empty());
+  bandName: 'band4',
+  id: 'event4',
+  stage: 'stage',
+  start: Optional.of(startDate.add(const Duration(hours: 3))),
+  end: const Optional.empty(),
+);
 // Past + pending
 final event5 = Event(
-    bandName: 'band5',
-    id: 'event5',
-    stage: 'stage',
-    start: Optional.of(DateTime.now().subtract(const Duration(days: 1))),
-    end: const Optional.empty());
+  bandName: 'band5',
+  id: 'event5',
+  stage: 'stage',
+  start: Optional.of(DateTime.now().subtract(const Duration(days: 1))),
+  end: const Optional.empty(),
+);
 final testEvents = ImmortalList([event1, event2, event3, event4, event5]);
 final testPendingNotifications = <PendingNotificationRequest>[
   PendingNotificationRequest(
@@ -161,7 +165,7 @@ final testPendingNotifications = <PendingNotificationRequest>[
 
 void main() {
   group('Notifications', () {
-    setUpAll(() async {
+    setUpAll(() {
       dimeInstall(TestModule());
       tz.initializeTimeZones();
       tz.setLocalLocation(tz.getLocation('Europe/Berlin'));
@@ -175,50 +179,94 @@ void main() {
 
     group('verifyScheduledEventNotifications', () {
       test('schedules missing notifications', () async {
-        when(notificationsPlugin.pendingNotificationRequests())
-            .thenAnswer(mockResponse(testPendingNotifications));
+        when(
+          notificationsPlugin.pendingNotificationRequests(),
+        ).thenAnswer(mockResponse(testPendingNotifications));
         await notifications.verifyScheduledEventNotifications(
           testSchedule,
           testEvents,
         );
         // Schedule missing
-        verify(notificationsPlugin.zonedSchedule(
-          2,
-          'name',
-          'band2 plays at 21:00 on the stage!',
-          tz.TZDateTime.from(
-              startDate.add(const Duration(minutes: 45)), tz.local),
-          argThat(NotificationDetailsMatcher()),
-          payload: '{"band":"band2","id":"event2",'
-              '"hash":${event2.hashCode}}',
-          androidAllowWhileIdle: true,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-        ));
+        verify(
+          notificationsPlugin.zonedSchedule(
+            2,
+            'name',
+            'band2 plays at 21:00 on the stage!',
+            tz.TZDateTime.from(
+              startDate.add(const Duration(minutes: 45)),
+              tz.local,
+            ),
+            argThat(NotificationDetailsMatcher()),
+            payload:
+                '{"band":"band2","id":"event2",'
+                '"hash":${event2.hashCode}}',
+            androidScheduleMode: AndroidScheduleMode.alarmClock,
+          ),
+        );
         // Reschedule changed
-        verify(notificationsPlugin.zonedSchedule(
-          4,
-          'name',
-          'band4 plays at 23:00 on the stage!',
-          tz.TZDateTime.from(
-              startDate.add(const Duration(minutes: 165)), tz.local),
-          argThat(NotificationDetailsMatcher()),
-          payload: '{"band":"band4","id":"event4",'
-              '"hash":${event4.hashCode}}',
-          androidAllowWhileIdle: true,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-        ));
+        verify(
+          notificationsPlugin.zonedSchedule(
+            4,
+            'name',
+            'band4 plays at 23:00 on the stage!',
+            tz.TZDateTime.from(
+              startDate.add(const Duration(minutes: 165)),
+              tz.local,
+            ),
+            argThat(NotificationDetailsMatcher()),
+            payload:
+                '{"band":"band4","id":"event4",'
+                '"hash":${event4.hashCode}}',
+            androidScheduleMode: AndroidScheduleMode.alarmClock,
+          ),
+        );
         // Do not schedule existing + obsolete
-        verifyNever(notificationsPlugin.zonedSchedule(0, any, any, any, any));
-        verifyNever(notificationsPlugin.zonedSchedule(1, any, any, any, any));
-        verifyNever(notificationsPlugin.zonedSchedule(3, any, any, any, any));
-        verifyNever(notificationsPlugin.zonedSchedule(5, any, any, any, any));
+        verifyNever(
+          notificationsPlugin.zonedSchedule(
+            0,
+            any,
+            any,
+            any,
+            any,
+            androidScheduleMode: anyNamed('androidScheduleMode'),
+          ),
+        );
+        verifyNever(
+          notificationsPlugin.zonedSchedule(
+            1,
+            any,
+            any,
+            any,
+            any,
+            androidScheduleMode: anyNamed('androidScheduleMode'),
+          ),
+        );
+        verifyNever(
+          notificationsPlugin.zonedSchedule(
+            3,
+            any,
+            any,
+            any,
+            any,
+            androidScheduleMode: anyNamed('androidScheduleMode'),
+          ),
+        );
+        verifyNever(
+          notificationsPlugin.zonedSchedule(
+            5,
+            any,
+            any,
+            any,
+            any,
+            androidScheduleMode: anyNamed('androidScheduleMode'),
+          ),
+        );
       });
 
       test('cancels unnecessary and rescheduled notifications', () async {
-        when(notificationsPlugin.pendingNotificationRequests())
-            .thenAnswer(mockResponse(testPendingNotifications));
+        when(
+          notificationsPlugin.pendingNotificationRequests(),
+        ).thenAnswer(mockResponse(testPendingNotifications));
         await notifications.verifyScheduledEventNotifications(
           testSchedule,
           testEvents,
@@ -233,65 +281,103 @@ void main() {
       });
 
       test('handles error retrieving pending notifications', () async {
-        when(notificationsPlugin.pendingNotificationRequests())
-            .thenAnswer(mockError());
+        when(
+          notificationsPlugin.pendingNotificationRequests(),
+        ).thenAnswer(mockError());
         await notifications.verifyScheduledEventNotifications(
           testSchedule,
           testEvents,
         );
-        verify(notificationsPlugin.zonedSchedule(
-          1,
-          'name',
-          'band1 plays at 20:00 on the stage!',
-          tz.TZDateTime.from(
-              startDate.subtract(const Duration(minutes: 15)), tz.local),
-          argThat(NotificationDetailsMatcher()),
-          payload: '{"band":"band1","id":"event1",'
-              '"hash":${event1.hashCode}}',
-          androidAllowWhileIdle: true,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-        ));
-        verify(notificationsPlugin.zonedSchedule(
-          2,
-          'name',
-          'band2 plays at 21:00 on the stage!',
-          tz.TZDateTime.from(
-              startDate.add(const Duration(minutes: 45)), tz.local),
-          argThat(NotificationDetailsMatcher()),
-          payload: '{"band":"band2","id":"event2",'
-              '"hash":${event2.hashCode}}',
-          androidAllowWhileIdle: true,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-        ));
-        verify(notificationsPlugin.zonedSchedule(
-          4,
-          'name',
-          'band4 plays at 23:00 on the stage!',
-          tz.TZDateTime.from(
-              startDate.add(const Duration(minutes: 165)), tz.local),
-          argThat(NotificationDetailsMatcher()),
-          payload: '{"band":"band4","id":"event4",'
-              '"hash":${event4.hashCode}}',
-          androidAllowWhileIdle: true,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-        ));
-        verifyNever(notificationsPlugin.zonedSchedule(3, any, any, any, any));
-        verifyNever(notificationsPlugin.zonedSchedule(5, any, any, any, any));
+        verify(
+          notificationsPlugin.zonedSchedule(
+            1,
+            'name',
+            'band1 plays at 20:00 on the stage!',
+            tz.TZDateTime.from(
+              startDate.subtract(const Duration(minutes: 15)),
+              tz.local,
+            ),
+            argThat(NotificationDetailsMatcher()),
+            payload:
+                '{"band":"band1","id":"event1",'
+                '"hash":${event1.hashCode}}',
+            androidScheduleMode: AndroidScheduleMode.alarmClock,
+          ),
+        );
+        verify(
+          notificationsPlugin.zonedSchedule(
+            2,
+            'name',
+            'band2 plays at 21:00 on the stage!',
+            tz.TZDateTime.from(
+              startDate.add(const Duration(minutes: 45)),
+              tz.local,
+            ),
+            argThat(NotificationDetailsMatcher()),
+            payload:
+                '{"band":"band2","id":"event2",'
+                '"hash":${event2.hashCode}}',
+            androidScheduleMode: AndroidScheduleMode.alarmClock,
+          ),
+        );
+        verify(
+          notificationsPlugin.zonedSchedule(
+            4,
+            'name',
+            'band4 plays at 23:00 on the stage!',
+            tz.TZDateTime.from(
+              startDate.add(const Duration(minutes: 165)),
+              tz.local,
+            ),
+            argThat(NotificationDetailsMatcher()),
+            payload:
+                '{"band":"band4","id":"event4",'
+                '"hash":${event4.hashCode}}',
+            androidScheduleMode: AndroidScheduleMode.alarmClock,
+          ),
+        );
+        verifyNever(
+          notificationsPlugin.zonedSchedule(
+            3,
+            any,
+            any,
+            any,
+            any,
+            androidScheduleMode: anyNamed('androidScheduleMode'),
+          ),
+        );
+        verifyNever(
+          notificationsPlugin.zonedSchedule(
+            5,
+            any,
+            any,
+            any,
+            any,
+            androidScheduleMode: anyNamed('androidScheduleMode'),
+          ),
+        );
         verifyNever(notificationsPlugin.cancel(any));
       });
 
       test('does nothing if schedule is empty', () async {
-        when(notificationsPlugin.pendingNotificationRequests())
-            .thenAnswer(mockResponse([]));
+        when(
+          notificationsPlugin.pendingNotificationRequests(),
+        ).thenAnswer(mockResponse([]));
         await notifications.verifyScheduledEventNotifications(
           MySchedule.empty(),
           testEvents,
         );
         verifyNever(notificationsPlugin.cancel(any));
-        verifyNever(notificationsPlugin.zonedSchedule(any, any, any, any, any));
+        verifyNever(
+          notificationsPlugin.zonedSchedule(
+            any,
+            any,
+            any,
+            any,
+            any,
+            androidScheduleMode: anyNamed('androidScheduleMode'),
+          ),
+        );
       });
     });
   });

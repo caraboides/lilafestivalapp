@@ -26,10 +26,8 @@ class DailyScheduleFilter {
   final FestivalId festivalId;
   final bool likedOnly;
 
-  DailyScheduleKey get dailyScheduleKey => DailyScheduleKey(
-        festivalId: festivalId,
-        date: date,
-      );
+  DailyScheduleKey get dailyScheduleKey =>
+      DailyScheduleKey(festivalId: festivalId, date: date);
 
   @override
   int get hashCode =>
@@ -43,11 +41,11 @@ class DailyScheduleFilter {
       likedOnly == other.likedOnly;
 }
 
-typedef FilteredDailyScheduleProvider
-    = ProviderFamily<AsyncValue<ImmortalList<EventId>>, DailyScheduleFilter>;
+typedef FilteredDailyScheduleProvider =
+    ProviderFamily<AsyncValue<ImmortalList<EventId>>, DailyScheduleFilter>;
 
-typedef FilteredBandScheduleProvider
-    = ProviderFamily<AsyncValue<ImmortalList<BandName>>, BandScheduleKey>;
+typedef FilteredBandScheduleProvider =
+    ProviderFamily<AsyncValue<ImmortalList<BandName>>, BandScheduleKey>;
 
 class BandScheduleKey extends CombinedKey<FestivalId, bool> {
   const BandScheduleKey({
@@ -61,14 +59,21 @@ class BandScheduleKey extends CombinedKey<FestivalId, bool> {
 
 class FilteredScheduleProviderCreator {
   static FilteredDailyScheduleProvider createFilteredDailyScheduleProvider() =>
-      ProviderFamily<AsyncValue<ImmortalList<EventId>>, DailyScheduleFilter>(
-          (ref, filter) {
-        final dailySchedule = ref
-            .watch(dimeGet<DailyScheduleProvider>()(filter.dailyScheduleKey));
-        final myScheduleProvider =
-            ref.watch(dimeGet<MyScheduleProvider>()(filter.festivalId));
-        return combineAsyncValues<ImmortalList<EventId>, ImmortalList<Event>,
-            MySchedule>(
+      ProviderFamily<AsyncValue<ImmortalList<EventId>>, DailyScheduleFilter>((
+        ref,
+        filter,
+      ) {
+        final dailySchedule = ref.watch(
+          dimeGet<DailyScheduleProvider>()(filter.dailyScheduleKey),
+        );
+        final myScheduleProvider = ref.watch(
+          dimeGet<MyScheduleProvider>()(filter.festivalId),
+        );
+        return combineAsyncValues<
+          ImmortalList<EventId>,
+          ImmortalList<Event>,
+          MySchedule
+        >(
           dailySchedule,
           myScheduleProvider,
           (events, mySchedule) => (filter.likedOnly
@@ -79,20 +84,29 @@ class FilteredScheduleProviderCreator {
       });
 
   static FilteredBandScheduleProvider createFilteredBandScheduleProvider() =>
-      Provider.family<AsyncValue<ImmortalList<BandName>>, BandScheduleKey>(
-          (ref, bandScheduleKey) {
+      Provider.family<AsyncValue<ImmortalList<BandName>>, BandScheduleKey>((
+        ref,
+        bandScheduleKey,
+      ) {
         final bandsWithEvents = ref.watch(
-            dimeGet<SortedBandsWithEventsProvider>()(
-                bandScheduleKey.festivalId));
-        final myScheduleProvider = ref
-            .watch(dimeGet<MyScheduleProvider>()(bandScheduleKey.festivalId));
-        return combineAsyncValues<ImmortalList<BandName>,
-            ImmortalList<BandWithEvents>, MySchedule>(
+          dimeGet<SortedBandsWithEventsProvider>()(bandScheduleKey.festivalId),
+        );
+        final myScheduleProvider = ref.watch(
+          dimeGet<MyScheduleProvider>()(bandScheduleKey.festivalId),
+        );
+        return combineAsyncValues<
+          ImmortalList<BandName>,
+          ImmortalList<BandWithEvents>,
+          MySchedule
+        >(
           bandsWithEvents,
           myScheduleProvider,
           (bands, mySchedule) => (bandScheduleKey.likedOnly
-                  ? bands.where((bandWithEvents) => bandWithEvents.events
-                      .any((event) => mySchedule.isEventLiked(event.id)))
+                  ? bands.where(
+                    (bandWithEvents) => bandWithEvents.events.any(
+                      (event) => mySchedule.isEventLiked(event.id),
+                    ),
+                  )
                   : bands)
               .map((band) => band.bandName),
         );

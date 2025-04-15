@@ -1,15 +1,13 @@
 import 'package:i18n_extension/i18n_extension.dart';
 
 extension Localization on String {
-  static final _t = Translations('en_us') +
+  static final _t =
+      Translations.byText('en-US') +
       {
-        'en_us': 'Remove gig from schedule',
-        'de_de': 'Entferne Auftritt vom Plan',
+        'en-US': 'Remove gig from schedule',
+        'de-DE': 'Entferne Auftritt vom Plan',
       } +
-      {
-        'en_us': 'Add gig to schedule',
-        'de_de': 'Füge Auftritt zum Plan hinzu',
-      };
+      {'en-US': 'Add gig to schedule', 'de-DE': 'Füge Auftritt zum Plan hinzu'};
 
   String get i18n => localize(this, _t);
 }

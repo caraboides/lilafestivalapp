@@ -17,7 +17,7 @@ import '../utils/logging.dart';
 import 'mixins/one_time_execution_mixin.dart';
 
 class InitializationWidget extends StatefulHookConsumerWidget {
-  InitializationWidget(this.child);
+  const InitializationWidget(this.child);
 
   final Widget child;
 
@@ -35,31 +35,37 @@ class _InitializationWidgetState extends ConsumerState<InitializationWidget>
   Logger get _log => const Logger(module: 'InitializationWidget');
 
   void _precacheImages(BuildContext context) =>
-      Optional.ofNullable(_theme.logoMenu).ifPresent((logo) => precacheImage(
-            AssetImage(logo.assetPath),
-            context,
-            size: logo.size,
-          ));
+      Optional.ofNullable(_theme.logoMenu).ifPresent(
+        (logo) =>
+            precacheImage(AssetImage(logo.assetPath), context, size: logo.size),
+      );
 
   bool _verifyScheduledNotifications(
     AsyncValue<MySchedule> myScheduleProvider,
     AsyncValue<ImmortalList<Event>> eventProvider,
-  ) =>
-      combineAsyncValues<void, ImmortalList<Event>, MySchedule>(
-          eventProvider, myScheduleProvider, (events, mySchedule) {
-        _log.debug('Verify notifications for liked events');
-        dimeGet<Notifications>()
-            .verifyScheduledEventNotifications(mySchedule, events);
-      }).when(
-        data: (_) => true,
-        loading: () => false,
-        error: (error, trace) {
-          _log.error('Error retrieving data, notification verification failed',
-              error, trace);
-          // TODO(SF) FEATURE recovery?
-          return true;
-        },
+  ) => combineAsyncValues<void, ImmortalList<Event>, MySchedule>(
+    eventProvider,
+    myScheduleProvider,
+    (events, mySchedule) {
+      _log.debug('Verify notifications for liked events');
+      dimeGet<Notifications>().verifyScheduledEventNotifications(
+        mySchedule,
+        events,
       );
+    },
+  ).when(
+    data: (_) => true,
+    loading: () => false,
+    error: (error, trace) {
+      _log.error(
+        'Error retrieving data, notification verification failed',
+        error,
+        trace,
+      );
+      // TODO(SF) FEATURE recovery?
+      return true;
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +79,8 @@ class _InitializationWidgetState extends ConsumerState<InitializationWidget>
     final mySchedule = ref.watch(dimeGet<MyScheduleProvider>()(festivalId));
     final events = ref.watch(dimeGet<ScheduleProvider>()(festivalId));
     executeUntilSuccessful(
-        () => _verifyScheduledNotifications(mySchedule, events));
+      () => _verifyScheduledNotifications(mySchedule, events),
+    );
     return widget.child;
   }
 }

@@ -11,7 +11,7 @@ import 'services/service_module.dart';
 import 'utils/global_module.dart';
 import 'widgets/initialization_widget.dart';
 
-void runForFlavor(BaseDimeModule flavorModule) async {
+Future<void> runForFlavor(BaseDimeModule flavorModule) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   dimeInstall(GlobalModule());
@@ -23,11 +23,7 @@ void runForFlavor(BaseDimeModule flavorModule) async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(
-    const ProviderScope(
-      child: FestivalApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: FestivalApp()));
 }
 
 class FestivalApp extends StatelessWidget {
@@ -38,19 +34,16 @@ class FestivalApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => InitializationWidget(
-        MaterialApp(
-          title: _config.festivalName,
-          theme: _theme.theme,
-          localizationsDelegates: [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale('en', 'US'),
-            Locale('de', 'DE'),
-          ],
-          navigatorKey: dimeGet<GlobalKey<NavigatorState>>(),
-          routes: dimeGet<Navigation>().namedRoutes.toMap(),
-        ),
-      );
+    MaterialApp(
+      title: _config.festivalName,
+      theme: _theme.theme,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en', 'US'), Locale('de', 'DE')],
+      navigatorKey: dimeGet<GlobalKey<NavigatorState>>(),
+      routes: dimeGet<Navigation>().namedRoutes.toMap(),
+    ),
+  );
 }

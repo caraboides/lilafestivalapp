@@ -17,10 +17,7 @@ import '../empty_schedule/empty_schedule.dart';
 import 'band_schedule_list.i18n.dart';
 
 class BandScheduleList extends HookConsumerWidget {
-  const BandScheduleList({
-    Key? key,
-    this.likedOnly = false,
-  });
+  const BandScheduleList({super.key, this.likedOnly = false});
 
   final bool likedOnly;
 
@@ -32,19 +29,19 @@ class BandScheduleList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final festivalId = DimeFlutter.get<FestivalScope>(context).festivalId;
-    final mapProvider =
-        ref.watch(dimeGet<BandsWithEventsProvider>()(festivalId));
-    final listProvider =
-        ref.watch(dimeGet<FilteredBandScheduleProvider>()(BandScheduleKey(
-      festivalId: festivalId,
-      likedOnly: likedOnly,
-    )));
+    final mapProvider = ref.watch(
+      dimeGet<BandsWithEventsProvider>()(festivalId),
+    );
+    final listProvider = ref.watch(
+      dimeGet<FilteredBandScheduleProvider>()(
+        BandScheduleKey(festivalId: festivalId, likedOnly: likedOnly),
+      ),
+    );
     return combineAsyncValues(
-            mapProvider,
-            listProvider,
-            Tuple2<ImmortalMap<String, BandWithEvents>, ImmortalList<String>>
-                .new)
-        .when(
+      mapProvider,
+      listProvider,
+      Tuple2<ImmortalMap<String, BandWithEvents>, ImmortalList<String>>.new,
+    ).when(
       data: (bandTuple) {
         if (bandTuple.item1.isEmpty) {
           return _buildErrorScreen();
@@ -55,18 +52,20 @@ class BandScheduleList extends HookConsumerWidget {
             bands: bandTuple.item1,
             bandIds: bandTuple.item2,
           ),
-          crossFadeState: bandTuple.item2.isEmpty
-              ? CrossFadeState.showFirst
-              : CrossFadeState.showSecond,
+          crossFadeState:
+              bandTuple.item2.isEmpty
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
           duration: const Duration(milliseconds: 350),
         );
       },
       loading: () => LoadingScreen('Loading bands.'.i18n),
       error: (error, trace) {
         _log.error(
-            'Error retrieving ${likedOnly ? "filtered" : "full"} band schedule',
-            error,
-            trace);
+          'Error retrieving ${likedOnly ? "filtered" : "full"} band schedule',
+          error,
+          trace,
+        );
         return _buildErrorScreen();
       },
     );

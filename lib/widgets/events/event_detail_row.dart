@@ -9,9 +9,9 @@ class EventDetailRow extends StatelessWidget {
   const EventDetailRow({
     required this.event,
     required this.currentTime,
-    Key? key,
+    super.key,
     this.dense = false,
-  }) : super(key: key);
+  });
 
   final Event event;
   final bool dense;
@@ -19,23 +19,27 @@ class EventDetailRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-        mainAxisSize: dense ? MainAxisSize.min : MainAxisSize.max,
-        mainAxisAlignment:
-            dense ? MainAxisAlignment.start : MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                EventToggle(event, dense: dense),
-                const SizedBox(width: 8),
-                Expanded(
-                    child: EventDetails(event,
-                        showBandName: !dense, showWeekDay: true)),
-              ],
+    mainAxisSize: dense ? MainAxisSize.min : MainAxisSize.max,
+    mainAxisAlignment:
+        dense ? MainAxisAlignment.start : MainAxisAlignment.spaceBetween,
+    children: [
+      Expanded(
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            EventToggle(event, dense: dense),
+            const SizedBox(width: 8),
+            Expanded(
+              child: EventDetails(
+                event,
+                showBandName: !dense,
+                showWeekDay: true,
+              ),
             ),
-          ),
-          EventPlayingIndicator(isPlaying: event.isPlaying(currentTime)),
-        ],
-      );
+          ],
+        ),
+      ),
+      EventPlayingIndicator(isPlaying: event.isPlaying(currentTime)),
+    ],
+  );
 }

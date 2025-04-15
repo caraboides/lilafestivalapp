@@ -15,8 +15,7 @@ class Logger {
   LogFunction _logFunction([
     String logLevel = 'INFO',
     LogFunction logFunction = print,
-  ]) =>
-      (message) => logFunction('[$logLevel] $_logModule$message');
+  ]) => (message) => logFunction('[$logLevel] $_logModule$message');
 
   LogFunction get _logDebug => _logFunction('DEBUG', _debugPrint);
 
@@ -24,7 +23,8 @@ class Logger {
 
   void debug(String message) => _logDebug(message);
 
-  void error(String message, dynamic error, [StackTrace? trace]) =>
-      _logError('$message: ${error?.toString()}'
-          '${trace != null ? " ${trace.toString()}" : ""}');
+  void error(String message, dynamic error, [StackTrace? trace]) => _logError(
+    '$message: $error'
+    '${trace != null ? " $trace" : ""}',
+  );
 }

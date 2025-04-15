@@ -7,9 +7,9 @@ class EventBandName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        bandName.toUpperCase(),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.subtitle2,
-      );
+    bandName.toUpperCase(),
+    maxLines: 1,
+    overflow: TextOverflow.ellipsis,
+    style: Theme.of(context).textTheme.titleSmall,
+  );
 }

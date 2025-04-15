@@ -22,48 +22,38 @@ class Menu extends StatelessWidget {
     required String label,
     required IconData icon,
     required VoidCallback onTap,
-  }) =>
-      ListTile(
-        title: Text(
-          label,
-          style: theme.textTheme.headline4,
-        ),
-        leading: IconTheme(
-          data: theme.iconTheme,
-          child: Icon(icon),
-        ),
-        onTap: onTap,
-      );
+  }) => ListTile(
+    title: Text(label, style: theme.textTheme.headlineMedium),
+    leading: IconTheme(data: theme.iconTheme, child: Icon(icon)),
+    onTap: onTap,
+  );
 
   Widget _buildNestedEntry({
     required BuildContext context,
     required NavigatorState navigator,
     required ThemeData theme,
     required NestedAppRoute route,
-  }) =>
-      ExpansionTile(
-        title: Text(
-          route.getName(),
-          style: theme.textTheme.headline4,
-        ),
-        leading: IconTheme(
-          data: theme.iconTheme,
-          child: Icon(route.icon),
-        ),
-        children: route.nestedRoutes
+  }) => ExpansionTile(
+    title: Text(route.getName(), style: theme.textTheme.headlineMedium),
+    leading: IconTheme(data: theme.iconTheme, child: Icon(route.icon)),
+    children:
+        route.nestedRoutes
             .map(
               (nestedRoute) => ListTile(
                 title: Text(
                   nestedRoute.title,
-                  style: theme.textTheme.headline4,
+                  style: theme.textTheme.headlineMedium,
                 ),
                 leading: const SizedBox(width: 24),
-                onTap: () => _navigation.navigateToPath(
-                    navigator, route.nestedRoutePath(nestedRoute)),
+                onTap:
+                    () => _navigation.navigateToPath(
+                      navigator,
+                      route.nestedRoutePath(nestedRoute),
+                    ),
               ),
             )
             .toList(),
-      );
+  );
 
   Widget _buildEntries(BuildContext context) {
     final navigator = Navigator.of(context);
@@ -73,30 +63,36 @@ class Menu extends StatelessWidget {
       children: <Widget>[
         OptionalBuilder(
           optional: Optional.of(_theme.logoMenu),
+          // ignore: avoid_dynamic_calls TODO(SF) fix this
           builder: (_, logoMenu) => logoMenu.toAsset(),
         ),
-        ..._navigation.routes.map((route) => route is NestedAppRoute
-            ? _buildNestedEntry(
-                context: context,
-                navigator: navigator,
-                theme: theme,
-                route: route,
-              )
-            : _buildEntry(
-                theme: theme,
-                label: route.getName(),
-                icon: route.icon,
-                onTap: () => _navigation.navigateToRoute(navigator, route),
-              )),
+        ..._navigation.routes.map(
+          (route) =>
+              route is NestedAppRoute
+                  ? _buildNestedEntry(
+                    context: context,
+                    navigator: navigator,
+                    theme: theme,
+                    route: route,
+                  )
+                  : _buildEntry(
+                    theme: theme,
+                    label: route.getName(),
+                    icon: route.icon,
+                    onTap: () => _navigation.navigateToRoute(navigator, route),
+                  ),
+        ),
         _buildEntry(
           theme: theme,
           label: 'Privacy Policy'.i18n,
           icon: Icons.verified_user,
-          onTap: () => launchUrl(
-              locale.languageCode == 'de'
-                  ? _globalConfig.privacyPolicyUrlDe
-                  : _globalConfig.privacyPolicyUrlEn,
-              mode: LaunchMode.externalApplication),
+          onTap:
+              () => launchUrl(
+                locale.languageCode == 'de'
+                    ? _globalConfig.privacyPolicyUrlDe
+                    : _globalConfig.privacyPolicyUrlEn,
+                mode: LaunchMode.externalApplication,
+              ),
         ),
       ],
     );
@@ -104,14 +100,15 @@ class Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext _) => Theme(
-        data: _theme.menuTheme,
-        child: Builder(
-          builder: (context) => Drawer(
+    data: _theme.menuTheme,
+    child: Builder(
+      builder:
+          (context) => Drawer(
             child: Container(
               decoration: _theme.menuDrawerDecoration,
               child: _buildEntries(context),
             ),
           ),
-        ),
-      );
+    ),
+  );
 }

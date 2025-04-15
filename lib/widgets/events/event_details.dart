@@ -10,11 +10,11 @@ import 'event_stage.dart';
 class EventDetails extends StatelessWidget {
   const EventDetails(
     this.event, {
-    Key? key,
+    super.key,
     this.showBandName = false,
     this.showWeekDay = false,
     this.alignByStage = false,
-  }) : super(key: key);
+  });
 
   final Event event;
   final bool showBandName;
@@ -23,26 +23,17 @@ class EventDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-        crossAxisAlignment: alignByStage
+    crossAxisAlignment:
+        alignByStage
             ? dimeGet<FestivalConfig>().stageAlignment(event.stage)
             : CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Visibility(
-            visible: showBandName,
-            child: EventBandName(event.bandName),
-          ),
-          Visibility(
-            visible: showBandName,
-            child: const SizedBox(height: 3.5),
-          ),
-          EventDate(
-            start: event.start,
-            end: event.end,
-            showWeekDay: showWeekDay,
-          ),
-          const SizedBox(height: 2.5),
-          EventStage(event.stage),
-        ],
-      );
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      Visibility(visible: showBandName, child: EventBandName(event.bandName)),
+      Visibility(visible: showBandName, child: const SizedBox(height: 3.5)),
+      EventDate(start: event.start, end: event.end, showWeekDay: showWeekDay),
+      const SizedBox(height: 2.5),
+      EventStage(event.stage),
+    ],
+  );
 }

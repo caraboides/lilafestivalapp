@@ -31,19 +31,18 @@ mixin PeriodicRebuildMixin<T extends StatefulWidget>
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
         _rebuildTimer?.cancel();
-        break;
       case AppLifecycleState.resumed:
         _rebuild();
         _rebuildTimer = _createTimer();
-        break;
     }
   }
 
   Timer _createTimer() => Timer.periodic(
-        dimeGet<GlobalConfig>().periodicRebuildDuration,
-        (_) => _rebuild(),
-      );
+    dimeGet<GlobalConfig>().periodicRebuildDuration,
+    (_) => _rebuild(),
+  );
 
   void _rebuild() {
     if (mounted) {

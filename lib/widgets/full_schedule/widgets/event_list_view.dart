@@ -19,8 +19,8 @@ class EventListView extends StatefulWidget {
     required this.events,
     required this.eventIds,
     required this.date,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ImmortalMap<EventId, Event> events;
   final ImmortalList<EventId> eventIds;
@@ -56,22 +56,26 @@ class _EventListViewState extends State<EventListView>
   void _updatePlayingBandIndices() {
     _currentOrNextPlayingBandIndex =
         isSameFestivalDay(_currentTime, widget.date)
-            ? widget.eventIds.indexWhere((eventId) => widget.events[eventId]
-                .map((event) => event.isPlayingOrInFutureOf(_currentTime))
-                .orElse(false))
+            ? widget.eventIds.indexWhere(
+              (eventId) => widget.events[eventId]
+                  .map((event) => event.isPlayingOrInFutureOf(_currentTime))
+                  .orElse(false),
+            )
             : -1;
-    _nextPlayingBandIndex = _currentOrNextPlayingBandIndex >= 0 &&
-            _eventAt(_currentOrNextPlayingBandIndex)
-                .map((event) => !event.isPlaying(_currentTime))
-                .orElse(false)
-        ? _currentOrNextPlayingBandIndex
-        : -1;
+    _nextPlayingBandIndex =
+        _currentOrNextPlayingBandIndex >= 0 &&
+                _eventAt(
+                  _currentOrNextPlayingBandIndex,
+                ).map((event) => !event.isPlaying(_currentTime)).orElse(false)
+            ? _currentOrNextPlayingBandIndex
+            : -1;
   }
 
   void _updateItemIds() {
-    _itemIds = _nextPlayingBandIndex >= 0
-        ? widget.eventIds.insert(_nextPlayingBandIndex, _changeOverId)
-        : widget.eventIds;
+    _itemIds =
+        _nextPlayingBandIndex >= 0
+            ? widget.eventIds.insert(_nextPlayingBandIndex, _changeOverId)
+            : widget.eventIds;
   }
 
   @override
@@ -117,21 +121,18 @@ class _EventListViewState extends State<EventListView>
   }
 
   Widget _buildEventListItem(int index, Event event) => DividedListTile(
-        key: Key(event.id),
-        isLast: index == _numItems - 1,
-        child: EventListItem(
-          event: event,
-          isPlaying: event.isPlaying(_currentTime),
-        ),
-      );
+    key: Key(event.id),
+    isLast: index == _numItems - 1,
+    child: EventListItem(
+      event: event,
+      isPlaying: event.isPlaying(_currentTime),
+    ),
+  );
 
   Widget _buildChangeOverIndicator() => DividedListTile(
-        key: const Key(_changeOverId),
-        child: Container(
-          height: 2,
-          color: Theme.of(context).colorScheme.secondary,
-        ),
-      );
+    key: const Key(_changeOverId),
+    child: Container(height: 2, color: Theme.of(context).colorScheme.secondary),
+  );
 
   Widget _buildListItem({
     required BuildContext context,

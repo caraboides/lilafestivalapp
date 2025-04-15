@@ -24,65 +24,57 @@ class About extends StatelessWidget {
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
   Widget get _divider => const Padding(
-        padding: EdgeInsets.only(bottom: 8),
-        child: Divider(height: 1),
-      );
+    padding: EdgeInsets.only(bottom: 8),
+    child: Divider(height: 1),
+  );
 
-  Widget _buildButtonLink(
-    Link link, {
-    bool shrink = false,
-  }) =>
-      TextButton(
-        child: Text(link.label ?? link.url.toString()),
-        onPressed: () =>
-            launchUrl(link.url, mode: LaunchMode.externalApplication),
-        style: ButtonStyle(
-          tapTargetSize: shrink
+  Widget _buildButtonLink(Link link, {bool shrink = false}) => TextButton(
+    onPressed: () => launchUrl(link.url, mode: LaunchMode.externalApplication),
+    style: ButtonStyle(
+      tapTargetSize:
+          shrink
               ? MaterialTapTargetSize.shrinkWrap
               : MaterialTapTargetSize.padded,
+    ),
+    child: Text(link.label ?? link.url.toString()),
+  );
+
+  Widget _buildLink(Link link, {bool shrink = false}) => Optional.ofNullable(
+        link.imageAssetPath,
+      )
+      .map<Widget>(
+        (assetPath) => GestureDetector(
+          child: Image.asset(assetPath),
+          onTap:
+              () => launchUrl(link.url, mode: LaunchMode.externalApplication),
         ),
-      );
+      )
+      .orElse(_buildButtonLink(link, shrink: shrink));
 
-  Widget _buildLink(
-    Link link, {
-    bool shrink = false,
-  }) =>
-      Optional.ofNullable(link.imageAssetPath)
-          .map<Widget>((assetPath) => GestureDetector(
-                child: Image.asset(assetPath),
-                onTap: () =>
-                    launchUrl(link.url, mode: LaunchMode.externalApplication),
-              ))
-          .orElse(_buildButtonLink(link, shrink: shrink));
-
-  List<Widget> _buildLinks(
-    ImmortalList<Link> links, {
-    bool shrink = false,
-  }) =>
+  List<Widget> _buildLinks(ImmortalList<Link> links, {bool shrink = false}) =>
       links.map((link) => _buildLink(link, shrink: shrink)).toList();
 
   Widget _buildReference(
     String? label,
     ImmortalList<Link> links, {
     Icon? icon,
-  }) =>
-      Row(
+  }) => Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      icon ?? Icon(_theme.aboutIcon),
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          icon ?? Icon(_theme.aboutIcon),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              if (label != null)
-                Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Text(label),
-                ),
-              ..._buildLinks(links, shrink: true),
-            ],
-          )
+          if (label != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Text(label),
+            ),
+          ..._buildLinks(links, shrink: true),
         ],
-      );
+      ),
+    ],
+  );
 
   List<Widget> _buildReferences(
     ImmortalList<Reference> references, {
@@ -110,18 +102,20 @@ class About extends StatelessWidget {
         ),
       ];
 
-  List<Widget> _buildMessages(ImmortalList<Reference> messages) => messages
-      .map((message) => _buildMessage(message.label, message.links))
-      .flatten<Widget>()
-      .toList();
+  List<Widget> _buildMessages(ImmortalList<Reference> messages) =>
+      messages
+          .map((message) => _buildMessage(message.label, message.links))
+          .flatten<Widget>()
+          .toList();
 
-  void _showLicenses(BuildContext context) async {
+  Future<void> _showLicenses(BuildContext context) async {
     final packageInfo = await PackageInfo.fromPlatform();
     showLicensePage(
+      // ignore: use_build_context_synchronously TODO(SF) fix me
       context: context,
-      applicationName: '{festivalName} App'
-          .i18n
-          .fill({'festivalName': _config.festivalName}),
+      applicationName: '{festivalName} App'.i18n.fill({
+        'festivalName': _config.festivalName,
+      }),
       applicationVersion: packageInfo.version,
       applicationLegalese: 'Copyright 2019 - 2020 Projekt LilaHerz 💜'.i18n,
     );
@@ -129,14 +123,19 @@ class About extends StatelessWidget {
 
   @override
   Widget build(BuildContext _) => Theme(
-        data: _theme.aboutTheme,
-        child: Builder(
-          builder: (context) => AppScaffold.withTitle(
+    data: _theme.aboutTheme,
+    child: Builder(
+      builder:
+          (context) => AppScaffold.withTitle(
             title: 'About'.i18n,
             body: Scrollbar(
               child: ListView(
                 padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 20, bottom: 10),
+                  left: 20,
+                  right: 20,
+                  top: 20,
+                  bottom: 10,
+                ),
                 children: <Widget>[
                   ..._buildMessages(
                     ImmortalList([
@@ -144,9 +143,7 @@ class About extends StatelessWidget {
                         label: 'This is an unofficial app for the {festival}:'
                             .i18n
                             .fill({'festival': _config.festivalFullName}),
-                        links: ImmortalList([
-                          Link(url: _config.festivalUrl),
-                        ]),
+                        links: ImmortalList([Link(url: _config.festivalUrl)]),
                       ),
                       Reference(
                         label: 'Source code can be found under'.i18n,
@@ -172,26 +169,27 @@ class About extends StatelessWidget {
                   ),
                   ..._buildReferences(
                     _config.fontReferences,
-                    labelGenerator: (label) =>
-                        'Font "{font}" by:'.i18n.fill({'font': label}),
+                    labelGenerator:
+                        (label) =>
+                            'Font "{font}" by:'.i18n.fill({'font': label}),
                   ),
                   _divider,
                   const SizedBox(height: 5),
-                  ..._buildMessages(
-                    _config.aboutMessages,
-                  ),
+                  ..._buildMessages(_config.aboutMessages),
                   const SizedBox(height: 13),
                   _divider,
                   const SizedBox(height: 5),
                   _theme.primaryButton(
-                    label: MaterialLocalizations.of(context)
-                        .viewLicensesButtonLabel,
+                    label:
+                        MaterialLocalizations.of(
+                          context,
+                        ).viewLicensesButtonLabel,
                     onPressed: () => _showLicenses(context),
                   ),
                 ],
               ),
             ),
           ),
-        ),
-      );
+    ),
+  );
 }

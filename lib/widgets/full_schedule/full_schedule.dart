@@ -20,10 +20,7 @@ import 'widgets/daily_schedule_list/daily_schedule_list.dart';
 import 'widgets/weather_card.dart';
 
 class FullSchedule extends StatefulHookConsumerWidget {
-  const FullSchedule({
-    this.likedOnly = false,
-    this.displayWeather = false,
-  });
+  const FullSchedule({this.likedOnly = false, this.displayWeather = false});
 
   final bool likedOnly;
   final bool displayWeather;
@@ -57,18 +54,20 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
   }
 
   TabBar _buildTabBar(ImmortalList<DateTime> days) => TabBar(
-        indicatorWeight: 2,
-        indicatorColor: _theme.theme.colorScheme.secondary,
-        tabs: [
-          Tab(child: Text('Bands'.i18n)),
-          ...days.mapIndexed((index, date) => Tooltip(
-              message: 'MMM dd'.i18n.dateFormat(date),
-              child: Tab(
-                  child: Text(
-                'Day {number}'.i18n.fill({'number': index + 1}),
-              )))),
-        ],
-      );
+    indicatorWeight: 2,
+    indicatorColor: _theme.theme.colorScheme.secondary,
+    tabs: [
+      Tab(child: Text('Bands'.i18n)),
+      ...days.mapIndexed(
+        (index, date) => Tooltip(
+          message: 'MMM dd'.i18n.dateFormat(date),
+          child: Tab(
+            child: Text('Day {number}'.i18n.fill({'number': index + 1})),
+          ),
+        ),
+      ),
+    ],
+  );
 
   Widget _buildTitleWidget(FestivalScope festivalScope) {
     if (festivalScope is HistoryFestivalScope) {
@@ -80,112 +79,104 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
   PreferredSizeWidget _buildTabBarContainer(ImmortalList<DateTime> days) =>
       _theme.tabBarDecoration != null
           ? PreferredSize(
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    height: _theme.tabBarHeight,
-                    decoration: _theme.tabBarDecoration,
-                  ),
-                  _buildTabBar(days),
-                ],
-              ),
-              preferredSize: Size.fromHeight(_theme.tabBarHeight),
-            )
+            preferredSize: Size.fromHeight(_theme.tabBarHeight),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  height: _theme.tabBarHeight,
+                  decoration: _theme.tabBarDecoration,
+                ),
+                _buildTabBar(days),
+              ],
+            ),
+          )
           : _buildTabBar(days);
 
   AppBar _buildAppBar(
     ImmortalList<DateTime>? days,
     FestivalScope festivalScope,
-  ) =>
-      AppBar(
-        bottom: Optional.ofNullable(days).map(_buildTabBarContainer).orElseNull,
-        title: _buildTitleWidget(festivalScope),
-        actions: <Widget>[
-          Center(
-            child: AnimatedCrossFade(
-              firstChild: const Icon(Icons.star),
-              secondChild: const Icon(Icons.star_border),
-              crossFadeState: _likedOnly
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-              duration: const Duration(milliseconds: 250),
-            ),
-          ),
-          Tooltip(
-            message:
-                (_likedOnly ? 'Show full schedule' : 'Show my schedule only')
-                    .i18n,
-            child: Switch(
-              value: _likedOnly,
-              onChanged: _onLikedFilterChange,
-            ),
-          ),
-        ],
-      );
+  ) => AppBar(
+    bottom: Optional.ofNullable(days).map(_buildTabBarContainer).orElseNull,
+    title: _buildTitleWidget(festivalScope),
+    actions: <Widget>[
+      Center(
+        child: AnimatedCrossFade(
+          firstChild: const Icon(Icons.star),
+          secondChild: const Icon(Icons.star_border),
+          crossFadeState:
+              _likedOnly ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          duration: const Duration(milliseconds: 250),
+        ),
+      ),
+      Tooltip(
+        message:
+            (_likedOnly ? 'Show full schedule' : 'Show my schedule only').i18n,
+        child: Switch(value: _likedOnly, onChanged: _onLikedFilterChange),
+      ),
+    ],
+  );
 
   Widget _buildBandScheduleList() => BandScheduleList(likedOnly: _likedOnly);
 
   Widget _buildDailyScheduleList(DateTime date) => Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Visibility(
-            visible: widget.displayWeather,
-            child: WeatherCard(date),
-          ),
-          Expanded(
-            child: DailyScheduleList(date, likedOnly: _likedOnly),
-          ),
-        ],
-      );
+    mainAxisSize: MainAxisSize.max,
+    children: <Widget>[
+      Visibility(visible: widget.displayWeather, child: WeatherCard(date)),
+      Expanded(child: DailyScheduleList(date, likedOnly: _likedOnly)),
+    ],
+  );
 
   Widget _buildScaffold({
     required Widget child,
     required FestivalScope festivalScope,
     ImmortalList<DateTime>? days,
-  }) =>
-      AppScaffold.withAppBar(
-        appBar: _buildAppBar(days, festivalScope),
-        body: child,
-      );
+  }) => AppScaffold.withAppBar(
+    appBar: _buildAppBar(days, festivalScope),
+    body: child,
+  );
 
   Widget _buildScheduleView(
     ImmortalList<DateTime> days,
     FestivalScope festivalScope,
-  ) =>
-      DefaultTabController(
-          length: days.length + 1,
-          initialIndex: _initialTab(days),
-          child: _buildScaffold(
-            days: days,
-            festivalScope: festivalScope,
-            child: TabBarView(
-              children: [
-                _buildBandScheduleList(),
-                ...days.map(_buildDailyScheduleList),
-              ],
-            ),
-          ));
+  ) => DefaultTabController(
+    length: days.length + 1,
+    initialIndex: _initialTab(days),
+    child: _buildScaffold(
+      days: days,
+      festivalScope: festivalScope,
+      child: TabBarView(
+        children: [
+          _buildBandScheduleList(),
+          ...days.map(_buildDailyScheduleList),
+        ],
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
     final festivalScope = DimeFlutter.get<FestivalScope>(context);
-    final provider =
-        ref.watch(dimeGet<FestivalDaysProvider>()(festivalScope.festivalId));
+    final provider = ref.watch(
+      dimeGet<FestivalDaysProvider>()(festivalScope.festivalId),
+    );
     return provider.when(
       data: (days) => _buildScheduleView(days, festivalScope),
-      loading: () => _buildScaffold(
-        festivalScope: festivalScope,
-        child: LoadingScreen('Loading schedule.'.i18n),
-      ),
+      loading:
+          () => _buildScaffold(
+            festivalScope: festivalScope,
+            child: LoadingScreen('Loading schedule.'.i18n),
+          ),
       error: (error, trace) {
         _log.error(
-            'Error retrieving festival days for ${festivalScope.festivalId}',
-            error,
-            trace);
+          'Error retrieving festival days for ${festivalScope.festivalId}',
+          error,
+          trace,
+        );
         return _buildScaffold(
           festivalScope: festivalScope,
-          child:
-              ErrorScreen('There was an error retrieving the schedule.'.i18n),
+          child: ErrorScreen(
+            'There was an error retrieving the schedule.'.i18n,
+          ),
         );
       },
     );

@@ -8,7 +8,7 @@ import 'ids.dart';
 
 @immutable
 class Event implements Comparable {
-  Event({
+  const Event({
     required this.bandName,
     required this.id,
     required this.stage,
@@ -17,12 +17,12 @@ class Event implements Comparable {
   });
 
   factory Event.fromJson(String id, Map<String, dynamic> json) => Event(
-        bandName: json['band'] ?? '',
-        id: id,
-        stage: json['stage'] ?? '',
-        start: Optional.ofNullable(DateTime.tryParse(json['start'] ?? '')),
-        end: Optional.ofNullable(DateTime.tryParse(json['end'] ?? '')),
-      );
+    bandName: json['band'] ?? '',
+    id: id,
+    stage: json['stage'] ?? '',
+    start: Optional.ofNullable(DateTime.tryParse(json['start'] ?? '')),
+    end: Optional.ofNullable(DateTime.tryParse(json['end'] ?? '')),
+  );
 
   final String bandName;
   final EventId id;
@@ -37,13 +37,16 @@ class Event implements Comparable {
       end.map(currentTime.isBefore).orElse(false);
 
   @override
-  int compareTo(dynamic other) => other is Event
-      ? other.start
-          .map((otherStartTime) => start
-              .map((startTime) => startTime.compareTo(otherStartTime))
-              .orElse(1))
-          .orElse(-1)
-      : -1;
+  int compareTo(dynamic other) =>
+      other is Event
+          ? other.start
+              .map(
+                (otherStartTime) => start
+                    .map((startTime) => startTime.compareTo(otherStartTime))
+                    .orElse(1),
+              )
+              .orElse(-1)
+          : -1;
 
   bool isInFutureOf(DateTime currentTime) =>
       start.map(currentTime.isBefore).orElse(false);
@@ -53,12 +56,12 @@ class Event implements Comparable {
 
   @override
   int get hashCode => quiver.hashObjects([
-        bandName.hashCode,
-        id.hashCode,
-        stage.hashCode,
-        start.hashCode,
-        end.hashCode
-      ]);
+    bandName.hashCode,
+    id.hashCode,
+    stage.hashCode,
+    start.hashCode,
+    end.hashCode,
+  ]);
 
   @override
   bool operator ==(dynamic other) =>
@@ -69,9 +72,6 @@ class Event implements Comparable {
       start == other.start &&
       end == other.end;
 
-  String get notificationPayload => jsonEncode({
-        'band': bandName,
-        'id': id,
-        'hash': hashCode,
-      });
+  String get notificationPayload =>
+      jsonEncode({'band': bandName, 'id': id, 'hash': hashCode});
 }

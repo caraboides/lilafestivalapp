@@ -12,7 +12,7 @@ import '../../../utils/date.dart';
 import '../../../utils/logging.dart';
 
 class WeatherCard extends HookConsumerWidget {
-  WeatherCard(this.date, {Key? key}) : super(key: key);
+  const WeatherCard(this.date, {super.key});
 
   final DateTime date;
 
@@ -24,65 +24,65 @@ class WeatherCard extends HookConsumerWidget {
       Uri.parse('https://openweathermap.org/city/${_config.weatherCityId}');
 
   Widget _buildWeatherWidget(Weather weather) => InkWell(
-        onTap: () =>
-            launchUrl(_weatherUrl, mode: LaunchMode.externalApplication),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // TODO(SF) FEATURE option for temperature unit?
-              if (weather.temperature?.celsius != null)
-                Text('${weather.temperature!.celsius!.toStringAsFixed(1)}°C'),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Image.network(
-                  'http://openweathermap.org/img/wn/${weather.weatherIcon}@2x.png',
-                ),
-              ),
-              if (weather.weatherDescription != null)
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Text(
-                    weather.weatherDescription!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-            ],
+    onTap: () => launchUrl(_weatherUrl, mode: LaunchMode.externalApplication),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          // TODO(SF) FEATURE option for temperature unit?
+          if (weather.temperature?.celsius != null)
+            Text('${weather.temperature!.celsius!.toStringAsFixed(1)}°C'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Image.network(
+              'http://openweathermap.org/img/wn/${weather.weatherIcon}@2x.png',
+            ),
           ),
-        ),
-      );
+          if (weather.weatherDescription != null)
+            Flexible(
+              fit: FlexFit.loose,
+              child: Text(
+                weather.weatherDescription!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+        ],
+      ),
+    ),
+  );
 
   Widget _buildWeatherCard(Weather weather) => Card(
-        child: Container(
-          height: _theme.cardBannerHeight,
-          child: _buildWeatherWidget(weather),
-        ),
-      );
+    child: SizedBox(
+      height: _theme.cardBannerHeight,
+      child: _buildWeatherWidget(weather),
+    ),
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Update weather every hour
     final hour = currentDate().hour;
-    final weather = ref.watch(_weather(WeatherKey(
-      date: date,
-      cacheKey: hour,
-    )));
+    final weather = ref.watch(_weather(WeatherKey(date: date, cacheKey: hour)));
     final lastWeather = useState<Widget?>(null);
     final fallback = lastWeather.value ?? Container();
     return weather.when(
-      data: (result) => result.map((weather) {
-        final weatherCard = _buildWeatherCard(weather);
-        lastWeather.value = weatherCard;
-        return weatherCard;
-      }).orElse(fallback),
+      data:
+          (result) => result
+              .map((weather) {
+                final weatherCard = _buildWeatherCard(weather);
+                lastWeather.value = weatherCard;
+                return weatherCard;
+              })
+              .orElse(fallback),
       loading: () => fallback,
       error: (error, trace) {
         _log.error(
-            'Error retrieving weather for ${date.toIso8601String()}@$hour',
-            error,
-            trace);
+          'Error retrieving weather for ${date.toIso8601String()}@$hour',
+          error,
+          trace,
+        );
         return fallback;
       },
     );

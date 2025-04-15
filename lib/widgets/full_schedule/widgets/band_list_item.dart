@@ -15,8 +15,8 @@ class BandListItem extends StatelessWidget {
   const BandListItem({
     required this.bandWithEvents,
     required this.currentTime,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final BandWithEvents bandWithEvents;
   final DateTime currentTime;
@@ -24,61 +24,60 @@ class BandListItem extends StatelessWidget {
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
 
   Widget _buildBandName() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: EventBandName(bandWithEvents.bandName),
-          ),
-          BandCancelled(bandWithEvents),
-        ],
-      );
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      Expanded(child: EventBandName(bandWithEvents.bandName)),
+      BandCancelled(bandWithEvents),
+    ],
+  );
 
   Widget _buildSingleEventEntry(Event event) => Padding(
-        padding: const EdgeInsets.only(bottom: 6),
-        child: EventDetailRow(
-          event: event,
-          currentTime: currentTime,
-        ),
-      );
+    padding: const EdgeInsets.only(bottom: 6),
+    child: EventDetailRow(event: event, currentTime: currentTime),
+  );
 
   Widget _buildMultiEventEntry() => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 56, right: 10),
-              child: _buildBandName(),
-            ),
-            DenseEventList(
-              events: bandWithEvents.events,
-              currentTime: currentTime,
-            ),
-          ]);
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisSize: MainAxisSize.min,
+    children: <Widget>[
+      Padding(
+        padding: const EdgeInsets.only(left: 56, right: 10),
+        child: _buildBandName(),
+      ),
+      DenseEventList(events: bandWithEvents.events, currentTime: currentTime),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return MaterialColorTransition(
-      color: bandWithEvents.isPlaying(currentTime)
-          ? theme.colorScheme.secondary
-          : theme.canvasColor,
+      color:
+          bandWithEvents.isPlaying(currentTime)
+              ? theme.colorScheme.secondary
+              : theme.canvasColor,
       child: InkWell(
-        onTap: () =>
-            BandDetailView.openFor(bandWithEvents.bandName, context: context),
+        onTap:
+            () => BandDetailView.openFor(
+              bandWithEvents.bandName,
+              context: context,
+            ),
         child: SafeArea(
           top: false,
           bottom: false,
           minimum: const EdgeInsets.only(left: 10),
           child: Container(
-            constraints:
-                BoxConstraints(minHeight: _theme.bandListItemMinHeight),
+            constraints: BoxConstraints(
+              minHeight: _theme.bandListItemMinHeight,
+            ),
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.only(top: 10, bottom: 4),
-            child: bandWithEvents.events.length == 1
-                ? _buildSingleEventEntry(bandWithEvents.events.first)
-                : _buildMultiEventEntry(),
+            child:
+                bandWithEvents.events.length == 1
+                    ? _buildSingleEventEntry(bandWithEvents.events.first)
+                    : _buildMultiEventEntry(),
           ),
         ),
       ),

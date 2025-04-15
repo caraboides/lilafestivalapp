@@ -28,7 +28,8 @@ class FestivalTheme {
   final Widget Function({
     required String label,
     required VoidCallback onPressed,
-  }) primaryButton;
+  })
+  primaryButton;
   final Logo? logo;
   final Logo? logoMenu;
   final Color notificationColor;
@@ -53,17 +54,12 @@ class FestivalTheme {
 
   IconData get aboutIcon => Icons.star;
 
-  Icon get heartIcon => const Icon(
-        Icons.favorite,
-        color: Colors.purple,
-      );
+  Icon get heartIcon => const Icon(Icons.favorite, color: Colors.purple);
 
-  AppBar appBar(String title) => AppBar(
-        title: Text(title),
-        shape: appBarBorder,
-      );
+  AppBar appBar(String title) =>
+      AppBar(title: Text(title), shape: appBarBorder);
 
-  Color get toggleSplashColor => theme.colorScheme.secondary.withOpacity(0.54);
+  Color get toggleSplashColor => theme.colorScheme.secondary.withAlpha(138);
 }
 
 class Logo {
@@ -79,9 +75,5 @@ class Logo {
 
   Size get size => Size(width, height);
 
-  Image toAsset() => Image.asset(
-        assetPath,
-        height: height,
-        width: width,
-      );
+  Image toAsset() => Image.asset(assetPath, height: height, width: width);
 }

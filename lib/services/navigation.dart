@@ -1,6 +1,6 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
-import 'package:i18n_extension/i18n_widget.dart';
+import 'package:i18n_extension/i18n_extension.dart';
 import 'package:immortal/immortal.dart';
 
 import '../models/app_route.dart';
@@ -15,56 +15,64 @@ class Navigation {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   ImmortalList<AppRoute> get routes => ImmortalList([
-        const FlatAppRoute(
-          path: '/',
-          getName: ScheduleScreen.title,
-          icon: Icons.calendar_today,
-          isRoot: true,
-          builder: ScheduleScreen.builder,
-        ),
-        const FlatAppRoute(
-          path: '/mySchedule',
-          getName: ScheduleScreen.myScheduleTitle,
-          icon: Icons.star,
-          isRoot: true,
-          builder: ScheduleScreen.myScheduleBuilder,
-        ),
-        ..._config.routes,
-        if (_config.history.isNotEmpty)
-          NestedAppRoute(
-            path: '/history',
-            getName: History.title,
-            icon: Icons.history,
-            nestedRoutes: _config.history,
-            nestedRouteBuilder: History.builder,
-          ),
-        const FlatAppRoute(
-          path: '/about',
-          getName: About.title,
-          icon: Icons.info,
-          builder: About.builder,
-        ),
-      ]);
+    const FlatAppRoute(
+      path: '/',
+      getName: ScheduleScreen.title,
+      icon: Icons.calendar_today,
+      isRoot: true,
+      builder: ScheduleScreen.builder,
+    ),
+    const FlatAppRoute(
+      path: '/mySchedule',
+      getName: ScheduleScreen.myScheduleTitle,
+      icon: Icons.star,
+      isRoot: true,
+      builder: ScheduleScreen.myScheduleBuilder,
+    ),
+    ..._config.routes,
+    if (_config.history.isNotEmpty)
+      NestedAppRoute(
+        path: '/history',
+        getName: History.title,
+        icon: Icons.history,
+        nestedRoutes: _config.history,
+        nestedRouteBuilder: History.builder,
+      ),
+    const FlatAppRoute(
+      path: '/about',
+      getName: About.title,
+      icon: Icons.info,
+      builder: About.builder,
+    ),
+  ]);
 
   ImmortalMap<String, AppRoute> get _routesByPath =>
       routes.asMapWithKeys((route) => route.path);
 
   ImmortalMap<String, WidgetBuilder> _buildNestedNamedRoutes(
-          NestedAppRoute route) =>
-      route.nestedRoutes.asMapWithKeys(route.nestedRoutePath).mapValues(
-          (_, nestedRoute) =>
-              (context) => route.nestedRouteBuilder(context, nestedRoute));
+    NestedAppRoute route,
+  ) => route.nestedRoutes
+      .asMapWithKeys(route.nestedRoutePath)
+      .mapValues(
+        (_, nestedRoute) =>
+            (context) => route.nestedRouteBuilder(context, nestedRoute),
+      );
 
   ImmortalMap<String, WidgetBuilder> _buildFlatRoute(
-          String routePath, FlatAppRoute route) =>
-      ImmortalMap({
-        routePath: (context) => route.isRoot
-            ? I18n(child: route.builder(context))
-            : route.builder(context),
-      });
+    String routePath,
+    FlatAppRoute route,
+  ) => ImmortalMap({
+    routePath:
+        (context) =>
+            route.isRoot
+                ? I18n(child: route.builder(context))
+                : route.builder(context),
+  });
 
   ImmortalMap<String, WidgetBuilder> _buildNamedRoutes(
-          String routePath, AppRoute route) =>
+    String routePath,
+    AppRoute route,
+  ) =>
       route is NestedAppRoute
           ? _buildNestedNamedRoutes(route)
           : _buildFlatRoute(routePath, route as FlatAppRoute);
@@ -76,17 +84,17 @@ class Navigation {
       .map((appRoute) => appRoute.isRoot)
       .orElse(false);
 
-  void navigateToPath(NavigatorState navigator, String path) {
+  Future<void> navigateToPath(NavigatorState navigator, String path) async {
     navigator.pop();
-    navigator.pushNamedAndRemoveUntil(path, _isRoot);
+    await navigator.pushNamedAndRemoveUntil(path, _isRoot);
   }
 
-  void navigateToRoute(NavigatorState navigator, AppRoute route) {
+  Future<void> navigateToRoute(NavigatorState navigator, AppRoute route) async {
     if (route.isRoot) {
       navigator.popUntil(_isRoot);
-      navigator.pushReplacementNamed(route.path);
+      await navigator.pushReplacementNamed(route.path);
     } else {
-      navigateToPath(navigator, route.path);
+      await navigateToPath(navigator, route.path);
     }
   }
 }

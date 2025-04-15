@@ -17,7 +17,7 @@ class EventDate extends StatelessWidget {
   final bool showWeekDay;
 
   List<Widget> _buildTimes(BuildContext context, DateTime startValue) {
-    final textStyle = Theme.of(context).textTheme.caption;
+    final textStyle = Theme.of(context).textTheme.bodySmall;
     return <Widget>[
       Text(
         (showWeekDay ? 'E HH:mm' : 'HH:mm').i18n.dateFormat(startValue),
@@ -25,22 +25,27 @@ class EventDate extends StatelessWidget {
       ),
       OptionalBuilder(
         optional: end,
-        builder: (_, endValue) => Text(
-          ' - ${'HH:mm'.i18n.dateFormat(endValue)}',
-          style: showWeekDay
-              ? textStyle
-              : textStyle?.copyWith(color: textStyle.color?.withOpacity(.33)),
-        ),
+        builder:
+            (_, endValue) => Text(
+              ' - ${'HH:mm'.i18n.dateFormat(endValue)}',
+              style:
+                  showWeekDay
+                      ? textStyle
+                      : textStyle?.copyWith(
+                        color: textStyle.color?.withAlpha(84),
+                      ),
+            ),
       ),
     ];
   }
 
   @override
   Widget build(BuildContext context) => OptionalBuilder(
-        optional: start,
-        builder: (_, startValue) => Row(
+    optional: start,
+    builder:
+        (_, startValue) => Row(
           mainAxisSize: MainAxisSize.min,
           children: _buildTimes(context, startValue),
         ),
-      );
+  );
 }

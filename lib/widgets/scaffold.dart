@@ -10,35 +10,22 @@ class AppScaffold extends StatelessWidget {
     this.title,
     this.appBar,
     this.isDialog = false,
-  }) : assert(title != null || appBar != null);
+  }) : assert(title != null || appBar != null, 'title or app bar required');
 
   factory AppScaffold.forDialog({
     required Widget body,
     required String title,
-  }) =>
-      AppScaffold._(
-        body: body,
-        title: title,
-        isDialog: true,
-      );
+  }) => AppScaffold._(body: body, title: title, isDialog: true);
 
   factory AppScaffold.withTitle({
     required Widget body,
     required String title,
-  }) =>
-      AppScaffold._(
-        body: body,
-        title: title,
-      );
+  }) => AppScaffold._(body: body, title: title);
 
   factory AppScaffold.withAppBar({
     required Widget body,
     required AppBar appBar,
-  }) =>
-      AppScaffold._(
-        body: body,
-        appBar: appBar,
-      );
+  }) => AppScaffold._(body: body, appBar: appBar);
 
   final String? title;
   final AppBar? appBar;
@@ -47,8 +34,8 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        drawer: isDialog ? null : const Menu(),
-        appBar: appBar ?? dimeGet<FestivalTheme>().appBar(title!),
-        body: body,
-      );
+    drawer: isDialog ? null : const Menu(),
+    appBar: appBar ?? dimeGet<FestivalTheme>().appBar(title!),
+    body: body,
+  );
 }

@@ -12,36 +12,29 @@ const Color _cardColor = Color.fromARGB(255, 235, 224, 201);
 const double _appBarHeight = 49;
 
 final ThemeData theme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: _primaryColor,
-    secondary: _secondaryColor,
-    error: _errorColor,
-  ),
   textTheme: Typography.blackMountainView.copyWith(
-    headline6: TextStyle(
+    titleLarge: TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 17,
       color: _errorColor,
       height: 1.05,
     ),
-    headline4: const TextStyle(
+    headlineMedium: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 24,
       color: Colors.black,
     ),
-    headline3: const TextStyle(
+    displaySmall: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 28,
       color: Colors.black,
     ),
-    headline2: TextStyle(
+    displayMedium: TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 28,
-      color: _primaryColor.withOpacity(0.54),
+      color: _primaryColor.withAlpha(138),
     ),
-    subtitle2: const TextStyle(
-      fontWeight: FontWeight.bold,
-    ),
+    titleSmall: const TextStyle(fontWeight: FontWeight.bold),
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   appBarTheme: AppBarTheme(
@@ -53,10 +46,7 @@ final ThemeData theme = ThemeData(
     toolbarHeight: _appBarHeight,
   ),
   tabBarTheme: const TabBarTheme(
-    labelStyle: TextStyle(
-      fontFamily: _displayFontFamily,
-      fontSize: 18,
-    ),
+    labelStyle: TextStyle(fontFamily: _displayFontFamily, fontSize: 18),
     unselectedLabelStyle: TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 18,
@@ -64,22 +54,69 @@ final ThemeData theme = ThemeData(
   ),
   cardTheme: const CardTheme(
     margin: EdgeInsets.only(bottom: 1),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.zero),
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.zero)),
     color: _cardColor,
   ),
-  backgroundColor: Colors.white,
-  toggleableActiveColor: _secondaryColor,
   progressIndicatorTheme: const ProgressIndicatorThemeData(
     color: _secondaryColor,
   ),
-  expansionTileTheme: const ExpansionTileThemeData(
-    iconColor: _secondaryColor,
+  expansionTileTheme: const ExpansionTileThemeData(iconColor: _secondaryColor),
+  dividerTheme: const DividerThemeData(thickness: 1),
+  checkboxTheme: CheckboxThemeData(
+    fillColor: WidgetStateProperty.resolveWith<Color?>((
+      Set<WidgetState> states,
+    ) {
+      if (states.contains(WidgetState.disabled)) {
+        return null;
+      }
+      if (states.contains(WidgetState.selected)) {
+        return _secondaryColor;
+      }
+      return null;
+    }),
   ),
-  dividerTheme: const DividerThemeData(
-    thickness: 1.0,
+  radioTheme: RadioThemeData(
+    fillColor: WidgetStateProperty.resolveWith<Color?>((
+      Set<WidgetState> states,
+    ) {
+      if (states.contains(WidgetState.disabled)) {
+        return null;
+      }
+      if (states.contains(WidgetState.selected)) {
+        return _secondaryColor;
+      }
+      return null;
+    }),
   ),
+  switchTheme: SwitchThemeData(
+    thumbColor: WidgetStateProperty.resolveWith<Color?>((
+      Set<WidgetState> states,
+    ) {
+      if (states.contains(WidgetState.disabled)) {
+        return null;
+      }
+      if (states.contains(WidgetState.selected)) {
+        return _secondaryColor;
+      }
+      return null;
+    }),
+    trackColor: WidgetStateProperty.resolveWith<Color?>((
+      Set<WidgetState> states,
+    ) {
+      if (states.contains(WidgetState.disabled)) {
+        return null;
+      }
+      if (states.contains(WidgetState.selected)) {
+        return _secondaryColor;
+      }
+      return null;
+    }),
+  ),
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: _primaryColor,
+    secondary: _secondaryColor,
+    error: _errorColor,
+  ).copyWith(surface: Colors.white),
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(
@@ -89,40 +126,36 @@ final FestivalTheme festivalTheme = FestivalTheme(
     scaffoldBackgroundColor: _primaryColor,
     dividerColor: _lightDividerColor,
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        primary: _secondaryColor,
-      ),
+      style: TextButton.styleFrom(foregroundColor: _secondaryColor),
     ),
     iconTheme: theme.iconTheme.copyWith(color: Colors.white70),
   ),
   menuTheme: theme.copyWith(
     textTheme: theme.textTheme.apply(
-        displayColor: theme.colorScheme.secondary,
-        bodyColor: theme.colorScheme.secondary),
+      displayColor: theme.colorScheme.secondary,
+      bodyColor: theme.colorScheme.secondary,
+    ),
     canvasColor: _primaryColor,
     iconTheme: theme.iconTheme.copyWith(
-      color: theme.colorScheme.secondary.withOpacity(0.87),
+      color: theme.colorScheme.secondary.withAlpha(222),
     ),
     dividerColor: _lightDividerColor,
   ),
   historyTheme: theme.copyWith(
     canvasColor: _historyBackgroundColor,
     scaffoldBackgroundColor: _historyBackgroundColor,
-    backgroundColor: _historyBackgroundColor,
+    colorScheme: theme.colorScheme.copyWith(surface: _historyBackgroundColor),
   ),
-  primaryButton: ({required label, required onPressed}) => ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      primary: theme.colorScheme.secondary,
-      onPrimary: theme.colorScheme.onSurface,
-    ),
-    onPressed: onPressed,
-    child: Text(label),
-  ),
-  logo: const Logo(
-    assetPath: 'assets/logo.png',
-    width: 111,
-    height: 56,
-  ),
+  primaryButton:
+      ({required label, required onPressed}) => ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: theme.colorScheme.secondary,
+          foregroundColor: theme.colorScheme.onSurface,
+        ),
+        onPressed: onPressed,
+        child: Text(label),
+      ),
+  logo: const Logo(assetPath: 'assets/logo.png', width: 111, height: 56),
   logoMenu: const Logo(
     assetPath: 'assets/logo_menu.png',
     width: 304,

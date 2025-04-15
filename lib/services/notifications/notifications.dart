@@ -1,10 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dime/dime.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:immortal/immortal.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -41,11 +41,15 @@ class Notifications {
         color: _theme.notificationColor,
       );
 
-  Future _onSelectNotification(String? payload) async {
+  Future _onSelectNotification(NotificationResponse response) async {
+    final payload = response.payload;
     if (payload != null) {
-      _log.debug('Notification selected with payload: $payload '
-          '- trying to open band detail view');
+      _log.debug(
+        'Notification selected with payload: $payload '
+        '- trying to open band detail view',
+      );
       try {
+        // ignore: avoid_dynamic_calls TODO(SF) fix this
         final bandName = jsonDecode(payload)['band'];
         BandDetailView.openFor(bandName ?? payload);
       } catch (error) {
@@ -57,24 +61,31 @@ class Notifications {
 
   Future<void> initializeNotificationPlugin() async {
     _log.debug('Initialize notification plugin');
-    unawaited(_plugin.getNotificationAppLaunchDetails().then((details) {
-      if (details != null && details.didNotificationLaunchApp) {
-        _log.debug('App was launched with notification');
-      }
-    }).catchError((error) {
-      _log.error('Retrieving notification launch details failed', error);
-    }));
+    unawaited(
+      _plugin
+          .getNotificationAppLaunchDetails()
+          .then((details) {
+            if (details != null && details.didNotificationLaunchApp) {
+              _log.debug('App was launched with notification');
+            }
+          })
+          .catchError((error) {
+            _log.error('Retrieving notification launch details failed', error);
+          }),
+    );
 
     // Request permissions
     final bool? result = await _plugin
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestPermission()
+          AndroidFlutterLocalNotificationsPlugin
+        >()
+        ?.requestExactAlarmsPermission()
         .then((success) {
-      _log.debug('Received permission for notifications: $success');
-    }).catchError((error) {
-      _log.error('Retrieving notification launch details failed', error);
-    });
+          _log.debug('Received permission for notifications: $success');
+        })
+        .catchError((error) {
+          _log.error('Retrieving notification launch details failed', error);
+        });
 
     // TODO(SF) move initialization somewhere else if tz is used more often
     tz.initializeTimeZones();
@@ -89,15 +100,17 @@ class Notifications {
 
     await _plugin
         .initialize(
-      const InitializationSettings(
-        android: AndroidInitializationSettings(Constants.notificationIcon),
-        iOS: IOSInitializationSettings(),
-      ),
-      onSelectNotification: _onSelectNotification,
-    )
+          const InitializationSettings(
+            android: AndroidInitializationSettings(Constants.notificationIcon),
+            iOS: DarwinInitializationSettings(),
+          ),
+          onDidReceiveBackgroundNotificationResponse: _onSelectNotification,
+          onDidReceiveNotificationResponse: _onSelectNotification,
+        )
         .catchError((error) {
-      _log.error('Initializing notification plugin failed', error);
-    });
+          _log.error('Initializing notification plugin failed', error);
+          return false; // TODO(SF) ??
+        });
   }
 
   Future<NotificationId> scheduleNotificationForEvent(
@@ -105,37 +118,38 @@ class Notifications {
     NotificationId notificationId,
   ) async {
     if (event.isInFutureOf(currentDate())) {
-      _log.debug('Schedule notification for event ${event.id} with id '
-          '$notificationId');
+      _log.debug(
+        'Schedule notification for event ${event.id} with id '
+        '$notificationId',
+      );
       await _plugin
           .zonedSchedule(
-        notificationId,
-        _config.festivalName,
-        '{band} plays at {time} on the {stage}!'.i18n.fill({
-          'band': event.bandName,
-          'time': 'HH:mm'.i18n.dateFormat(event.start.value),
-          'stage': event.stage,
-        }),
-        // TODO(SF) FEATURE configuration option?
-        tz.TZDateTime.from(
-          event.start.value.subtract(const Duration(
-            minutes: notificationTimePeriodInMinutes,
-          )),
-          tz.local,
-        ),
-        NotificationDetails(
-          android: _androidPlatformChannelSpecifics,
-          iOS: const IOSNotificationDetails(),
-        ),
-        payload: event.notificationPayload,
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-      )
+            notificationId,
+            _config.festivalName,
+            '{band} plays at {time} on the {stage}!'.i18n.fill({
+              'band': event.bandName,
+              'time': 'HH:mm'.i18n.dateFormat(event.start.value),
+              'stage': event.stage,
+            }),
+            // TODO(SF) FEATURE configuration option?
+            tz.TZDateTime.from(
+              event.start.value.subtract(
+                const Duration(minutes: notificationTimePeriodInMinutes),
+              ),
+              tz.local,
+            ),
+            NotificationDetails(
+              android: _androidPlatformChannelSpecifics,
+              iOS: const DarwinNotificationDetails(),
+            ),
+            payload: event.notificationPayload,
+            androidScheduleMode:
+                AndroidScheduleMode.alarmClock, // TODO(SF) requires permission
+          )
           .catchError((error) {
-        // Will be retried on next app start if still necessary
-        _log.error('Scheduling notification failed', error);
-      });
+            // Will be retried on next app start if still necessary
+            _log.error('Scheduling notification failed', error);
+          });
     }
     return notificationId;
   }
@@ -167,45 +181,58 @@ class Notifications {
     MySchedule mySchedule,
     ImmortalList<Event> events,
   ) async {
-    final requiredNotifications =
-        _calculateRequiredNotifications(mySchedule, events);
+    final requiredNotifications = _calculateRequiredNotifications(
+      mySchedule,
+      events,
+    );
     _log.debug('Verify required notifications $requiredNotifications');
-    final pendingNotifications =
-        await _plugin.pendingNotificationRequests().catchError((error) {
-      _log.error('Retrieving pending notifications failed', error);
-      return <PendingNotificationRequest>[];
-    });
-    final pendingNotificationsMap =
-        ImmortalMap.fromEntries(pendingNotifications.map((notification) {
-      Map<String, dynamic> payload;
-      try {
-        payload = jsonDecode(notification.payload ?? '{}');
-      } catch (error) {
-        _log.error(
+    final pendingNotifications = await _plugin
+        .pendingNotificationRequests()
+        .catchError((error) {
+          _log.error('Retrieving pending notifications failed', error);
+          return <PendingNotificationRequest>[];
+        });
+    final pendingNotificationsMap = ImmortalMap.fromEntries(
+      pendingNotifications.map((notification) {
+        Map<String, dynamic> payload;
+        try {
+          payload = jsonDecode(notification.payload ?? '{}');
+        } catch (error) {
+          _log.error(
             'Error decoding notification payload ${notification.payload}',
-            error);
-        payload = {};
-      }
-      return MapEntry(notification.id, payload);
-    }));
+            error,
+          );
+          payload = {};
+        }
+        return MapEntry(notification.id, payload);
+      }),
+    );
 
     // Cancel notifications that are not needed anymore
     pendingNotificationsMap.keys
         .difference(requiredNotifications.keys)
         .forEach(cancelNotification);
     // Schedule missing notifications
-    await Future.wait(requiredNotifications
-        .mapValues((notificationId, event) => pendingNotificationsMap
+    await Future.wait(
+      requiredNotifications
+          .mapValues(
+            (notificationId, event) => pendingNotificationsMap
                 .get(notificationId)
                 .map((payload) {
-              // Reschedule changed events
-              if (payload['hash'] != event.hashCode) {
-                return cancelNotification(notificationId).then((value) =>
-                    scheduleNotificationForEvent(event, notificationId));
-              }
-              return Future.value(notificationId);
-            }).orElseGet(
-                    () => scheduleNotificationForEvent(event, notificationId)))
-        .values);
+                  // Reschedule changed events
+                  if (payload['hash'] != event.hashCode) {
+                    return cancelNotification(notificationId).then(
+                      (value) =>
+                          scheduleNotificationForEvent(event, notificationId),
+                    );
+                  }
+                  return Future.value(notificationId);
+                })
+                .orElseGet(
+                  () => scheduleNotificationForEvent(event, notificationId),
+                ),
+          )
+          .values,
+    );
   }
 }

@@ -1,39 +1,19 @@
 import 'package:i18n_extension/i18n_extension.dart';
 
 extension Localization on String {
-  static final _t = Translations('en_us') +
+  static final _t =
+      Translations.byText('en-US') +
+      {'en-US': 'Band Details', 'de-DE': 'Band Details'} +
+      {'en-US': 'Sorry, no info', 'de-DE': 'Sorry, keine Infos'} +
+      {'en-US': 'Origin', 'de-DE': 'Herkunft'} +
+      {'en-US': 'Roots', 'de-DE': 'Wurzeln'} +
+      {'en-US': 'Style', 'de-DE': 'Stil'} +
+      {'en-US': 'Play on Spotify', 'de-DE': 'Reinhören bei Spotify'} +
       {
-        'en_us': 'Band Details',
-        'de_de': 'Band Details',
+        'en-US': 'There was an error retrieving band data.',
+        'de-DE': 'Beim Laden der Band-Daten ist ein Fehler aufgetreten.',
       } +
-      {
-        'en_us': 'Sorry, no info',
-        'de_de': 'Sorry, keine Infos',
-      } +
-      {
-        'en_us': 'Origin',
-        'de_de': 'Herkunft',
-      } +
-      {
-        'en_us': 'Roots',
-        'de_de': 'Wurzeln',
-      } +
-      {
-        'en_us': 'Style',
-        'de_de': 'Stil',
-      } +
-      {
-        'en_us': 'Play on Spotify',
-        'de_de': 'Reinhören bei Spotify',
-      } +
-      {
-        'en_us': 'There was an error retrieving band data.',
-        'de_de': 'Beim Laden der Band-Daten ist ein Fehler aufgetreten.'
-      } +
-      {
-        'en_us': 'Loading band data.',
-        'de_de': 'Band-Daten werden geladen.',
-      };
+      {'en-US': 'Loading band data.', 'de-DE': 'Band-Daten werden geladen.'};
 
   String get i18n => localize(this, _t);
 }
