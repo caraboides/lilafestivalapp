@@ -1,8 +1,8 @@
 import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:immortal/immortal.dart';
 import 'package:lilafestivalapp/models/event.dart';
 import 'package:lilafestivalapp/models/festival_config.dart';
@@ -19,7 +19,7 @@ import 'package:timezone/timezone.dart' as tz;
 import '../test_utils.dart';
 import 'notifications_test.mocks.dart';
 
-@GenerateMocks([FlutterLocalNotificationsPlugin, FlutterNativeTimezone])
+@GenerateMocks([FlutterLocalNotificationsPlugin, FlutterTimezone])
 final MockFlutterLocalNotificationsPlugin notificationsPlugin =
     MockFlutterLocalNotificationsPlugin();
 

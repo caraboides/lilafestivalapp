@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:dime/dime.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:immortal/immortal.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -89,7 +89,7 @@ class Notifications {
 
     // TODO(SF) move initialization somewhere else if tz is used more often
     tz.initializeTimeZones();
-    final currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+    final currentTimeZone = await FlutterTimezone.getLocalTimezone();
     _log.debug('Setting local timezone to $currentTimeZone');
     tz.setLocalLocation(tz.getLocation(currentTimeZone));
 

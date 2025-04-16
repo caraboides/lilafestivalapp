@@ -16,7 +16,7 @@ import 'package:flutter_local_notifications/src/platform_specifics/android/sched
 import 'package:flutter_local_notifications/src/types.dart' as _i9;
 import 'package:flutter_local_notifications_platform_interface/flutter_local_notifications_platform_interface.dart'
     as _i5;
-import 'package:flutter_native_timezone/flutter_native_timezone.dart' as _i10;
+import 'package:flutter_timezone/flutter_timezone.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:timezone/timezone.dart' as _i7;
 
@@ -203,12 +203,11 @@ class MockFlutterLocalNotificationsPlugin extends _i1.Mock
           as _i3.Future<List<_i5.ActiveNotification>>);
 }
 
-/// A class which mocks [FlutterNativeTimezone].
+/// A class which mocks [FlutterTimezone].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFlutterNativeTimezone extends _i1.Mock
-    implements _i10.FlutterNativeTimezone {
-  MockFlutterNativeTimezone() {
+class MockFlutterTimezone extends _i1.Mock implements _i10.FlutterTimezone {
+  MockFlutterTimezone() {
     _i1.throwOnMissingStub(this);
   }
 }
