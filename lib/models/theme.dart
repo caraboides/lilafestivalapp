@@ -47,10 +47,10 @@ class FestivalTheme {
   final double cardBannerHeight = 40;
   final double tabBarHeight = 48;
   final double alphabeticalIndexWidth = 32;
-  // TODO(SF) THEME value ok?
+  // TODO(SF): THEME value ok?
   final int minItemCountForAlphabeticalIndex = 10;
 
-  // TODO(SF) THEME make schedule icons in general configurable?
+  // TODO(SF): THEME make schedule icons in general configurable?
 
   IconData get aboutIcon => Icons.star;
 

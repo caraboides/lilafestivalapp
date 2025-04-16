@@ -31,7 +31,7 @@ import '../../widgets/optional_builder.dart';
 import '../../widgets/scaffold.dart';
 import 'band_detail_view.i18n.dart';
 
-// TODO(SF) FEATURE periodic rebuild for is playing indicator?
+// TODO(SF): FEATURE periodic rebuild for is playing indicator?
 class BandDetailView extends HookConsumerWidget {
   const BandDetailView(this.bandName);
 

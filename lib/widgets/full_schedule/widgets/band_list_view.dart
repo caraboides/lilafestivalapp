@@ -52,7 +52,7 @@ class BandListView extends StatelessWidget {
   String _getAlphabeticalIndex(int index) => _bandAt(index)
       .map((band) {
         final letter = band.bandName.substring(0, 1);
-        // TODO(SF) THEME use different symbol?
+        // TODO(SF): THEME use different symbol?
         return _isLetterRegex.hasMatch(letter) ? letter : '#';
       })
       .orElse('');

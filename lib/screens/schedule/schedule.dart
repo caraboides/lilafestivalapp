@@ -23,20 +23,17 @@ class ScheduleScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _ScheduleScreenState();
 }
 
-// TODO(SF) STYLE create hook four periodic rebuild?
+// TODO(SF): STYLE create hook four periodic rebuild?
 class _ScheduleScreenState extends State<ScheduleScreen>
     with WidgetsBindingObserver, PeriodicRebuildMixin<ScheduleScreen> {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   @override
   Widget build(BuildContext context) => DimeScopeFlutter(
-        scopeName: FestivalScope.scopeName,
-        modules: <BaseDimeModule>[
-          FestivalScopeModule(_config.currentFestivalScope)
-        ],
-        child: FullSchedule(
-          likedOnly: widget.likedOnly,
-          displayWeather: true,
-        ),
-      );
+    scopeName: FestivalScope.scopeName,
+    modules: <BaseDimeModule>[
+      FestivalScopeModule(_config.currentFestivalScope),
+    ],
+    child: FullSchedule(likedOnly: widget.likedOnly, displayWeather: true),
+  );
 }

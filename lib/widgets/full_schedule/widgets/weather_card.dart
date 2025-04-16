@@ -30,7 +30,7 @@ class WeatherCard extends HookConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          // TODO(SF) FEATURE option for temperature unit?
+          // TODO(SF): FEATURE option for temperature unit?
           if (weather.temperature?.celsius != null)
             Text('${weather.temperature!.celsius!.toStringAsFixed(1)}°C'),
           Padding(

@@ -6,9 +6,9 @@ analyzer:
     non_nullable_equals_parameter: ignore
   exclude:
     - test/utils/*.mocks.dart
-#   strong-mode:
-#     implicit-casts: false
-#     implicit-dynamic: false
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
 
 linter:
   rules:
@@ -62,7 +62,7 @@ linter:
     - camel_case_extensions
     - camel_case_types
     - cancel_subscriptions: true
-    - cascade_invocations: false # TODO(SF) not always working
+    - cascade_invocations: false
     - cast_nullable_to_non_nullable
     - close_sinks: true
     - collection_methods_unrelated_type
@@ -78,7 +78,7 @@ linter:
     - deprecated_member_use_from_same_package
     - diagnostic_describe_all_properties: false
     - directives_ordering
-    - discarded_futures: false # TODO(SF) kind of inconsistent
+    - discarded_futures: false
     - do_not_use_environment: false
     - document_ignores
     - empty_catches
@@ -87,7 +87,7 @@ linter:
     - eol_at_end_of_file
     - exhaustive_cases
     - file_names
-    - flutter_style_todos: false # TODO(SF): change later
+    - flutter_style_todos
     - hash_and_equals
     - implementation_imports
     - implicit_call_tearoffs
@@ -222,7 +222,7 @@ linter:
     - unsafe_variance
     - use_build_context_synchronously
     - use_colored_box
-    - use_decorated_box: false # TODO(SF) not working with optional decoration
+    - use_decorated_box: false # Not working with optional decorations 
     - use_enums
     - use_full_hex_values_for_flutter_colors
     - use_function_type_syntax_for_parameters: true
@@ -230,7 +230,7 @@ linter:
     - use_is_even_rather_than_modulo
     - use_key_in_widget_constructors: false
     - use_late_for_private_fields_and_variables
-    - use_named_constants: false # TODO(SF): actually quite nice
+    - use_named_constants: false
     - use_raw_strings
     - use_rethrow_when_possible
     - use_setters_to_change_properties

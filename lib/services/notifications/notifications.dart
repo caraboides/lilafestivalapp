@@ -87,7 +87,7 @@ class Notifications {
           _log.error('Retrieving notification launch details failed', error);
         });
 
-    // TODO(SF) move initialization somewhere else if tz is used more often
+    // TODO(SF): move initialization somewhere else if tz is used more often
     tz.initializeTimeZones();
     final currentTimeZone = await FlutterTimezone.getLocalTimezone();
     _log.debug('Setting local timezone to $currentTimeZone');
@@ -109,7 +109,7 @@ class Notifications {
         )
         .catchError((error) {
           _log.error('Initializing notification plugin failed', error);
-          return false; // TODO(SF) ??
+          return false; // TODO(SF): ??
         });
   }
 
@@ -131,7 +131,7 @@ class Notifications {
               'time': 'HH:mm'.i18n.dateFormat(event.start.value),
               'stage': event.stage,
             }),
-            // TODO(SF) FEATURE configuration option?
+            // TODO(SF): FEATURE configuration option?
             tz.TZDateTime.from(
               event.start.value.subtract(
                 const Duration(minutes: notificationTimePeriodInMinutes),
@@ -144,7 +144,7 @@ class Notifications {
             ),
             payload: event.notificationPayload,
             androidScheduleMode:
-                AndroidScheduleMode.alarmClock, // TODO(SF) requires permission
+                AndroidScheduleMode.alarmClock, // TODO(SF): requires permission
           )
           .catchError((error) {
             // Will be retried on next app start if still necessary

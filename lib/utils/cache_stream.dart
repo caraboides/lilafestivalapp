@@ -14,9 +14,10 @@ Stream<T> createCacheStream<T, J>({
   BaseCacheManager? cacheManager,
 }) {
   _log.debug('Loading data from $remoteUrl');
-  // TODO(SF) FEATURE with DownloadProgress
-  final stream =
-      (cacheManager ?? dimeGet<BaseCacheManager>()).getFileStream(remoteUrl);
+  // TODO(SF): FEATURE with DownloadProgress
+  final stream = (cacheManager ?? dimeGet<BaseCacheManager>()).getFileStream(
+    remoteUrl,
+  );
   return stream.asyncMap<T>((fileResponse) async {
     final info = fileResponse as FileInfo;
     final content = await info.file.readAsString();

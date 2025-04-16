@@ -29,8 +29,8 @@ class FestivalConfig {
   final String festivalName;
   final String festivalFullName;
   final Uri festivalUrl;
-  // TODO(SF) THEME display those somewhere?
-  // TODO(SF) maybe sliver app bar? combine with "onboarding"!
+  // TODO(SF): THEME display those somewhere?
+  // TODO(SF): maybe sliver app bar? combine with "onboarding"!
   final DateTime startDate;
   final DateTime endDate;
   final Duration daySwitchOffset;

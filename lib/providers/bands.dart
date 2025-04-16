@@ -13,8 +13,8 @@ import '../utils/cache_stream.dart';
 import '../utils/combined_storage_stream.dart';
 import '../utils/constants.dart';
 
-typedef BandsProvider
-    = StreamProviderFamily<ImmortalMap<BandName, Band>, FestivalId>;
+typedef BandsProvider =
+    StreamProviderFamily<ImmortalMap<BandName, Band>, FestivalId>;
 
 typedef BandProvider = ProviderFamily<AsyncValue<Optional<Band>>, BandKey>;
 
@@ -26,12 +26,15 @@ class BandsProviderCreator {
       '/bands?festival=$festivalId';
 
   static ImmortalMap<BandName, Band> _fromJson(Map<String, dynamic> jsonMap) =>
-      ImmortalMap<String, dynamic>(jsonMap)
-          .mapValues((bandName, json) => Band.fromJson(bandName, json));
+      ImmortalMap<String, dynamic>(
+        jsonMap,
+      ).mapValues((bandName, json) => Band.fromJson(bandName, json));
 
   static BandsProvider create(BuildContext context) =>
-      StreamProvider.family<ImmortalMap<BandName, Band>, FestivalId>(
-          (ref, festivalId) {
+      StreamProvider.family<ImmortalMap<BandName, Band>, FestivalId>((
+        ref,
+        festivalId,
+      ) {
         if (festivalId == _config.festivalId) {
           return createCombinedStorageStream(
             context: context,
@@ -42,7 +45,7 @@ class BandsProviderCreator {
             fromJson: _fromJson,
           );
         }
-        // TODO(SF) autodispose?
+        // TODO(SF): autodispose?
         return createCacheStream(
           remoteUrl: _globalConfig.festivalHubBaseUrl + _remoteUrl(festivalId),
           fromJson: _fromJson,
@@ -50,7 +53,9 @@ class BandsProviderCreator {
       });
 
   static BandProvider createBandProvider() =>
-      Provider.family<AsyncValue<Optional<Band>>, BandKey>((ref, bandKey) => ref
-          .watch(dimeGet<BandsProvider>()(bandKey.festivalId))
-          .whenData((bands) => bands[bandKey.bandName]));
+      Provider.family<AsyncValue<Optional<Band>>, BandKey>(
+        (ref, bandKey) => ref
+            .watch(dimeGet<BandsProvider>()(bandKey.festivalId))
+            .whenData((bands) => bands[bandKey.bandName]),
+      );
 }

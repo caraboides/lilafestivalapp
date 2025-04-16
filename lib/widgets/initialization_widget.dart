@@ -62,7 +62,7 @@ class _InitializationWidgetState extends ConsumerState<InitializationWidget>
         error,
         trace,
       );
-      // TODO(SF) FEATURE recovery?
+      // TODO(SF): FEATURE recovery?
       return true;
     },
   );

@@ -14,7 +14,7 @@ import '../utils/constants.dart';
 import '../utils/date.dart';
 import '../utils/logging.dart';
 
-// TODO(SF) STATE create custom cache manager for history as well
+// TODO(SF): STATE create custom cache manager for history as well
 class WeatherCacheManager extends CacheManager {
   WeatherCacheManager()
     : super(

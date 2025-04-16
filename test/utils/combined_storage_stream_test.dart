@@ -79,8 +79,6 @@ bool assertList(List<TestData> actual, List<String> expected) => ImmortalList(
 const TestData remoteData = TestData('remoteData');
 const TestData remoteUpdateData = TestData('remoteUpdateData');
 const TestData appStorageData = TestData('appStorageData');
-// TODO(SF)?
-// const TestData assetData = TestData('assetData');
 const String jsonAssetData = '{"value":"assetData"}';
 
 void mockRemoteData([

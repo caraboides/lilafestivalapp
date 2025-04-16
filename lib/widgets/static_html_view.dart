@@ -19,7 +19,7 @@ class StaticHtmlViewState extends State<StaticHtmlView> {
   bool _loadingState = true;
   int _progress = 0;
 
-  // TODO(SF) still needed?
+  // TODO(SF): still needed?
   // import 'dart:convert';
   // String _buildUrl(BuildContext context) {
   //   final contentBase64 = base64Encode(
@@ -79,7 +79,7 @@ class StaticHtmlViewState extends State<StaticHtmlView> {
       Visibility(
         visible: _loadingState,
         child: LinearProgressIndicator(
-          value: _progress / 100, // TODO(SF) ??
+          value: _progress / 100, // TODO(SF): ??
         ),
       ),
       Expanded(child: WebViewWidget(controller: _controller)),

@@ -6,7 +6,7 @@ extension Localization on String {
       {'en-US': 'Gig Reminder', 'de-DE': 'Auftrittsbenachrichtigungen'} +
       {
         'en-US': 'Notifications to remind of liked gigs',
-        // TODO(SF) I18n find better words
+        // TODO(SF): I18n find better words
         'de-DE': 'Benachrichtigungen für favorisierte Auftritte',
       } +
       {'en-US': 'HH:mm', 'de-DE': 'HH:mm'} +

@@ -10,9 +10,9 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MessageScreen(
-        headline: 'An error occurred!'.i18n,
-        description: description,
-        // TODO(SF) FEATURE retry
-        icon: const Text('💀', style: TextStyle(fontSize: 24)),
-      );
+    headline: 'An error occurred!'.i18n,
+    description: description,
+    // TODO(SF): FEATURE retry
+    icon: const Text('💀', style: TextStyle(fontSize: 24)),
+  );
 }
