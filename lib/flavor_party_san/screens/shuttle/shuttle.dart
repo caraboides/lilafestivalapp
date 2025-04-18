@@ -7,7 +7,7 @@ import 'shuttle.i18n.dart';
 import 'shuttle_en_html.dart';
 import 'shuttle_html.dart';
 
-const String _shuttleHeader = '''
+String _shuttleHeader(String fontUrl) => '''
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -43,12 +43,12 @@ const String _shuttleHeader = '''
     }
 
     @font-face {
-      font-family: 'Impacted2';
-      src: url('https://www.party-san.de/typo3conf/ext/theme_psoa/Resources/Public/Fonts/Impacted2/Impacted20-Regular.woff2?v=4.6.3') format('woff');
+      font-family: 'DisplayFont';
+      src: url($fontUrl);
     }
 
     h2 {
-      font-family: 'Impacted2';
+      font-family: 'DisplayFont';
       font-size: 27px;
     }
 
@@ -66,15 +66,13 @@ class Shuttle extends StatelessWidget {
 
   static String title() => 'Bus Shuttle'.i18n;
 
-  String _buildHtml(BuildContext context) {
-    final locale = I18n.locale;
-    return _shuttleHeader +
-        (locale.languageCode == 'en' ? shuttleEnHtml : shuttleHtml);
-  }
+  String _buildHtml(String fontUrl) =>
+      _shuttleHeader(fontUrl) +
+      (I18n.language == 'en' ? shuttleEnHtml : shuttleHtml);
 
   @override
   Widget build(BuildContext context) => AppScaffold.withTitle(
     title: title(),
-    body: StaticHtmlView(_buildHtml(context)),
+    body: StaticHtmlView(buildHtml: _buildHtml),
   );
 }

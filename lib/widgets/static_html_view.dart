@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../utils/logging.dart';
 
 class StaticHtmlView extends StatefulWidget {
-  const StaticHtmlView(this.html);
+  const StaticHtmlView({required this.buildHtml});
 
-  final String html;
+  final String Function(String fontUrl) buildHtml;
 
   @override
   State<StatefulWidget> createState() => StaticHtmlViewState();
@@ -19,14 +20,14 @@ class StaticHtmlViewState extends State<StaticHtmlView> {
   bool _loadingState = true;
   int _progress = 0;
 
-  // TODO(SF): still needed?
-  // import 'dart:convert';
-  // String _buildUrl(BuildContext context) {
-  //   final contentBase64 = base64Encode(
-  //     const Utf8Encoder().convert(widget.html),
-  //   );
-  //   return 'data:text/html;base64,$contentBase64';
-  // }
+  Future<String> _getFontUrl() async {
+    final data = await rootBundle.load('assets/display_font.ttf');
+    final buffer = data.buffer;
+    return Uri.dataFromBytes(
+      buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+      mimeType: 'font/ttf',
+    ).toString();
+  }
 
   @override
   void initState() {
@@ -69,8 +70,10 @@ class StaticHtmlViewState extends State<StaticHtmlView> {
               },
             ),
           )
-          ..enableZoom(false)
-          ..loadHtmlString(widget.html);
+          ..enableZoom(false);
+    _getFontUrl().then(
+      (fontUrl) => _controller.loadHtmlString(widget.buildHtml(fontUrl)),
+    );
   }
 
   @override
@@ -78,9 +81,7 @@ class StaticHtmlViewState extends State<StaticHtmlView> {
     children: <Widget>[
       Visibility(
         visible: _loadingState,
-        child: LinearProgressIndicator(
-          value: _progress / 100, // TODO(SF): ??
-        ),
+        child: LinearProgressIndicator(value: _progress.toDouble()),
       ),
       Expanded(child: WebViewWidget(controller: _controller)),
     ],

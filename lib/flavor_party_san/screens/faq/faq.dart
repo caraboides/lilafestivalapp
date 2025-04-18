@@ -7,16 +7,16 @@ import 'faq.i18n.dart';
 import 'faq_en_html.dart';
 import 'faq_html.dart';
 
-const String _faqHeader = '''
+String _faqHeader(String fontUrl) => '''
     <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
     @font-face {
-      font-family: 'Impacted2';
-      src: url('https://www.party-san.de/typo3conf/ext/theme_psoa/Resources/Public/Fonts/Impacted2/Impacted20-Regular.woff2?v=4.6.3') format('woff');
+      font-family: 'DisplayFont';
+      src: url($fontUrl);
     }
     h3 {
-      font-family: 'Impacted2';
+      font-family: 'DisplayFont';
       font-size: 27px;
     }
     body {
@@ -36,14 +36,12 @@ class FAQ extends StatelessWidget {
 
   static String title() => 'FAQ'.i18n;
 
-  String _buildHtml(BuildContext context) {
-    final locale = I18n.locale;
-    return _faqHeader + (locale.languageCode == 'en' ? faqEnHtml : faqHtml);
-  }
+  String _buildHtml(String fontUrl) =>
+      _faqHeader(fontUrl) + (I18n.language == 'en' ? faqEnHtml : faqHtml);
 
   @override
   Widget build(BuildContext context) => AppScaffold.withTitle(
     title: title(),
-    body: StaticHtmlView(_buildHtml(context)),
+    body: StaticHtmlView(buildHtml: _buildHtml),
   );
 }
