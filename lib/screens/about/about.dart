@@ -24,7 +24,7 @@ class About extends StatelessWidget {
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
   Widget get _divider => Padding(
-    padding: EdgeInsets.only(bottom: 8),
+    padding: const EdgeInsets.only(bottom: 8),
     child: Divider(height: 1, color: _theme.aboutTheme.dividerColor),
   );
 

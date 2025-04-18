@@ -4,15 +4,6 @@ import 'package:flutter/material.dart';
 import '../models/theme.dart';
 
 class ToggleLikeButton extends StatelessWidget {
-  FestivalTheme get _theme => dimeGet<FestivalTheme>();
-  static const _iconSize = 24.0;
-
-  final VoidCallback onPressed;
-  final Color? iconColor;
-  final bool toggleState;
-  final String tooltip;
-  final bool dense;
-
   const ToggleLikeButton({
     required this.toggleState,
     required this.onPressed,
@@ -20,6 +11,15 @@ class ToggleLikeButton extends StatelessWidget {
     this.iconColor,
     this.dense = false,
   });
+
+  final VoidCallback onPressed;
+  final Color? iconColor;
+  final bool toggleState;
+  final String tooltip;
+  final bool dense;
+
+  FestivalTheme get _theme => dimeGet<FestivalTheme>();
+  static const _iconSize = 24.0;
 
   @override
   Widget build(BuildContext context) {

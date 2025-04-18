@@ -109,7 +109,7 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
         ),
       ),
     ),
-    SizedBox(width: 8),
+    const SizedBox(width: 8),
   ];
 
   AppBar _buildAppBar(

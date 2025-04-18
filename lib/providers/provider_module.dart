@@ -21,30 +21,40 @@ class ProviderModule extends BaseDimeModule {
     // Schedule providers
     addSingle<ScheduleProvider>(ScheduleProviderCreator.create(context));
     addSingle<FestivalDaysProvider>(
-        ScheduleProviderCreator.createFestivalDaysProvider());
+      ScheduleProviderCreator.createFestivalDaysProvider(),
+    );
     addSingle<SortedScheduleProvider>(
-        ScheduleProviderCreator.createSortedProvider());
+      ScheduleProviderCreator.createSortedProvider(),
+    );
     addSingle<DailyScheduleProvider>(
-        ScheduleProviderCreator.createDailyScheduleProvider());
+      ScheduleProviderCreator.createDailyScheduleProvider(),
+    );
     addSingle<DailyScheduleMapProvider>(
-        ScheduleProviderCreator.createDailyScheduleMapProvider());
+      ScheduleProviderCreator.createDailyScheduleMapProvider(),
+    );
     addSingle<BandScheduleProvider>(
-        ScheduleProviderCreator.createBandsScheduleProvider());
+      ScheduleProviderCreator.createBandsScheduleProvider(),
+    );
     // My Schedule providers
     addSingle<MyScheduleProvider>(MyScheduleProviderCreator.create());
     addSingle<LikedEventProvider>(
-        MyScheduleProviderCreator.createLikedEventProvider());
+      MyScheduleProviderCreator.createLikedEventProvider(),
+    );
     // Combined bands and events providers
     addSingle<BandWithEventsProvider>(
-        BandsWithEventsProviderCreator.createBandWithEventsProvider());
+      BandsWithEventsProviderCreator.createBandWithEventsProvider(),
+    );
     addSingle<BandsWithEventsProvider>(BandsWithEventsProviderCreator.create());
     addSingle<SortedBandsWithEventsProvider>(
-        BandsWithEventsProviderCreator.createSortedBandsWithEventsProvider());
+      BandsWithEventsProviderCreator.createSortedBandsWithEventsProvider(),
+    );
     // Filtered band and event providers
     addSingle<FilteredDailyScheduleProvider>(
-        FilteredScheduleProviderCreator.createFilteredDailyScheduleProvider());
+      FilteredScheduleProviderCreator.createFilteredDailyScheduleProvider(),
+    );
     addSingle<FilteredBandScheduleProvider>(
-        FilteredScheduleProviderCreator.createFilteredBandScheduleProvider());
+      FilteredScheduleProviderCreator.createFilteredBandScheduleProvider(),
+    );
     // Weather provider
     addSingle<WeatherProvider>(WeatherProviderCreator.create());
   }

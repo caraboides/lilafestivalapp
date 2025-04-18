@@ -60,7 +60,7 @@ final ThemeData theme = ThemeData(
     foregroundColor: _colorScheme.onPrimary,
   ),
   tabBarTheme: TabBarTheme(
-    labelStyle: TextStyle(
+    labelStyle: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 18,
       color: Colors.white,
@@ -81,7 +81,7 @@ final ThemeData theme = ThemeData(
     color: _secondaryColor,
   ),
   expansionTileTheme: const ExpansionTileThemeData(iconColor: _secondaryColor),
-  dividerTheme: DividerThemeData(thickness: 1),
+  dividerTheme: const DividerThemeData(thickness: 1),
   checkboxTheme: CheckboxThemeData(fillColor: _toggleableColorSelected),
   radioTheme: RadioThemeData(fillColor: _toggleableColorSelected),
   switchTheme: SwitchThemeData(

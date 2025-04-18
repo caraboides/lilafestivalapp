@@ -18,7 +18,8 @@ class ServiceModule extends BaseDimeModule {
     addSingle<CombinedStorage>(const CombinedStorage());
     addSingle<OpenWeather>(OpenWeather());
     addSingle<FlutterLocalNotificationsPlugin>(
-        FlutterLocalNotificationsPlugin());
+      FlutterLocalNotificationsPlugin(),
+    );
     addSingle<Notifications>(const Notifications());
     addSingle<BaseCacheManager>(DefaultCacheManager());
     addSingle<WeatherCacheManager>(WeatherCacheManager());

@@ -48,18 +48,14 @@ class MyScheduleMatcher extends Matcher {
 
 const appStorageFileName = 'my_schedule/festival_id.json';
 const legacyFileName = 'my_schedule.txt';
-final event = Event(
+const event = Event(
   bandName: 'band',
   id: 'event1',
   stage: 'stage',
-  start: const Optional.empty(),
-  end: const Optional.empty(),
+  start: Optional.empty(),
+  end: Optional.empty(),
 );
-const testSchedule = {
-  'event1': 1,
-  'event2': 2,
-  'event3': 3,
-};
+const testSchedule = {'event1': 1, 'event2': 2, 'event3': 3};
 
 void main() {
   group('MyScheduleController', () {
@@ -80,95 +76,94 @@ void main() {
     });
 
     test('loads schedule from app storage', () async {
-      when(appStorageMock.loadJson(any))
-          .thenAnswer(mockResponse(Optional.of(testSchedule)));
+      when(
+        appStorageMock.loadJson(any),
+      ).thenAnswer(mockResponse(Optional.of(testSchedule)));
 
       controller = MyScheduleController.create(festivalId: 'festival_id');
       final state = await controller.stream.first;
 
       verify(appStorageMock.loadJson(appStorageFileName));
-      expect(
-        state.value,
-        const MyScheduleMatcher(testSchedule),
-      );
+      expect(state.value, const MyScheduleMatcher(testSchedule));
     });
 
     test('loads schedule from legacy file if necessary', () async {
-      when(appStorageMock.loadJson(appStorageFileName))
-          .thenAnswer(mockResponse(const Optional.empty()));
-      when(appStorageMock.loadJson(legacyFileName))
-          .thenAnswer(mockResponse(Optional.of(testSchedule)));
+      when(
+        appStorageMock.loadJson(appStorageFileName),
+      ).thenAnswer(mockResponse(const Optional.empty()));
+      when(
+        appStorageMock.loadJson(legacyFileName),
+      ).thenAnswer(mockResponse(Optional.of(testSchedule)));
 
       controller = MyScheduleController.create(
-          festivalId: 'festival_id', handleLegacyFile: true);
+        festivalId: 'festival_id',
+        handleLegacyFile: true,
+      );
       final state = await controller.stream.first;
 
       verify(appStorageMock.loadJson(appStorageFileName));
       verify(appStorageMock.loadJson(legacyFileName));
       verify(appStorageMock.storeJson(appStorageFileName, testSchedule));
       verify(appStorageMock.removeFile(legacyFileName));
-      expect(
-        state.value,
-        const MyScheduleMatcher(testSchedule),
-      );
+      expect(state.value, const MyScheduleMatcher(testSchedule));
     });
 
     test('ignores legacy file if not necessary', () async {
-      when(appStorageMock.loadJson(appStorageFileName))
-          .thenAnswer(mockResponse(Optional.of(testSchedule)));
-      when(appStorageMock.loadJson(legacyFileName))
-          .thenAnswer(mockResponse(const Optional.empty()));
+      when(
+        appStorageMock.loadJson(appStorageFileName),
+      ).thenAnswer(mockResponse(Optional.of(testSchedule)));
+      when(
+        appStorageMock.loadJson(legacyFileName),
+      ).thenAnswer(mockResponse(const Optional.empty()));
 
       controller = MyScheduleController.create(
-          festivalId: 'festival_id', handleLegacyFile: true);
+        festivalId: 'festival_id',
+        handleLegacyFile: true,
+      );
       final state = await controller.stream.first;
 
       verify(appStorageMock.loadJson(appStorageFileName));
       verifyNever(appStorageMock.loadJson(legacyFileName));
       verifyNever(appStorageMock.storeJson(appStorageFileName, testSchedule));
       verifyNever(appStorageMock.removeFile(legacyFileName));
-      expect(
-        state.value,
-        const MyScheduleMatcher(testSchedule),
-      );
+      expect(state.value, const MyScheduleMatcher(testSchedule));
     });
 
     test('handles error when reading from app storage', () async {
-      when(appStorageMock.loadJson(any))
-          .thenAnswer(mockResponse(Optional.of('foobar')));
+      when(
+        appStorageMock.loadJson(any),
+      ).thenAnswer(mockResponse(Optional.of('foobar')));
 
       controller = MyScheduleController.create(festivalId: 'festival_id');
       final state = await controller.stream.first;
 
       verify(appStorageMock.loadJson(appStorageFileName));
-      expect(
-        state.value,
-        const MyScheduleMatcher({}),
-      );
+      expect(state.value, const MyScheduleMatcher({}));
     });
 
     test('handles error when reading from legacy file', () async {
-      when(appStorageMock.loadJson(any))
-          .thenAnswer(mockResponse(Optional.of('foobar')));
+      when(
+        appStorageMock.loadJson(any),
+      ).thenAnswer(mockResponse(Optional.of('foobar')));
 
       controller = MyScheduleController.create(
-          festivalId: 'festival_id', handleLegacyFile: true);
+        festivalId: 'festival_id',
+        handleLegacyFile: true,
+      );
       final state = await controller.stream.first;
 
       verify(appStorageMock.loadJson(appStorageFileName));
       verify(appStorageMock.loadJson(legacyFileName));
       verifyNever(appStorageMock.storeJson(appStorageFileName, testSchedule));
       verifyNever(appStorageMock.removeFile(legacyFileName));
-      expect(
-        state.value,
-        const MyScheduleMatcher({}),
-      );
+      expect(state.value, const MyScheduleMatcher({}));
     });
 
     test('stores updates in app storage', () async {
       const updatedSchedule = {'event2': 2, 'event3': 3};
-      when(appStorageMock.loadJson(any))
-          .thenAnswer(mockResponse(Optional.of(testSchedule)));
+      when(
+        appStorageMock.loadJson(any),
+      ).thenAnswer(mockResponse(Optional.of(testSchedule)));
 
       controller = MyScheduleController.create(festivalId: 'festival_id');
       var initialized = false;
