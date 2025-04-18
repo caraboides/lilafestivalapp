@@ -3,6 +3,7 @@ import 'package:dime_flutter/dime_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:i18n_extension/i18n_extension.dart';
 import 'package:immortal/immortal.dart';
 import 'package:optional/optional.dart';
 import 'package:shimmer/shimmer.dart';
@@ -208,7 +209,7 @@ class BandDetailView extends HookConsumerWidget {
           );
 
   Widget _buildBandView(BuildContext context, BandWithEvents bandWithEvents) {
-    final locale = Localizations.localeOf(context);
+    final locale = I18n.locale;
     final theme = Theme.of(context);
     final band = bandWithEvents.band;
     return Container(

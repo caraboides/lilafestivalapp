@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i18n_extension/i18n_extension.dart';
 
 import '../../../widgets/scaffold.dart';
 import '../../../widgets/static_html_view.dart';
@@ -36,13 +37,13 @@ class FAQ extends StatelessWidget {
   static String title() => 'FAQ'.i18n;
 
   String _buildHtml(BuildContext context) {
-    final locale = Localizations.localeOf(context);
+    final locale = I18n.locale;
     return _faqHeader + (locale.languageCode == 'en' ? faqEnHtml : faqHtml);
   }
 
   @override
   Widget build(BuildContext context) => AppScaffold.withTitle(
-        title: title(),
-        body: StaticHtmlView(_buildHtml(context)),
-      );
+    title: title(),
+    body: StaticHtmlView(_buildHtml(context)),
+  );
 }

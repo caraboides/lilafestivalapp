@@ -17,7 +17,7 @@ import '../utils/logging.dart';
 import 'mixins/one_time_execution_mixin.dart';
 
 class InitializationWidget extends StatefulHookConsumerWidget {
-  const InitializationWidget(this.child);
+  const InitializationWidget({required this.child});
 
   final Widget child;
 

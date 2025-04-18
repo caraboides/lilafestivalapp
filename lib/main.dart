@@ -34,7 +34,7 @@ class FestivalApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => InitializationWidget(
-    MaterialApp(
+    child: MaterialApp(
       title: _config.festivalName,
       theme: _theme.theme,
       localizationsDelegates: const [

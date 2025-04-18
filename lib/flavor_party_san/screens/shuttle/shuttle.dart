@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i18n_extension/i18n_extension.dart';
 
 import '../../../widgets/scaffold.dart';
 import '../../../widgets/static_html_view.dart';
@@ -66,14 +67,14 @@ class Shuttle extends StatelessWidget {
   static String title() => 'Bus Shuttle'.i18n;
 
   String _buildHtml(BuildContext context) {
-    final locale = Localizations.localeOf(context);
+    final locale = I18n.locale;
     return _shuttleHeader +
         (locale.languageCode == 'en' ? shuttleEnHtml : shuttleHtml);
   }
 
   @override
   Widget build(BuildContext context) => AppScaffold.withTitle(
-        title: title(),
-        body: StaticHtmlView(_buildHtml(context)),
-      );
+    title: title(),
+    body: StaticHtmlView(_buildHtml(context)),
+  );
 }

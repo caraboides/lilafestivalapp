@@ -1,5 +1,6 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
+import 'package:i18n_extension/i18n_extension.dart';
 import 'package:optional/optional.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -58,7 +59,7 @@ class Menu extends StatelessWidget {
   Widget _buildEntries(BuildContext context) {
     final navigator = Navigator.of(context);
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context);
+    final locale = I18n.locale;
     return ListView(
       children: <Widget>[
         OptionalBuilder(
