@@ -64,8 +64,7 @@ class Menu extends StatelessWidget {
       children: <Widget>[
         OptionalBuilder(
           optional: Optional.of(_theme.logoMenu),
-          // ignore: avoid_dynamic_calls TODO(SF) fix this
-          builder: (_, logoMenu) => logoMenu.toAsset(),
+          builder: (_, logoMenu) => (logoMenu as Logo).toAsset(),
         ),
         ..._navigation.routes.map(
           (route) =>

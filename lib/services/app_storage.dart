@@ -23,8 +23,7 @@ class AppStorage {
     try {
       _log.debug('Reading data from $fileName');
       final file = await _getFileHandle(fileName);
-      // ignore: avoid_slow_async_io TODO(SF) check this
-      if (await file.exists()) {
+      if (file.existsSync()) {
         final fileContent = await file.readAsString();
         final json = jsonDecode(fileContent);
         _log.debug('Reading data from $fileName was successful');

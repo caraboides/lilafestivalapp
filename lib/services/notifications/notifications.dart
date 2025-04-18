@@ -49,8 +49,7 @@ class Notifications {
         '- trying to open band detail view',
       );
       try {
-        // ignore: avoid_dynamic_calls TODO(SF) fix this
-        final bandName = jsonDecode(payload)['band'];
+        final bandName = (jsonDecode(payload) as Map)['band'];
         BandDetailView.openFor(bandName ?? payload);
       } catch (error) {
         _log.error('Error parsing notification payload $payload', error);
@@ -143,8 +142,7 @@ class Notifications {
               iOS: const DarwinNotificationDetails(),
             ),
             payload: event.notificationPayload,
-            androidScheduleMode:
-                AndroidScheduleMode.alarmClock, // TODO(SF): requires permission
+            androidScheduleMode: AndroidScheduleMode.alarmClock,
           )
           .catchError((error) {
             // Will be retried on next app start if still necessary

@@ -108,18 +108,33 @@ class About extends StatelessWidget {
           .flatten<Widget>()
           .toList();
 
-  Future<void> _showLicenses(BuildContext context) async {
-    final packageInfo = await PackageInfo.fromPlatform();
+  Future<void> _showLicenses(BuildContext context, String version) async {
     showLicensePage(
-      // ignore: use_build_context_synchronously TODO(SF) fix me
       context: context,
       applicationName: '{festivalName} App'.i18n.fill({
         'festivalName': _config.festivalName,
       }),
-      applicationVersion: packageInfo.version,
+      applicationVersion: version,
       applicationLegalese: 'Copyright 2019 - 2020 Projekt LilaHerz 💜'.i18n,
     );
   }
+
+  Widget get _licensesButton => Theme(
+    data: _theme.theme,
+    child: FutureBuilder(
+      future: PackageInfo.fromPlatform(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final packageInfo = snapshot.data!;
+          return _theme.primaryButton(
+            label: MaterialLocalizations.of(context).viewLicensesButtonLabel,
+            onPressed: () => _showLicenses(context, packageInfo.version),
+          );
+        }
+        return Container();
+      },
+    ),
+  );
 
   @override
   Widget build(BuildContext _) => Theme(
@@ -179,13 +194,7 @@ class About extends StatelessWidget {
                   const SizedBox(height: 13),
                   _divider,
                   const SizedBox(height: 5),
-                  _theme.primaryButton(
-                    label:
-                        MaterialLocalizations.of(
-                          context,
-                        ).viewLicensesButtonLabel,
-                    onPressed: () => _showLicenses(context),
-                  ),
+                  _licensesButton,
                 ],
               ),
             ),

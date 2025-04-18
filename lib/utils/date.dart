@@ -10,8 +10,9 @@ bool isSameFestivalDay(DateTime date1, DateTime date2) {
 }
 
 DateTime toFestivalDay(DateTime date) {
-  final withoutOffset =
-      date.subtract(dimeGet<FestivalConfig>().daySwitchOffset);
+  final withoutOffset = date.subtract(
+    dimeGet<FestivalConfig>().daySwitchOffset,
+  );
   return DateTime(withoutOffset.year, withoutOffset.month, withoutOffset.day);
 }
 
