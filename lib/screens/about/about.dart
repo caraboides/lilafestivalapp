@@ -23,9 +23,9 @@ class About extends StatelessWidget {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
-  Widget get _divider => const Padding(
+  Widget get _divider => Padding(
     padding: EdgeInsets.only(bottom: 8),
-    child: Divider(height: 1),
+    child: Divider(height: 1, color: _theme.aboutTheme.dividerColor),
   );
 
   Widget _buildButtonLink(Link link, {bool shrink = false}) => TextButton(

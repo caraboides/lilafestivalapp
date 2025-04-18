@@ -37,7 +37,7 @@ class FestivalTheme {
   final TextStyle bannerTextStyle;
   final Color shimmerColor;
 
-  final double eventListItemHeight = 70;
+  final double eventListItemHeight = 80;
   final double denseEventListItemHeight = 42;
   final double toggleIconSize = 48;
   final double toggleDenseIconSize = 32;

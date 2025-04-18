@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../models/event.dart';
-import '../../../models/theme.dart';
 import '../../../providers/festival_scope.dart';
 import '../../../providers/my_schedule.dart';
+import '../../toggle_like_button.dart';
 import 'event_toggle.i18n.dart';
 
 class EventToggle extends HookConsumerWidget {
@@ -13,38 +13,6 @@ class EventToggle extends HookConsumerWidget {
 
   final Event event;
   final bool dense;
-
-  FestivalTheme get _theme => dimeGet<FestivalTheme>();
-  static const _iconSize = 24.0;
-
-  Widget _buildIconButton({
-    required double size,
-    required BuildContext context,
-    required Widget icon,
-    required String tooltip,
-    required VoidCallback onPressed,
-  }) => Semantics(
-    button: true,
-    enabled: true,
-    child: InkResponse(
-      onTap: onPressed,
-      splashColor: _theme.toggleSplashColor,
-      radius:
-          dense ? _theme.toggleDenseSplashRadius : Material.defaultSplashRadius,
-      child: Tooltip(
-        message: tooltip,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minWidth: size, minHeight: size),
-          child: Container(
-            height: _iconSize,
-            width: _iconSize,
-            alignment: Alignment.center,
-            child: icon,
-          ),
-        ),
-      ),
-    ),
-  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,24 +25,16 @@ class EventToggle extends HookConsumerWidget {
               ),
             )
             .isPresent;
-    final size = dense ? _theme.toggleDenseIconSize : _theme.toggleIconSize;
 
-    final button = _buildIconButton(
-      context: context,
-      size: size,
-      icon: AnimatedCrossFade(
-        firstChild: const Icon(Icons.star),
-        secondChild: const Icon(Icons.star_border),
-        crossFadeState:
-            isLiked ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-        duration: const Duration(milliseconds: 150),
-      ),
+    final button = ToggleLikeButton(
+      toggleState: isLiked,
       tooltip:
           (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,
       onPressed:
           () => ref
               .read(dimeGet<MyScheduleProvider>()(festivalId).notifier)
               .toggleEvent(event),
+      dense: dense,
     );
     return dense
         ? Padding(

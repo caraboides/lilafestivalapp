@@ -120,28 +120,33 @@ class BandDetailView extends HookConsumerWidget {
   );
 
   Widget _buildImage(ThemeData theme, String imgUrl, [ImageData? imgData]) =>
-      Stack(
-        children: [
-          if (imgData?.hasHash ?? false) BlurHash(hash: imgData!.hash!),
-          CachedNetworkImage(
-            imageUrl: imgUrl,
-            errorWidget: (_, _, _) => Container(),
-            placeholder:
-                (_, _) => Shimmer.fromColors(
-                  baseColor: Colors.transparent,
-                  highlightColor: _theme.shimmerColor,
-                  loop: 1,
-                  child: Container(color: theme.scaffoldBackgroundColor),
-                ),
-            placeholderFadeInDuration: const Duration(milliseconds: 1500),
-            imageBuilder:
-                (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: imageProvider),
+      ColoredBox(
+        color: Colors.black,
+        child: Stack(
+          children: [
+            if (imgData?.hasHash ?? false)
+              BlurHash(hash: imgData!.hash!, color: Colors.black),
+            CachedNetworkImage(
+              imageUrl: imgUrl,
+              errorWidget: (_, _, _) => Container(),
+              placeholder:
+                  (_, _) => Shimmer.fromColors(
+                    baseColor: Colors.transparent,
+                    highlightColor: _theme.shimmerColor,
+                    loop: 1,
+                    child: Container(color: Colors.black),
                   ),
-                ),
-          ),
-        ],
+              placeholderFadeInDuration: const Duration(milliseconds: 1500),
+              imageBuilder:
+                  (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      image: DecorationImage(image: imageProvider),
+                    ),
+                  ),
+            ),
+          ],
+        ),
       );
 
   Widget _buildBandLogo(ThemeData theme, String imgUrl, ImageData? imgData) =>
@@ -208,52 +213,58 @@ class BandDetailView extends HookConsumerWidget {
     final band = bandWithEvents.band;
     return Container(
       alignment: Alignment.topCenter,
-      child: Scrollbar(
-        child: ListView(
-          children: <Widget>[
-            OptionalBuilder(
-              optional: Optional.ofNullable(
-                band.map((bandValue) => bandValue.nonEmptyLogo).orElseNull,
+      color: Colors.black,
+      child: ColoredBox(
+        color: theme.colorScheme.surface,
+        child: Scrollbar(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            children: <Widget>[
+              OptionalBuilder(
+                optional: Optional.ofNullable(
+                  band.map((bandValue) => bandValue.nonEmptyLogo).orElseNull,
+                ),
+                builder:
+                    (_, logoValue) =>
+                        _buildBandLogo(theme, logoValue, band.value.logoData),
               ),
-              builder:
-                  (_, logoValue) =>
-                      _buildBandLogo(theme, logoValue, band.value.logoData),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              child: Text(
-                bandName.toUpperCase(),
-                style: theme.textTheme.displaySmall,
-                textAlign: TextAlign.center,
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                child: Text(
+                  bandName.toUpperCase(),
+                  style: theme.textTheme.displaySmall,
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
-            _buildEvents(bandWithEvents),
-            band
-                .map<Widget>(
-                  (b) => Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
+              _buildEvents(bandWithEvents),
+              band
+                  .map<Widget>(
+                    (b) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                      child: _buildDetails(theme, locale, b),
                     ),
-                    child: _buildDetails(theme, locale, b),
-                  ),
-                )
-                .orElse(_fallbackInfo),
-            OptionalBuilder(
-              optional: Optional.ofNullable(
-                band.map((bandValue) => bandValue.nonEmptyImage).orElseNull,
-              ),
-              builder:
-                  (_, imageValue) => Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: _buildBandImage(
-                      theme,
-                      imageValue,
-                      band.value.imageData,
+                  )
+                  .orElse(_fallbackInfo),
+              OptionalBuilder(
+                optional: Optional.ofNullable(
+                  band.map((bandValue) => bandValue.nonEmptyImage).orElseNull,
+                ),
+                builder:
+                    (_, imageValue) => Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: _buildBandImage(
+                        theme,
+                        imageValue,
+                        band.value.imageData,
+                      ),
                     ),
-                  ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -92,28 +92,33 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
           )
           : _buildTabBar(days);
 
+  List<Widget> _buildActions() => [
+    Tooltip(
+      message:
+          (_likedOnly ? 'Show full schedule' : 'Show my schedule only').i18n,
+      child: Switch(
+        value: _likedOnly,
+        onChanged: _onLikedFilterChange,
+        thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+          (Set<WidgetState> states) => Icon(
+            states.contains(WidgetState.selected)
+                ? Icons.star
+                : Icons.star_border,
+            color: _theme.theme.colorScheme.surface,
+          ),
+        ),
+      ),
+    ),
+    SizedBox(width: 8),
+  ];
+
   AppBar _buildAppBar(
     ImmortalList<DateTime>? days,
     FestivalScope festivalScope,
   ) => AppBar(
     bottom: Optional.ofNullable(days).map(_buildTabBarContainer).orElseNull,
     title: _buildTitleWidget(festivalScope),
-    actions: <Widget>[
-      Center(
-        child: AnimatedCrossFade(
-          firstChild: const Icon(Icons.star),
-          secondChild: const Icon(Icons.star_border),
-          crossFadeState:
-              _likedOnly ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-          duration: const Duration(milliseconds: 250),
-        ),
-      ),
-      Tooltip(
-        message:
-            (_likedOnly ? 'Show full schedule' : 'Show my schedule only').i18n,
-        child: Switch(value: _likedOnly, onChanged: _onLikedFilterChange),
-      ),
-    ],
+    actions: _buildActions(),
   );
 
   Widget _buildBandScheduleList() => BandScheduleList(likedOnly: _likedOnly);
