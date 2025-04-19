@@ -5,9 +5,13 @@ import '../models/reference.dart';
 
 final GlobalConfig config = GlobalConfig(
   periodicRebuildDuration: const Duration(minutes: 1),
-  privacyPolicyUrlDe: Uri.parse('https://bit.ly/3IYKdwl'),
+  privacyPolicyUrlDe: Uri.parse(
+    'https://docs.google.com/document/d/e/2PACX-1vQexTaah3MduYjXNBpEn1EH7-XKPFV4jHJthS_qIQmbRf5hhuou_BAGSQE9IMHdkELR-CPknLzPUqMc/pub',
+  ),
   // TODO(SF): I18N translate privacy policy
-  privacyPolicyUrlEn: Uri.parse('https://bit.ly/3IYKdwl'),
+  privacyPolicyUrlEn: Uri.parse(
+    'https://docs.google.com/document/d/e/2PACX-1vQexTaah3MduYjXNBpEn1EH7-XKPFV4jHJthS_qIQmbRf5hhuou_BAGSQE9IMHdkELR-CPknLzPUqMc/pub',
+  ),
   festivalHubBaseUrl: const String.fromEnvironment('FESTIVAL_HUB_BASE_URL'),
   repositoryUrl: Uri.parse('https://github.com/caraboides/lilafestivalapp'),
   creators: ImmortalList([

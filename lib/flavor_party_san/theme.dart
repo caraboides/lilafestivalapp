@@ -4,7 +4,7 @@ import '../models/theme.dart';
 
 const String _displayFontFamily = 'Display Font';
 final Color _primaryColor = Colors.grey[850]!;
-const Color _secondaryColor = Color(0xFFE9D8B3);
+const Color _secondaryColor = Color(0xFFE4BB8A);
 final Color _errorColor = Colors.redAccent.shade700;
 final Color _lightDividerColor = Colors.grey.shade800;
 final Color _historyBackgroundColor = Colors.grey.shade400;
