@@ -26,12 +26,25 @@ const Color _secondaryColor = Color(0xFFbafb00);
 const double _primaryButtonHeight = 40;
 const double _appBarHeight = 54;
 
+final _toggleableColorSelected = WidgetStateProperty.resolveWith<Color?>(
+  (Set<WidgetState> states) =>
+      states.contains(WidgetState.selected) ? _secondaryColor : null,
+);
+
+final _colorScheme = ColorScheme.fromSeed(
+  seedColor: _primaryColor,
+  secondary: _secondaryColor,
+  error: _menuFontColor,
+  surface: Colors.white,
+);
+
 final ThemeData theme = ThemeData(
+  colorScheme: _colorScheme,
   textTheme: Typography.blackMountainView.copyWith(
     titleLarge: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 16,
-      color: _primaryColor,
+      color: _menuFontColor,
     ),
     headlineMedium: const TextStyle(
       fontFamily: _displayFontFamily,
@@ -60,13 +73,20 @@ final ThemeData theme = ThemeData(
       shadows: _appBarTextShadows,
     ),
     toolbarHeight: _appBarHeight,
+    foregroundColor: _colorScheme.onPrimary,
   ),
-  tabBarTheme: const TabBarTheme(
-    labelStyle: TextStyle(fontFamily: _displayFontFamily, fontSize: 18),
+  tabBarTheme: TabBarTheme(
+    labelStyle: const TextStyle(
+      fontFamily: _displayFontFamily,
+      fontSize: 18,
+      color: Colors.white,
+    ),
     unselectedLabelStyle: TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 18,
+      color: Colors.white.withAlpha(138),
     ),
+    indicatorSize: TabBarIndicatorSize.tab,
   ),
   cardTheme: const CardTheme(
     margin: EdgeInsets.zero,
@@ -77,61 +97,17 @@ final ThemeData theme = ThemeData(
     color: _secondaryColor,
   ),
   expansionTileTheme: const ExpansionTileThemeData(iconColor: _menuFontColor),
-  checkboxTheme: CheckboxThemeData(
-    fillColor: WidgetStateProperty.resolveWith<Color?>((
-      Set<WidgetState> states,
-    ) {
-      if (states.contains(WidgetState.disabled)) {
-        return null;
-      }
-      if (states.contains(WidgetState.selected)) {
-        return _secondaryColor;
-      }
-      return null;
-    }),
-  ),
-  radioTheme: RadioThemeData(
-    fillColor: WidgetStateProperty.resolveWith<Color?>((
-      Set<WidgetState> states,
-    ) {
-      if (states.contains(WidgetState.disabled)) {
-        return null;
-      }
-      if (states.contains(WidgetState.selected)) {
-        return _secondaryColor;
-      }
-      return null;
-    }),
-  ),
+  checkboxTheme: CheckboxThemeData(fillColor: _toggleableColorSelected),
+  radioTheme: RadioThemeData(fillColor: _toggleableColorSelected),
   switchTheme: SwitchThemeData(
-    thumbColor: WidgetStateProperty.resolveWith<Color?>((
-      Set<WidgetState> states,
-    ) {
-      if (states.contains(WidgetState.disabled)) {
-        return null;
-      }
-      if (states.contains(WidgetState.selected)) {
-        return _secondaryColor;
-      }
-      return null;
-    }),
-    trackColor: WidgetStateProperty.resolveWith<Color?>((
-      Set<WidgetState> states,
-    ) {
-      if (states.contains(WidgetState.disabled)) {
-        return null;
-      }
-      if (states.contains(WidgetState.selected)) {
-        return _secondaryColor;
-      }
-      return null;
-    }),
+    thumbColor: WidgetStateProperty.resolveWith<Color?>(
+      (Set<WidgetState> states) =>
+          states.contains(WidgetState.selected)
+              ? _primaryColor
+              : _colorScheme.outline,
+    ),
+    trackColor: _toggleableColorSelected,
   ),
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: _primaryColor,
-    secondary: _secondaryColor,
-    error: _menuFontColor,
-  ).copyWith(surface: Colors.white),
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(

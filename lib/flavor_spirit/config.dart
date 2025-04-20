@@ -30,19 +30,18 @@ final FestivalConfig config = FestivalConfig(
   aboutMessages: ImmortalList([
     Reference(
       label: 'Seenotrettung ist kein Verbrechen!',
-      links: ImmortalList([
-        Link(url: Uri.parse('https://sea-watch.org/')),
-      ]),
+      links: ImmortalList([Link(url: Uri.parse('https://sea-watch.org/'))]),
     ),
   ]),
   stageAlignment: (stage) {
     switch (stage) {
       case 'Mainstage':
         return CrossAxisAlignment.start;
-      case 'Stage II':
-        return CrossAxisAlignment.end;
+      // case 'Stage II':
+      //   return CrossAxisAlignment.end;
       default:
-        return CrossAxisAlignment.center;
+        //   return CrossAxisAlignment.center;
+        return CrossAxisAlignment.end;
     }
   },
   routes: ImmortalList([
@@ -61,7 +60,5 @@ final FestivalConfig config = FestivalConfig(
   ]),
   weatherGeoLocation: const LatLng(lat: 51.59, lng: 12.59),
   weatherCityId: '6547727',
-  history: ImmortalList([
-    const NestedRoute(key: 'spirit_2019', title: '2019'),
-  ]),
+  history: ImmortalList([const NestedRoute(key: 'spirit_2019', title: '2019')]),
 );
