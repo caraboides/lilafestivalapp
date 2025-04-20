@@ -11,7 +11,7 @@ extension Localization on String {
       {'en_us': 'Homepage', 'de_de': 'Homepage'} +
       {'en_us': 'Social', 'de_de': 'Social'} +
       {'en_us': 'added on', 'de_de': 'hinzugefügt'} +
-      {'en_us': 'MMM dd YYYY', 'de_de': 'dd.MM.YYYY'} +
+      {'en_us': 'MMM dd yyyy', 'de_de': 'dd.MM.yyyy'} +
       {'en_us': 'Play on Spotify', 'de_de': 'Reinhören bei Spotify'} +
       {
         'en_us': 'There was an error retrieving band data.',

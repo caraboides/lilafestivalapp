@@ -168,7 +168,7 @@ class BandDetailView extends HookConsumerWidget {
             (_, addedOnValue) => _buildDetailTextRow(
               theme,
               'added on',
-              'MMM dd YYYY'.i18n.dateFormat(addedOnValue),
+              'MMM dd yyyy'.i18n.dateFormat(addedOnValue),
               paddingTop: 6,
             ),
       ),
