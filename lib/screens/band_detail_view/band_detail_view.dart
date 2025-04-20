@@ -14,10 +14,12 @@ import '../../models/band_key.dart';
 import '../../models/band_with_events.dart';
 import '../../models/event.dart';
 import '../../models/festival_config.dart';
+import '../../models/reference.dart';
 import '../../models/theme.dart';
 import '../../providers/bands_with_events.dart';
 import '../../providers/festival_scope.dart';
 import '../../utils/date.dart';
+import '../../utils/i18n.dart';
 import '../../utils/logging.dart';
 import '../../widgets/bands/band_cancelled/band_cancelled.dart';
 import '../../widgets/events/dense_event_list.dart';
@@ -26,6 +28,7 @@ import '../../widgets/events/event_playing_indicator/event_playing_indicator.dar
 import '../../widgets/events/event_stage.dart';
 import '../../widgets/events/event_toggle/event_toggle.dart';
 import '../../widgets/history/history_wrapper.dart';
+import '../../widgets/link_button.dart';
 import '../../widgets/messages/error_screen/error_screen.dart';
 import '../../widgets/messages/loading_screen/loading_screen.dart';
 import '../../widgets/optional_builder.dart';
@@ -68,20 +71,54 @@ class BandDetailView extends HookConsumerWidget {
   String _getDescription(Locale locale, Band band) =>
       band.descriptionForLocale(locale) ?? _fallbackText;
 
-  Widget _buildDetailRow(ThemeData theme, String title, String value) =>
-      Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Row(
-          children: <Widget>[
-            Flexible(
-              flex: 2,
-              fit: FlexFit.tight,
-              child: Text('${title.i18n}:', style: theme.textTheme.titleSmall),
-            ),
-            Flexible(flex: 7, fit: FlexFit.tight, child: Text(value)),
-          ],
+  Widget _buildDetailRow(
+    ThemeData theme,
+    String title,
+    Widget child, {
+    double paddingTop = 0,
+  }) => Padding(
+    padding: EdgeInsets.only(top: paddingTop),
+    child: Row(
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Flexible(
+          flex: 2,
+          fit: FlexFit.tight,
+          child: Text('${title.i18n}:', style: theme.textTheme.titleSmall),
         ),
-      );
+        Flexible(flex: 7, fit: FlexFit.loose, child: child),
+      ],
+    ),
+  );
+
+  Widget _buildDetailTextRow(
+    ThemeData theme,
+    String title,
+    String value, {
+    double paddingTop = 12,
+  }) => _buildDetailRow(
+    theme,
+    title,
+    Padding(padding: const EdgeInsets.only(left: 12), child: Text(value)),
+    paddingTop: paddingTop,
+  );
+
+  Widget _buildDetailLinkRow(
+    ThemeData theme,
+    String title,
+    Uri link, {
+    double paddingTop = 0,
+  }) => _buildDetailRow(
+    theme,
+    title,
+    LinkButton(
+      link: Link(url: link),
+      shrink: true,
+      dense: true,
+      textEllipsis: true,
+    ),
+    paddingTop: paddingTop,
+  );
 
   Widget _buildDetails(ThemeData theme, Locale locale, Band band) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -90,18 +127,50 @@ class BandDetailView extends HookConsumerWidget {
         padding: const EdgeInsets.only(bottom: 10),
         child: Text(_getDescription(locale, band)),
       ),
-      _buildDetailRow(
+      _buildDetailTextRow(
         theme,
         'Origin',
         band.optionalOrigin.map(_buildFlag).orElse(_fallbackText),
       ),
-      OptionalBuilder(
+      OptionalBuilder<String>(
         optional: band.optionalStyle,
-        builder: (_, styleValue) => _buildDetailRow(theme, 'Style', styleValue),
+        builder:
+            (_, styleValue) => _buildDetailTextRow(theme, 'Style', styleValue),
       ),
-      OptionalBuilder(
+      OptionalBuilder<String>(
         optional: band.optionalRoots,
-        builder: (_, rootsValue) => _buildDetailRow(theme, 'Roots', rootsValue),
+        builder:
+            (_, rootsValue) => _buildDetailTextRow(theme, 'Roots', rootsValue),
+      ),
+      OptionalBuilder<Uri>(
+        optional: band.optionalHomepage,
+        builder:
+            (_, homepageValue) => _buildDetailLinkRow(
+              theme,
+              'Homepage',
+              homepageValue,
+              paddingTop: 6,
+            ),
+      ),
+      OptionalBuilder<Uri>(
+        optional: band.optionalSocial,
+        builder:
+            (_, socialValue) => _buildDetailLinkRow(
+              theme,
+              'Social',
+              socialValue,
+              paddingTop: band.optionalHomepage.isPresent ? 0 : 6,
+            ),
+      ),
+      OptionalBuilder<DateTime>(
+        optional: band.optionalAddedOn,
+        builder:
+            (_, addedOnValue) => _buildDetailTextRow(
+              theme,
+              'added on',
+              'MMM dd YYYY'.i18n.dateFormat(addedOnValue),
+              paddingTop: 6,
+            ),
       ),
       const SizedBox(height: 10),
       OptionalBuilder(

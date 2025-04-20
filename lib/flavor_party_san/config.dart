@@ -9,7 +9,7 @@ import 'screens/faq/faq.dart';
 import 'screens/shuttle/shuttle.dart';
 
 final FestivalConfig config = FestivalConfig(
-  festivalId: 'party_san_2024', // TODO(SF): CONTENT update id
+  festivalId: 'party_san_2025',
   festivalName: 'Party.San',
   festivalFullName: 'Party.San Open Air',
   festivalUrl: Uri.parse('https://www.party-san.de'),
@@ -59,8 +59,7 @@ final FestivalConfig config = FestivalConfig(
   weatherGeoLocation: const LatLng(lat: 51.25, lng: 10.67),
   weatherCityId: '2838240',
   history: ImmortalList([
-    // TODO(SF): CONTENT include 2024
-    // const NestedRoute(key: 'party_san_2024', title: '2024'),
+    const NestedRoute(key: 'party_san_2024', title: '2024'),
     const NestedRoute(key: 'party_san_2023', title: '2023'),
     const NestedRoute(key: 'party_san_2022', title: '2022'),
     const NestedRoute(key: 'party_san_2019', title: '2019'),

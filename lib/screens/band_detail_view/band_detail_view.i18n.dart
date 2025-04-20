@@ -8,6 +8,10 @@ extension Localization on String {
       {'en_us': 'Origin', 'de_de': 'Herkunft'} +
       {'en_us': 'Roots', 'de_de': 'Wurzeln'} +
       {'en_us': 'Style', 'de_de': 'Stil'} +
+      {'en_us': 'Homepage', 'de_de': 'Homepage'} +
+      {'en_us': 'Social', 'de_de': 'Social'} +
+      {'en_us': 'added on', 'de_de': 'hinzugefügt'} +
+      {'en_us': 'MMM dd YYYY', 'de_de': 'dd.MM.YYYY'} +
       {'en_us': 'Play on Spotify', 'de_de': 'Reinhören bei Spotify'} +
       {
         'en_us': 'There was an error retrieving band data.',

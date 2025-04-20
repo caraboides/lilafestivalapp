@@ -4,17 +4,13 @@ import 'package:optional/optional.dart';
 import 'ids.dart';
 
 class ImageData {
-  const ImageData({
-    this.width,
-    this.height,
-    this.hash,
-  });
+  const ImageData({this.width, this.height, this.hash});
 
   factory ImageData.fromJson(Map<String, dynamic> json) => ImageData(
-        width: json['width'],
-        height: json['height'],
-        hash: json['hash'],
-      );
+    width: json['width'],
+    height: json['height'],
+    hash: json['hash'],
+  );
 
   final int? width;
   final int? height;
@@ -45,25 +41,32 @@ class Band {
     this.origin,
     this.style,
     this.roots,
+    this.homepage,
+    this.social,
+    this.addedOn,
     this.textDe,
     this.textEn,
     this.cancelled = false,
   });
 
   factory Band.fromJson(String bandName, Map<String, dynamic> json) => Band(
-        name: bandName,
-        image: json['img'],
-        imageData: ImageData.fromJson(json['imgData'] ?? {}),
-        logo: json['logo'],
-        logoData: ImageData.fromJson(json['logoData'] ?? {}),
-        spotify: json['spotify'],
-        origin: json['origin'],
-        style: json['style'],
-        roots: json['roots'],
-        textDe: json['description'],
-        textEn: json['description_en'],
-        cancelled: json['cancelled'] ?? false,
-      );
+    name: bandName,
+    image: json['img'],
+    imageData: ImageData.fromJson(json['imgData'] ?? {}),
+    logo: json['logo'],
+    logoData: ImageData.fromJson(json['logoData'] ?? {}),
+    spotify: json['spotify'],
+    origin: json['origin'],
+    style: json['style'],
+    roots: json['roots'],
+    homepage:
+        _isValueSet(json['homepage']) ? Uri.tryParse(json['homepage']) : null,
+    social: _isValueSet(json['social']) ? Uri.tryParse(json['social']) : null,
+    addedOn: DateTime.tryParse(json['addedOn'] ?? ''),
+    textDe: json['description'],
+    textEn: json['description_en'],
+    cancelled: json['cancelled'] ?? false,
+  );
 
   final BandName name;
   final String? image;
@@ -74,6 +77,9 @@ class Band {
   final String? origin;
   final String? style;
   final String? roots;
+  final Uri? homepage;
+  final Uri? social;
+  final DateTime? addedOn;
   final String? textDe;
   final String? textEn;
   final bool cancelled;
@@ -85,6 +91,12 @@ class Band {
   Optional<String> get optionalStyle => _valueAsOptional(style);
 
   Optional<String> get optionalRoots => _valueAsOptional(roots);
+
+  Optional<Uri> get optionalHomepage => Optional.ofNullable(homepage);
+
+  Optional<Uri> get optionalSocial => Optional.ofNullable(social);
+
+  Optional<DateTime> get optionalAddedOn => Optional.ofNullable(addedOn);
 
   String? get nonEmptyImage => _nonEmptyValue(image);
 

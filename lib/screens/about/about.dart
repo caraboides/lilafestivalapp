@@ -10,6 +10,7 @@ import '../../models/global_config.dart';
 import '../../models/reference.dart';
 import '../../models/theme.dart';
 import '../../utils/i18n.dart';
+import '../../widgets/link_button.dart';
 import '../../widgets/scaffold.dart';
 import 'about.i18n.dart';
 
@@ -28,17 +29,6 @@ class About extends StatelessWidget {
     child: Divider(height: 1, color: _theme.aboutTheme.dividerColor),
   );
 
-  Widget _buildButtonLink(Link link, {bool shrink = false}) => TextButton(
-    onPressed: () => launchUrl(link.url, mode: LaunchMode.externalApplication),
-    style: ButtonStyle(
-      tapTargetSize:
-          shrink
-              ? MaterialTapTargetSize.shrinkWrap
-              : MaterialTapTargetSize.padded,
-    ),
-    child: Text(link.label ?? link.url.toString()),
-  );
-
   Widget _buildLink(Link link, {bool shrink = false}) => Optional.ofNullable(
         link.imageAssetPath,
       )
@@ -49,7 +39,7 @@ class About extends StatelessWidget {
               () => launchUrl(link.url, mode: LaunchMode.externalApplication),
         ),
       )
-      .orElse(_buildButtonLink(link, shrink: shrink));
+      .orElse(LinkButton(link: link, shrink: shrink));
 
   List<Widget> _buildLinks(ImmortalList<Link> links, {bool shrink = false}) =>
       links.map((link) => _buildLink(link, shrink: shrink)).toList();
