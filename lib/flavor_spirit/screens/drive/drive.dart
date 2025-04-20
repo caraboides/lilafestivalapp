@@ -8,6 +8,7 @@ class Drive extends StatelessWidget {
 
   static Widget builder(BuildContext context) => const Drive();
 
+  static String path = '/drive';
   static String title() => 'Location'.i18n;
 
   List<Widget> _buildList(List<String> content) =>

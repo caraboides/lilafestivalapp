@@ -17,6 +17,7 @@ import 'about.i18n.dart';
 class About extends StatelessWidget {
   const About();
 
+  static String path = '/about';
   static Widget builder(BuildContext context) => const About();
   static String title() => 'About'.i18n;
 

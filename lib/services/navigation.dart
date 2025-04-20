@@ -14,15 +14,20 @@ class CurrentRouteObserver extends RouteObserver<ModalRoute<void>> {
 
   String get currentRoute => routeStack.isEmpty ? '/' : routeStack.last;
 
+  void replaceCurrentRoute(String? newRoute) {
+    _onPop();
+    _onPush(newRoute);
+  }
+
   void _onPop() {
     if (routeStack.isNotEmpty) {
       routeStack.removeLast();
     }
   }
 
-  void _onPush(Route? route) {
+  void _onPush(String? route) {
     if (route != null) {
-      routeStack.add(route.settings.name ?? '');
+      routeStack.add(route);
     }
   }
 
@@ -34,7 +39,7 @@ class CurrentRouteObserver extends RouteObserver<ModalRoute<void>> {
 
   @override
   void didPush(Route route, Route? previousRoute) {
-    _onPush(route);
+    _onPush(route.settings.name);
     super.didPush(route, previousRoute);
   }
 
@@ -46,15 +51,13 @@ class CurrentRouteObserver extends RouteObserver<ModalRoute<void>> {
 
   @override
   void didReplace({Route? newRoute, Route? oldRoute}) {
-    _onPop();
-    _onPush(newRoute);
+    replaceCurrentRoute(newRoute?.settings.name);
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
   }
 
   @override
   void didChangeTop(Route topRoute, Route? previousTopRoute) {
-    _onPop();
-    _onPush(topRoute);
+    replaceCurrentRoute(topRoute.settings.name);
     super.didChangeTop(topRoute, previousTopRoute);
   }
 }
@@ -69,15 +72,15 @@ class Navigation {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   ImmortalList<AppRoute> get routes => ImmortalList([
-    const FlatAppRoute(
-      path: '/',
+    FlatAppRoute(
+      path: ScheduleScreen.path,
       getName: ScheduleScreen.title,
       icon: Icons.calendar_today,
       isRoot: true,
       builder: ScheduleScreen.builder,
     ),
-    const FlatAppRoute(
-      path: '/mySchedule',
+    FlatAppRoute(
+      path: ScheduleScreen.mySchedulePath,
       getName: ScheduleScreen.myScheduleTitle,
       icon: Icons.star,
       isRoot: true,
@@ -86,14 +89,14 @@ class Navigation {
     ..._config.routes,
     if (_config.history.isNotEmpty)
       NestedAppRoute(
-        path: '/history',
+        path: History.path,
         getName: History.title,
         icon: Icons.history,
         nestedRoutes: _config.history,
         nestedRouteBuilder: History.builder,
       ),
-    const FlatAppRoute(
-      path: '/about',
+    FlatAppRoute(
+      path: About.path,
       getName: About.title,
       icon: Icons.info,
       builder: About.builder,

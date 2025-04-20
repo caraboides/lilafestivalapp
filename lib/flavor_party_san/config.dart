@@ -43,14 +43,14 @@ final FestivalConfig config = FestivalConfig(
               ? CrossAxisAlignment.start
               : CrossAxisAlignment.end,
   routes: ImmortalList([
-    const FlatAppRoute(
-      path: '/shuttle',
+    FlatAppRoute(
+      path: Shuttle.path,
       getName: Shuttle.title,
       icon: Icons.map,
       builder: Shuttle.builder,
     ),
-    const FlatAppRoute(
-      path: '/faq',
+    FlatAppRoute(
+      path: FAQ.path,
       getName: FAQ.title,
       icon: Icons.help,
       builder: FAQ.builder,

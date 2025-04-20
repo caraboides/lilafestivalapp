@@ -64,6 +64,7 @@ class Shuttle extends StatelessWidget {
 
   static Widget builder(BuildContext context) => const Shuttle();
 
+  static String path = '/shuttle';
   static String title() => 'Bus Shuttle'.i18n;
 
   String _buildHtml(String fontUrl) =>

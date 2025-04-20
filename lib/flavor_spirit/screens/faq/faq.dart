@@ -8,6 +8,7 @@ class FAQ extends StatelessWidget {
 
   static Widget builder(BuildContext context) => const FAQ();
 
+  static String path = '/faq';
   static String title() => 'FAQ'.i18n;
 
   List<Widget> _buildSection(

@@ -8,6 +8,8 @@ import '../../models/festival_config.dart';
 import '../../models/theme.dart';
 import '../../providers/festival_scope.dart';
 import '../../providers/schedule.dart';
+// import '../../screens/schedule/schedule.dart';
+// import '../../services/navigation.dart';
 import '../../utils/date.dart';
 import '../../utils/i18n.dart';
 import '../../utils/logging.dart';
@@ -20,10 +22,15 @@ import 'widgets/daily_schedule_list/daily_schedule_list.dart';
 import 'widgets/weather_card.dart';
 
 class FullSchedule extends StatefulHookConsumerWidget {
-  const FullSchedule({this.likedOnly = false, this.displayWeather = false});
+  const FullSchedule({
+    this.likedOnly = false,
+    this.displayWeather = false,
+    this.onLikedFilterChange,
+  });
 
   final bool likedOnly;
   final bool displayWeather;
+  final Function({bool likedOnly})? onLikedFilterChange;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _FullScheduleState();
@@ -46,6 +53,7 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
     setState(() {
       _likedOnly = newValue;
     });
+    widget.onLikedFilterChange?.call(likedOnly: newValue);
   }
 
   int _initialTab(ImmortalList<DateTime> days) {

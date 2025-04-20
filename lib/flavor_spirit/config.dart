@@ -37,22 +37,21 @@ final FestivalConfig config = FestivalConfig(
     switch (stage) {
       case 'Mainstage':
         return CrossAxisAlignment.start;
-      // case 'Stage II':
-      //   return CrossAxisAlignment.end;
-      default:
-        //   return CrossAxisAlignment.center;
+      case 'Stage II':
         return CrossAxisAlignment.end;
+      default:
+        return CrossAxisAlignment.center;
     }
   },
   routes: ImmortalList([
-    const FlatAppRoute(
-      path: '/drive',
+    FlatAppRoute(
+      path: Drive.path,
       getName: Drive.title,
       icon: Icons.map,
       builder: Drive.builder,
     ),
-    const FlatAppRoute(
-      path: '/faq',
+    FlatAppRoute(
+      path: FAQ.path,
       getName: FAQ.title,
       icon: Icons.help,
       builder: FAQ.builder,
