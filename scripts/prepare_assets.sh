@@ -35,5 +35,6 @@ else
   echo "Could not load schedule, provide fallback"
   echo -n '{}' >assets/schedule.json
 fi
+dart run flutter_native_splash:create
 flutter clean
 flutter pub get

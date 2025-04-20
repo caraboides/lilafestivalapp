@@ -76,8 +76,7 @@ There is also a helper script to switch to the newest version of a festivals:
 ## Update content
 
 * Update initial `bands.json` and `schedule.json`
-* Update `display_font.tff` if necessary
-* Update flyer in `android/app/src/<festival>/res/drawable/flyer.jpg`
+* Update `assets` if necessary (display font, flyer, menu logo, splash logo, ...)
 * Update infos if necessary:
   * HTML for FAQs, shuttle plan etc
   * Styling for htmls: font + colors
