@@ -44,6 +44,7 @@ class FestivalApp extends StatelessWidget {
       supportedLocales: const [Locale('en', 'US'), Locale('de', 'DE')],
       navigatorKey: dimeGet<GlobalKey<NavigatorState>>(),
       routes: dimeGet<Navigation>().namedRoutes.toMap(),
+      navigatorObservers: [dimeGet<Navigation>().routeObserver],
     ),
   );
 }

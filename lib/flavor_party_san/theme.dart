@@ -121,6 +121,9 @@ final FestivalTheme festivalTheme = FestivalTheme(
       color: theme.colorScheme.secondary.withAlpha(222),
     ),
     dividerColor: _lightDividerColor,
+    colorScheme: theme.colorScheme.copyWith(
+      onSurface: theme.colorScheme.onPrimary,
+    ),
   ),
   historyTheme: theme.copyWith(
     canvasColor: _historyBackgroundColor,

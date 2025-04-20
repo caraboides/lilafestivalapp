@@ -25,7 +25,10 @@ class ScheduleScreen extends StatefulWidget {
 
 // TODO(SF): STYLE create hook for periodic rebuild?
 class _ScheduleScreenState extends State<ScheduleScreen>
-    with WidgetsBindingObserver, PeriodicRebuildMixin<ScheduleScreen> {
+    with
+        WidgetsBindingObserver,
+        PeriodicRebuildMixin<ScheduleScreen>,
+        RouteAware {
   FestivalConfig get _config => dimeGet<FestivalConfig>();
 
   @override

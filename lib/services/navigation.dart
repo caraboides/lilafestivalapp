@@ -9,8 +9,62 @@ import '../screens/about/about.dart';
 import '../screens/history/history.dart';
 import '../screens/schedule/schedule.dart';
 
+class CurrentRouteObserver extends RouteObserver<ModalRoute<void>> {
+  List<String> routeStack = [];
+
+  String get currentRoute => routeStack.isEmpty ? '/' : routeStack.last;
+
+  void _onPop() {
+    if (routeStack.isNotEmpty) {
+      routeStack.removeLast();
+    }
+  }
+
+  void _onPush(Route? route) {
+    if (route != null) {
+      routeStack.add(route.settings.name ?? '');
+    }
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    _onPop();
+    super.didPop(route, previousRoute);
+  }
+
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    _onPush(route);
+    super.didPush(route, previousRoute);
+  }
+
+  @override
+  void didRemove(Route route, Route? previousRoute) {
+    _onPop();
+    super.didRemove(route, previousRoute);
+  }
+
+  @override
+  void didReplace({Route? newRoute, Route? oldRoute}) {
+    _onPop();
+    _onPush(newRoute);
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+  }
+
+  @override
+  void didChangeTop(Route topRoute, Route? previousTopRoute) {
+    _onPop();
+    _onPush(topRoute);
+    super.didChangeTop(topRoute, previousTopRoute);
+  }
+}
+
 class Navigation {
-  const Navigation();
+  factory Navigation() => Navigation._(CurrentRouteObserver());
+
+  const Navigation._(this.routeObserver);
+
+  final CurrentRouteObserver routeObserver;
 
   FestivalConfig get _config => dimeGet<FestivalConfig>();
 

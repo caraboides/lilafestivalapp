@@ -18,14 +18,32 @@ class Menu extends StatelessWidget {
   Navigation get _navigation => dimeGet<Navigation>();
   GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
+  Widget _buildEntryTitle(
+    ThemeData theme,
+    String label, {
+    bool isCurrentRoute = false,
+  }) => Text(
+    label,
+    style: theme.textTheme.headlineMedium?.copyWith(
+      color: isCurrentRoute ? theme.colorScheme.onSurface : null,
+    ),
+  );
+
   Widget _buildEntry({
     required ThemeData theme,
     required String label,
     required IconData icon,
     required VoidCallback onTap,
+    bool isCurrentRoute = false,
   }) => ListTile(
-    title: Text(label, style: theme.textTheme.headlineMedium),
-    leading: IconTheme(data: theme.iconTheme, child: Icon(icon)),
+    title: _buildEntryTitle(theme, label, isCurrentRoute: isCurrentRoute),
+    leading: IconTheme(
+      data: theme.iconTheme,
+      child: Icon(
+        icon,
+        color: isCurrentRoute ? theme.colorScheme.onSurface : null,
+      ),
+    ),
     onTap: onTap,
   );
 
@@ -34,32 +52,31 @@ class Menu extends StatelessWidget {
     required NavigatorState navigator,
     required ThemeData theme,
     required NestedAppRoute route,
+    required String currentRoutePath,
   }) => ExpansionTile(
-    title: Text(route.getName(), style: theme.textTheme.headlineMedium),
+    title: _buildEntryTitle(theme, route.getName()),
     leading: IconTheme(data: theme.iconTheme, child: Icon(route.icon)),
+    initiallyExpanded: currentRoutePath.contains(route.path),
     children:
-        route.nestedRoutes
-            .map(
-              (nestedRoute) => ListTile(
-                title: Text(
-                  nestedRoute.title,
-                  style: theme.textTheme.headlineMedium,
-                ),
-                leading: const SizedBox(width: 24),
-                onTap:
-                    () => _navigation.navigateToPath(
-                      navigator,
-                      route.nestedRoutePath(nestedRoute),
-                    ),
-              ),
-            )
-            .toList(),
+        route.nestedRoutes.map((nestedRoute) {
+          final path = route.nestedRoutePath(nestedRoute);
+          return ListTile(
+            title: _buildEntryTitle(
+              theme,
+              nestedRoute.title,
+              isCurrentRoute: path == currentRoutePath,
+            ),
+            leading: const SizedBox(width: 24),
+            onTap: () => _navigation.navigateToPath(navigator, path),
+          );
+        }).toList(),
   );
 
   Widget _buildEntries(BuildContext context) {
     final navigator = Navigator.of(context);
     final theme = Theme.of(context);
     final locale = I18n.locale;
+    final currentRoute = _navigation.routeObserver.currentRoute;
     return ListView(
       children: <Widget>[
         OptionalBuilder(
@@ -74,12 +91,14 @@ class Menu extends StatelessWidget {
                     navigator: navigator,
                     theme: theme,
                     route: route,
+                    currentRoutePath: currentRoute,
                   )
                   : _buildEntry(
                     theme: theme,
                     label: route.getName(),
                     icon: route.icon,
                     onTap: () => _navigation.navigateToRoute(navigator, route),
+                    isCurrentRoute: route.path == currentRoute,
                   ),
         ),
         _buildEntry(

@@ -90,6 +90,10 @@ There is also a helper script to switch to the newest version of a festivals:
 * Possibly change default year in `switch.sh` script
 * Update colors in `theme.dart` if necessary
 
+## Maintenance
+
+Run `flutter pub outdated` to check for dependency updates.
+
 ## Tests
 
 We use mockito for creating mocks in our tests. Since the introduction of null safety in dart, mockito requires code

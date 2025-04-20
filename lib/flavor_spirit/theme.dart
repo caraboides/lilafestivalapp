@@ -123,13 +123,7 @@ final FestivalTheme festivalTheme = FestivalTheme(
     ),
   ),
   menuTheme: theme.copyWith(
-    textTheme: theme.textTheme.apply(
-      displayColor: _menuFontColor,
-      bodyColor: _menuFontColor,
-    ),
-    canvasColor: _darkBackgroundColor,
-    iconTheme: theme.iconTheme.copyWith(color: _menuFontColor.withAlpha(222)),
-    colorScheme: theme.colorScheme.copyWith(secondary: _menuFontColor),
+    colorScheme: theme.colorScheme.copyWith(onSurface: _menuFontColor),
     dividerColor: _menuFontColor,
   ),
   menuDrawerDecoration: const BoxDecoration(border: Border(right: _border)),
