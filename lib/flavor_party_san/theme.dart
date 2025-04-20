@@ -8,7 +8,10 @@ const Color _secondaryColor = Color(0xFFE4BB8A);
 final Color _errorColor = Colors.redAccent.shade700;
 final Color _lightDividerColor = Colors.grey.shade800;
 final Color _historyBackgroundColor = Colors.grey.shade400;
-const Color _cardColor = Color.fromARGB(255, 235, 224, 201);
+final Color _cardColor = Color.alphaBlend(
+  Colors.white.withAlpha(128),
+  _secondaryColor,
+);
 const double _appBarHeight = 49;
 
 final _toggleableColorSelected = WidgetStateProperty.resolveWith<Color?>(
@@ -72,9 +75,11 @@ final ThemeData theme = ThemeData(
     ),
     indicatorSize: TabBarIndicatorSize.tab,
   ),
-  cardTheme: const CardTheme(
-    margin: EdgeInsets.only(bottom: 1),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.zero)),
+  cardTheme: CardTheme(
+    margin: const EdgeInsets.only(bottom: 1),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.zero),
+    ),
     color: _cardColor,
   ),
   progressIndicatorTheme: const ProgressIndicatorThemeData(

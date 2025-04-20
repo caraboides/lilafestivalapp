@@ -13,20 +13,23 @@ class MissingScheduleBanner extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final festivalScope = DimeFlutter.get<FestivalScope>(context);
-    final provider =
-        ref.watch(dimeGet<FestivalDaysProvider>()(festivalScope.festivalId));
+    final provider = ref.watch(
+      dimeGet<FestivalDaysProvider>()(festivalScope.festivalId),
+    );
 
     return provider.maybeMap(
-      data: (days) => Visibility(
-        visible: !(festivalScope is HistoryFestivalScope) && days.value.isEmpty,
-        child: Card(
-          child: Container(
-            alignment: Alignment.center,
-            height: _theme.cardBannerHeight,
-            child: Text('There is no schedule yet!'.i18n),
+      data:
+          (days) => Visibility(
+            visible:
+                !(festivalScope is HistoryFestivalScope) && days.value.isEmpty,
+            child: Card(
+              child: Container(
+                alignment: Alignment.center,
+                height: _theme.cardBannerHeight,
+                child: Text('There is no schedule yet!'.i18n),
+              ),
+            ),
           ),
-        ),
-      ),
       orElse: () => Container(),
     );
   }
