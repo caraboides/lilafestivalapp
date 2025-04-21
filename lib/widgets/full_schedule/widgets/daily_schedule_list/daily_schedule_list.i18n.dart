@@ -10,6 +10,14 @@ extension Localization on String {
       {
         'en_us': 'There was an error retrieving the running order.',
         'de_de': 'Beim Laden der Running Order ist ein Fehler aufgetreten.',
+      } +
+      {
+        'en_us': 'There is no schedule yet!',
+        'de_de': 'Es gibt noch keine Running Order!',
+      } +
+      {
+        'en_us': 'Check again before the festival',
+        'de_de': 'Schau noch mal vor dem Festival nach',
       };
 
   String get i18n => localize(this, _t);

@@ -10,7 +10,6 @@ import '../../../models/theme.dart';
 import '../../../utils/date.dart';
 import 'alphabetical_list_view.dart';
 import 'band_list_item.dart';
-import 'missing_schedule_banner/missing_schedule_banner.dart';
 
 class BandListView extends StatelessWidget {
   const BandListView({
@@ -70,27 +69,18 @@ class BandListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentTime = currentDate();
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        MissingScheduleBanner(),
-        Flexible(
-          fit: FlexFit.loose,
-          child: AlphabeticalListView(
-            itemCount: bandIds.length,
-            itemIds: bandIds,
-            listItemHeights: _calculateListItemHeights(),
-            getAlphabeticalIndex: _getAlphabeticalIndex,
-            buildListItem:
-                ({
-                  required context,
-                  required animation,
-                  required index,
-                  required itemId,
-                }) => _buildListItem(itemId, currentTime),
-          ),
-        ),
-      ],
+    return AlphabeticalListView(
+      itemCount: bandIds.length,
+      itemIds: bandIds,
+      listItemHeights: _calculateListItemHeights(),
+      getAlphabeticalIndex: _getAlphabeticalIndex,
+      buildListItem:
+          ({
+            required context,
+            required animation,
+            required index,
+            required itemId,
+          }) => _buildListItem(itemId, currentTime),
     );
   }
 }

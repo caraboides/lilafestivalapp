@@ -84,18 +84,17 @@ class ScheduleProviderCreator {
 
   static FestivalDaysProvider createFestivalDaysProvider() =>
       Provider.family<AsyncValue<ImmortalList<DateTime>>, FestivalId>(
-        (ref, festivalId) => ref
-            .watch(_scheduleProvider(festivalId))
-            .whenData(
-              (events) =>
-                  events
-                      .filterMapOptional(
-                        (event) => event.start.map(toFestivalDay),
-                      )
-                      .toImmortalSet()
-                      .toImmortalList()
-                      .sort(),
-            ),
+        (ref, festivalId) =>
+            ref.watch(_scheduleProvider(festivalId)).whenData((events) {
+              if (festivalId == _config.festivalId) {
+                return _config.festivalDays;
+              }
+              return events
+                  .filterMapOptional((event) => event.start.map(toFestivalDay))
+                  .toImmortalSet()
+                  .toImmortalList()
+                  .sort();
+            }),
       );
 
   static DailyScheduleProvider createDailyScheduleProvider() =>

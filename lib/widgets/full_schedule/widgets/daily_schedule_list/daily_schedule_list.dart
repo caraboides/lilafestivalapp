@@ -13,6 +13,7 @@ import '../../../../utils/combined_async_values.dart';
 import '../../../../utils/logging.dart';
 import '../../../messages/error_screen/error_screen.dart';
 import '../../../messages/loading_screen/loading_screen.dart';
+import '../../../messages/message_screen.dart';
 import '../empty_schedule/empty_schedule.dart';
 import '../event_list_view.dart';
 import 'daily_schedule_list.i18n.dart';
@@ -52,7 +53,11 @@ class DailyScheduleList extends HookConsumerWidget {
     ).when(
       data: (eventTuple) {
         if (eventTuple.item1.isEmpty) {
-          return _buildErrorScreen();
+          return MessageScreen(
+            headline: 'There is no schedule yet!'.i18n,
+            description: 'Check again before the festival'.i18n,
+            icon: const Icon(Icons.star_border),
+          );
         }
         return AnimatedCrossFade(
           firstChild: const EmptySchedule(),
