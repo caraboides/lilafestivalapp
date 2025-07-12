@@ -23,7 +23,7 @@ class BandsProviderCreator {
   static GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
 
   static String _remoteUrl(FestivalId festivalId) =>
-      '/bands?festival=$festivalId';
+      '/app/android/bands';
 
   static ImmortalMap<BandName, Band> _fromJson(Map<String, dynamic> jsonMap) =>
       ImmortalMap<String, dynamic>(

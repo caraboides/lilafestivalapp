@@ -37,14 +37,16 @@ class FestivalApp extends StatelessWidget {
     child: MaterialApp(
       title: _config.festivalName,
       theme: _theme.theme,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('de', 'DE'),
       ],
-      supportedLocales: const [Locale('en', 'US'), Locale('de', 'DE')],
       navigatorKey: dimeGet<GlobalKey<NavigatorState>>(),
       routes: dimeGet<Navigation>().namedRoutes.toMap(),
-      navigatorObservers: [dimeGet<Navigation>().routeObserver],
+      navigatorObservers: [
+        dimeGet<Navigation>().routeObserver,
+      ],
     ),
   );
 }
