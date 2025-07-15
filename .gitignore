@@ -300,4 +300,11 @@ fabric.properties
 #           - AS PER https://guides.cocoapods.org/using/using-cocoapods.html NEVER IGNORE THE LOCK FILE
 Pods/
 
+# Ignore DevTools options
+devtools_options.yaml
+
+# Ignore ephemeral iOS LLDB helper files
+ios/Flutter/ephemeral/flutter_lldb_helper.py
+ios/Flutter/ephemeral/flutter_lldbinit
+
 # End of https://www.toptal.com/developers/gitignore/api/flutter,androidstudio,android,xcode
