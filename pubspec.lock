@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: analyzer
-      sha256: de617bfdc64f3d8b00835ec2957441ceca0a29cdf7881f7ab231bc14f71159c0
+      sha256: "754aed101003afceca3e6637fe88150dbe9739068e0135788a62645a131867bb"
       url: "https://pub.dev"
     source: hosted
-    version: "7.5.6"
+    version: "7.5.9"
   ansicolor:
     dependency: transitive
     description:
@@ -561,10 +561,10 @@ packages:
     dependency: "direct dev"
     description:
       name: lints
-      sha256: c35bb79562d980e9a453fc715854e1ed39e24e7d0297a880ef54e17f9874a9d7
+      sha256: a5e2b223cb7c9c8efdc663ef484fdd95bb243bff242ef5b13e26883547fce9a0
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "6.0.0"
   logging:
     dependency: transitive
     description:
@@ -1182,10 +1182,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_android
-      sha256: f6e6afef6e234801da77170f7a1847ded8450778caf2fe13979d140484be3678
+      sha256: "769f34fc9855f7d7789b786b79b7c37a60e92ff08f71e3a429208d7f5b81d944"
       url: "https://pub.dev"
     source: hosted
-    version: "4.7.0"
+    version: "4.8.0"
   webview_flutter_platform_interface:
     dependency: transitive
     description:
