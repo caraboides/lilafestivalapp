@@ -6,11 +6,11 @@ import '../models/reference.dart';
 final GlobalConfig config = GlobalConfig(
   periodicRebuildDuration: const Duration(minutes: 1),
   privacyPolicyUrlDe: Uri.parse(
-    'https://docs.google.com/document/d/e/2PACX-1vQexTaah3MduYjXNBpEn1EH7-XKPFV4jHJthS_qIQmbRf5hhuou_BAGSQE9IMHdkELR-CPknLzPUqMc/pub',
+    'https://www.weltturbojugendtage.de/j/privacy',
   ),
   // TODO(SF): I18N translate privacy policy
   privacyPolicyUrlEn: Uri.parse(
-    'https://docs.google.com/document/d/e/2PACX-1vQexTaah3MduYjXNBpEn1EH7-XKPFV4jHJthS_qIQmbRf5hhuou_BAGSQE9IMHdkELR-CPknLzPUqMc/pub',
+    'https://www.weltturbojugendtage.de/j/privacy',
   ),
   festivalHubBaseUrl: const String.fromEnvironment('FESTIVAL_HUB_BASE_URL'),
   repositoryUrl: Uri.parse('https://github.com/caraboides/lilafestivalapp'),
@@ -35,7 +35,15 @@ final GlobalConfig config = GlobalConfig(
         ),
       ]),
     ),
-  ]),
+    Reference(
+      label: 'concert-news.de',
+      links: ImmortalList([
+        Link(url: Uri.parse('https://www.concert-news.de'))
+      ]),
+    ),
+  ]
+
+  ),
   references: ImmortalList([
     Reference(
       label: 'Weather data provided by:',

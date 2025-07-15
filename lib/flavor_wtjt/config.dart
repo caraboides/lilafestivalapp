@@ -39,7 +39,7 @@ final FestivalConfig config = FestivalConfig(
   ]),
   stageAlignment:
       (stage) =>
-          stage == 'Mainstage'
+          stage == 'Shows'
               ? CrossAxisAlignment.start
               : CrossAxisAlignment.end,
   routes: ImmortalList([

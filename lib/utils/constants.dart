@@ -9,6 +9,8 @@ class Constants {
   static const String bandsAssetFileName = 'assets/bands.json';
   static const String scheduleAppStorageFileName = 'schedule.json';
   static const String scheduleAssetFileName = 'assets/schedule.json';
+  static const String faqAppStorageFileName = 'faq.json';
+  static const String faqAppAssetFileName = 'assets/faq.json';
 
   // CACHE
   static const String weatherCacheKey = 'weather';

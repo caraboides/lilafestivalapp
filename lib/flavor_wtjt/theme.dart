@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../models/theme.dart';
 
+// color: rgb(255, 153, 0)
+
 const String _displayFontFamily = 'Display Font';
 final Color _primaryColor = Colors.grey[850]!;
 const Color _secondaryColor = Color(0xFFE4BB8A);
 final Color _errorColor = Colors.redAccent.shade700;
-final Color _lightDividerColor = Colors.grey.shade800;
+const Color _lightDividerColor =  Color(0xFFFF9900);
 final Color _historyBackgroundColor = Colors.grey.shade400;
 final Color _cardColor = Color.alphaBlend(
   Colors.white.withAlpha(128),

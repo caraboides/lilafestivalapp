@@ -8,7 +8,6 @@ import 'main.dart';
 void main() {
 
   Intl.defaultLocale = 'en-US'; //
-  print('Set Intl.defaultLocale to: ${Intl.defaultLocale}');
   // Jetzt App starten
   runForFlavor(FlavorModule());
 }
