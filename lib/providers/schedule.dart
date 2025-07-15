@@ -47,7 +47,8 @@ class ScheduleProviderCreator {
   static GlobalConfig get _globalConfig => dimeGet<GlobalConfig>();
   static ScheduleProvider get _scheduleProvider => dimeGet<ScheduleProvider>();
 
-  static String _remoteUrl(FestivalId festivalId) => '/app/android/event';
+  static String _remoteUrl(FestivalId festivalId) =>
+      '/schedule?festival=$festivalId';
 
   static ImmortalList<Event> _fromJson(Map<String, dynamic> jsonMap) =>
       ImmortalMap<String, dynamic>(

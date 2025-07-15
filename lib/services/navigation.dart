@@ -87,6 +87,7 @@ class Navigation {
       builder: ScheduleScreen.myScheduleBuilder,
     ),
     ..._config.routes,
+    ..._config.nestedRoutes,
     if (_config.history.isNotEmpty)
       NestedAppRoute(
         path: History.path,
@@ -120,10 +121,7 @@ class Navigation {
     FlatAppRoute route,
   ) => ImmortalMap({
     routePath:
-        (context) =>
-            route.isRoot
-                ? I18n(child: route.builder(context))
-                : route.builder(context),
+        (context) => route.builder(context),
   });
 
   ImmortalMap<String, WidgetBuilder> _buildNamedRoutes(

@@ -21,6 +21,7 @@ class FestivalConfig {
     required this.aboutMessages,
     required this.stageAlignment,
     required this.routes,
+    required this.nestedRoutes,
     required this.weatherGeoLocation,
     required this.weatherCityId,
     required this.history,
@@ -39,6 +40,7 @@ class FestivalConfig {
   final ImmortalList<Reference> aboutMessages;
   final CrossAxisAlignment Function(String stage) stageAlignment;
   final ImmortalList<AppRoute> routes;
+  final ImmortalList<NestedAppRoute> nestedRoutes;
   final LatLng weatherGeoLocation;
   final String weatherCityId;
   final ImmortalList<NestedRoute> history;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:i18n_extension/i18n_extension.dart';
 
 import 'models/festival_config.dart';
 import 'models/theme.dart';
@@ -22,8 +23,11 @@ Future<void> runForFlavor(BaseDimeModule flavorModule) async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
-  runApp(const ProviderScope(child: FestivalApp()));
+  runApp(
+    I18n(
+      child: const ProviderScope(child: FestivalApp()),
+    ),
+  );
 }
 
 class FestivalApp extends StatelessWidget {
