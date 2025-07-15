@@ -96,6 +96,7 @@ final startDate = DateTime(DateTime.now().year + 1, 8, 1, 20, 0);
 // Scheduled + pending
 final event1 = Event(
   bandName: 'band1',
+  venueName: 'venue_name',
   id: 'event1',
   stage: 'stage',
   start: Optional.of(startDate),
@@ -104,6 +105,7 @@ final event1 = Event(
 // Scheduled, not pending
 final event2 = Event(
   bandName: 'band2',
+  venueName: 'venue_name',
   id: 'event2',
   stage: 'stage',
   start: Optional.of(startDate.add(const Duration(hours: 1))),
@@ -112,6 +114,7 @@ final event2 = Event(
 // Not scheduled, pending
 final event3 = Event(
   bandName: 'band3',
+  venueName: 'venue-name',
   id: 'event3',
   stage: 'stage',
   start: Optional.of(startDate.add(const Duration(hours: 2))),
@@ -120,6 +123,7 @@ final event3 = Event(
 // Rescheduled + pending
 final event4 = Event(
   bandName: 'band4',
+  venueName: 'venue-name',
   id: 'event4',
   stage: 'stage',
   start: Optional.of(startDate.add(const Duration(hours: 3))),
@@ -128,6 +132,7 @@ final event4 = Event(
 // Past + pending
 final event5 = Event(
   bandName: 'band5',
+  venueName: 'venue_name',
   id: 'event5',
   stage: 'stage',
   start: Optional.of(DateTime.now().subtract(const Duration(days: 1))),

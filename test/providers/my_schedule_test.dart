@@ -50,6 +50,7 @@ const appStorageFileName = 'my_schedule/festival_id.json';
 const legacyFileName = 'my_schedule.txt';
 const event = Event(
   bandName: 'band',
+  venueName: 'venue_name',
   id: 'event1',
   stage: 'stage',
   start: Optional.empty(),

@@ -37,7 +37,7 @@ class OpenWeather {
       'lat=${_config.weatherGeoLocation.lat}&'
       'lon=${_config.weatherGeoLocation.lng}&'
       'appid=${_globalConfig.weatherApiKey}&'
-      'lang=${I18n.language}';
+      'lang=${"de"}';
 
   ImmortalList<Weather> _forecastFromJson(Map<String, dynamic> json) =>
       ImmortalList(json['list']).map((w) => Weather(w));

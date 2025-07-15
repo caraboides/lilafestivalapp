@@ -2,22 +2,22 @@ import 'package:i18n_extension/i18n_extension.dart';
 
 extension Localization on String {
   static final _t =
-      Translations.byText('en_us') +
-      {'en_us': 'Band Details', 'de_de': 'Band Details'} +
-      {'en_us': 'Sorry, no info', 'de_de': 'Sorry, keine Infos'} +
-      {'en_us': 'Origin', 'de_de': 'Herkunft'} +
-      {'en_us': 'Roots', 'de_de': 'Wurzeln'} +
-      {'en_us': 'Style', 'de_de': 'Stil'} +
-      {'en_us': 'Homepage', 'de_de': 'Homepage'} +
-      {'en_us': 'Social', 'de_de': 'Social'} +
-      {'en_us': 'added on', 'de_de': 'hinzugefügt'} +
-      {'en_us': 'MMM dd yyyy', 'de_de': 'dd.MM.yyyy'} +
-      {'en_us': 'Play on Spotify', 'de_de': 'Reinhören bei Spotify'} +
+      Translations.byText('en-US') +
+      {'en-US': 'Band Details', 'de-DE': 'Band Details'} +
+      {'en-US': 'Sorry, no info', 'de-DE': 'Sorry, keine Infos'} +
+      {'en-US': 'Origin', 'de-DE': 'Herkunft'} +
+      {'en-US': 'Roots', 'de-DE': 'Wurzeln'} +
+      {'en-US': 'Style', 'de-DE': 'Stil'} +
+      {'en-US': 'Homepage', 'de-DE': 'Homepage'} +
+      {'en-US': 'Social', 'de-DE': 'Social'} +
+      {'en-US': 'added on', 'de-DE': 'hinzugefügt'} +
+      {'en-US': 'MMM dd yyyy', 'de-DE': 'dd.MM.yyyy'} +
+      {'en-US': 'Play on Spotify', 'de-DE': 'Reinhören bei Spotify'} +
       {
-        'en_us': 'There was an error retrieving band data.',
-        'de_de': 'Beim Laden der Band-Daten ist ein Fehler aufgetreten.',
+        'en-US': 'There was an error retrieving band data.',
+        'de-DE': 'Beim Laden der Band-Daten ist ein Fehler aufgetreten.',
       } +
-      {'en_us': 'Loading band data.', 'de_de': 'Band-Daten werden geladen.'};
+      {'en-US': 'Loading band data.', 'de-DE': 'Band-Daten werden geladen.'};
 
   String get i18n => localize(this, _t);
 }

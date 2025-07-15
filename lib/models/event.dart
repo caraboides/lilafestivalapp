@@ -10,6 +10,7 @@ import 'ids.dart';
 class Event implements Comparable {
   const Event({
     required this.bandName,
+    required this.venueName,
     required this.id,
     required this.stage,
     required this.start,
@@ -17,14 +18,16 @@ class Event implements Comparable {
   });
 
   factory Event.fromJson(String id, Map<String, dynamic> json) => Event(
-    bandName: json['band'] ?? '',
     id: id,
+    bandName: json['band'] ?? '',
+    venueName: json['venue_name'] ?? '',
     stage: json['stage'] ?? '',
     start: Optional.ofNullable(DateTime.tryParse(json['start'] ?? '')),
     end: Optional.ofNullable(DateTime.tryParse(json['end'] ?? '')),
   );
 
   final String bandName;
+  final String venueName;
   final EventId id;
   final String stage;
   final Optional<DateTime> start;
@@ -56,8 +59,9 @@ class Event implements Comparable {
 
   @override
   int get hashCode => quiver.hashObjects([
-    bandName.hashCode,
     id.hashCode,
+    bandName.hashCode,
+    venueName.hashCode,
     stage.hashCode,
     start.hashCode,
     end.hashCode,

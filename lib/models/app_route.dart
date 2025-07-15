@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
+class BuiltNestedRoute extends NestedRoute {
+  const BuiltNestedRoute({
+    required super.key,
+    required super.title,
+    required this.builder,
+  });
+
+  final WidgetBuilder builder;
+}
+
 class NestedRoute {
   const NestedRoute({required this.key, required this.title});
 

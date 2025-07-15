@@ -38,7 +38,8 @@ class FAQ extends StatelessWidget {
   static String title() => 'FAQ'.i18n;
 
   String _buildHtml(String fontUrl) =>
-      _faqHeader(fontUrl) + (I18n.language == 'en' ? faqEnHtml : faqHtml);
+      _faqHeader(fontUrl) + (I18n.locale.languageCode == 'en'
+          ? faqEnHtml : faqHtml);
 
   @override
   Widget build(BuildContext context) => AppScaffold.withTitle(
