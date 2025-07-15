@@ -4,6 +4,13 @@ import '../models/theme.dart';
 
 // color: rgb(255, 153, 0)
 
+// _shuttleHeader CSS
+// a {
+//   color: #FF9900;
+//   font-weight: bold;
+//   text-decoration: underline;
+// }
+
 const String _displayFontFamily = 'Display Font';
 final Color _primaryColor = Colors.grey[850]!;
 const Color _secondaryColor = Color(0xFFE4BB8A);

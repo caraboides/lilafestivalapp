@@ -22,7 +22,7 @@ String _faqHeader(String fontUrl) => '''
     body {
       margin: 20px;
     }
-    a:link, a:visited {
+    a:link, a:visited1 {
       color: #E4BB8A;
     }
     </style>

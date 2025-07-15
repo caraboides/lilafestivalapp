@@ -6,6 +6,7 @@ import '../../models/festival_config.dart';
 import 'event_band_name.dart';
 import 'event_date/event_date.dart';
 import 'event_stage.dart';
+import 'event_venue.dart';
 
 class EventDetails extends StatelessWidget {
   const EventDetails(
@@ -33,7 +34,9 @@ class EventDetails extends StatelessWidget {
       Visibility(visible: showBandName, child: const SizedBox(height: 3.5)),
       EventDate(start: event.start, end: event.end, showWeekDay: showWeekDay),
       const SizedBox(height: 2.5),
-      EventStage(event.stage),
+      EventVenue(event.venueName),
+      const SizedBox(height: 2.5),
+      EventStage(event.stage)
     ],
   );
 }

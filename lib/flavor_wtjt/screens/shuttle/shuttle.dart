@@ -12,6 +12,31 @@ String _shuttleHeader(String fontUrl) => '''
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+    body {
+      background-color: #1F211F;
+      color: #FF9900;
+      margin: 20px;
+      font-family: sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      color: #CCCCCC;
+      font-family: 'DisplayFont';
+      font-size: 27px;
+      margin-top: 2em;
+    }
+
+    a {
+      color: #FF9900;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    p {
+      line-height: 1.5;
+      margin-bottom: 1em;
+    }
+
     td,
     th {
       text-align: center;
@@ -30,7 +55,6 @@ String _shuttleHeader(String fontUrl) => '''
 
     table td:first-child {
       border-left: none;
-      // background-color: #ffffff;
     }
 
     table td:last-child {
@@ -46,15 +70,6 @@ String _shuttleHeader(String fontUrl) => '''
       font-family: 'DisplayFont';
       src: url($fontUrl);
     }
-
-    h2 {
-      font-family: 'DisplayFont';
-      font-size: 27px;
-    }
-
-    body {
-      margin: 20px;
-    }
   </style>
 </head>
 ''';
@@ -65,7 +80,7 @@ class Shuttle extends StatelessWidget {
   static Widget builder(BuildContext context) => const Shuttle();
 
   static String path = '/shuttle';
-  static String title() => 'Bus Shuttle'.i18n;
+  static String title() => 'Venues'.i18n;
 
   String _buildHtml(String fontUrl) =>
       _shuttleHeader(fontUrl) +

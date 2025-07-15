@@ -46,18 +46,12 @@ final FestivalConfig config = FestivalConfig(
     FlatAppRoute(
       path: Shuttle.path,
       getName: Shuttle.title,
-      icon: Icons.map,
+      icon: Icons.location_city,
       builder: Shuttle.builder,
-    ),
-    FlatAppRoute(
-      path: FAQ.path,
-      getName: FAQ.title,
-      icon: Icons.help,
-      builder: FAQ.builder,
-    ),
+    )
   ]),
-  weatherGeoLocation: const LatLng(lat: 51.25, lng: 10.67),
-  weatherCityId: '2838240',
+  weatherGeoLocation: const LatLng(lat: 53.54, lng: 9.95),
+  weatherCityId: '2911298',
   history: ImmortalList([
     const NestedRoute(key: 'wtjt', title: '2025')
   ]),
