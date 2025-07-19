@@ -588,7 +588,6 @@ const String shuttleEnHtml = '''
                   <div class="frame-inner">
                     <a id="c829"></a>
                     <p>* 15 min after the end of the mainstage show latest, not before 1:30 + access at flag-gate</p>
-                    <p>&nbsp;</p>
                   </div>
                 </div>
               </div>
@@ -607,7 +606,6 @@ const String shuttleEnHtml = '''
                       </h2>
                     </div>
                     <p>Mühlhausen - P.S:O:A = 20,- € (1x to&amp;back)</p>
-                    <p>&nbsp;</p>
                   </div>
                 </div>
               </div>
