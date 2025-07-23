@@ -1,0 +1,5 @@
+flutter_icons:
+  image_path: "flavor_icons/wtjt/app_logo.png"
+  android: true
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "flavor_icons/wtjt/app_logo-adaptive.png"

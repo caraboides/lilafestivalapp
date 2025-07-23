@@ -8,8 +8,9 @@ import 'package:optional/optional.dart';
 final startDate = DateTime(2022, 8, 1, 18, 0);
 
 final event1 = Event(
-  bandName: 'band',
   id: 'id1',
+  bandName: 'band',
+  venueName: 'vanue_name',
   stage: 'stage',
   start: Optional.of(startDate.add(const Duration(hours: 1))),
   end: const Optional.empty(),
@@ -18,6 +19,7 @@ final events = ImmortalList([
   event1,
   const Event(
     bandName: 'band',
+    venueName: 'venue_name',
     id: 'id2',
     stage: 'stage',
     start: Optional.empty(),
@@ -25,6 +27,7 @@ final events = ImmortalList([
   ),
   Event(
     bandName: 'band',
+    venueName: 'vanue_name',
     id: 'id3',
     stage: 'stage',
     start: Optional.of(startDate),
@@ -32,6 +35,7 @@ final events = ImmortalList([
   ),
   Event(
     bandName: 'band',
+    venueName: 'venueName',
     id: 'id4',
     stage: 'stage',
     start: Optional.of(startDate.add(const Duration(hours: 1))),
@@ -49,6 +53,7 @@ void main() {
     test('has a stable hash', () {
       final jsonEvent = {
         'band': 'band',
+        'venue_name' : 'venue_name',
         'id': 'id1',
         'stage': 'stage',
         'start': event1.start.value.toIso8601String(),

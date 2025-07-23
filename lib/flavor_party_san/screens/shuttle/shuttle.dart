@@ -69,7 +69,7 @@ class Shuttle extends StatelessWidget {
 
   String _buildHtml(String fontUrl) =>
       _shuttleHeader(fontUrl) +
-      (I18n.language == 'en' ? shuttleEnHtml : shuttleHtml);
+      (I18n.locale.languageCode == 'en-US' ? shuttleEnHtml : shuttleHtml);
 
   @override
   Widget build(BuildContext context) => AppScaffold.withTitle(

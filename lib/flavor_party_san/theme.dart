@@ -62,7 +62,7 @@ final ThemeData theme = ThemeData(
     toolbarHeight: _appBarHeight,
     foregroundColor: _colorScheme.onPrimary,
   ),
-  tabBarTheme: TabBarTheme(
+  tabBarTheme: TabBarThemeData(
     labelStyle: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 18,
@@ -75,7 +75,7 @@ final ThemeData theme = ThemeData(
     ),
     indicatorSize: TabBarIndicatorSize.tab,
   ),
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     margin: const EdgeInsets.only(bottom: 1),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.zero),
