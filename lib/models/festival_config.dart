@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:immortal/immortal.dart';
 
 import '../providers/festival_scope.dart';
-import '../utils/date.dart';
 import 'app_route.dart';
 import 'ids.dart';
 import 'lat_lng.dart';
@@ -47,6 +46,11 @@ class FestivalConfig {
 
   FestivalScope get currentFestivalScope => FestivalScope(festivalId);
 
+  DateTime toFestivalDay(DateTime date) {
+    final withoutOffset = date.subtract(daySwitchOffset);
+    return DateTime(withoutOffset.year, withoutOffset.month, withoutOffset.day);
+  }
+
   ImmortalList<DateTime> get festivalDays {
     final days = [startDate];
     final length = endDate.difference(startDate).inDays;
@@ -54,6 +58,6 @@ class FestivalConfig {
       final day = startDate.add(Duration(days: i + 1));
       days.add(day);
     }
-    return ImmortalList(days.map(toFestivalDay));
+    return ImmortalList(days);
   }
 }

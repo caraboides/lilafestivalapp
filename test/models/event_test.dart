@@ -47,7 +47,7 @@ void main() {
   group('event', () {
     test('gets sorted by start date', () {
       final expected = ['id3', 'id1', 'id4', 'id2'];
-      expect(expected, events.sort().map((event) => event.id));
+      expect(events.sort().map((event) => event.id), expected);
     });
 
     test('has a stable hash', () {
@@ -62,7 +62,7 @@ void main() {
         'id1',
         jsonDecode(jsonEncode(jsonEvent)),
       );
-      expect(event1.hashCode, serializedEvent.hashCode);
+      expect(serializedEvent.hashCode, event1.hashCode);
     });
   });
 }

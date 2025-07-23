@@ -6,7 +6,6 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:immortal/immortal.dart';
 import 'package:lilafestivalapp/models/event.dart';
 import 'package:lilafestivalapp/models/festival_config.dart';
-import 'package:lilafestivalapp/models/lat_lng.dart';
 import 'package:lilafestivalapp/models/my_schedule.dart';
 import 'package:lilafestivalapp/models/theme.dart';
 import 'package:lilafestivalapp/services/notifications/notifications.dart';
@@ -16,6 +15,7 @@ import 'package:optional/optional.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../test_data.dart';
 import '../test_utils.dart';
 import 'notifications_test.mocks.dart';
 

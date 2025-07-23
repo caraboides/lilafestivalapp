@@ -9,11 +9,7 @@ bool isSameFestivalDay(DateTime date1, DateTime date2) {
       date.day == date2.day;
 }
 
-DateTime toFestivalDay(DateTime date) {
-  final withoutOffset = date.subtract(
-    dimeGet<FestivalConfig>().daySwitchOffset,
-  );
-  return DateTime(withoutOffset.year, withoutOffset.month, withoutOffset.day);
-}
+DateTime toFestivalDay(DateTime date) =>
+    dimeGet<FestivalConfig>().toFestivalDay(date);
 
 DateTime currentDate() => DateTime.now();
