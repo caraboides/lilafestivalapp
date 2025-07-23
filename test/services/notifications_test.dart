@@ -35,6 +35,7 @@ final testFestivalConfig = FestivalConfig(
   aboutMessages: ImmortalList.empty(),
   stageAlignment: (_) => CrossAxisAlignment.start,
   routes: ImmortalList.empty(),
+  nestedRoutes: ImmortalList.empty(),
   weatherGeoLocation: const LatLng(lat: 1, lng: 1),
   weatherCityId: 'weatherCityId',
   history: ImmortalList.empty(),

@@ -4,6 +4,7 @@ Generic festival app with specific festivals as flavors:
 
 * [Party.San Open Air](https://www.party-san.de)
 * [Spirit Festival](https://www.spirit-festival.com)
+* [Weltturbojugendtage 2025](https://www.weltturbojugendtage.de)
 
 ## Setup
 

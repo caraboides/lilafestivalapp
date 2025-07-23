@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../widgets/scaffold.dart';
 import '../../model/history_item.dart';
 
 class WebViewScreen extends StatelessWidget {
@@ -35,8 +36,8 @@ class WebViewScreen extends StatelessWidget {
       )
       ..loadRequest(item.url);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(item.title)),
+    return AppScaffold.withTitle(
+      title: item.title,
       body: WebViewWidget(controller: controller),
     );
   }
