@@ -3,3 +3,6 @@ flutter_icons:
   android: true
   adaptive_icon_background: "#000000"
   adaptive_icon_foreground: "flavor_icons/party_san/app_logo-adaptive.png"
+  ios: true
+  remove_alpha_ios: true
+  background_color_ios: "#000000"
