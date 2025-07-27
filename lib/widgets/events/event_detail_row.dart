@@ -20,8 +20,9 @@ class EventDetailRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
     mainAxisSize: dense ? MainAxisSize.min : MainAxisSize.max,
-    mainAxisAlignment:
-        dense ? MainAxisAlignment.start : MainAxisAlignment.spaceBetween,
+    mainAxisAlignment: dense
+        ? MainAxisAlignment.start
+        : MainAxisAlignment.spaceBetween,
     children: [
       Expanded(
         child: Row(

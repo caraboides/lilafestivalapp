@@ -51,9 +51,9 @@ class ScheduleProviderCreator {
       '/schedule?festival=$festivalId';
 
   static ImmortalList<Event> _fromJson(Map<String, dynamic> jsonMap) =>
-      ImmortalMap<String, dynamic>(
-        jsonMap,
-      ).mapEntries<Event>((id, json) => Event.fromJson(id, json));
+      ImmortalMap<String, dynamic>(jsonMap).mapEntries<Event>(
+        (id, json) => Event.fromJson(id, json as Map<String, dynamic>),
+      );
 
   static ScheduleProvider create(BuildContext context) =>
       StreamProvider.family<ImmortalList<Event>, FestivalId>((ref, festivalId) {

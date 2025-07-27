@@ -16,24 +16,22 @@ class DenseEventList extends StatelessWidget {
   final WrapAlignment wrapAlignment;
 
   Widget _buildEventRow(Event event) => FractionallySizedBox(
-        widthFactor: 0.5,
-        child: EventDetailRow(
-          event: event,
-          key: Key(event.id),
-          currentTime: currentTime,
-          dense: true,
-        ),
-      );
+    widthFactor: 0.5,
+    child: EventDetailRow(
+      event: event,
+      key: Key(event.id),
+      currentTime: currentTime,
+      dense: true,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) => Container(
-        constraints: const BoxConstraints(
-          minWidth: double.infinity,
-        ),
-        child: Wrap(
-          direction: Axis.horizontal,
-          alignment: WrapAlignment.spaceBetween,
-          children: events.map(_buildEventRow).toList(),
-        ),
-      );
+    constraints: const BoxConstraints(minWidth: double.infinity),
+    child: Wrap(
+      direction: Axis.horizontal,
+      alignment: WrapAlignment.spaceBetween,
+      children: events.map(_buildEventRow).toList(),
+    ),
+  );
 }

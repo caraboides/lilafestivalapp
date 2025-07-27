@@ -17,30 +17,28 @@ class EventToggle extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final festivalId = DimeFlutter.get<FestivalScope>(context).festivalId;
-    final isLiked =
-        ref
-            .watch(
-              dimeGet<LikedEventProvider>()(
-                EventKey(festivalId: festivalId, eventId: event.id),
-              ),
-            )
-            .isPresent;
+    final isLiked = ref
+        .watch(
+          dimeGet<LikedEventProvider>()(
+            EventKey(festivalId: festivalId, eventId: event.id),
+          ),
+        )
+        .isPresent;
 
     final button = ToggleLikeButton(
       toggleState: isLiked,
       tooltip:
           (isLiked ? 'Remove gig from schedule' : 'Add gig to schedule').i18n,
-      onPressed:
-          () => ref
-              .read(dimeGet<MyScheduleProvider>()(festivalId).notifier)
-              .toggleEvent(event),
+      onPressed: () => ref
+          .read(dimeGet<MyScheduleProvider>()(festivalId).notifier)
+          .toggleEvent(event),
       dense: dense,
     );
     return dense
         ? Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: button,
-        )
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: button,
+          )
         : button;
   }
 }

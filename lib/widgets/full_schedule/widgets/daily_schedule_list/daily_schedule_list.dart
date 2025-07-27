@@ -66,10 +66,9 @@ class DailyScheduleList extends HookConsumerWidget {
             eventIds: eventTuple.item2,
             date: date,
           ),
-          crossFadeState:
-              eventTuple.item2.isEmpty
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
+          crossFadeState: eventTuple.item2.isEmpty
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
           duration: const Duration(milliseconds: 350),
         );
       },

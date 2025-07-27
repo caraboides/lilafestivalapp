@@ -45,8 +45,9 @@ class TestModule extends BaseDimeModule {
 class TestData {
   const TestData(this.value);
 
-  // ignore: strict_top_level_inference, avoid_dynamic_calls TODO(SF) fix this
-  factory TestData.fromJson(json) => TestData(json['value']);
+  // TODO(SF): fix this
+  // ignore: avoid_dynamic_calls
+  factory TestData.fromJson(json) => TestData(json['value'] as String);
 
   final String value;
 
@@ -101,8 +102,9 @@ void mockPeriodicRemoteData([
         mockOptionalResponse(remoteUpdateData, delayInMilliseconds),
       ];
   when(festivalHubMock.loadJsonData('remoteUrl')).thenAnswer((invocation) {
-    final response =
-        responses.length > 1 ? responses.removeAt(0) : responses.first;
+    final response = responses.length > 1
+        ? responses.removeAt(0)
+        : responses.first;
     return response(invocation);
   });
 }
@@ -135,8 +137,9 @@ Future<bool> assertStreamData(List<String> expectedData) async {
 }
 
 Future<bool> assertPeriodicStreamData(List<String> expectedData) async {
-  final data =
-      await createStream(periodicDuration).take(expectedData.length).toList();
+  final data = await createStream(
+    periodicDuration,
+  ).take(expectedData.length).toList();
   return assertList(data, expectedData);
 }
 

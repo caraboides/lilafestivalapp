@@ -29,21 +29,20 @@ class FAQ extends StatelessWidget {
   List<Widget> _buildTextList(List<String> content) =>
       content.map((text) => Text(text)).toList();
 
-  List<Widget> _buildList(List<String> content) =>
-      _buildTextList(content)
-          .map(
-            (item) => Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text('●', style: TextStyle(fontSize: 11)),
-                ),
-                Expanded(child: item),
-              ],
+  List<Widget> _buildList(List<String> content) => _buildTextList(content)
+      .map(
+        (item) => Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text('●', style: TextStyle(fontSize: 11)),
             ),
-          )
-          .toList();
+            Expanded(child: item),
+          ],
+        ),
+      )
+      .toList();
 
   @override
   Widget build(BuildContext context) {

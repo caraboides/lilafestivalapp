@@ -17,11 +17,13 @@ class Event implements Comparable {
   });
 
   factory Event.fromJson(String id, Map<String, dynamic> json) => Event(
-    bandName: json['band'] ?? '',
+    bandName: json['band'] as String? ?? '',
     id: id,
-    stage: json['stage'] ?? '',
-    start: Optional.ofNullable(DateTime.tryParse(json['start'] ?? '')),
-    end: Optional.ofNullable(DateTime.tryParse(json['end'] ?? '')),
+    stage: json['stage'] as String? ?? '',
+    start: Optional.ofNullable(
+      DateTime.tryParse(json['start'] as String? ?? ''),
+    ),
+    end: Optional.ofNullable(DateTime.tryParse(json['end'] as String? ?? '')),
   );
 
   final String bandName;
@@ -37,16 +39,15 @@ class Event implements Comparable {
       end.map(currentTime.isBefore).orElse(false);
 
   @override
-  int compareTo(dynamic other) =>
-      other is Event
-          ? other.start
-              .map(
-                (otherStartTime) => start
-                    .map((startTime) => startTime.compareTo(otherStartTime))
-                    .orElse(1),
-              )
-              .orElse(-1)
-          : -1;
+  int compareTo(dynamic other) => other is Event
+      ? other.start
+            .map(
+              (otherStartTime) => start
+                  .map((startTime) => startTime.compareTo(otherStartTime))
+                  .orElse(1),
+            )
+            .orElse(-1)
+      : -1;
 
   bool isInFutureOf(DateTime currentTime) =>
       start.map(currentTime.isBefore).orElse(false);
@@ -55,7 +56,7 @@ class Event implements Comparable {
       isInFutureOf(currentTime) || end.map(currentTime.isBefore).orElse(false);
 
   @override
-  int get hashCode => quiver.hashObjects([
+  int get hashCode => quiver.hashObjects(<dynamic>[
     bandName.hashCode,
     id.hashCode,
     stage.hashCode,

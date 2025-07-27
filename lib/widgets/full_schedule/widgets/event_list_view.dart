@@ -56,26 +56,25 @@ class _EventListViewState extends State<EventListView>
   void _updatePlayingBandIndices() {
     _currentOrNextPlayingBandIndex =
         isSameFestivalDay(_currentTime, widget.date)
-            ? widget.eventIds.indexWhere(
-              (eventId) => widget.events[eventId]
-                  .map((event) => event.isPlayingOrInFutureOf(_currentTime))
-                  .orElse(false),
-            )
-            : -1;
+        ? widget.eventIds.indexWhere(
+            (eventId) => widget.events[eventId]
+                .map((event) => event.isPlayingOrInFutureOf(_currentTime))
+                .orElse(false),
+          )
+        : -1;
     _nextPlayingBandIndex =
         _currentOrNextPlayingBandIndex >= 0 &&
-                _eventAt(
-                  _currentOrNextPlayingBandIndex,
-                ).map((event) => !event.isPlaying(_currentTime)).orElse(false)
-            ? _currentOrNextPlayingBandIndex
-            : -1;
+            _eventAt(
+              _currentOrNextPlayingBandIndex,
+            ).map((event) => !event.isPlaying(_currentTime)).orElse(false)
+        ? _currentOrNextPlayingBandIndex
+        : -1;
   }
 
   void _updateItemIds() {
-    _itemIds =
-        _nextPlayingBandIndex >= 0
-            ? widget.eventIds.insert(_nextPlayingBandIndex, _changeOverId)
-            : widget.eventIds;
+    _itemIds = _nextPlayingBandIndex >= 0
+        ? widget.eventIds.insert(_nextPlayingBandIndex, _changeOverId)
+        : widget.eventIds;
   }
 
   @override
@@ -139,12 +138,11 @@ class _EventListViewState extends State<EventListView>
     required Animation<double> animation,
     required int index,
     required EventId itemId,
-  }) =>
-      itemId == _changeOverId
-          ? _buildChangeOverIndicator()
-          : widget.events[itemId]
-              .map((event) => _buildEventListItem(index, event))
-              .orElse(Container());
+  }) => itemId == _changeOverId
+      ? _buildChangeOverIndicator()
+      : widget.events[itemId]
+            .map((event) => _buildEventListItem(index, event))
+            .orElse(Container());
 
   @override
   Widget build(BuildContext context) {

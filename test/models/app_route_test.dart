@@ -12,7 +12,7 @@ void main() {
         path: '/history',
         getName: () => '',
         icon: Icons.history,
-        nestedRouteBuilder: (_, _) => Container(),
+        nestedRouteBuilder: (_, __) => Container(),
         nestedRoutes: ImmortalList.empty(),
       );
       final nestedRoute = testFestivalConfig.history.first;

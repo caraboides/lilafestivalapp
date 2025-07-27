@@ -21,7 +21,7 @@ Stream<T> createCacheStream<T, J>({
   return stream.asyncMap<T>((fileResponse) async {
     final info = fileResponse as FileInfo;
     final content = await info.file.readAsString();
-    final json = jsonDecode(content);
+    final json = jsonDecode(content) as J;
     _log.debug('Loading data from $remoteUrl was successful');
     return fromJson(json);
   });

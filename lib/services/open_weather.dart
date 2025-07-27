@@ -37,10 +37,12 @@ class OpenWeather {
       'lat=${_config.weatherGeoLocation.lat}&'
       'lon=${_config.weatherGeoLocation.lng}&'
       'appid=${_globalConfig.weatherApiKey}&'
-      'lang=${I18n.language}';
+      'lang=${I18n.languageOnly}';
 
   ImmortalList<Weather> _forecastFromJson(Map<String, dynamic> json) =>
-      ImmortalList(json['list']).map((w) => Weather(w));
+      ImmortalList(
+        json['list'] as List<Map<String, dynamic>>,
+      ).map((w) => Weather(w));
 
   /// For API documentation, see: https://openweathermap.org/forecast5
   Stream<ImmortalList<Weather>> _getForecast() => createCacheStream(
@@ -54,10 +56,9 @@ class OpenWeather {
         _log.debug('Selecting weather for $date');
         final now = currentDate();
         final isToday = isSameFestivalDay(now, date);
-        final maxHour =
-            isToday
-                ? max(_globalConfig.weatherMinHour, now.hour)
-                : _globalConfig.weatherMinHour;
+        final maxHour = isToday
+            ? max(_globalConfig.weatherMinHour, now.hour)
+            : _globalConfig.weatherMinHour;
         return forecast.lastWhereOptional(
           (current) => Optional.ofNullable(current.date)
               .map(

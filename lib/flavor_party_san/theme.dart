@@ -62,7 +62,7 @@ final ThemeData theme = ThemeData(
     toolbarHeight: _appBarHeight,
     foregroundColor: _colorScheme.onPrimary,
   ),
-  tabBarTheme: TabBarTheme(
+  tabBarTheme: TabBarThemeData(
     labelStyle: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 18,
@@ -75,7 +75,7 @@ final ThemeData theme = ThemeData(
     ),
     indicatorSize: TabBarIndicatorSize.tab,
   ),
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     margin: const EdgeInsets.only(bottom: 1),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.zero),
@@ -91,10 +91,9 @@ final ThemeData theme = ThemeData(
   radioTheme: RadioThemeData(fillColor: _toggleableColorSelected),
   switchTheme: SwitchThemeData(
     thumbColor: WidgetStateProperty.resolveWith<Color?>(
-      (Set<WidgetState> states) =>
-          states.contains(WidgetState.selected)
-              ? _primaryColor
-              : _colorScheme.outline,
+      (Set<WidgetState> states) => states.contains(WidgetState.selected)
+          ? _primaryColor
+          : _colorScheme.outline,
     ),
     trackColor: _toggleableColorSelected,
   ),
@@ -130,15 +129,14 @@ final FestivalTheme festivalTheme = FestivalTheme(
     scaffoldBackgroundColor: _historyBackgroundColor,
     colorScheme: theme.colorScheme.copyWith(surface: _historyBackgroundColor),
   ),
-  primaryButton:
-      ({required label, required onPressed}) => ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: theme.colorScheme.secondary,
-          foregroundColor: theme.colorScheme.onSurface,
-        ),
-        onPressed: onPressed,
-        child: Text(label),
-      ),
+  primaryButton: ({required label, required onPressed}) => ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: theme.colorScheme.secondary,
+      foregroundColor: theme.colorScheme.onSurface,
+    ),
+    onPressed: onPressed,
+    child: Text(label),
+  ),
   logo: const Logo(assetPath: 'assets/logo.png', width: 111, height: 56),
   logoMenu: const Logo(
     assetPath: 'assets/logo_menu.png',

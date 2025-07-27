@@ -49,7 +49,7 @@ class Notifications {
         '- trying to open band detail view',
       );
       try {
-        final bandName = (jsonDecode(payload) as Map)['band'];
+        final bandName = (jsonDecode(payload) as Map)['band'] as String?;
         BandDetailView.openFor(bandName ?? payload);
       } catch (error) {
         _log.error('Error parsing notification payload $payload', error);
@@ -194,7 +194,8 @@ class Notifications {
       pendingNotifications.map((notification) {
         Map<String, dynamic> payload;
         try {
-          payload = jsonDecode(notification.payload ?? '{}');
+          payload =
+              jsonDecode(notification.payload ?? '{}') as Map<String, dynamic>;
         } catch (error) {
           _log.error(
             'Error decoding notification payload ${notification.payload}',

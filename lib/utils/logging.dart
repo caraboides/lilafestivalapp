@@ -15,7 +15,8 @@ class Logger {
   LogFunction _logFunction([
     String logLevel = 'INFO',
     LogFunction logFunction = print,
-  ]) => (message) => logFunction('[$logLevel] $_logModule$message');
+  ]) =>
+      (message) => logFunction('[$logLevel] $_logModule$message');
 
   LogFunction get _logDebug => _logFunction('DEBUG', _debugPrint);
 

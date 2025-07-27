@@ -43,29 +43,30 @@ class _InitializationWidgetState extends ConsumerState<InitializationWidget>
   bool _verifyScheduledNotifications(
     AsyncValue<MySchedule> myScheduleProvider,
     AsyncValue<ImmortalList<Event>> eventProvider,
-  ) => combineAsyncValues<void, ImmortalList<Event>, MySchedule>(
-    eventProvider,
-    myScheduleProvider,
-    (events, mySchedule) {
-      _log.debug('Verify notifications for liked events');
-      dimeGet<Notifications>().verifyScheduledEventNotifications(
-        mySchedule,
-        events,
+  ) =>
+      combineAsyncValues<void, ImmortalList<Event>, MySchedule>(
+        eventProvider,
+        myScheduleProvider,
+        (events, mySchedule) {
+          _log.debug('Verify notifications for liked events');
+          dimeGet<Notifications>().verifyScheduledEventNotifications(
+            mySchedule,
+            events,
+          );
+        },
+      ).when(
+        data: (_) => true,
+        loading: () => false,
+        error: (error, trace) {
+          _log.error(
+            'Error retrieving data, notification verification failed',
+            error,
+            trace,
+          );
+          // TODO(SF): FEATURE recovery?
+          return true;
+        },
       );
-    },
-  ).when(
-    data: (_) => true,
-    loading: () => false,
-    error: (error, trace) {
-      _log.error(
-        'Error retrieving data, notification verification failed',
-        error,
-        trace,
-      );
-      // TODO(SF): FEATURE recovery?
-      return true;
-    },
-  );
 
   @override
   Widget build(BuildContext context) {

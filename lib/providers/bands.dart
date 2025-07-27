@@ -26,9 +26,10 @@ class BandsProviderCreator {
       '/bands?festival=$festivalId';
 
   static ImmortalMap<BandName, Band> _fromJson(Map<String, dynamic> jsonMap) =>
-      ImmortalMap<String, dynamic>(
-        jsonMap,
-      ).mapValues((bandName, json) => Band.fromJson(bandName, json));
+      ImmortalMap<String, dynamic>(jsonMap).mapValues(
+        (bandName, json) =>
+            Band.fromJson(bandName, json as Map<String, dynamic>),
+      );
 
   static BandsProvider create(BuildContext context) =>
       StreamProvider.family<ImmortalMap<BandName, Band>, FestivalId>((

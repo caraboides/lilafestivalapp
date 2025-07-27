@@ -62,7 +62,9 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
           (result) => result
               .map((json) {
                 try {
-                  final data = Optional.of(MySchedule.fromJson(json));
+                  final data = Optional.of(
+                    MySchedule.fromJson(json as Map<String, dynamic>),
+                  );
                   _log.debug('Reading from app storage was successful');
                   return data;
                 } catch (error) {
@@ -129,11 +131,8 @@ class MyScheduleController extends StateNotifier<AsyncValue<MySchedule>> {
       final newSchedule = mySchedule.toggleEvent(
         event.id,
         onRemove: _notifications.cancelNotification,
-        onAdd:
-            (notificationId) => _notifications.scheduleNotificationForEvent(
-              event,
-              notificationId,
-            ),
+        onAdd: (notificationId) =>
+            _notifications.scheduleNotificationForEvent(event, notificationId),
       );
       _log.debug('Updating my schedule');
       state = AsyncValue.data(newSchedule);
@@ -166,7 +165,7 @@ class MyScheduleProviderCreator {
         .when(
           data: (mySchedule) => mySchedule.getNotificationId(eventKey.eventId),
           loading: () => const Optional<NotificationId>.empty(),
-          error: (_, _) => const Optional<NotificationId>.empty(),
+          error: (_, __) => const Optional<NotificationId>.empty(),
         ),
   );
 }

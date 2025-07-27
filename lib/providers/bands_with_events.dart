@@ -46,27 +46,30 @@ class BandsWithEventsProviderCreator {
         );
       });
 
-  static BandsWithEventsProvider create() => Provider.family<
-    AsyncValue<ImmortalMap<BandName, BandWithEvents>>,
-    FestivalId
-  >((ref, festivalId) {
-    final bandsProvider = ref.watch(dimeGet<BandsProvider>()(festivalId));
-    final schedule = ref.watch(dimeGet<SortedScheduleProvider>()(festivalId));
-    return combineAsyncValues<
-      ImmortalMap<BandName, BandWithEvents>,
-      ImmortalMap<BandName, Band>,
-      ImmortalList<Event>
-    >(bandsProvider, schedule, (bands, events) {
-      final eventsByBand = events.asMapOfLists((event) => event.bandName);
-      return bands.mapValues(
-        (bandName, band) => BandWithEvents(
-          bandName: bandName,
-          band: Optional.of(band),
-          events: eventsByBand[band.name].orElse(ImmortalList<Event>()),
-        ),
-      );
-    });
-  });
+  static BandsWithEventsProvider create() =>
+      Provider.family<
+        AsyncValue<ImmortalMap<BandName, BandWithEvents>>,
+        FestivalId
+      >((ref, festivalId) {
+        final bandsProvider = ref.watch(dimeGet<BandsProvider>()(festivalId));
+        final schedule = ref.watch(
+          dimeGet<SortedScheduleProvider>()(festivalId),
+        );
+        return combineAsyncValues<
+          ImmortalMap<BandName, BandWithEvents>,
+          ImmortalMap<BandName, Band>,
+          ImmortalList<Event>
+        >(bandsProvider, schedule, (bands, events) {
+          final eventsByBand = events.asMapOfLists((event) => event.bandName);
+          return bands.mapValues(
+            (bandName, band) => BandWithEvents(
+              bandName: bandName,
+              band: Optional.of(band),
+              events: eventsByBand[band.name].orElse(ImmortalList<Event>()),
+            ),
+          );
+        });
+      });
 
   static SortedBandsWithEventsProvider createSortedBandsWithEventsProvider() =>
       Provider.family<AsyncValue<ImmortalList<BandWithEvents>>, FestivalId>(

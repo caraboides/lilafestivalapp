@@ -27,14 +27,13 @@ class BandListView extends StatelessWidget {
 
   FestivalTheme get _theme => dimeGet<FestivalTheme>();
 
-  double _getListItemHeight(int numEvents) =>
-      numEvents == 1
-          ? _theme.eventListItemHeight
-          : max(
-            _theme.bandListHeaderHeight +
-                (numEvents / 2).ceil() * _theme.denseEventListItemHeight,
-            _theme.bandListItemMinHeight,
-          );
+  double _getListItemHeight(int numEvents) => numEvents == 1
+      ? _theme.eventListItemHeight
+      : max(
+          _theme.bandListHeaderHeight +
+              (numEvents / 2).ceil() * _theme.denseEventListItemHeight,
+          _theme.bandListItemMinHeight,
+        );
 
   ImmortalList<double> _calculateListItemHeights() => bandIds.map(
     (bandName) => bands[bandName]

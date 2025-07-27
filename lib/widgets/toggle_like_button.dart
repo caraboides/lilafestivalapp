@@ -30,10 +30,9 @@ class ToggleLikeButton extends StatelessWidget {
       child: InkResponse(
         onTap: onPressed,
         splashColor: _theme.toggleSplashColor,
-        radius:
-            dense
-                ? _theme.toggleDenseSplashRadius
-                : Material.defaultSplashRadius,
+        radius: dense
+            ? _theme.toggleDenseSplashRadius
+            : Material.defaultSplashRadius,
         child: Tooltip(
           message: tooltip,
           child: ConstrainedBox(
@@ -45,10 +44,9 @@ class ToggleLikeButton extends StatelessWidget {
               child: AnimatedCrossFade(
                 firstChild: Icon(Icons.star, color: iconColor),
                 secondChild: Icon(Icons.star_border, color: iconColor),
-                crossFadeState:
-                    toggleState
-                        ? CrossFadeState.showFirst
-                        : CrossFadeState.showSecond,
+                crossFadeState: toggleState
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
                 duration: const Duration(milliseconds: 150),
               ),
             ),

@@ -23,10 +23,9 @@ class EventDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    crossAxisAlignment:
-        alignByStage
-            ? dimeGet<FestivalConfig>().stageAlignment(event.stage)
-            : CrossAxisAlignment.start,
+    crossAxisAlignment: alignByStage
+        ? dimeGet<FestivalConfig>().stageAlignment(event.stage)
+        : CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       Visibility(visible: showBandName, child: EventBandName(event.bandName)),

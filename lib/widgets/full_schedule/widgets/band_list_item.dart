@@ -54,16 +54,12 @@ class BandListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return MaterialColorTransition(
-      color:
-          bandWithEvents.isPlaying(currentTime)
-              ? theme.colorScheme.secondary
-              : theme.canvasColor,
+      color: bandWithEvents.isPlaying(currentTime)
+          ? theme.colorScheme.secondary
+          : theme.canvasColor,
       child: InkWell(
-        onTap:
-            () => BandDetailView.openFor(
-              bandWithEvents.bandName,
-              context: context,
-            ),
+        onTap: () =>
+            BandDetailView.openFor(bandWithEvents.bandName, context: context),
         child: SafeArea(
           top: false,
           bottom: false,
@@ -74,10 +70,9 @@ class BandListItem extends StatelessWidget {
             ),
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.only(top: 10, bottom: 4),
-            child:
-                bandWithEvents.events.length == 1
-                    ? _buildSingleEventEntry(bandWithEvents.events.first)
-                    : _buildMultiEventEntry(),
+            child: bandWithEvents.events.length == 1
+                ? _buildSingleEventEntry(bandWithEvents.events.first)
+                : _buildMultiEventEntry(),
           ),
         ),
       ),

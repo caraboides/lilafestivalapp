@@ -30,17 +30,16 @@ class About extends StatelessWidget {
     child: Divider(height: 1, color: _theme.aboutTheme.dividerColor),
   );
 
-  Widget _buildLink(Link link, {bool shrink = false}) => Optional.ofNullable(
-        link.imageAssetPath,
-      )
-      .map<Widget>(
-        (assetPath) => GestureDetector(
-          child: Image.asset(assetPath),
-          onTap:
-              () => launchUrl(link.url, mode: LaunchMode.externalApplication),
-        ),
-      )
-      .orElse(LinkButton(link: link, shrink: shrink));
+  Widget _buildLink(Link link, {bool shrink = false}) =>
+      Optional.ofNullable(link.imageAssetPath)
+          .map<Widget>(
+            (assetPath) => GestureDetector(
+              child: Image.asset(assetPath),
+              onTap: () =>
+                  launchUrl(link.url, mode: LaunchMode.externalApplication),
+            ),
+          )
+          .orElse(LinkButton(link: link, shrink: shrink));
 
   List<Widget> _buildLinks(ImmortalList<Link> links, {bool shrink = false}) =>
       links.map((link) => _buildLink(link, shrink: shrink)).toList();
@@ -71,18 +70,17 @@ class About extends StatelessWidget {
     ImmortalList<Reference> references, {
     String Function(String label)? labelGenerator,
     Icon? icon,
-  }) =>
-      references
-          .map(
-            (reference) => _buildReference(
-              labelGenerator != null && reference.label != null
-                  ? labelGenerator(reference.label!)
-                  : reference.label,
-              reference.links,
-              icon: icon,
-            ),
-          )
-          .toList();
+  }) => references
+      .map(
+        (reference) => _buildReference(
+          labelGenerator != null && reference.label != null
+              ? labelGenerator(reference.label!)
+              : reference.label,
+          reference.links,
+          icon: icon,
+        ),
+      )
+      .toList();
 
   List<Widget> _buildMessage(String? label, ImmortalList<Link> links) =>
       <Widget>[
@@ -93,11 +91,10 @@ class About extends StatelessWidget {
         ),
       ];
 
-  List<Widget> _buildMessages(ImmortalList<Reference> messages) =>
-      messages
-          .map((message) => _buildMessage(message.label, message.links))
-          .flatten<Widget>()
-          .toList();
+  List<Widget> _buildMessages(ImmortalList<Reference> messages) => messages
+      .map((message) => _buildMessage(message.label, message.links))
+      .flatten<Widget>()
+      .toList();
 
   Future<void> _showLicenses(BuildContext context, String version) async {
     showLicensePage(
@@ -128,68 +125,65 @@ class About extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext _) => Theme(
+  Widget build(BuildContext context) => Theme(
     data: _theme.aboutTheme,
     child: Builder(
-      builder:
-          (context) => AppScaffold.withTitle(
-            title: 'About'.i18n,
-            body: Scrollbar(
-              child: ListView(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  top: 20,
-                  bottom: 10,
-                ),
-                children: <Widget>[
-                  ..._buildMessages(
-                    ImmortalList([
-                      Reference(
-                        label: 'This is an unofficial app for the {festival}:'
-                            .i18n
-                            .fill({'festival': _config.festivalFullName}),
-                        links: ImmortalList([Link(url: _config.festivalUrl)]),
-                      ),
-                      Reference(
-                        label: 'Source code can be found under'.i18n,
-                        links: ImmortalList([
-                          Link(url: _globalConfig.repositoryUrl),
-                        ]),
-                      ),
+      builder: (_) => AppScaffold.withTitle(
+        title: 'About'.i18n,
+        body: Scrollbar(
+          child: ListView(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: 10,
+            ),
+            children: <Widget>[
+              ..._buildMessages(
+                ImmortalList([
+                  Reference(
+                    label: 'This is an unofficial app for the {festival}:'.i18n
+                        .fill({'festival': _config.festivalFullName}),
+                    links: ImmortalList([Link(url: _config.festivalUrl)]),
+                  ),
+                  Reference(
+                    label: 'Source code can be found under'.i18n,
+                    links: ImmortalList([
+                      Link(url: _globalConfig.repositoryUrl),
                     ]),
                   ),
-                  _divider,
-                  const SizedBox(height: 5),
-                  Text('Created by Projekt LilaHerz'.i18n),
-                  const SizedBox(height: 10),
-                  ..._buildReferences(
-                    _globalConfig.creators,
-                    icon: _theme.heartIcon,
-                  ),
-                  _divider,
-                  const SizedBox(height: 5),
-                  ..._buildReferences(
-                    _globalConfig.references,
-                    labelGenerator: (label) => label.i18n,
-                  ),
-                  ..._buildReferences(
-                    _config.fontReferences,
-                    labelGenerator:
-                        (label) =>
-                            'Font "{font}" by:'.i18n.fill({'font': label}),
-                  ),
-                  _divider,
-                  const SizedBox(height: 5),
-                  ..._buildMessages(_config.aboutMessages),
-                  const SizedBox(height: 13),
-                  _divider,
-                  const SizedBox(height: 5),
-                  _licensesButton,
-                ],
+                ]),
               ),
-            ),
+              _divider,
+              const SizedBox(height: 5),
+              Text('Created by Projekt LilaHerz'.i18n),
+              const SizedBox(height: 10),
+              ..._buildReferences(
+                _globalConfig.creators,
+                icon: _theme.heartIcon,
+              ),
+              _divider,
+              const SizedBox(height: 5),
+              ..._buildReferences(
+                _globalConfig.references,
+                labelGenerator: (label) => label.i18n,
+              ),
+              ..._buildReferences(
+                _config.fontReferences,
+                labelGenerator: (label) =>
+                    'Font "{font}" by:'.i18n.fill({'font': label}),
+              ),
+              _divider,
+              const SizedBox(height: 5),
+              ..._buildMessages(_config.aboutMessages),
+              const SizedBox(height: 13),
+              _divider,
+              const SizedBox(height: 5),
+              _licensesButton,
+            ],
           ),
+        ),
+      ),
     ),
   );
 }

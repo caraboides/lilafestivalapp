@@ -11,24 +11,23 @@ class Drive extends StatelessWidget {
   static String path = '/drive';
   static String title() => 'Location'.i18n;
 
-  List<Widget> _buildList(List<String> content) =>
-      content
-          .expand(
-            (item) => [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('●', style: TextStyle(fontSize: 11)),
-                  ),
-                  Expanded(child: Text(item)),
-                ],
+  List<Widget> _buildList(List<String> content) => content
+      .expand(
+        (item) => [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Text('●', style: TextStyle(fontSize: 11)),
               ),
-              const SizedBox(height: 10),
+              Expanded(child: Text(item)),
             ],
-          )
-          .toList();
+          ),
+          const SizedBox(height: 10),
+        ],
+      )
+      .toList();
 
   @override
   Widget build(BuildContext context) {

@@ -13,8 +13,8 @@ void main() {
         (DateTime(2025, 2, 24, 3, 0), DateTime(2025, 2, 24)),
       ];
 
-      for (final (date, expected) in testCases) {
-        expect(testFestivalConfig.toFestivalDay(date), expected);
+      for (final testCase in testCases) {
+        expect(testFestivalConfig.toFestivalDay(testCase.$0), testCase.$1);
       }
     });
 

@@ -57,19 +57,18 @@ class Menu extends StatelessWidget {
     title: _buildEntryTitle(theme, route.getName()),
     leading: IconTheme(data: theme.iconTheme, child: Icon(route.icon)),
     initiallyExpanded: currentRoutePath.contains(route.path),
-    children:
-        route.nestedRoutes.map((nestedRoute) {
-          final path = route.nestedRoutePath(nestedRoute);
-          return ListTile(
-            title: _buildEntryTitle(
-              theme,
-              nestedRoute.title,
-              isCurrentRoute: path == currentRoutePath,
-            ),
-            leading: const SizedBox(width: 24),
-            onTap: () => _navigation.navigateToPath(navigator, path),
-          );
-        }).toList(),
+    children: route.nestedRoutes.map((nestedRoute) {
+      final path = route.nestedRoutePath(nestedRoute);
+      return ListTile(
+        title: _buildEntryTitle(
+          theme,
+          nestedRoute.title,
+          isCurrentRoute: path == currentRoutePath,
+        ),
+        leading: const SizedBox(width: 24),
+        onTap: () => _navigation.navigateToPath(navigator, path),
+      );
+    }).toList(),
   );
 
   Widget _buildEntries(BuildContext context) {
@@ -80,54 +79,51 @@ class Menu extends StatelessWidget {
     return ListView(
       children: <Widget>[
         OptionalBuilder(
-          optional: Optional.of(_theme.logoMenu),
-          builder: (_, logoMenu) => (logoMenu as Logo).toAsset(),
+          optional: Optional.ofNullable(_theme.logoMenu),
+          builder: (_, logoMenu) => logoMenu.toAsset(),
         ),
         ..._navigation.routes.map(
-          (route) =>
-              route is NestedAppRoute
-                  ? _buildNestedEntry(
-                    context: context,
-                    navigator: navigator,
-                    theme: theme,
-                    route: route,
-                    currentRoutePath: currentRoute,
-                  )
-                  : _buildEntry(
-                    theme: theme,
-                    label: route.getName(),
-                    icon: route.icon,
-                    onTap: () => _navigation.navigateToRoute(navigator, route),
-                    isCurrentRoute: route.path == currentRoute,
-                  ),
+          (route) => route is NestedAppRoute
+              ? _buildNestedEntry(
+                  context: context,
+                  navigator: navigator,
+                  theme: theme,
+                  route: route,
+                  currentRoutePath: currentRoute,
+                )
+              : _buildEntry(
+                  theme: theme,
+                  label: route.getName(),
+                  icon: route.icon,
+                  onTap: () => _navigation.navigateToRoute(navigator, route),
+                  isCurrentRoute: route.path == currentRoute,
+                ),
         ),
         _buildEntry(
           theme: theme,
           label: 'Privacy Policy'.i18n,
           icon: Icons.verified_user,
-          onTap:
-              () => launchUrl(
-                locale.languageCode == 'de'
-                    ? _globalConfig.privacyPolicyUrlDe
-                    : _globalConfig.privacyPolicyUrlEn,
-                mode: LaunchMode.externalApplication,
-              ),
+          onTap: () => launchUrl(
+            locale.languageCode == 'de'
+                ? _globalConfig.privacyPolicyUrlDe
+                : _globalConfig.privacyPolicyUrlEn,
+            mode: LaunchMode.externalApplication,
+          ),
         ),
       ],
     );
   }
 
   @override
-  Widget build(BuildContext _) => Theme(
+  Widget build(BuildContext context) => Theme(
     data: _theme.menuTheme,
     child: Builder(
-      builder:
-          (context) => Drawer(
-            child: Container(
-              decoration: _theme.menuDrawerDecoration,
-              child: _buildEntries(context),
-            ),
-          ),
+      builder: (innerContext) => Drawer(
+        child: Container(
+          decoration: _theme.menuDrawerDecoration,
+          child: _buildEntries(innerContext),
+        ),
+      ),
     ),
   );
 }

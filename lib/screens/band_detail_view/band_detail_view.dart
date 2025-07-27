@@ -43,17 +43,15 @@ class BandDetailView extends HookConsumerWidget {
 
   static void openFor(String bandName, {BuildContext? context}) {
     final navigatorKey = dimeGet<GlobalKey<NavigatorState>>();
-    final festivalScope =
-        context != null
-            ? DimeFlutter.get<FestivalScope>(context)
-            : _config.currentFestivalScope;
+    final festivalScope = context != null
+        ? DimeFlutter.get<FestivalScope>(context)
+        : _config.currentFestivalScope;
     navigatorKey.currentState?.push(
       MaterialPageRoute(
-        builder:
-            (_) => HistoryWrapper(
-              festivalScope: festivalScope,
-              child: BandDetailView(bandName),
-            ),
+        builder: (_) => HistoryWrapper(
+          festivalScope: festivalScope,
+          child: BandDetailView(bandName),
+        ),
         fullscreenDialog: true,
       ),
     );
@@ -134,57 +132,53 @@ class BandDetailView extends HookConsumerWidget {
       ),
       OptionalBuilder<String>(
         optional: band.optionalStyle,
-        builder:
-            (_, styleValue) => _buildDetailTextRow(theme, 'Style', styleValue),
+        builder: (_, styleValue) =>
+            _buildDetailTextRow(theme, 'Style', styleValue),
       ),
       OptionalBuilder<String>(
         optional: band.optionalRoots,
-        builder:
-            (_, rootsValue) => _buildDetailTextRow(theme, 'Roots', rootsValue),
+        builder: (_, rootsValue) =>
+            _buildDetailTextRow(theme, 'Roots', rootsValue),
       ),
       OptionalBuilder<Uri>(
         optional: band.optionalHomepage,
-        builder:
-            (_, homepageValue) => _buildDetailLinkRow(
-              theme,
-              'Homepage',
-              homepageValue,
-              paddingTop: 6,
-            ),
+        builder: (_, homepageValue) => _buildDetailLinkRow(
+          theme,
+          'Homepage',
+          homepageValue,
+          paddingTop: 6,
+        ),
       ),
       OptionalBuilder<Uri>(
         optional: band.optionalSocial,
-        builder:
-            (_, socialValue) => _buildDetailLinkRow(
-              theme,
-              'Social',
-              socialValue,
-              paddingTop: band.optionalHomepage.isPresent ? 0 : 6,
-            ),
+        builder: (_, socialValue) => _buildDetailLinkRow(
+          theme,
+          'Social',
+          socialValue,
+          paddingTop: band.optionalHomepage.isPresent ? 0 : 6,
+        ),
       ),
       OptionalBuilder<DateTime>(
         optional: band.optionalAddedOn,
-        builder:
-            (_, addedOnValue) => _buildDetailTextRow(
-              theme,
-              'added on',
-              'MMM dd yyyy'.i18n.dateFormat(addedOnValue),
-              paddingTop: 6,
-            ),
+        builder: (_, addedOnValue) => _buildDetailTextRow(
+          theme,
+          'added on',
+          'MMM dd yyyy'.i18n.dateFormat(addedOnValue),
+          paddingTop: 6,
+        ),
       ),
       const SizedBox(height: 10),
       OptionalBuilder(
         optional: band.spotifyUrl,
-        builder:
-            (_, url) => Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: _theme.primaryButton(
-                label: 'Play on Spotify'.i18n,
-                onPressed: () {
-                  launchUrl(url, mode: LaunchMode.externalApplication);
-                },
-              ),
-            ),
+        builder: (_, url) => Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: _theme.primaryButton(
+            label: 'Play on Spotify'.i18n,
+            onPressed: () {
+              launchUrl(url, mode: LaunchMode.externalApplication);
+            },
+          ),
+        ),
       ),
     ],
   );
@@ -198,22 +192,20 @@ class BandDetailView extends HookConsumerWidget {
               BlurHash(hash: imgData!.hash!, color: Colors.black),
             CachedNetworkImage(
               imageUrl: imgUrl,
-              errorWidget: (_, _, _) => Container(),
-              placeholder:
-                  (_, _) => Shimmer.fromColors(
-                    baseColor: Colors.transparent,
-                    highlightColor: _theme.shimmerColor,
-                    loop: 1,
-                    child: Container(color: Colors.black),
-                  ),
+              errorWidget: (_, __, ___) => Container(),
+              placeholder: (_, __) => Shimmer.fromColors(
+                baseColor: Colors.transparent,
+                highlightColor: _theme.shimmerColor,
+                loop: 1,
+                child: Container(color: Colors.black),
+              ),
               placeholderFadeInDuration: const Duration(milliseconds: 1500),
-              imageBuilder:
-                  (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      image: DecorationImage(image: imageProvider),
-                    ),
-                  ),
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  image: DecorationImage(image: imageProvider),
+                ),
+              ),
             ),
           ],
         ),
@@ -229,11 +221,11 @@ class BandDetailView extends HookConsumerWidget {
 
   Widget _buildBandImage(ThemeData theme, String imgUrl, ImageData? imgData) =>
       (imgData?.hasRatio ?? false)
-          ? AspectRatio(
-            aspectRatio: imgData!.ratio,
-            child: _buildImage(theme, imgUrl, imgData),
-          )
-          : _buildImage(theme, imgUrl);
+      ? AspectRatio(
+          aspectRatio: imgData!.ratio,
+          child: _buildImage(theme, imgUrl, imgData),
+        )
+      : _buildImage(theme, imgUrl);
 
   Widget get _fallbackInfo => Container(
     padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
@@ -262,20 +254,19 @@ class BandDetailView extends HookConsumerWidget {
 
   Widget _buildEvents(BandWithEvents bandWithEvents) =>
       bandWithEvents.events.isEmpty
-          ? Container(
-            padding: const EdgeInsets.only(top: 10, bottom: 2),
-            alignment: Alignment.center,
-            child: BandCancelled(bandWithEvents),
-          )
-          : SafeArea(
-            top: false,
-            bottom: false,
-            minimum: const EdgeInsets.symmetric(horizontal: 10),
-            child:
-                bandWithEvents.events.length == 1
-                    ? _buildSingleEventEntry(bandWithEvents.events.first)
-                    : _buildMultiEventEntry(bandWithEvents.events),
-          );
+      ? Container(
+          padding: const EdgeInsets.only(top: 10, bottom: 2),
+          alignment: Alignment.center,
+          child: BandCancelled(bandWithEvents),
+        )
+      : SafeArea(
+          top: false,
+          bottom: false,
+          minimum: const EdgeInsets.symmetric(horizontal: 10),
+          child: bandWithEvents.events.length == 1
+              ? _buildSingleEventEntry(bandWithEvents.events.first)
+              : _buildMultiEventEntry(bandWithEvents.events),
+        );
 
   Widget _buildBandView(BuildContext context, BandWithEvents bandWithEvents) {
     final locale = I18n.locale;
@@ -295,9 +286,8 @@ class BandDetailView extends HookConsumerWidget {
                 optional: Optional.ofNullable(
                   band.map((bandValue) => bandValue.nonEmptyLogo).orElseNull,
                 ),
-                builder:
-                    (_, logoValue) =>
-                        _buildBandLogo(theme, logoValue, band.value.logoData),
+                builder: (_, logoValue) =>
+                    _buildBandLogo(theme, logoValue, band.value.logoData),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -323,15 +313,14 @@ class BandDetailView extends HookConsumerWidget {
                 optional: Optional.ofNullable(
                   band.map((bandValue) => bandValue.nonEmptyImage).orElseNull,
                 ),
-                builder:
-                    (_, imageValue) => Padding(
-                      padding: const EdgeInsets.only(top: 5),
-                      child: _buildBandImage(
-                        theme,
-                        imageValue,
-                        band.value.imageData,
-                      ),
-                    ),
+                builder: (_, imageValue) => Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: _buildBandImage(
+                    theme,
+                    imageValue,
+                    band.value.imageData,
+                  ),
+                ),
               ),
             ],
           ),

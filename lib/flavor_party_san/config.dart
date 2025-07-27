@@ -37,11 +37,8 @@ final FestivalConfig config = FestivalConfig(
       ]),
     ),
   ]),
-  stageAlignment:
-      (stage) =>
-          stage == 'Mainstage'
-              ? CrossAxisAlignment.start
-              : CrossAxisAlignment.end,
+  stageAlignment: (stage) =>
+      stage == 'Mainstage' ? CrossAxisAlignment.start : CrossAxisAlignment.end,
   routes: ImmortalList([
     FlatAppRoute(
       path: Shuttle.path,

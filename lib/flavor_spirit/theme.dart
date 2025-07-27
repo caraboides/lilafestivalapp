@@ -75,7 +75,7 @@ final ThemeData theme = ThemeData(
     toolbarHeight: _appBarHeight,
     foregroundColor: _colorScheme.onPrimary,
   ),
-  tabBarTheme: TabBarTheme(
+  tabBarTheme: TabBarThemeData(
     labelStyle: const TextStyle(
       fontFamily: _displayFontFamily,
       fontSize: 18,
@@ -88,7 +88,7 @@ final ThemeData theme = ThemeData(
     ),
     indicatorSize: TabBarIndicatorSize.tab,
   ),
-  cardTheme: const CardTheme(
+  cardTheme: const CardThemeData(
     margin: EdgeInsets.zero,
     shape: Border(bottom: _border),
     color: Color(0xFFb3dddd),
@@ -101,10 +101,9 @@ final ThemeData theme = ThemeData(
   radioTheme: RadioThemeData(fillColor: _toggleableColorSelected),
   switchTheme: SwitchThemeData(
     thumbColor: WidgetStateProperty.resolveWith<Color?>(
-      (Set<WidgetState> states) =>
-          states.contains(WidgetState.selected)
-              ? _primaryColor
-              : _colorScheme.outline,
+      (Set<WidgetState> states) => states.contains(WidgetState.selected)
+          ? _primaryColor
+          : _colorScheme.outline,
     ),
     trackColor: _toggleableColorSelected,
   ),
@@ -134,27 +133,26 @@ final FestivalTheme festivalTheme = FestivalTheme(
     scaffoldBackgroundColor: _historyBackgroundColor,
     colorScheme: theme.colorScheme.copyWith(surface: _historyBackgroundColor),
   ),
-  primaryButton:
-      ({required label, required onPressed}) => Container(
-        height: _primaryButtonHeight,
-        foregroundDecoration: BoxDecoration(
-          border: Border(
-            top: _borderSlim,
-            left: _borderSlim,
-            bottom: _border,
-            right: _border,
-          ),
-        ),
-        child: TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor: theme.colorScheme.onSurface,
-            backgroundColor: theme.colorScheme.secondary,
-            shape: const RoundedRectangleBorder(),
-          ),
-          onPressed: onPressed,
-          child: Text(label),
-        ),
+  primaryButton: ({required label, required onPressed}) => Container(
+    height: _primaryButtonHeight,
+    foregroundDecoration: BoxDecoration(
+      border: Border(
+        top: _borderSlim,
+        left: _borderSlim,
+        bottom: _border,
+        right: _border,
       ),
+    ),
+    child: TextButton(
+      style: TextButton.styleFrom(
+        foregroundColor: theme.colorScheme.onSurface,
+        backgroundColor: theme.colorScheme.secondary,
+        shape: const RoundedRectangleBorder(),
+      ),
+      onPressed: onPressed,
+      child: Text(label),
+    ),
+  ),
   logo: const Logo(assetPath: 'assets/logo.png', width: 158, height: 40),
   logoMenu: const Logo(
     assetPath: 'assets/logo_menu.png',

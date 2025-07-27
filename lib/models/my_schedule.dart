@@ -36,11 +36,12 @@ class MySchedule {
     EventId eventId, {
     required ValueChanged<NotificationId> onAdd,
     required ValueChanged<NotificationId> onRemove,
-  }) =>
-      getNotificationId(eventId).map((notificationId) {
+  }) => getNotificationId(eventId)
+      .map((notificationId) {
         onRemove(notificationId);
         return _remove(eventId);
-      }).orElseGet(() {
+      })
+      .orElseGet(() {
         final notificationId = _nextNotificationId();
         onAdd(notificationId);
         return _add(eventId, notificationId);

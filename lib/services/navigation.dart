@@ -119,20 +119,17 @@ class Navigation {
     String routePath,
     FlatAppRoute route,
   ) => ImmortalMap({
-    routePath:
-        (context) =>
-            route.isRoot
-                ? I18n(child: route.builder(context))
-                : route.builder(context),
+    routePath: (context) => route.isRoot
+        ? I18n(child: route.builder(context))
+        : route.builder(context),
   });
 
   ImmortalMap<String, WidgetBuilder> _buildNamedRoutes(
     String routePath,
     AppRoute route,
-  ) =>
-      route is NestedAppRoute
-          ? _buildNestedNamedRoutes(route)
-          : _buildFlatRoute(routePath, route as FlatAppRoute);
+  ) => route is NestedAppRoute
+      ? _buildNestedNamedRoutes(route)
+      : _buildFlatRoute(routePath, route as FlatAppRoute);
 
   ImmortalMap<String, WidgetBuilder> get namedRoutes =>
       _routesByPath.mapValues(_buildNamedRoutes).flatten();

@@ -52,10 +52,9 @@ class BandScheduleList extends HookConsumerWidget {
             bands: bandTuple.item1,
             bandIds: bandTuple.item2,
           ),
-          crossFadeState:
-              bandTuple.item2.isEmpty
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
+          crossFadeState: bandTuple.item2.isEmpty
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
           duration: const Duration(milliseconds: 350),
         );
       },

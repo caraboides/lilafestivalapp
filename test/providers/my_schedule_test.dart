@@ -176,8 +176,10 @@ void main() {
         });
       });
 
-      final states =
-          await controller.stream.take(2).map((state) => state.value).toList();
+      final states = await controller.stream
+          .take(2)
+          .map((state) => state.value)
+          .toList();
       await Future.delayed(const Duration(milliseconds: 500), () {});
 
       verify(notificationsMock.cancelNotification(1));

@@ -32,45 +32,44 @@ class StaticHtmlViewState extends State<StaticHtmlView> {
   @override
   void initState() {
     super.initState();
-    _controller =
-        WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..setNavigationDelegate(
-            NavigationDelegate(
-              onProgress: (progress) {
-                setState(() {
-                  _progress = progress;
-                });
-              },
-              onPageFinished: (String url) {
-                setState(() {
-                  _loadingState = false;
-                });
-              },
-              onHttpError: (HttpResponseError error) {
-                _log.error(
-                  'HTTP error: '
-                  '$error',
-                  error.toString(),
-                );
-              },
-              onWebResourceError: (error) {
-                _log.error(
-                  'Web resource failed to load: type ${error.errorType} code '
-                  '${error.errorCode} on url ${error.url}',
-                  error.description,
-                );
-              },
-              onNavigationRequest: (NavigationRequest request) {
-                launchUrl(
-                  Uri.parse(request.url),
-                  mode: LaunchMode.externalApplication,
-                );
-                return NavigationDecision.prevent;
-              },
-            ),
-          )
-          ..enableZoom(false);
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (progress) {
+            setState(() {
+              _progress = progress;
+            });
+          },
+          onPageFinished: (String url) {
+            setState(() {
+              _loadingState = false;
+            });
+          },
+          onHttpError: (HttpResponseError error) {
+            _log.error(
+              'HTTP error: '
+              '$error',
+              error.toString(),
+            );
+          },
+          onWebResourceError: (error) {
+            _log.error(
+              'Web resource failed to load: type ${error.errorType} code '
+              '${error.errorCode} on url ${error.url}',
+              error.description,
+            );
+          },
+          onNavigationRequest: (NavigationRequest request) {
+            launchUrl(
+              Uri.parse(request.url),
+              mode: LaunchMode.externalApplication,
+            );
+            return NavigationDecision.prevent;
+          },
+        ),
+      )
+      ..enableZoom(false);
     _getFontUrl().then(
       (fontUrl) => _controller.loadHtmlString(widget.buildHtml(fontUrl)),
     );

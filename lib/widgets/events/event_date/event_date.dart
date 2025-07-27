@@ -25,16 +25,12 @@ class EventDate extends StatelessWidget {
       ),
       OptionalBuilder(
         optional: end,
-        builder:
-            (_, endValue) => Text(
-              ' - ${'HH:mm'.i18n.dateFormat(endValue)}',
-              style:
-                  showWeekDay
-                      ? textStyle
-                      : textStyle?.copyWith(
-                        color: textStyle.color?.withAlpha(84),
-                      ),
-            ),
+        builder: (_, endValue) => Text(
+          ' - ${'HH:mm'.i18n.dateFormat(endValue)}',
+          style: showWeekDay
+              ? textStyle
+              : textStyle?.copyWith(color: textStyle.color?.withAlpha(84)),
+        ),
       ),
     ];
   }
@@ -42,10 +38,9 @@ class EventDate extends StatelessWidget {
   @override
   Widget build(BuildContext context) => OptionalBuilder(
     optional: start,
-    builder:
-        (_, startValue) => Row(
-          mainAxisSize: MainAxisSize.min,
-          children: _buildTimes(context, startValue),
-        ),
+    builder: (_, startValue) => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: _buildTimes(context, startValue),
+    ),
   );
 }

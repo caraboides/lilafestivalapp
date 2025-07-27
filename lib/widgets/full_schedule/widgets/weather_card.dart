@@ -68,14 +68,13 @@ class WeatherCard extends HookConsumerWidget {
     final lastWeather = useState<Widget?>(null);
     final fallback = lastWeather.value ?? Container();
     return weather.when(
-      data:
-          (result) => result
-              .map((weather) {
-                final weatherCard = _buildWeatherCard(weather);
-                lastWeather.value = weatherCard;
-                return weatherCard;
-              })
-              .orElse(fallback),
+      data: (result) => result
+          .map((weather) {
+            final weatherCard = _buildWeatherCard(weather);
+            lastWeather.value = weatherCard;
+            return weatherCard;
+          })
+          .orElse(fallback),
       loading: () => fallback,
       error: (error, trace) {
         _log.error(

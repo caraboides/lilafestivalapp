@@ -55,7 +55,7 @@ void main() {
       };
       final serializedEvent = Event.fromJson(
         'id1',
-        jsonDecode(jsonEncode(jsonEvent)),
+        jsonDecode(jsonEncode(jsonEvent)) as Map<String, dynamic>,
       );
       expect(serializedEvent.hashCode, event1.hashCode);
     });

@@ -7,7 +7,8 @@ import 'faq.i18n.dart';
 import 'faq_en_html.dart';
 import 'faq_html.dart';
 
-String _faqHeader(String fontUrl) => '''
+String _faqHeader(String fontUrl) =>
+    '''
     <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -38,7 +39,7 @@ class FAQ extends StatelessWidget {
   static String title() => 'FAQ'.i18n;
 
   String _buildHtml(String fontUrl) =>
-      _faqHeader(fontUrl) + (I18n.language == 'en' ? faqEnHtml : faqHtml);
+      _faqHeader(fontUrl) + (I18n.languageOnly == 'en' ? faqEnHtml : faqHtml);
 
   @override
   Widget build(BuildContext context) => AppScaffold.withTitle(

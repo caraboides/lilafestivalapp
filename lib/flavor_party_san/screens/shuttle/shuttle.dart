@@ -7,7 +7,8 @@ import 'shuttle.i18n.dart';
 import 'shuttle_en_html.dart';
 import 'shuttle_html.dart';
 
-String _shuttleHeader(String fontUrl) => '''
+String _shuttleHeader(String fontUrl) =>
+    '''
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -69,7 +70,7 @@ class Shuttle extends StatelessWidget {
 
   String _buildHtml(String fontUrl) =>
       _shuttleHeader(fontUrl) +
-      (I18n.language == 'en' ? shuttleEnHtml : shuttleHtml);
+      (I18n.languageOnly == 'en' ? shuttleEnHtml : shuttleHtml);
 
   @override
   Widget build(BuildContext context) => AppScaffold.withTitle(

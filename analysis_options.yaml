@@ -4,11 +4,19 @@ analyzer:
     missing_required_param: error
     missing_return: error
     non_nullable_equals_parameter: ignore
+    switch_case_completes_normally: ignore
+    implicit_dynamic_type: ignore
+    implicit_dynamic_parameter: ignore
+    implicit_dynamic_map_literal: ignore
+    implicit_dynamic_method: ignore
+    implicit_dynamic_variable: ignore
   exclude:
     - test/utils/*.mocks.dart
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
+  enable-experiment:
+    - records
 
 linter:
   rules:

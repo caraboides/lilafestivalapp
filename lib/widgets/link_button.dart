@@ -20,13 +20,12 @@ class LinkButton extends StatelessWidget {
   Widget build(BuildContext context) => Tooltip(
     message: link.url.toString(),
     child: TextButton(
-      onPressed:
-          () => launchUrl(link.url, mode: LaunchMode.externalApplication),
+      onPressed: () =>
+          launchUrl(link.url, mode: LaunchMode.externalApplication),
       style: ButtonStyle(
-        tapTargetSize:
-            shrink
-                ? MaterialTapTargetSize.shrinkWrap
-                : MaterialTapTargetSize.padded,
+        tapTargetSize: shrink
+            ? MaterialTapTargetSize.shrinkWrap
+            : MaterialTapTargetSize.padded,
         visualDensity: dense ? VisualDensity.compact : VisualDensity.standard,
       ),
       child: Text(

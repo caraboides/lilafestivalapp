@@ -25,7 +25,7 @@ class AppStorage {
       final file = await _getFileHandle(fileName);
       if (file.existsSync()) {
         final fileContent = await file.readAsString();
-        final json = jsonDecode(fileContent);
+        final json = jsonDecode(fileContent) as J;
         _log.debug('Reading data from $fileName was successful');
         return Optional.of(json);
       } else {

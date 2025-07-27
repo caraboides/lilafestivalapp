@@ -25,7 +25,7 @@ class CombinedStorage {
     return DefaultAssetBundle.of(context)
         .loadString(assetPath)
         .then((content) {
-          final json = jsonDecode(content);
+          final json = jsonDecode(content) as J;
           final data = fromJson(json);
           _log.debug('Reading asset data from $assetPath was successful');
           return Optional.of(data);

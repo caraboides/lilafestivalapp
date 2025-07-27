@@ -88,20 +88,19 @@ class _AnimatedListViewState extends State<AnimatedListView> {
       shrinkWrap: true,
       controller: widget.scrollController,
       initialItemCount: widget.initialItemCount,
-      itemBuilder:
-          (context, index, animation) => widget.itemIds[index]
-              .map<Widget>(
-                (itemId) => _animated(
-                  animation: animation,
-                  child: widget.itemBuilder(
-                    context: context,
-                    animation: animation,
-                    index: index,
-                    itemId: itemId,
-                  ),
-                ),
-              )
-              .orElse(Container()),
+      itemBuilder: (context, index, animation) => widget.itemIds[index]
+          .map<Widget>(
+            (itemId) => _animated(
+              animation: animation,
+              child: widget.itemBuilder(
+                context: context,
+                animation: animation,
+                index: index,
+                itemId: itemId,
+              ),
+            ),
+          )
+          .orElse(Container()),
     ),
   );
 }

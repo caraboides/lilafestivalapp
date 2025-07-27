@@ -86,19 +86,19 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
 
   PreferredSizeWidget _buildTabBarContainer(ImmortalList<DateTime> days) =>
       _theme.tabBarDecoration != null
-          ? PreferredSize(
-            preferredSize: Size.fromHeight(_theme.tabBarHeight),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  height: _theme.tabBarHeight,
-                  decoration: _theme.tabBarDecoration,
-                ),
-                _buildTabBar(days),
-              ],
-            ),
-          )
-          : _buildTabBar(days);
+      ? PreferredSize(
+          preferredSize: Size.fromHeight(_theme.tabBarHeight),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                height: _theme.tabBarHeight,
+                decoration: _theme.tabBarDecoration,
+              ),
+              _buildTabBar(days),
+            ],
+          ),
+        )
+      : _buildTabBar(days);
 
   List<Widget> _buildActions() => [
     Tooltip(
@@ -174,11 +174,10 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
     );
     return provider.when(
       data: (days) => _buildScheduleView(days, festivalScope),
-      loading:
-          () => _buildScaffold(
-            festivalScope: festivalScope,
-            child: LoadingScreen('Loading schedule.'.i18n),
-          ),
+      loading: () => _buildScaffold(
+        festivalScope: festivalScope,
+        child: LoadingScreen('Loading schedule.'.i18n),
+      ),
       error: (error, trace) {
         _log.error(
           'Error retrieving festival days for ${festivalScope.festivalId}',

@@ -76,10 +76,13 @@ class FilteredScheduleProviderCreator {
         >(
           dailySchedule,
           myScheduleProvider,
-          (events, mySchedule) => (filter.likedOnly
-                  ? events.where((event) => mySchedule.isEventLiked(event.id))
-                  : events)
-              .map((event) => event.id),
+          (events, mySchedule) =>
+              (filter.likedOnly
+                      ? events.where(
+                          (event) => mySchedule.isEventLiked(event.id),
+                        )
+                      : events)
+                  .map((event) => event.id),
         );
       });
 
@@ -101,14 +104,15 @@ class FilteredScheduleProviderCreator {
         >(
           bandsWithEvents,
           myScheduleProvider,
-          (bands, mySchedule) => (bandScheduleKey.likedOnly
-                  ? bands.where(
-                    (bandWithEvents) => bandWithEvents.events.any(
-                      (event) => mySchedule.isEventLiked(event.id),
-                    ),
-                  )
-                  : bands)
-              .map((band) => band.bandName),
+          (bands, mySchedule) =>
+              (bandScheduleKey.likedOnly
+                      ? bands.where(
+                          (bandWithEvents) => bandWithEvents.events.any(
+                            (event) => mySchedule.isEventLiked(event.id),
+                          ),
+                        )
+                      : bands)
+                  .map((band) => band.bandName),
         );
       });
 }

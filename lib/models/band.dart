@@ -7,9 +7,9 @@ class ImageData {
   const ImageData({this.width, this.height, this.hash});
 
   factory ImageData.fromJson(Map<String, dynamic> json) => ImageData(
-    width: json['width'],
-    height: json['height'],
-    hash: json['hash'],
+    width: json['width'] as int?,
+    height: json['height'] as int?,
+    hash: json['hash'] as String?,
   );
 
   final int? width;
@@ -51,21 +51,28 @@ class Band {
 
   factory Band.fromJson(String bandName, Map<String, dynamic> json) => Band(
     name: bandName,
-    image: json['img'],
-    imageData: ImageData.fromJson(json['imgData'] ?? {}),
-    logo: json['logo'],
-    logoData: ImageData.fromJson(json['logoData'] ?? {}),
-    spotify: json['spotify'],
-    origin: json['origin'],
-    style: json['style'],
-    roots: json['roots'],
-    homepage:
-        _isValueSet(json['homepage']) ? Uri.tryParse(json['homepage']) : null,
-    social: _isValueSet(json['social']) ? Uri.tryParse(json['social']) : null,
-    addedOn: DateTime.tryParse(json['addedOn'] ?? ''),
-    textDe: json['description'],
-    textEn: json['description_en'],
-    cancelled: json['cancelled'] ?? false,
+    image: json['img'] as String?,
+    imageData: ImageData.fromJson(
+      json['imgData'] as Map<String, dynamic>? ?? {},
+    ),
+    logo: json['logo'] as String?,
+    logoData: ImageData.fromJson(
+      json['logoData'] as Map<String, dynamic>? ?? {},
+    ),
+    spotify: json['spotify'] as String?,
+    origin: json['origin'] as String?,
+    style: json['style'] as String?,
+    roots: json['roots'] as String?,
+    homepage: _isValueSet(json['homepage'] as String?)
+        ? Uri.tryParse(json['homepage'] as String)
+        : null,
+    social: _isValueSet(json['social'] as String?)
+        ? Uri.tryParse(json['social'] as String)
+        : null,
+    addedOn: DateTime.tryParse(json['addedOn'] as String? ?? ''),
+    textDe: json['description'] as String?,
+    textEn: json['description_en'] as String?,
+    cancelled: json['cancelled'] as bool? ?? false,
   );
 
   final BandName name;
