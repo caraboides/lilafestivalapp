@@ -40,6 +40,10 @@ class Notifications {
         priority: Priority.high,
         color: _theme.notificationColor,
       );
+  DarwinNotificationDetails get _iosPlatformChannelSpecifics =>
+      const DarwinNotificationDetails(
+        threadIdentifier: Constants.notificationChannelId,
+      );
 
   Future _onSelectNotification(NotificationResponse response) async {
     final payload = response.payload;
@@ -139,7 +143,7 @@ class Notifications {
             ),
             NotificationDetails(
               android: _androidPlatformChannelSpecifics,
-              iOS: const DarwinNotificationDetails(),
+              iOS: _iosPlatformChannelSpecifics,
             ),
             payload: event.notificationPayload,
             androidScheduleMode: AndroidScheduleMode.alarmClock,

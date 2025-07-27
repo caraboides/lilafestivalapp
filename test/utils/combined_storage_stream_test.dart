@@ -170,6 +170,7 @@ void main() {
         expect(await assertStreamData(['appStorageData', 'remoteData']), true);
       });
 
+      // TODO(SF): fails on MacOS?
       test('resolves asset data before remote data if app storage data is '
           'missing', () async {
         mockRemoteData(10);

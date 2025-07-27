@@ -25,8 +25,8 @@ void main() {
         (testFestivalConfig.startDate.add(const Duration(days: 2)), false),
       ];
 
-      for (final testCase in testCases) {
-        expect(bandWithEvents.isPlaying(testCase.$0), testCase.$1);
+      for (final (date, expected) in testCases) {
+        expect(bandWithEvents.isPlaying(date), expected);
       }
     });
   });
