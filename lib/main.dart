@@ -38,7 +38,7 @@ class FestivalApp extends StatelessWidget {
       title: _config.festivalName,
       theme: _theme.theme,
       localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: const [Locale('en', 'US'), Locale('de', 'DE')],

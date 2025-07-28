@@ -8,8 +8,6 @@ import '../../models/festival_config.dart';
 import '../../models/theme.dart';
 import '../../providers/festival_scope.dart';
 import '../../providers/schedule.dart';
-// import '../../screens/schedule/schedule.dart';
-// import '../../services/navigation.dart';
 import '../../utils/date.dart';
 import '../../utils/i18n.dart';
 import '../../utils/logging.dart';

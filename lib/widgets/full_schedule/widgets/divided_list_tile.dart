@@ -10,7 +10,7 @@ class DividedListTile extends StatelessWidget {
   Widget build(BuildContext context) => isLast
       ? child
       : Container(
-          foregroundDecoration: BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(bottom: Divider.createBorderSide(context)),
           ),
           child: child,

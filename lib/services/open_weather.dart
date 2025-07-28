@@ -40,9 +40,7 @@ class OpenWeather {
       'lang=${I18n.languageOnly}';
 
   ImmortalList<Weather> _forecastFromJson(Map<String, dynamic> json) =>
-      ImmortalList(
-        json['list'] as List<Map<String, dynamic>>,
-      ).map((w) => Weather(w));
+      ImmortalList(json['list'] as List<dynamic>).map((w) => Weather(w));
 
   /// For API documentation, see: https://openweathermap.org/forecast5
   Stream<ImmortalList<Weather>> _getForecast() => createCacheStream(

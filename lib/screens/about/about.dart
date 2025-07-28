@@ -136,7 +136,7 @@ class About extends StatelessWidget {
               left: 20,
               right: 20,
               top: 20,
-              bottom: 10,
+              bottom: 30,
             ),
             children: <Widget>[
               ..._buildMessages(

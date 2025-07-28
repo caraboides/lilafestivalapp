@@ -61,10 +61,15 @@ class StaticHtmlViewState extends State<StaticHtmlView> {
             );
           },
           onNavigationRequest: (NavigationRequest request) {
-            launchUrl(
-              Uri.parse(request.url),
-              mode: LaunchMode.externalApplication,
-            );
+            if (request.url.startsWith('about:blank')) {
+              return NavigationDecision.navigate;
+            } else if (request.url.startsWith('http') ||
+                request.url.startsWith('mailto')) {
+              launchUrl(
+                Uri.parse(request.url),
+                mode: LaunchMode.externalApplication,
+              );
+            }
             return NavigationDecision.prevent;
           },
         ),

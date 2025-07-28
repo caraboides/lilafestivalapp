@@ -22,6 +22,7 @@ String _faqHeader(String fontUrl) =>
     }
     body {
       margin: 20px;
+      font-family: 'Arial';
     }
     a:link, a:visited {
       color: #E4BB8A;
