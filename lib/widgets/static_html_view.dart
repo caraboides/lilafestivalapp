@@ -87,12 +87,7 @@ class StaticHtmlViewState extends State<StaticHtmlView> {
         visible: _loadingState,
         child: LinearProgressIndicator(value: _progress.toDouble()),
       ),
-      Expanded(
-        child: Container(
-          padding: const EdgeInsets.only(bottom: 40),
-          child: WebViewWidget(controller: _controller),
-        ),
-      ),
+      Expanded(child: WebViewWidget(controller: _controller)),
     ],
   );
 }

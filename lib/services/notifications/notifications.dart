@@ -43,6 +43,7 @@ class Notifications {
   DarwinNotificationDetails get _iosPlatformChannelSpecifics =>
       const DarwinNotificationDetails(
         threadIdentifier: Constants.notificationChannelId,
+        interruptionLevel: InterruptionLevel.timeSensitive,
       );
 
   Future _onSelectNotification(NotificationResponse response) async {
@@ -62,6 +63,33 @@ class Notifications {
     }
   }
 
+  Future<bool> _requestNotificationPermissions() async {
+    final bool? resultAndroid = await _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
+        ?.requestExactAlarmsPermission()
+        .then((success) {
+          _log.debug('Received permission for notifications: $success');
+        })
+        .catchError((error) {
+          _log.error('Retrieving notification launch details failed', error);
+        });
+    final bool? resultIOS = await _plugin
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >()
+        ?.requestPermissions(alert: true, badge: true, sound: true)
+        .then((success) {
+          _log.debug('Received permission for notifications: $success');
+        })
+        .catchError((error) {
+          _log.error('Retrieving notification launch details failed', error);
+        });
+
+    return resultAndroid ?? resultIOS ?? false;
+  }
+
   Future<void> initializeNotificationPlugin() async {
     _log.debug('Initialize notification plugin');
     unawaited(
@@ -77,18 +105,7 @@ class Notifications {
           }),
     );
 
-    // Request permissions
-    final bool? result = await _plugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >()
-        ?.requestExactAlarmsPermission()
-        .then((success) {
-          _log.debug('Received permission for notifications: $success');
-        })
-        .catchError((error) {
-          _log.error('Retrieving notification launch details failed', error);
-        });
+    final permissionsGranted = await _requestNotificationPermissions();
 
     // TODO(SF): move initialization somewhere else if tz is used more often
     tz.initializeTimeZones();
@@ -96,7 +113,7 @@ class Notifications {
     _log.debug('Setting local timezone to $currentTimeZone');
     tz.setLocalLocation(tz.getLocation(currentTimeZone));
 
-    if (!(result ?? false)) {
+    if (!permissionsGranted) {
       // Did not receive permission to send notifications, skip initialization
       return;
     }

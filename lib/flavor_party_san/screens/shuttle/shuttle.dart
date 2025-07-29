@@ -55,6 +55,7 @@ String _shuttleHeader(String fontUrl) =>
 
     body {
       margin: 20px;
+      margin-bottom: 60px;
       font-family: 'Arial';
     }
   </style>
