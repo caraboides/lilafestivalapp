@@ -84,7 +84,7 @@ class BandDetailView extends HookConsumerWidget {
           fit: FlexFit.tight,
           child: Text('${title.i18n}:', style: theme.textTheme.titleSmall),
         ),
-        Flexible(flex: 7, fit: FlexFit.loose, child: child),
+        Flexible(flex: 6, fit: FlexFit.loose, child: child),
       ],
     ),
   );

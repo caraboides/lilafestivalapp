@@ -118,11 +118,7 @@ class Navigation {
   ImmortalMap<String, WidgetBuilder> _buildFlatRoute(
     String routePath,
     FlatAppRoute route,
-  ) => ImmortalMap({
-    routePath: (context) => route.isRoot
-        ? I18n(child: route.builder(context))
-        : route.builder(context),
-  });
+  ) => ImmortalMap({routePath: (context) => route.builder(context)});
 
   ImmortalMap<String, WidgetBuilder> _buildNamedRoutes(
     String routePath,
