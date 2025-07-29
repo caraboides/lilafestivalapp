@@ -6,6 +6,7 @@ import '../models/festival_config.dart';
 import '../models/lat_lng.dart';
 import '../models/reference.dart';
 import 'model/history_items.dart';
+import 'screens/rules/rules.dart';
 import 'screens/shuttle/shuttle.dart';
 import 'screens/webview/WebViewScreen.dart';
 
@@ -31,10 +32,6 @@ final FestivalConfig config = FestivalConfig(
   aboutMessages: ImmortalList([
     Reference(
       links: ImmortalList([
-        Link(
-          imageAssetPath: 'assets/mar.gif',
-          url: Uri.parse('https://www.facebook.com/MetalHeadsAgainst/'),
-        ),
       ]),
     ),
   ]),
@@ -49,6 +46,12 @@ final FestivalConfig config = FestivalConfig(
       getName: Shuttle.title,
       icon: Icons.location_city,
       builder: Shuttle.builder,
+    ),
+    FlatAppRoute(
+      path: Rules.path,
+      getName: Rules.title,
+      icon: Icons.gavel,
+      builder: Rules.builder,
     )
   ]),
   nestedRoutes: ImmortalList([
