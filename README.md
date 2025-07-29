@@ -19,6 +19,12 @@ Place `.env` file in the root directory.
 flutter pub run flutter_launcher_icons:main
 ```
 
+### Generate splash screens for all flavors
+
+```sh
+dart run flutter_native_splash:create -A
+```
+
 ## Run development version
 
 Run in the app for a specific festival in development mode as follows:
