@@ -15,8 +15,8 @@ final FestivalConfig config = FestivalConfig(
   festivalName: 'WTJT',
   festivalFullName: 'Weltturbojugendtage',
   festivalUrl: Uri.parse('https://www.weltturbojugendtage.de'),
-  startDate: DateTime(2025, 8, 1),
-  endDate: DateTime(2025, 8, 4),
+  startDate: DateTime(2025, 7, 31),
+  endDate: DateTime(2025, 8, 3),
   daySwitchOffset: const Duration(hours: 3),
   fontReferences: ImmortalList([
     Reference(
