@@ -78,7 +78,7 @@ class Menu extends StatelessWidget {
     final currentRoute = _navigation.routeObserver.currentRoute;
     return ListView(
       children: <Widget>[
-        OptionalBuilder(
+        OptionalBuilder<Logo>(
           optional: Optional.ofNullable(_theme.logoMenu),
           builder: (_, logoMenu) => logoMenu.toAsset(),
         ),

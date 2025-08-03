@@ -165,7 +165,7 @@ class MyScheduleProviderCreator {
         .when(
           data: (mySchedule) => mySchedule.getNotificationId(eventKey.eventId),
           loading: () => const Optional<NotificationId>.empty(),
-          error: (_, __) => const Optional<NotificationId>.empty(),
+          error: (_, _) => const Optional<NotificationId>.empty(),
         ),
   );
 }

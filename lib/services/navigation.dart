@@ -1,6 +1,5 @@
 import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
-import 'package:i18n_extension/i18n_extension.dart';
 import 'package:immortal/immortal.dart';
 
 import '../models/app_route.dart';

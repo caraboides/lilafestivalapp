@@ -45,9 +45,8 @@ class TestModule extends BaseDimeModule {
 class TestData {
   const TestData(this.value);
 
-  // TODO(SF): fix this
-  // ignore: avoid_dynamic_calls
-  factory TestData.fromJson(json) => TestData(json['value'] as String);
+  factory TestData.fromJson(Map<String, dynamic> json) =>
+      TestData(json['value'] as String);
 
   final String value;
 
@@ -57,13 +56,12 @@ class TestData {
   dynamic toJson() => {'value': value};
 }
 
-Future<Optional<dynamic>> Function(Invocation) mockOptionalResponse(
-  TestData? data, [
-  int delayInMilliseconds = 0,
-]) => mockResponse(Optional.ofNullable(data?.toJson()), delayInMilliseconds);
+Future<Optional<Map<String, dynamic>>> Function(Invocation)
+mockOptionalResponse(TestData? data, [int delayInMilliseconds = 0]) =>
+    mockResponse(Optional.ofNullable(data?.toJson()), delayInMilliseconds);
 
 Stream<TestData> createStream([Duration? periodicDuration]) =>
-    createCombinedStorageStream(
+    createCombinedStorageStream<TestData, Map<String, dynamic>>(
       context: buildContextMock,
       remoteUrl: 'remoteUrl',
       appStorageKey: 'appStorageKey',

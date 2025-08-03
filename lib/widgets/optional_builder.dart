@@ -8,6 +8,7 @@ class OptionalBuilder<T> extends StatelessWidget {
   const OptionalBuilder({required this.builder, required this.optional});
 
   final Optional<T> optional;
+  // ignore: unsafe_variance TODO(SF): fix this
   final OptionalWidgetBuilder<T> builder;
 
   @override

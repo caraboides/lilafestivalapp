@@ -16,7 +16,7 @@ Place `.env` file in the root directory.
 ### Generate app icons for all flavors
 
 ```sh
-flutter pub run flutter_launcher_icons:main
+dart run flutter_launcher_icons:main
 ```
 
 ### Generate splash screens for all flavors
@@ -100,13 +100,22 @@ There is also a helper script to switch to the newest version of a festivals:
 
 Run `flutter pub outdated` to check for dependency updates.
 
+### Clearing build caches
+
+```sh
+flutter clean
+# If that was not sufficient
+./gradlew --stop
+rm -rf ~/.gradle/caches/build-cache-*
+```
+
 ## Tests
 
 We use mockito for creating mocks in our tests. Since the introduction of null safety in dart, mockito requires code
 generation to generate mocks. You can update these mocks by running
 
 ```sh
-flutter pub run build_runner build
+dart run build_runner build
 ```
 
 Tests can be executed by running

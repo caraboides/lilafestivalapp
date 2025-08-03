@@ -192,8 +192,8 @@ class BandDetailView extends HookConsumerWidget {
               BlurHash(hash: imgData!.hash!, color: Colors.black),
             CachedNetworkImage(
               imageUrl: imgUrl,
-              errorWidget: (_, __, ___) => Container(),
-              placeholder: (_, __) => Shimmer.fromColors(
+              errorWidget: (_, _, _) => Container(),
+              placeholder: (_, _) => Shimmer.fromColors(
                 baseColor: Colors.transparent,
                 highlightColor: _theme.shimmerColor,
                 loop: 1,
