@@ -24,11 +24,13 @@ class FullSchedule extends StatefulHookConsumerWidget {
     this.likedOnly = false,
     this.displayWeather = false,
     this.onLikedFilterChange,
+    this.noBands = true,
   });
 
   final bool likedOnly;
   final bool displayWeather;
   final Function({bool likedOnly})? onLikedFilterChange;
+  final bool noBands;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _FullScheduleState();
@@ -63,7 +65,7 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
     indicatorWeight: 2,
     indicatorColor: _theme.theme.colorScheme.secondary,
     tabs: [
-      Tab(child: Text('Bands'.i18n)),
+      ...widget.noBands ? [] : [Tab(child: Text('Bands'.i18n))],
       ...days.mapIndexed(
         (index, date) => Tooltip(
           message: 'MMM dd'.i18n.dateFormat(date),
@@ -150,14 +152,14 @@ class _FullScheduleState extends ConsumerState<FullSchedule> {
     ImmortalList<DateTime> days,
     FestivalScope festivalScope,
   ) => DefaultTabController(
-    length: days.length + 1,
+    length: days.length + (widget.noBands ? 0 : 1),
     initialIndex: _initialTab(days),
     child: _buildScaffold(
       days: days,
       festivalScope: festivalScope,
       child: TabBarView(
         children: [
-          _buildBandScheduleList(),
+          ...widget.noBands ? [] : [_buildBandScheduleList()],
           ...days.map(_buildDailyScheduleList),
         ],
       ),

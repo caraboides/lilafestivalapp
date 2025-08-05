@@ -5,11 +5,14 @@ import 'package:immortal/immortal.dart';
 import '../models/app_route.dart';
 import '../models/festival_config.dart';
 import '../screens/about/about.dart';
+import '../screens/bands/bands.dart';
 import '../screens/history/history.dart';
+import '../screens/more/more.dart';
 import '../screens/schedule/schedule.dart';
 
 class CurrentRouteObserver extends RouteObserver<ModalRoute<void>> {
   List<String> routeStack = [];
+  int selectedBottomBarIndex = 1;
 
   String get currentRoute => routeStack.isEmpty ? '/' : routeStack.last;
 
@@ -72,35 +75,66 @@ class Navigation {
 
   ImmortalList<AppRoute> get routes => ImmortalList([
     FlatAppRoute(
+      path: BandsScreen.path,
+      getName: BandsScreen.title,
+      icon: Icons.star_border,
+      selectedIcon: Icons.star,
+      isRoot: true,
+      builder: BandsScreen.builder,
+      inBottomNavigation: true,
+    ),
+    FlatAppRoute(
       path: ScheduleScreen.path,
       getName: ScheduleScreen.title,
-      icon: Icons.calendar_today,
+      icon: Icons.calendar_today_outlined,
+      selectedIcon: Icons.calendar_today,
       isRoot: true,
       builder: ScheduleScreen.builder,
+      inMenu: true,
+      inBottomNavigation: true,
     ),
     FlatAppRoute(
       path: ScheduleScreen.mySchedulePath,
       getName: ScheduleScreen.myScheduleTitle,
-      icon: Icons.star,
+      icon: Icons.star_outline,
+      selectedIcon: Icons.star,
       isRoot: true,
       builder: ScheduleScreen.myScheduleBuilder,
+      inMenu: true,
     ),
     ..._config.routes,
     if (_config.history.isNotEmpty)
       NestedAppRoute(
         path: History.path,
         getName: History.title,
-        icon: Icons.history,
+        icon: Icons.history_outlined,
+        selectedIcon: Icons.history,
         nestedRoutes: _config.history,
         nestedRouteBuilder: History.builder,
+        inMenu: true,
       ),
     FlatAppRoute(
       path: About.path,
       getName: About.title,
-      icon: Icons.info,
+      icon: Icons.info_outline,
+      selectedIcon: Icons.info,
       builder: About.builder,
+      inMenu: true,
+      inMore: true,
+    ),
+    FlatAppRoute(
+      path: MoreScreen.path,
+      getName: MoreScreen.title,
+      icon: Icons.more_horiz_outlined,
+      selectedIcon: Icons.more_horiz,
+      builder: MoreScreen.builder,
+      inBottomNavigation: true,
+      isRoot: true,
     ),
   ]);
+
+  ImmortalList<AppRoute> get bottomBarRoutes =>
+      routes.filter((route) => route.inBottomNavigation);
 
   ImmortalMap<String, AppRoute> get _routesByPath =>
       routes.asMapWithKeys((route) => route.path);
@@ -141,7 +175,13 @@ class Navigation {
   Future<void> navigateToRoute(NavigatorState navigator, AppRoute route) async {
     if (route.isRoot) {
       navigator.popUntil(_isRoot);
-      await navigator.pushReplacementNamed(route.path);
+      if (routeObserver.routeStack.isEmpty) {
+        await navigator.pushNamed(route.path);
+      } else {
+        await navigator.pushReplacementNamed(route.path);
+      }
+      // TODO(SF): previously
+      // navigator.restorablePushReplacementNamed(route.path);
     } else {
       await navigateToPath(navigator, route.path);
     }

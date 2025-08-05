@@ -11,7 +11,8 @@ void main() {
       final nestedAppRoute = NestedAppRoute(
         path: '/history',
         getName: () => '',
-        icon: Icons.history,
+        icon: Icons.history_outlined,
+        selectedIcon: Icons.history,
         nestedRouteBuilder: (_, _) => Container(),
         nestedRoutes: ImmortalList.empty(),
       );

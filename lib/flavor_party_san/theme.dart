@@ -98,6 +98,20 @@ final ThemeData theme = ThemeData(
     trackColor: _toggleableColorSelected,
   ),
   drawerTheme: DrawerThemeData(backgroundColor: _primaryColor),
+  navigationBarTheme: NavigationBarThemeData(
+    backgroundColor: _primaryColor,
+    indicatorColor: _lightDividerColor,
+    labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>(
+      (Set<WidgetState> states) => states.contains(WidgetState.selected)
+          ? TextStyle(color: theme.colorScheme.secondary)
+          : TextStyle(color: theme.colorScheme.onPrimary),
+    ),
+    iconTheme: WidgetStateProperty.resolveWith<IconThemeData?>(
+      (Set<WidgetState> states) => states.contains(WidgetState.selected)
+          ? IconThemeData(color: theme.colorScheme.secondary.withAlpha(222))
+          : IconThemeData(color: theme.colorScheme.onPrimary),
+    ),
+  ),
 );
 
 final FestivalTheme festivalTheme = FestivalTheme(

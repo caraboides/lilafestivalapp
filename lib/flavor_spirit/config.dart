@@ -47,13 +47,15 @@ final FestivalConfig config = FestivalConfig(
     FlatAppRoute(
       path: Drive.path,
       getName: Drive.title,
-      icon: Icons.map,
+      icon: Icons.map_outlined,
+      selectedIcon: Icons.map,
       builder: Drive.builder,
     ),
     FlatAppRoute(
       path: FAQ.path,
       getName: FAQ.title,
-      icon: Icons.help,
+      icon: Icons.help_outline,
+      selectedIcon: Icons.help,
       builder: FAQ.builder,
     ),
   ]),

@@ -2,7 +2,8 @@ import 'package:dime/dime.dart';
 import 'package:flutter/material.dart';
 
 import '../models/theme.dart';
-import '../screens/menu/menu.dart';
+// import '../screens/menu/menu.dart';
+import 'bottom_navigation.dart';
 
 class AppScaffold extends StatelessWidget {
   const AppScaffold._({
@@ -34,8 +35,9 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    drawer: isDialog ? null : const Menu(),
+    // TODO(SF): drawer: isDialog ? null : const Menu(),
     appBar: appBar ?? dimeGet<FestivalTheme>().appBar(title!),
     body: body,
+    bottomNavigationBar: BottomNavigation(),
   );
 }

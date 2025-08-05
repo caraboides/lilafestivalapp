@@ -104,6 +104,7 @@ Run `flutter pub outdated` to check for dependency updates.
 
 ```sh
 flutter clean
+
 # If that was not sufficient
 ./gradlew --stop
 rm -rf ~/.gradle/caches/build-cache-*
